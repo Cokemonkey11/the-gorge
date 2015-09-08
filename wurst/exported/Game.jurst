@@ -1,4 +1,8 @@
 library Game initializer init requires Ships, MyBoardSystem, RegisterPlayerUnitEvent
+	private struct AssistTimestamps
+		integer array vals[12]
+	end
+
 	globals
 		public constant integer OUTPOST_ID         = 'h002'
 		public constant integer DUMMY_ID           = 'u000'
@@ -103,7 +107,7 @@ library Game initializer init requires Ships, MyBoardSystem, RegisterPlayerUnitE
 		public boolean array playing[12]
 		public string array colors[12]
 		public string array names[12]
-		public integer array assistStamps[12][12]
+		public AssistTimestamps array assistTimestamps[12]
 		public integer array kills[12]
 		public integer array deaths[12]
 		public integer array assists[12]
@@ -373,9 +377,14 @@ library Game initializer init requires Ships, MyBoardSystem, RegisterPlayerUnitE
 		local integer j = 0
 		loop
 			exitwhen i>11
+
+			assistTimestamps[i] = new AssistTimestamps()
+
 			loop
 				exitwhen j>11
-				set assistStamps[i][j] = -1 * ASSIST_TIME
+
+				assistTimestamps[i].vals[j] = -1 * ASSIST_TIME
+
 				set j = j +1
 			endloop
 			set i = i +1
