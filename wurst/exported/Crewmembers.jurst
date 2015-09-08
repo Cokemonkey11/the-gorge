@@ -1,63 +1,63 @@
 library Crewmembers initializer i requires Ships, Game
-    private struct CrewMember
-        integer ownerID
+	private struct CrewMember
+		integer ownerID
 		unit dummy
 		unit phoenix
-    endstruct
-    
-    globals
+	endstruct
+
+	globals
 		private constant integer MAX_SLOTS = 10
-		
+
 		private constant integer HEADHUNTER_ID    = 'o000'
 		private constant integer HEADHUNTER_D_ID  = 'o009'
-		
+
 		private constant integer WITCHDOCTOR_ID   = 'o001'
 		private constant integer WITCHDOCTOR_D_ID = 'o00F'
-		
+
 		private constant integer SPEARMAN_ID      = 'o002'
 		private constant integer SPEARMAN_D_ID    = 'o00D'
-		
+
 		private constant integer UNBROKEN_ID      = 'o003'
 		private constant integer UNBROKEN_D_ID    = 'o00E'
-		
+
 		private constant integer SHAMAN_ID        = 'o004'
 		private constant integer SHAMAN_D_ID      = 'o00C'
-		
+
 		private constant integer SEAWITCH_ID      = 'o005'
 		private constant integer SEAWITCH_D_ID    = 'o00B'
-		
+
 		private constant integer GRENADIER_ID     = 'o006'
 		private constant integer GRENADIER_D_ID   = 'o008'
-		
+
 		private constant integer LASERRIFLE_ID    = 'o007'
 		private constant integer LASERRIFLE_D_ID  = 'o00A'
-		
+
 		private constant integer GRYPHON_ID       = 'o00G'
 		private constant integer GRYPHON_D_ID     = 'o00H'
-		
+
 		private constant integer AMASTER_ID       = 'o00I'
 		private constant integer AMASTER_D_ID     = 'o00J'
-		
+
 		private constant integer ODRAKE_ID        = 'o00K'
 		private constant integer ODRAKE_D_ID      = 'o00L'
-		
+
 		private constant integer VTEMPT_ID        = 'o00M'
 		private constant integer VTEMPT_D_ID      = 'o00N'
-	
+
 		private constant string ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
 		private constant real CLOCK_PERIOD = 1./30.
 		private constant real OFFSET = 256.+64.
 		private constant real SELL_RATE = .5
-		
-        private CrewMember array db
-        private integer dbIndex=-1
-        private timer time=CreateTimer()
+
+		private CrewMember array db
+		private integer dbIndex=-1
+		private timer time=CreateTimer()
 		private HandleTable fromDummy
 		private Table links
 		private CrewMember array slots[12][MAX_SLOTS]
 		private integer array slotIndices[12]
-    endglobals
-    
+	endglobals
+
 	public function getMemberIndex takes integer id, CrewMember cre returns integer
 		local integer index=0
 		loop
@@ -69,7 +69,7 @@ library Crewmembers initializer i requires Ships, Game
 		endloop
 		return -1
 	endfunction
-	
+
 	public function updatePosition takes CrewMember cre, integer index returns nothing
 		local real face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
 		local real x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
@@ -77,7 +77,7 @@ library Crewmembers initializer i requires Ships, Game
 		call SetUnitPosition(cre.dummy,x,y)
 		call SetUnitFacing(cre.dummy,face*bj_RADTODEG)
 	endfunction
-	
+
 	public function release takes unit u returns nothing
 		local CrewMember temp
 		local integer val
@@ -104,26 +104,26 @@ library Crewmembers initializer i requires Ships, Game
 			debug call BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
 		endif
 	endfunction
-	
-    private function p takes nothing returns nothing
-        local CrewMember temp
-        local integer index=0
-        loop
-            exitwhen index>dbIndex
-            set temp=db[index]
-            if UnitAlive(Ships_ships[temp.ownerID]) and not Game_ended then
-                call SetUnitX(temp.phoenix,GetUnitX(Ships_ships[temp.ownerID]))
-                call SetUnitY(temp.phoenix,GetUnitY(Ships_ships[temp.ownerID]))
-            else
-                call SetUnitX(temp.phoenix,Game_SAFE_X)
-				call SetUnitY(temp.phoenix,Game_SAFE_Y)
-            endif
-            set index=index+1
-        endloop
-    endfunction
 
-    private function c takes nothing returns nothing
-        local CrewMember temp
+	private function p takes nothing returns nothing
+		local CrewMember temp
+		local integer index=0
+		loop
+			exitwhen index>dbIndex
+			set temp=db[index]
+			if UnitAlive(Ships_ships[temp.ownerID]) and not Game_ended then
+				call SetUnitX(temp.phoenix,GetUnitX(Ships_ships[temp.ownerID]))
+				call SetUnitY(temp.phoenix,GetUnitY(Ships_ships[temp.ownerID]))
+			else
+				call SetUnitX(temp.phoenix,Game_SAFE_X)
+				call SetUnitY(temp.phoenix,Game_SAFE_Y)
+			endif
+			set index=index+1
+		endloop
+	endfunction
+
+	private function c takes nothing returns nothing
+		local CrewMember temp
 		local unit selU = GetSellingUnit()
 		local unit bU=GetBuyingUnit()
 		local unit sU=GetSoldUnit()
@@ -159,12 +159,12 @@ library Crewmembers initializer i requires Ships, Game
 		set bU=null
 		set sU=null
 		set selU=null
-    endfunction
-    
-    private function i takes nothing returns nothing
+	endfunction
+
+	private function i takes nothing returns nothing
 		local integer index = 0
 		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function c)
-		
+
 		// Format Links
 		set links = Table.create()
 		set links[HEADHUNTER_ID]  = HEADHUNTER_D_ID
@@ -179,14 +179,14 @@ library Crewmembers initializer i requires Ships, Game
 		set links[AMASTER_ID]     = AMASTER_D_ID
 		set links[ODRAKE_ID]      = ODRAKE_D_ID
 		set links[VTEMPT_ID]      = VTEMPT_D_ID
-		
+
 		set fromDummy = HandleTable.create()
-		
+
 		// Initialize slotInidices
 		loop
 			exitwhen index>11
 			set slotIndices[index] = -1
 			set index=index+1
 		endloop
-    endfunction
+	endfunction
 endlibrary
