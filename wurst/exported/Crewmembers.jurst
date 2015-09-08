@@ -1,9 +1,15 @@
-library Crewmembers initializer i requires Ships, Game
+library Crewmembers initializer i requires Ships
+	import Game
+
 	private struct CrewMember
 		integer ownerID
 		unit dummy
 		unit phoenix
 	endstruct
+
+	private struct CrewInventory
+		CrewMember array slots[MAX_SLOTS]
+	end
 
 	globals
 		private constant integer MAX_SLOTS = 10
@@ -54,7 +60,7 @@ library Crewmembers initializer i requires Ships, Game
 		private timer time=CreateTimer()
 		private HandleTable fromDummy
 		private Table links
-		private CrewMember array slots[12][MAX_SLOTS]
+		private CrewInventory array inventories[12]
 		private integer array slotIndices[12]
 	endglobals
 
@@ -188,5 +194,15 @@ library Crewmembers initializer i requires Ships, Game
 			set slotIndices[index] = -1
 			set index=index+1
 		endloop
+
+		// Initialize CrewInventories
+		index = 0
+		loop
+			exitwhen index > 11
+
+			inventories[index] = new CrewInventory()
+
+			index++
+		end
 	endfunction
 endlibrary
