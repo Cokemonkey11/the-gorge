@@ -1,13 +1,14 @@
 library MyBoardSystem
 	globals
-		private          boolean    DEBUG_MODE           = false
-		private constant integer    MAX_ROW_COUNT        = 100
-		private constant integer    MAX_COLUMN_COUNT     = 30
-		private constant integer    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
-		private constant real       AVERAGE_LETTER_WIDTH = .01484375
+		boolean             DEBUG_MODE           = false
+
+		constant integer    MAX_ROW_COUNT        = 100
+		constant integer    MAX_COLUMN_COUNT     = 30
+		constant integer    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
+		constant real       AVERAGE_LETTER_WIDTH = .01484375
 	endglobals
 
-	struct myBoard
+	struct MyBoard
 		readonly multiboard           board        = null
 		private  integer              colCount     = 0
 		private  integer              rowCount     = 0
@@ -256,43 +257,43 @@ library MyBoardSystem
 
 		// Operator API.
 
-		method operator title takes nothing returns string
+		method title takes nothing returns string
 			return .titleText
 		endmethod
 
-		method operator title= takes string newTitle returns nothing
+		method setTitle takes string newTitle returns nothing
 			call .setTitleText(newTitle)
 		endmethod
 
-		method operator columns takes nothing returns integer
+		method columns takes nothing returns integer
 			return .colCount
 		endmethod
 
-		method operator columns= takes integer cols returns nothing
+		method setColumns takes integer cols returns nothing
 			call .setColCount(cols)
 		endmethod
 
-		method operator rows takes nothing returns integer
+		method rows takes nothing returns integer
 			return .rowCount
 		endmethod
 
-		method operator rows= takes integer cols returns nothing
+		method setRows takes integer cols returns nothing
 			call .setRowCount(cols)
 		endmethod
 
-		method operator show takes nothing returns boolean
+		method show takes nothing returns boolean
 			return .isShown
 		endmethod
 
-		method operator show= takes boolean doDisplay returns nothing
+		method setShow takes boolean doDisplay returns nothing
 			call .display(doDisplay)
 		endmethod
 
-		method operator suppress takes nothing returns boolean
+		method suppress takes nothing returns boolean
 			return .isMinimized
 		endmethod
 
-		method operator suppress= takes boolean doMinimize returns nothing
+		method setSuppress takes boolean doMinimize returns nothing
 			call .minimize(doMinimize)
 		endmethod
 

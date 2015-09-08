@@ -113,7 +113,7 @@ library Game initializer init requires Ships, MyBoardSystem, RegisterPlayerUnitE
 		public integer array assists[12]
 		public integer array farm[12]
 
-		public myBoard scoreboard
+		public MyBoard scoreboard
 
 		public unit array westKeep[2]
 		public unit array eastKeep[2]
