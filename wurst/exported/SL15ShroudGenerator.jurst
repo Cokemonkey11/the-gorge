@@ -1,0 +1,141 @@
+scope SL15ShroudGenerator initializer i
+	private struct Shroud
+		unit caster
+		real cX
+		real cY
+		unit dummy
+		real time = 0.
+		real genTime
+	endstruct
+	
+	private struct Gen
+		unit dummy
+		effect mdl
+		real dX
+		real dY
+		real duration
+	endstruct
+	
+	globals
+		private constant integer SHROUD_ID = 'A00Y'
+		private constant integer INVIS_ID  = 'A00L'
+		private constant integer BUF_ID    = 'B004'
+		private constant integer GEN_COUNT = 32
+		private constant real DURATION = 15.
+		private constant real GEN_PERIOD = 1./2.
+		private constant real CLOCK_PERIOD = 1./30.
+		private constant real SHROUD_RADIUS = 500.
+		private constant real GEN_VELOCITY = 400.
+		private constant string GEN_MODEL = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
+		private Shroud array shrouds
+		private integer shroudsIndex = -1
+		private Gen array gens
+		private integer gensIndex = -1
+		private timer clock =  CreateTimer()
+		private timer clock2 = CreateTimer()
+	endglobals
+	
+	private function p2 takes nothing returns nothing
+		local integer index=0
+		local Gen g
+		loop
+			exitwhen index>gensIndex
+			set g = gens[index]
+			set g.duration = g.duration - CLOCK_PERIOD
+			call SetUnitX(g.dummy,GetUnitX(g.dummy)+g.dX)
+			call SetUnitY(g.dummy,GetUnitY(g.dummy)+g.dY)
+			if g.duration <= 0. then
+				call DestroyEffect(g.mdl)
+				call DummyUnitStack.release(g.dummy)
+				call g.destroy()
+				set gens[index] = gens[gensIndex]
+				set gensIndex = gensIndex - 1
+				set index = index - 1
+				if gensIndex == -1 then
+					call PauseTimer(clock2)
+				endif
+			endif
+			set index=index+1
+		endloop
+	endfunction
+	
+	private function p takes nothing returns nothing
+		local integer index = 0
+		local integer j
+		local Shroud s
+		local Gen g
+		loop
+			exitwhen index > shroudsIndex
+			set s = shrouds[index]
+			set s.time = s.time + CLOCK_PERIOD
+			set s.genTime = s.genTime + CLOCK_PERIOD
+			if s.genTime > GEN_PERIOD then
+				set s.genTime = 0.
+				set j = 0
+				loop
+					exitwhen j >= GEN_COUNT
+					set g = Gen.create()
+					set g.dummy = DummyUnitStack.get()
+					set g.mdl = AddSpecialEffectTarget(GEN_MODEL,g.dummy,"origin")
+					set g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					set g.dY = GEN_VELOCITY * Sin(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					set g.duration = SHROUD_RADIUS / GEN_VELOCITY
+					call SetUnitFlyHeight(g.dummy,100.,0.)
+					call SetUnitX(g.dummy,s.cX)
+					call SetUnitY(g.dummy,s.cY)
+					set gensIndex = gensIndex + 1
+					set gens[gensIndex] = g
+					if gensIndex == 0 then
+						call TimerStart(clock2,CLOCK_PERIOD,true,function p2)
+					endif
+					set j = j + 1
+				endloop
+			endif
+			if IsUnitInRangeXY(s.caster,s.cX,s.cY,SHROUD_RADIUS) then
+				if GetUnitAbilityLevel(s.caster,BUF_ID)<1 then
+					call SetUnitX(s.dummy,GetUnitX(s.caster))
+					call SetUnitY(s.dummy,GetUnitY(s.caster))
+					call UnitAddAbility(s.dummy,INVIS_ID)
+					call IssueTargetOrder(s.dummy,"invisibility",s.caster)
+					call UnitRemoveAbility(s.dummy,INVIS_ID)
+				endif
+			else
+				call UnitRemoveAbility(s.caster,BUF_ID)
+			endif
+			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)==0 or s.time>DURATION then
+				call DummyUnitStack.release(s.dummy)
+				call s.destroy()
+				set shrouds[index] = shrouds[shroudsIndex]
+				set shroudsIndex = shroudsIndex - 1
+				set index = index - 1
+				if shroudsIndex == -1 then
+					call PauseTimer(clock)
+				endif
+			endif
+			set index = index +1
+		endloop
+	endfunction
+	
+	private function c takes nothing returns nothing
+		local Shroud s
+		if GetSpellAbilityId()==SHROUD_ID then
+			set s = Shroud.create()
+			set s.caster = GetTriggerUnit()
+			set s.cX = GetUnitX(s.caster)
+			set s.cY = GetUnitY(s.caster)
+			set s.dummy = DummyUnitStack.get()
+			set s.genTime = GEN_PERIOD
+			call SetUnitX(s.dummy,s.cX)
+			call SetUnitY(s.dummy,s.cY)
+			set shroudsIndex = shroudsIndex + 1
+			set shrouds[shroudsIndex] = s
+			if shroudsIndex == 0 then
+				call TimerStart(clock,CLOCK_PERIOD,true,function p)
+			endif
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope

@@ -1,0 +1,39 @@
+scope ShieldAllLevels initializer i
+	globals
+		private constant string SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
+		private constant string SHIELD_FX_POINT = "origin"
+		private constant integer SHIELD_ID = 'A00G'
+		private constant integer SHIELD_1  = 'I005'
+		private constant real AMOUNT_1 = 500.
+		private constant real TIME_1 = 5.
+	endglobals
+	
+	private function getUnitShieldId takes unit u returns integer
+		local integer index=0
+		loop
+			exitwhen index>5
+			if GetItemTypeId(UnitItemInSlot(u,index))==SHIELD_1 then
+				return SHIELD_1
+			endif
+			set index=index+1
+		endloop
+		return -1
+	endfunction
+	
+	private function c takes nothing returns nothing
+		local integer sId
+		local unit tU
+		if GetSpellAbilityId()==SHIELD_ID then
+			set tU=GetTriggerUnit()
+			set sId=getUnitShieldId(tU)
+			if sId==SHIELD_1 then
+				call Shield.add(tU,AMOUNT_1,TIME_1,SHIELD_FX,SHIELD_FX_POINT)
+			endif
+			set tU=null
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope

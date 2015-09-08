@@ -1,0 +1,14 @@
+library FloatText requires Game
+	public function reviveNumbers takes real x, real y, string s, integer pID returns nothing
+		local texttag t=CreateTextTag()
+        call SetTextTagFadepoint(t,3)
+        call SetTextTagLifespan(t,4)
+        call SetTextTagPermanent(t,false)
+        call SetTextTagPos(t,x,y,100)
+        call SetTextTagText(t,s,.02)
+        call SetTextTagVelocity(t,0,.05)
+		if Game_localPlayer == Game_players[pID] then
+			call SetTextTagVisibility(t,true)
+		endif
+	endfunction
+endlibrary

@@ -1,0 +1,36 @@
+scope TurretDestroyed initializer i
+	globals
+		private constant integer TURRET_ID = 'h005'
+		private constant integer GOLD_BONUS = 200
+		private constant string WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
+		private constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
+		private constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
+		private constant string WARNING         = "Sound\\Interface\\Warning.wav"
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local unit tU=GetTriggerUnit()
+		local integer index=2
+		if GetUnitTypeId(tU)==TURRET_ID then
+			loop
+				exitwhen index>11
+				if IsUnitAlly(tU,Game_players[index]) then
+					call DisplayTimedTextToPlayer(Game_players[index],0.,0.,10.,WARNING_MESSAGE)
+					call Sound.playForPlayer(WARNING,1.,Game_players[index])
+				else
+					call SetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
+					call DisplayTimedTextToPlayer(Game_players[index],0.,0.,10.,SUCCESS)
+					call Sound.playForPlayer(GOODJOB,1.,Game_players[index])
+				endif
+				set index=index+1
+			endloop
+		endif
+		set tU=null
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+		call Sound.preload(GOODJOB)
+		call Sound.preload(WARNING)
+	endfunction
+endscope

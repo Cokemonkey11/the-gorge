@@ -1,0 +1,202 @@
+
+//*     *API*
+//* real TIMER_PERIOD:      This value refers to how often Shield should search 
+//*                         for instances that are expired in regards to their 
+//*                         duration. A smaller value means that shields are less 
+//*                         likely to block damage when their duration has passed, 
+//*                         while a larger value is less computationally expensive. 
+//*                         A good value lies on [1./60.,1./2.].
+//* static method add:      This is the one and only important method for
+//*                         instanciating a Shield. The arguments are of the
+//*                         form (unit u, real a, real t, string f, string p) 
+//*                         which imparts a shield of size 'a' for time 't' on 
+//*                         'u' using effect with model 'f' on attachment
+//*                         point 'p'.
+library Shield requires DamageType
+    //* We must declare the UnitAlive native because StructuredDD no longer
+    //* declares it for us :) UnitAlive is proven to have less computational 
+    //* cost compared to IsUnitType(u,UNIT_TYPE_DEAD)
+    native UnitAlive takes unit u returns boolean
+
+    //* This struct is just a shim for a pretty API. (You don't instanciate 
+    //* Shield objects yourself)
+    struct Shield
+        //< BEGIN CUSTOMIZABLE SECTION
+        
+        //* How often to check for shield instances with expired durations. A
+        //* smaller value will reduce the likelihood of a unit blocking damage
+        //* with a shield that would otherwise be expired, at the cost of 
+        //* performance. A good value is between 1./30. and 1./2.
+        private static constant real TIMER_PERIOD=1./10.
+        
+        //> END CUSTOMIZABLE SECTION
+        
+        private static thistype array allShields
+        private static integer shieldIndex=-1
+        private static timer time=CreateTimer()
+        private static HandleTable tab
+        
+        private boolean useDuration=true
+        private boolean finiteShield=true
+        private unit u
+        private real shieldLeft
+        private real falseHP
+        private real timeLeft
+        private effect fx
+        private thistype prevShield=0
+        private thistype nextShield=0
+        
+        //* This method is used for handling when a unit with a shield
+        //* receives damage.
+        private static method handler takes nothing returns nothing
+            local thistype tempDat
+            local thistype destroyingDat
+            local unit tU=GetTriggerUnit()
+            local real damageLeft=GetEventDamage()
+            local boolean noShieldsLeft=false
+            if DamageType.get()!=DamageType.SPELL and UnitAlive(tU) and tab.exists(tU) then
+                set tempDat=thistype.tab[tU]
+                //we need to loop until either all the damage is mitigated
+                //or there's no shield left on this unit.
+                loop
+                    exitwhen damageLeft<=0. or noShieldsLeft
+                    if tempDat.shieldLeft>damageLeft then
+                        if tempDat.finiteShield then
+                            set tempDat.shieldLeft=tempDat.shieldLeft-damageLeft
+                        endif
+                        call SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+damageLeft)
+                        set damageLeft=0.
+                    else
+                        set damageLeft=damageLeft-tempDat.shieldLeft
+                        call SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
+                        set tempDat.shieldLeft=0.
+                        if tempDat.falseHP>damageLeft then
+                            set tempDat.falseHP=tempDat.falseHP-damageLeft
+                            set damageLeft=0.
+                        else
+                            set damageLeft=damageLeft-tempDat.falseHP
+                            set tempDat.falseHP=0.
+                            set destroyingDat=tempDat
+                            if destroyingDat.nextShield!=0 then
+                                set tempDat=destroyingDat.nextShield
+                                set tempDat.prevShield=0
+                                set thistype.tab[tempDat.u]=tempDat
+                            else
+                                set noShieldsLeft=true
+                            endif
+                            set destroyingDat.nextShield=0
+                        endif
+                    endif
+                endloop
+            endif
+            set tU=null
+        endmethod
+        
+        //* This method runs every TIMER_PERIOD seconds as long as the stack 
+        //* is not empty, and looks for members that need to be destroyed.
+        private static method timeout takes nothing returns nothing
+            local integer index=0
+            local thistype tempDat
+            local thistype otherDat
+            loop
+                exitwhen index>thistype.shieldIndex
+                set tempDat=thistype.allShields[index]
+                set tempDat.timeLeft=tempDat.timeLeft-TIMER_PERIOD
+                if (tempDat.timeLeft<=0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP)<=0. or UnitAlive(tempDat.u)==false then
+                    //deallocate it, depending on the values of prevShield 
+                    //and nextShield
+                    if tempDat.prevShield==0 and tempDat.nextShield==0 and thistype.tab[tempDat.u]==tempDat then
+                        //this was the only shield left on the unit so:
+                        call thistype.tab.flush(tempDat.u)
+                    elseif tempDat.prevShield==0 and tempDat.nextShield!=0 then
+                        //the shield was the first in a list so we have to 
+                        //make next into the new first!
+                        set otherDat=tempDat.nextShield
+                        set otherDat.prevShield=0
+                        set thistype.tab[tempDat.u]=otherDat
+                    elseif tempDat.prevShield!=0 and tempDat.nextShield==0 then
+                        //the shield was the end of the list so let's do the 
+                        //proper changes to the previous member.
+                        set otherDat=tempDat.prevShield
+                        set otherDat.nextShield=0
+                    elseif tempDat.prevShield!=0 and tempDat.nextShield!=0 then
+                        //this shield was somewhere in the middle of the list 
+                        //so let's make the prev and next link to each other
+                        set otherDat=tempDat.prevShield
+                        set otherDat.nextShield=tempDat.nextShield
+                        set otherDat=tempDat.nextShield
+                        set otherDat.prevShield=tempDat.prevShield
+                    endif
+                    //let's reset the unit's hp if he has extra
+                    if tempDat.falseHP>0. then
+                        call SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)-tempDat.falseHP)
+                    endif
+                    call DestroyEffect(tempDat.fx)
+                    call tempDat.destroy()
+                    set thistype.allShields[index]=thistype.allShields[thistype.shieldIndex]
+                    set thistype.shieldIndex=thistype.shieldIndex-1
+                    set index=index-1
+                    if thistype.shieldIndex==-1 then
+                        call PauseTimer(thistype.time)
+                    endif
+                endif
+                set index=index+1
+            endloop
+        endmethod
+        
+        //* This method adds a shield to a unit. You can use 
+        //* Shield.DEFAULT_EFFECT in the fx argument.
+        public static method add takes unit u, real amount, real time, string fx, string fxpoint returns nothing
+            local thistype tempDat=thistype.create()
+            local thistype linkedDat
+            local real initialLife=GetWidgetLife(u)
+            local real maxLife=GetUnitState(u,UNIT_STATE_MAX_LIFE)
+            local real diff=maxLife-initialLife
+            set tempDat.u=u
+            set tempDat.timeLeft=time
+            set tempDat.fx=AddSpecialEffectTarget(fx,u,fxpoint)
+            if time==-1. then
+                set tempDat.useDuration=false
+            endif
+            if amount==-1. then
+                set amount=100000.
+                set tempDat.finiteShield=false
+            endif
+            //figure out how to partition the damage
+            if diff>=amount then
+                //the unit has plenty of missing HP, so:
+                set tempDat.shieldLeft=0
+                set tempDat.falseHP=amount
+                call SetWidgetLife(u,initialLife+amount)
+            else
+                //the unit has less hp missing than the shield has value, so:
+                call SetWidgetLife(u,maxLife)
+                set tempDat.falseHP=diff
+                set tempDat.shieldLeft=amount-diff
+            endif
+            //Now let's figure out if the unit already has a shield - if he 
+            //does, we add this shield to the front:
+            if thistype.tab.exists(u) then
+                set linkedDat=thistype.tab[u]
+                set tempDat.nextShield=linkedDat
+                set linkedDat.prevShield=tempDat
+            endif
+            set thistype.tab[u]=tempDat
+            //now let's add this shield to the stack so it can be properly
+            //deallocated when its time runs out:
+            set thistype.shieldIndex=thistype.shieldIndex+1
+            set thistype.allShields[thistype.shieldIndex]=tempDat
+            //if allShields was previously empty we have to jumpstart the timer:
+            if thistype.shieldIndex==0 then
+                call TimerStart(thistype.time,thistype.TIMER_PERIOD,true,function thistype.timeout)
+            endif
+        endmethod
+        
+        //* Auxillary method used to initialize the HandleTable and 
+        //* StructuredDD handler.
+        private static method onInit takes nothing returns nothing
+            set thistype.tab=HandleTable.create()
+            call StructuredDD.addHandler(function thistype.handler)
+        endmethod
+    endstruct
+endlibrary

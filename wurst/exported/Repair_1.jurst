@@ -1,0 +1,62 @@
+scope Repair initializer i
+	globals
+		private constant real MAX_DISTANCE = 400.
+		private constant real REPAIR_TIMEOUT = 30.
+		private constant real FRAC = 1./2.
+		private constant string TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
+		private constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
+		private constant string DISTANCE_ERROR = "Your ship is too far away!"
+		private constant string ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
+		private constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+		private real array lastRepair[12]
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local player p
+		local unit tU=GetTriggerUnit()
+		local integer id
+		local real max
+		local real life
+		local integer index=0
+		if not Game_ended and (tU == Game_westRepair or tU == Game_eastRepair) then
+			set p = GetTriggerPlayer()
+			set id = GetPlayerId(p)
+			if Game_localPlayer==p then
+				call SelectUnit(tU,false)
+				call SelectUnit(Ships_ships[id],true)
+			endif
+			if IsUnitAlly(tU,p) then
+				if IsUnitInRange(tU,Ships_ships[id],MAX_DISTANCE) then
+					set life = GetWidgetLife(Ships_ships[id])
+					set max = GetUnitState(Ships_ships[id],UNIT_STATE_MAX_LIFE)
+					if life<max then
+						if Game_seconds - lastRepair[id] > REPAIR_TIMEOUT then
+							set lastRepair[id] = Game_seconds
+							call SetWidgetLife(Ships_ships[id],life + (max-life)*FRAC)
+							call DestroyEffect(AddSpecialEffectTarget(HEAL_MODEL,Ships_ships[id],"origin"))
+						else
+							call SimError(p,TOO_OFTEN_ERROR)
+						endif
+					else
+						call SimError(p,MAX_HEALTH_ERROR)
+					endif
+				else
+					call SimError(p,DISTANCE_ERROR)
+				endif
+			else
+				call SimError(p,ALLIANCE_ERROR)
+			endif
+		endif
+		set tU=null
+	endfunction
+	
+	private function i takes nothing returns nothing
+		local integer index=0
+		loop
+			exitwhen index>11
+			set lastRepair[index] = -1.*REPAIR_TIMEOUT
+			set index=index+1
+		endloop
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
+	endfunction
+endscope

@@ -1,0 +1,15 @@
+scope IonicTeleporter initializer i
+	globals
+		private constant integer TELE_ID='A00H'
+	endglobals
+	
+	private function effectC takes nothing returns nothing
+		if GetSpellAbilityId()==TELE_ID then
+			call DTS12MissileArray_disjoint(GetTriggerUnit())
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)
+	endfunction
+endscope

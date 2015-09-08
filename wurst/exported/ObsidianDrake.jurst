@@ -1,0 +1,25 @@
+// Deals precisely 400 damage to targets below 400 hp.
+
+scope ObsidianDrake initializer i
+	globals
+		private constant integer DRAKE_ID = 'o00K'
+		private constant integer HEALTH_PROC = 400
+		private constant real STD_DAMAGE = 320.
+		private constant real BONUS_DAMAGE = HEALTH_PROC - STD_DAMAGE
+	endglobals
+	
+	private function h takes nothing returns boolean
+		local unit tU=GetTriggerUnit()
+		local unit dS=GetEventDamageSource()
+		if DamageType.get()==DamageType.SPELL and GetUnitTypeId(dS)==DRAKE_ID and GetWidgetLife(tU)<=HEALTH_PROC then
+			call DamageType.dealCodeDamage(dS,tU,BONUS_DAMAGE)
+		endif
+		set tU=null
+		set dS=null
+		return false
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call StructuredDD.addHandler(function h)
+	endfunction
+endscope

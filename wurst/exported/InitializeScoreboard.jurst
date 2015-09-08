@@ -1,0 +1,88 @@
+scope InitializeScoreboard initializer i
+	globals
+		private string array colors[12]
+		private constant real MB_WIDTH = .25
+	endglobals
+	
+	private function iconCol takes integer col, boolean show returns nothing
+		local integer i = 0
+		loop
+			exitwhen i>Game_scoreboard.rows
+			call Game_scoreboard.displayIcon(col,i,show)
+			set i = i +1
+		endloop
+	endfunction
+	
+	private function widthCol takes integer col, real width returns nothing
+		local integer i = 0
+		loop
+			exitwhen i>Game_scoreboard.rows
+			call Game_scoreboard.setWidth(col,i,width)
+			set i = i +1
+		endloop
+	endfunction
+	
+	private function valueCol takes integer col, string val returns nothing
+		local integer i = 0
+		loop
+			exitwhen i>Game_scoreboard.rows
+			call Game_scoreboard.setValue(col,i,val)
+			set i = i +1
+		endloop
+	endfunction
+	
+    private function initialize takes nothing returns nothing
+        local integer i = 2
+		local integer j = 0
+        
+        set Game_scoreboard = myBoard.create(5,2+Game_playerCount,"|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
+		call widthCol(0,MB_WIDTH*3./7.)
+		call widthCol(1,MB_WIDTH*1./7.)
+		call widthCol(2,MB_WIDTH*1.125/7.)
+		call widthCol(3,MB_WIDTH*1.125/7.)
+		call widthCol(4,MB_WIDTH*0.75/7.)
+		call iconCol(1,false)
+		call iconCol(2,false)
+		call iconCol(3,false)
+		call iconCol(4,false)
+		call Game_scoreboard.displayIcon(0,0,false)
+		call Game_scoreboard.displayIcon(0,1+Game_westCount,false)
+		call valueCol(1,"0")
+		call valueCol(2,"0")
+		call valueCol(3,"0")
+		call valueCol(4,"0")
+        call Game_scoreboard.setValue(1,0,"|cffffcc00Kills|r")
+        call Game_scoreboard.setValue(2,0,"|cffffcc00Deaths|r")
+		call Game_scoreboard.setValue(3,0,"|cffffcc00Assists|r")
+		call Game_scoreboard.setValue(4,0,"|cffffcc00Farm|r")
+		call Game_scoreboard.setValue(1,1+Game_westCount,"")
+		call Game_scoreboard.setValue(2,1+Game_westCount,"")
+		call Game_scoreboard.setValue(3,1+Game_westCount,"")
+		call Game_scoreboard.setValue(4,1+Game_westCount,"")
+        loop
+            exitwhen i > 11
+            if Game_playing[i] then
+				if i<7 then
+					call Game_scoreboard.setValue(0,1+j,Game_colors[i]+Game_names[i]+"|r")
+					call Game_scoreboard.setIcon(0,1+j,Game_HELICOPTER_ICON)
+					set Game_scoreboardRows[i] = 1+j
+				else
+					call Game_scoreboard.setValue(0,2+j,Game_colors[i]+Game_names[i]+"|r")
+					call Game_scoreboard.setIcon(0,2+j,Game_HELICOPTER_ICON)
+					set Game_scoreboardRows[i] = 2+j
+				endif
+				set j = j+1
+			endif
+            set i = i + 1
+        endloop
+        
+        set Game_scoreboard.show = true
+		set Game_scoreboard.suppress = true
+    
+        call DestroyTimer(GetExpiredTimer())
+    endfunction
+	
+	private function i takes nothing returns nothing
+		call TimerStart(CreateTimer(),0.,false,function initialize)
+	endfunction
+endscope

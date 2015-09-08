@@ -1,0 +1,35 @@
+scope Creeps2 initializer i
+    globals
+		private constant real BONUS_CREEPS_RATE = 120.
+        private group g=CreateGroup()
+		private rect rct
+    endglobals
+    
+    private function c takes nothing returns nothing
+		local unit FoG
+		local unit u
+		local player owner
+		if not Game_ended then
+			call GroupEnumUnitsInRect(g,Terrain_centralArea, null)
+			loop
+				set FoG=FirstOfGroup(g)
+				exitwhen FoG==null
+				if GetUnitTypeId(FoG) == Game_OUTPOST_ID and UnitAlive(FoG) then
+					set owner=GetOwningPlayer(FoG)
+					set u=CreateUnit(owner,'ufro',GetUnitX(FoG),GetUnitY(FoG),270.)
+					if owner==Game_players[0] then
+						call IssuePointOrder(u,"attack",Game_EASTX,0.)
+					else
+						call IssuePointOrder(u,"attack",Game_WESTX,0.)
+					endif
+				endif
+				call GroupRemoveUnit(g,FoG)
+			endloop
+		endif
+		set u = null
+    endfunction
+    
+    private function i takes nothing returns nothing
+		call TimerStart(CreateTimer(),BONUS_CREEPS_RATE,true,function c)
+    endfunction
+endscope

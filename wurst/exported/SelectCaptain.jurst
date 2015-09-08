@@ -1,0 +1,23 @@
+scope SelectCaptain initializer init
+	globals
+		private constant integer SELECT_CAPT_ID = 'A00Z'
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local player owner
+		local integer id
+		if GetSpellAbilityId() == SELECT_CAPT_ID then
+			set owner = GetOwningPlayer(GetTriggerUnit())
+			set id = GetPlayerId(owner)
+			if Game_localPlayer == owner then
+				call ClearSelection()
+				call SelectUnit(Game_captains[id],true)
+				call PanCameraToTimed(GetUnitX(Game_captains[id]),GetUnitY(Game_captains[id]),0.)
+			endif
+		endif
+	endfunction
+	
+	private function init takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope

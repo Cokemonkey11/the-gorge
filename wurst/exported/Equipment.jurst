@@ -1,0 +1,404 @@
+library Equipment initializer i requires SimError, Ships
+	globals
+		private constant integer CLASS_UNKNOWN   = -1
+		private constant integer CLASS_ENGINE    =  0
+		private constant integer CLASS_MECHANIC  =  1
+		private constant integer CLASS_HULL      =  2
+		private constant integer CLASS_SHIELDGEN =  3
+		private constant integer CLASS_TELEPORT  =  4
+		private constant integer CLASS_SPECIAL   =  5
+		
+		public constant integer CLASS_CONTRACT   =  6
+		
+		private constant integer PAGE_1_2       = 'I003'
+		private constant integer PAGE_2_1		= 'I004'
+		private constant integer PAGE_2_3       = 'I006'
+		private constant integer PAGE_3_2       = 'I007'
+		private constant integer PAGE_3_4       = 'I00A'
+		private constant integer PAGE_4_3       = 'I00B'
+		
+		private constant integer KPAGE_1_2      = 'I00E'
+		private constant integer KPAGE_2_1      = 'I00F'
+		
+		public constant integer DATA_ID         = 'I00D'
+		public constant integer TOXIC_SUBST_FULL= 'I00H'
+		
+		// Engines
+		private constant integer STEAM_CORE     = 'I000'
+		// Mechanics
+		private constant integer PROBLEM_SOLVER = 'I001'
+		// Hulls
+		private constant integer STONE_HULL     = 'I002'
+		// Shield Generators
+		private constant integer BRONZE_GEN     = 'I005'
+		// Teleporters
+		private constant integer IONIC_TELEPORT = 'I008'
+		// Special
+		private constant integer SHIP_LOCATOR   = 'I009'
+		// Contracts
+		private constant integer DATA_ACQUISIT  = 'I00C'
+		public constant integer TOXIC_SUBST     = 'I00G'
+		
+		private constant integer REDUCTION1 = 10
+		
+		private constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
+		private constant string INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
+		
+		private constant real EQUIPMENT_SELL_VALUE = 1.
+		
+		private Table classes
+		
+		public HandleTable reduction
+	endglobals
+	
+	public function autoPawnItemForPlayer takes integer pID, item it returns nothing
+		local integer val = R2I(GetWidgetLife(it))
+		if val>1 then
+			call DisplayTextToPlayer(Game_players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships_ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
+			call SetPlayerState(Game_players[pID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game_players[pID],PLAYER_STATE_RESOURCE_GOLD)+val)
+		endif
+		call RemoveItem(it)
+	endfunction
+	
+	public function getItemClassId takes integer id returns integer
+		if classes.exists(id) then
+			return classes[id]
+		endif
+		return CLASS_UNKNOWN
+	endfunction
+	
+	public function getItemClass takes item it returns integer
+		return getItemClassId(GetItemTypeId(it))
+	endfunction
+	
+	private function unitHasClassPair takes unit u, integer class returns boolean
+		local integer index = 0
+		local integer count = 0
+		loop
+			exitwhen index>5
+			if getItemClass(UnitItemInSlot(u,index))==class then
+				set count=count+1
+				if count>1 then
+					return true
+				endif
+			endif
+			set index=index+1
+		endloop
+		return false
+	endfunction
+	
+	private function unitHasItemOfClass takes unit u, integer class returns item
+		local integer index=0
+		local item it=null
+		loop
+			exitwhen index>5
+			set it=UnitItemInSlot(u,index)
+			if getItemClass(it)==class then
+				return it
+			endif
+			set index=index+1
+		endloop
+		set it=null
+		return it
+	endfunction
+	
+	public function unitHasItemOfTypeSlot takes unit u, integer id returns integer
+		local integer index=0
+		loop
+			exitwhen index>5
+			if GetItemTypeId(UnitItemInSlot(u,index))==id then
+				return index
+			endif
+			set index = index + 1
+		endloop
+		return -1
+	endfunction
+	
+	private function unitHasItemOfType takes unit u, integer id returns boolean
+		return unitHasItemOfTypeSlot(u,id)>-1
+	endfunction
+	
+	private function unitHasTypePair takes unit u, integer id returns boolean
+		local integer index = 0
+		local integer count = 0
+		loop
+			exitwhen index>5
+			if GetItemTypeId(UnitItemInSlot(u,index)) == id then
+				set count = count +1
+				if count>1 then
+					return true
+				endif
+			endif
+			set index=index+1
+		endloop
+		return false
+	endfunction
+	
+	public function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
+		local integer shipClass = Ships_getClass(u)
+		local integer itemClass = getItemClassId(id)
+		if unitHasClassPair(u,itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+			return false
+		elseif unitHasTypePair(u,id) then
+			return false
+		elseif shipClass == Ships_CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+			return false
+		elseif shipClass == Ships_CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+			return false
+		elseif shipClass == Ships_CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+			return false
+		elseif shipClass == Ships_CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+			return false
+		endif
+		return true
+	endfunction
+	
+	private function unitCanAcquireItemId takes unit u, integer id returns boolean
+		local integer shipClass = Ships_getClass(u)
+		local integer itemClass = getItemClassId(id)
+		if unitHasItemOfClass(u,itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+			return false
+		elseif unitHasItemOfType(u,id) then
+			return false
+		elseif shipClass == Ships_CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+			return false
+		elseif shipClass == Ships_CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+			return false
+		elseif shipClass == Ships_CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+			return false
+		elseif shipClass == Ships_CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+			return false
+		endif
+		return true
+	endfunction
+	
+	public function playerCanAcquireItem takes integer pID, item it returns boolean
+		return unitCanAcquireItemId(Ships_ships[pID],GetItemTypeId(it))
+	endfunction
+	
+	private function unitCanAcquireItem takes unit u, item it returns boolean
+		return unitCanAcquireItemId(u,GetItemTypeId(it))
+	endfunction
+	
+	private function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
+		local real x = GetUnitX(Ships_ships[pID])
+		local real y = GetUnitY(Ships_ships[pID])
+		local item temp
+		local integer val
+		if unitCanAcquireItemId(Ships_ships[pID],id) then
+			call UnitAddItem(Ships_ships[pID],CreateItem(id,x,y))
+			return true
+		else
+			set temp = CreateItem(id,0.,0.)
+			call autoPawnItemForPlayer(pID,temp)
+			set temp = null
+		endif
+		return false
+	endfunction
+	
+	public function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+		if i0>0 then
+			call playerAddItemFromIdConditional(pID,i0)
+		endif
+		if i1>0 then
+			call playerAddItemFromIdConditional(pID,i1)
+		endif
+		if i2>0 then
+			call playerAddItemFromIdConditional(pID,i2)
+		endif
+		if i3>0 then
+			call playerAddItemFromIdConditional(pID,i3)
+		endif
+		if i4>0 then
+			call playerAddItemFromIdConditional(pID,i4)
+		endif
+		if i5>0 then
+			call playerAddItemFromIdConditional(pID,i5)
+		endif
+	endfunction
+	
+	public function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+		local real x = GetUnitX(Ships_ships[pID])
+		local real y = GetUnitY(Ships_ships[pID])
+		if i0>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i0,x,y))
+		endif
+		if i1>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i1,x,y))
+		endif
+		if i2>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i2,x,y))
+		endif
+		if i3>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i3,x,y))
+		endif
+		if i4>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i4,x,y))
+		endif
+		if i5>0 then
+			call UnitAddItem(Ships_ships[pID],CreateItem(i5,x,y))
+		endif
+	endfunction
+	
+	private function tradeExperience takes player who returns integer
+		return Game_tradeExp[GetPlayerId(who)]
+	endfunction
+	
+	private function getContractCost takes item it returns integer
+		local integer typ = GetItemTypeId(it)
+		if typ == DATA_ACQUISIT then
+			return 0
+		elseif typ == TOXIC_SUBST then
+			return 1
+		endif
+		return -1
+	endfunction
+	
+	private function pageC takes nothing returns boolean
+		local item sI=GetSoldItem()
+		local unit seller = GetTriggerUnit()
+		local unit buyer = GetBuyingUnit()
+		local unit toSelect = null
+		local integer id = GetItemTypeId(sI)
+		local player owner = GetOwningPlayer(buyer)
+		local boolean was = false
+		if id == PAGE_1_2 then
+			set was = true
+			if seller == Game_westUtility[0] then
+				set toSelect = Game_westUtility[1]
+			else
+				set toSelect = Game_eastUtility[1]
+			endif
+		elseif id==PAGE_2_1 then
+			set was = true
+			if seller == Game_westUtility[1] then
+				set toSelect = Game_westUtility[0]
+			else
+				set toSelect = Game_eastUtility[0]
+			endif
+		elseif id==PAGE_2_3 then
+			set was = true
+			if seller == Game_westUtility[1] then
+				set toSelect = Game_westUtility[2]
+			else
+				set toSelect = Game_eastUtility[2]
+			endif
+		elseif id==PAGE_3_2 then
+			set was = true
+			if seller == Game_westUtility[2] then
+				set toSelect = Game_westUtility[1]
+			else
+				set toSelect=Game_eastUtility[1]
+			endif
+		elseif id==PAGE_3_4 then
+			set was = true
+			if seller == Game_westUtility[2] then
+				set toSelect = Game_westUtility[3]
+			else
+				set toSelect = Game_eastUtility[3]
+			endif
+		elseif id==PAGE_4_3 then
+			set was = true
+			if seller == Game_westUtility[3] then
+				set toSelect = Game_westUtility[2]
+			else
+				set toSelect = Game_eastUtility[2]
+			endif
+		elseif id==KPAGE_1_2 then
+			set was = true
+			if seller == Game_westKeep[0] then
+				set toSelect = Game_westKeep[1]
+			else
+				set toSelect = Game_eastKeep[1]
+			endif
+		elseif id==KPAGE_2_1 then
+			set was = true
+			if seller == Game_westKeep[1] then
+				set toSelect = Game_westKeep[0]
+			else
+				set toSelect = Game_eastKeep[0]
+			endif
+		endif
+		if was then
+			call RemoveItem(sI)
+			if Game_localPlayer == owner then
+				call SelectUnit(seller,false)
+				call SelectUnit(toSelect,true)
+			endif
+		endif
+		set sI=null
+		set seller = null
+		set buyer = null
+		return false
+	endfunction
+	
+	public function resetUnitDamageReduction takes unit u returns nothing
+		local integer index = 0
+		loop
+			exitwhen index>5
+			if GetItemTypeId(UnitItemInSlot(u,index)) == STONE_HULL then
+				set reduction[u] = REDUCTION1
+				return
+			endif
+			set index = index +1
+		endloop
+		set reduction[u] = 0
+	endfunction
+	
+	private function c takes nothing returns boolean
+		local unit buyer = GetBuyingUnit()
+		local unit seller = GetTriggerUnit()
+		local item it
+		local boolean has
+		local item sI=GetSoldItem()
+		local player buyerP = GetOwningPlayer(buyer)
+		local real val
+		local integer class = getItemClass(sI)
+		set has = unitHasItemOfType(buyer,GetItemTypeId(sI))
+		set it = unitHasItemOfClass(buyer,class)
+		if has or GetItemTypeId(sI) == GetItemTypeId(it) then
+			call SimError(buyerP,"You can't carry two of the same equipment.")
+			set val = GetWidgetLife(sI)
+			if val>1. then
+				call SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+			endif
+			call RemoveItem(sI)
+		elseif not unitCanAcquireItem(buyer,sI) then
+			set val = GetWidgetLife(sI)
+			call RemoveItem(sI)
+			call SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+			call SimError(buyerP,WRONG_CLASS)
+		else
+			if it!=null and class!=CLASS_UNKNOWN and class!=CLASS_SPECIAL and class!=CLASS_CONTRACT then
+				set val = GetWidgetLife(it)
+				call SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				call DisplayTextToPlayer(buyerP,0.,0.,"|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
+				call RemoveItem(it)
+			elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
+				call RemoveItem(sI)
+				call SimError(buyerP,INSUFFICIENT_EXPERIENCE)
+			endif
+		endif
+		call resetUnitDamageReduction(buyer)
+		set buyer = null
+		set seller = null
+		set sI=null
+		return false
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM,function c)
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM,function pageC)
+		// Initialize class table
+		set classes = Table.create()
+		set classes[STEAM_CORE]     = CLASS_ENGINE
+		set classes[PROBLEM_SOLVER] = CLASS_MECHANIC
+		set classes[STONE_HULL]     = CLASS_HULL
+		set classes[BRONZE_GEN]     = CLASS_SHIELDGEN
+		set classes[IONIC_TELEPORT] = CLASS_TELEPORT
+		set classes[SHIP_LOCATOR]   = CLASS_SPECIAL
+		set classes[DATA_ACQUISIT]  = CLASS_CONTRACT
+		set classes[TOXIC_SUBST]    = CLASS_CONTRACT
+		set reduction = HandleTable.create()
+	endfunction
+endlibrary

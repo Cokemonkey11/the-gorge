@@ -1,0 +1,22 @@
+scope Release initializer i
+	globals
+		private constant integer RELEASE_ID = 'A00M'
+		private constant string TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local player owner
+		local integer id
+		local unit tU
+		if GetSpellAbilityId() == RELEASE_ID then
+			set tU=GetSpellTargetUnit()
+			call Crewmembers_release(tU)
+			call DestroyEffect(AddSpecialEffect(TRANSMUTE,GetUnitX(tU),GetUnitY(tU)))
+			set tU=null
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope

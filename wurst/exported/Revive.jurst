@@ -1,0 +1,187 @@
+scope Revive initializer i
+    private struct deathDat
+        unit u
+        integer timeL
+        real teamX
+		integer ownerID=-1
+		integer item0Id=-1
+		integer item1Id=-1
+		integer item2Id=-1
+		integer item3Id=-1
+		integer item4Id=-1
+		integer item5Id=-1
+    endstruct
+    
+    globals
+		private constant real CLOCK_PERIOD = 1.
+		private constant real REVIVE_OFFSET = 328.
+		private constant integer REVIVE_DELAY_FLAT = 15
+		private constant integer REVIVE_DELAY_PERMINUTE = 1
+		private constant integer FLAT_BOUNTY = 100
+		private constant integer BOUNTY_PER_MINUTE = 2
+		private constant integer COP_ID = 'u003'
+		private constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
+		private constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
+        private deathDat array deathDB
+        private integer dbIndex=-1
+        private timer time=CreateTimer()
+		private integer westDeadCount=0
+		private integer eastDeadCount=0
+		private unit westDummy
+		private unit eastDummy
+    endglobals
+    
+    private function p takes nothing returns nothing
+        local deathDat tempDat
+        local integer index=0
+        loop
+            exitwhen index>dbIndex
+            set tempDat=deathDB[index]
+			call FloatText_reviveNumbers(tempDat.teamX,0.,I2S(tempDat.timeL),tempDat.ownerID)
+            set tempDat.timeL=tempDat.timeL-1
+            if tempDat.timeL<1 and not Game_ended then
+                set Ships_ships[tempDat.ownerID] = CreateUnit(Game_players[tempDat.ownerID],Game_shipClass[tempDat.ownerID],tempDat.teamX,0,270.)
+				call Equipment_playerAddItemsFromId(tempDat.ownerID,tempDat.item0Id,tempDat.item1Id,tempDat.item2Id,tempDat.item3Id,tempDat.item4Id,tempDat.item5Id)
+				call DestroyEffect(AddSpecialEffectTarget(REVIVE_MODEL,Ships_ships[tempDat.ownerID],"origin"))
+				if Game_localPlayer == Game_players[tempDat.ownerID] then
+					call PanCameraToTimed(tempDat.teamX,0.,0.)
+					call ClearSelection()
+					call SelectUnit(Ships_ships[tempDat.ownerID],true)
+				endif
+				if tempDat.ownerID<7 then
+					set westDeadCount = westDeadCount - 1
+					if westDeadCount == 0 then
+						call SetUnitX(westDummy,Game_SAFE_X)
+						call SetUnitY(westDummy,Game_SAFE_Y)
+					endif
+				else
+					set eastDeadCount = eastDeadCount - 1
+					if eastDeadCount == 0 then
+						call SetUnitX(eastDummy,Game_SAFE_X)
+						call SetUnitY(eastDummy,Game_SAFE_Y)
+					endif
+				endif
+                call tempDat.destroy()
+                set deathDB[index]=deathDB[dbIndex]
+                set dbIndex=dbIndex-1
+				set index = index-1
+                if dbIndex==-1 then
+                    call PauseTimer(time)
+                endif
+            endif
+            set index=index+1
+        endloop
+    endfunction
+	
+	private function getBounty takes nothing returns integer
+		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game_getMinutes()
+	endfunction
+	
+	private function parseAssists takes integer pID returns nothing
+		local integer index = 2
+		loop
+			exitwhen index>11
+			if Game_seconds - Game_assistStamps[pID][index] <= Game_ASSIST_TIME then
+				set Game_assists[index] = Game_assists[index] +1
+				call Game_scoreboard.setValue(3,Game_scoreboardRows[index],I2S(Game_assists[index]))
+			endif
+			set index = index+1
+		endloop
+	endfunction
+    
+    private function c takes nothing returns nothing
+		local deathDat tempDat
+		local unit tU=GetTriggerUnit()
+		local unit kU
+		local integer id
+		local integer bounty
+		local player kO
+		local item ti
+		local integer pID
+        if Ships_isPlayerShip(tU)then
+			set kU=GetKillingUnit()
+			set kO=GetOwningPlayer(kU)
+			set id = GetPlayerId(kO)
+			set tempDat=deathDat.create()
+			set tempDat.u=tU
+			set tempDat.timeL=REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game_getMinutes()
+			set tempDat.ownerID=GetPlayerId(GetOwningPlayer(tU))
+			set pID=GetPlayerId(GetOwningPlayer(kU))
+			if id>1 then
+				call Game_parseKill(id)
+				call parseAssists(tempDat.ownerID)
+				set bounty = getBounty()
+				call SetPlayerState(kO,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(kO,PLAYER_STATE_RESOURCE_GOLD)+bounty)
+				if Game_localPlayer == Game_players[tempDat.ownerID] then
+					call DisplayTimedTextToPlayer(Game_localPlayer,0.,0.,10.,"Your ship was destroyed by "+Game_colors[id]+Game_names[id]+"|r; you will be rebuilt in "+I2S(tempDat.timeL)+"|r seconds.")
+				elseif Game_localPlayer == Game_players[id] then
+					call DisplayTimedTextToPlayer(Game_localPlayer,0.,0.,10.,"You destroyed "+Game_colors[tempDat.ownerID]+Game_names[tempDat.ownerID]+"|r for |cffffcc00"+I2S(bounty)+" gold.")
+				else
+					call DisplayTimedTextToPlayer(Game_localPlayer,0.,0.,10.,Game_colors[tempDat.ownerID]+Game_names[tempDat.ownerID]+"|r was destroyed by "+Game_colors[id]+Game_names[id]+"|r for |cffffcc00"+I2S(bounty)+"|r gold.")
+				endif
+			else
+				if Game_localPlayer == Game_players[tempDat.ownerID] then
+					call DisplayTimedTextToPlayer(Game_localPlayer,0.,0.,10.,"Your ship was destroyed. It will be rebuilt in |cffffcc00"+I2S(tempDat.timeL)+"|r seconds.")
+				else
+					call DisplayTimedTextToPlayer(Game_localPlayer,0.,0.,10.,Game_colors[tempDat.ownerID]+Game_names[tempDat.ownerID]+"|r was destroyed.")
+				endif
+			endif
+			call Game_addDeath(tU)
+			
+			set ti = UnitItemInSlot(tU,0)
+			set tempDat.item0Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			set ti = UnitItemInSlot(tU,1)
+			set tempDat.item1Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			set ti = UnitItemInSlot(tU,2)
+			set tempDat.item2Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			set ti = UnitItemInSlot(tU,3)
+			set tempDat.item3Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			set ti = UnitItemInSlot(tU,4)
+			set tempDat.item4Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			set ti = UnitItemInSlot(tU,5)
+			set tempDat.item5Id=GetItemTypeId(ti)
+			call RemoveItem(ti)
+			
+			if tempDat.ownerID<7 then
+				set tempDat.teamX=Game_WESTX+REVIVE_OFFSET
+				set westDeadCount=westDeadCount+1
+				if westDeadCount==1 then
+					call SetUnitX(westDummy,Game_WESTX+REVIVE_OFFSET)
+					call SetUnitY(westDummy,0.)
+				endif
+			else
+				set tempDat.teamX=Game_EASTX-REVIVE_OFFSET
+				set eastDeadCount=eastDeadCount+1
+				if eastDeadCount==1 then
+					call SetUnitX(eastDummy,Game_EASTX-REVIVE_OFFSET)
+					call SetUnitY(eastDummy,0.)
+				endif
+			endif
+			set dbIndex=dbIndex+1
+			set deathDB[dbIndex]=tempDat
+			if dbIndex==0 then
+				call TimerStart(time,CLOCK_PERIOD,true,function p)
+			endif
+			set kU=null
+		endif
+		set tU=null
+    endfunction
+    
+    private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
+		
+		// Initialize circle of power dummies
+		set westDummy = CreateUnit(Game_playerPassive,COP_ID,Game_SAFE_X,Game_SAFE_Y,270.)
+		set eastDummy = CreateUnit(Game_playerPassive,COP_ID,Game_SAFE_X,Game_SAFE_Y,270.)
+    endfunction
+endscope

@@ -1,0 +1,290 @@
+// Helicopter (Frigate) Q Ability:
+// Fires two missiles at a unit, which accelerate towards the target and deal 
+// damage upon contact. If the missiles do not hit they eventually disjoint. 
+// If a location is targeted, the missiles instead accelerate in one direction. 
+// This ability can be cast twice before it will enter cooldown.
+// 		Damage (each):    55
+//	    Cast Range:       700
+//		Maximum Range:    1800
+//	    Initial Velocity: 600
+//		Maximum Velocity: 1200
+//		Acceleration:     100
+
+library DTS12MissileArray initializer i requires RegisterPlayerUnitEvent
+	private struct Missile
+		unit target
+		real dX
+		real dY
+		real ddX = 0.
+		real ddY = 0.
+		real vel
+		real dist=0.
+		unit missile
+		integer ownerID
+		effect fx
+	endstruct
+	
+	globals
+		private constant integer DUMMY_ID = 'u000'
+		private constant integer ARRAY_ID = 'A00P'
+		private constant real DAMAGE           = 55.
+		private constant real MAXIMUM_RANGE    = 1800.
+		private constant real INITIAL_VELOCITY = 600.
+		private constant real MAXIMUM_VELOCITY = 1200.
+		private constant real INITIAL_OFFSET   = 24.
+		private constant real ACCELERATION     = 100.
+		private constant real CLOCK_PERIOD     = 1./30.
+		private constant real COLLISION_RADIUS = 32.+64.
+		private constant real FLY_HEIGHT       = 120.
+		private constant real CHEAP_FRICTION   = MAXIMUM_VELOCITY / (MAXIMUM_VELOCITY + ACCELERATION)
+		private constant real SCALE = .75
+		private constant string MISSILE_MODEL = "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdl"
+		private constant string SOUND         = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
+		
+		private timer clock = CreateTimer()
+		private Missile array db
+		private integer dbIndex = -1
+		private location loc = Location(0.,0.)
+		private group grp = CreateGroup()
+		private HandleTable ht
+	endglobals
+	
+	private function getZ takes real x, real y returns real
+		call MoveLocation(loc,x,y)
+		return GetLocationZ(loc)
+	endfunction
+	
+	public function disjoint takes unit u returns nothing
+		local integer index = 0
+		local Missile temp
+		loop
+			exitwhen index>dbIndex
+			set temp = db[index]
+			if temp.target == u then
+				set temp.target = null
+			endif
+			set index=index+1
+		endloop
+	endfunction
+	
+	private function p takes nothing returns nothing
+		local integer index = 0
+		local Missile temp
+		local real ang
+		local unit FoG
+		local boolean hit
+		local real newX
+		local real newY
+		local real oldX
+		local real oldY
+		loop
+			exitwhen index>dbIndex
+			set temp = db[index]
+			if temp.target==null then
+				set temp.dX = temp.dX + temp.ddX
+				set temp.dY = temp.dY + temp.ddY
+				set temp.dX = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dX
+				set temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
+				set oldX = GetUnitX(temp.missile)
+				set oldY = GetUnitY(temp.missile)
+				set newX = oldX+temp.dX
+				set newY = oldY+temp.dY
+				call SetUnitX(temp.missile,newX)
+				call SetUnitY(temp.missile,newY)
+				call SetUnitFlyHeight(temp.missile,GetUnitFlyHeight(temp.missile)-(getZ(newX,newY)-getZ(oldX,oldY)),0.)
+				set temp.vel = temp.vel + ACCELERATION * CLOCK_PERIOD
+				set temp.vel = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.vel
+				set temp.dist = temp.dist + temp.vel
+				call GroupEnumUnitsInRange(grp,newX,newY,COLLISION_RADIUS,null)
+				set hit = false
+				loop
+					set FoG=FirstOfGroup(grp)
+					exitwhen FoG==null
+					if IsUnitEnemy(FoG,Game_players[temp.ownerID]) and UnitAlive(FoG) and IsUnitType(FoG,UNIT_TYPE_STRUCTURE)==false and not hit then
+						set hit = true
+						call DamageType.dealCodeDamage(Ships_ships[temp.ownerID],FoG,DAMAGE)
+					endif
+					call GroupRemoveUnit(grp,FoG)
+				endloop
+				if temp.dist >= MAXIMUM_RANGE or hit then
+					call KillUnit(temp.missile)
+					call DestroyEffect(temp.fx)
+					set db[index] = db[dbIndex]
+					set dbIndex = dbIndex - 1
+					set index = index -1
+					call temp.destroy()
+					if dbIndex==-1 then
+						call PauseTimer(clock)
+					endif
+				endif
+			else
+				set ang = Atan2(GetUnitY(temp.target)-GetUnitY(temp.missile),GetUnitX(temp.target)-GetUnitX(temp.missile))
+				call SetUnitFacing(temp.missile,ang*bj_RADTODEG)
+				set temp.ddX = ACCELERATION * CLOCK_PERIOD * Cos(ang)
+				set temp.ddY = ACCELERATION * CLOCK_PERIOD * Sin(ang)
+				set temp.dX = temp.dX + temp.ddX
+				set temp.dY = temp.dY + temp.ddY
+				set temp.dX = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dX
+				set temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
+				set newX = GetUnitX(temp.missile)+temp.dX
+				set newY = GetUnitY(temp.missile)+temp.dY
+				call SetUnitX(temp.missile,newX)
+				call SetUnitY(temp.missile,newY)
+				set temp.vel = SquareRoot(temp.dX*temp.dX + temp.dY*temp.dY)
+				set temp.dist = temp.dist + temp.vel
+				if not UnitAlive(temp.target) then
+					set temp.target = null
+				endif
+				call GroupEnumUnitsInRange(grp,newX,newY,COLLISION_RADIUS,null)
+				set hit = false
+				loop
+					set FoG=FirstOfGroup(grp)
+					exitwhen FoG==null
+					if IsUnitEnemy(FoG,Game_players[temp.ownerID]) and UnitAlive(FoG) and IsUnitType(FoG,UNIT_TYPE_STRUCTURE)==false and not hit then
+						set hit = true
+						call DamageType.dealCodeDamage(Ships_ships[temp.ownerID],FoG,DAMAGE)
+					endif
+					call GroupRemoveUnit(grp,FoG)
+				endloop
+				if temp.dist >= MAXIMUM_RANGE or hit then
+					call KillUnit(temp.missile)
+					call DestroyEffect(temp.fx)
+					set db[index] = db[dbIndex]
+					set dbIndex = dbIndex - 1
+					set index = index -1
+					call temp.destroy()
+					if dbIndex==-1 then
+						call PauseTimer(clock)
+					endif
+				endif
+			endif
+			set index = index+1
+		endloop
+	endfunction
+	
+	private function c takes nothing returns nothing
+		local unit targ
+		local unit tU
+		local Missile temp
+		local real face
+		local real cX
+		local real cY
+		local real tX
+		local real tY
+		local player owner
+		if GetSpellAbilityId()==ARRAY_ID then
+			set targ = GetSpellTargetUnit()
+			set tU = GetTriggerUnit()
+			set cX=GetUnitX(tU)
+			set cY=GetUnitY(tU)
+			call Sound.play3D(SOUND,1.,cX,cY,100.)
+			if targ!= null then
+				set tU=GetTriggerUnit()
+				set owner = GetOwningPlayer(tU)
+				set cX=GetUnitX(tU)
+				set cY=GetUnitY(tU)
+				set face = Atan2(GetUnitY(targ)-cY,GetUnitX(targ)-cX)
+				set temp = Missile.create()
+				set temp.target = targ
+				set temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
+				call SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+				call SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+				call UnitAddAbility(temp.missile,'Arav')
+				call UnitAddAbility(temp.missile,'Aloc')
+				call SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
+				call SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
+				set temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+				set temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+				set temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+				set temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+				set temp.ownerID = GetPlayerId(owner)
+				set dbIndex = dbIndex + 1
+				set db[dbIndex] = temp
+				if dbIndex==0 then
+					call TimerStart(clock,CLOCK_PERIOD,true,function p)
+				endif
+				set temp = Missile.create()
+				set temp.target = targ
+				set temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
+				call SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+				call SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+				call UnitAddAbility(temp.missile,'Arav')
+				call UnitAddAbility(temp.missile,'Aloc')
+				call SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
+				call SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
+				set temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+				set temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+				set temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+				set temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+				set temp.ownerID = GetPlayerId(owner)
+				set dbIndex = dbIndex+1
+				set db[dbIndex] = temp
+			else
+				set tU=GetTriggerUnit()
+				set owner = GetOwningPlayer(tU)
+				set cX=GetUnitX(tU)
+				set cY=GetUnitY(tU)
+				set tX=GetSpellTargetX()
+				set tY=GetSpellTargetY()
+				set face = Atan2(tY-cY,tX-cX)
+				set temp = Missile.create()
+				set temp.target = null
+				set temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
+				call SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+				call SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+				call UnitAddAbility(temp.missile,'Arav')
+				call UnitAddAbility(temp.missile,'Aloc')
+				call SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
+				call SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
+				set temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+				set temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+				set temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+				set temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+				set temp.ddX = ACCELERATION * Cos(face) * CLOCK_PERIOD
+				set temp.ddY = ACCELERATION * Sin(face) * CLOCK_PERIOD
+				set temp.ownerID = GetPlayerId(owner)
+				set dbIndex = dbIndex + 1
+				set db[dbIndex] = temp
+				if dbIndex==0 then
+					call TimerStart(clock,CLOCK_PERIOD,true,function p)
+				endif
+				set temp = Missile.create()
+				set temp.target = null
+				set temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
+				call SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+				call SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+				call UnitAddAbility(temp.missile,'Arav')
+				call UnitAddAbility(temp.missile,'Aloc')
+				call SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
+				call SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
+				set temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+				set temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+				set temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+				set temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+				set temp.ddX = ACCELERATION * Cos(face) * CLOCK_PERIOD
+				set temp.ddY = ACCELERATION * Sin(face) * CLOCK_PERIOD
+				set temp.ownerID = GetPlayerId(owner)
+				set dbIndex = dbIndex+1
+				set db[dbIndex] = temp
+			endif
+			if not ht.exists(tU) then
+				set ht[tU] = 0
+			endif
+			set ht[tU] = ht[tU] + 1
+			if ht[tU] == 1 then
+				call UnitRemoveAbility(tU,ARRAY_ID)
+				call UnitAddAbility(tU,ARRAY_ID)
+			else
+				set ht[tU] = 0
+			endif
+			set targ = null
+			set tU = null
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+		call Sound.preload(SOUND)
+		set ht = HandleTable.create()
+	endfunction
+endlibrary

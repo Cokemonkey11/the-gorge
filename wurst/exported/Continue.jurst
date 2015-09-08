@@ -1,0 +1,39 @@
+scope Continue initializer i
+	globals
+		private constant real RECT_SIZE = 250.
+	endglobals
+	
+	private function rectFromXY takes real x, real y, real size returns rect
+		return Rect(x-size/2.,y-size/2.,x+size/2.,y+size/2.)
+	endfunction
+	
+    private function f takes nothing returns boolean
+		local unit fU=GetFilterUnit()
+		local integer id=GetUnitTypeId(fU)
+		local player owner = GetOwningPlayer(fU)
+        if owner==Game_players[0] and (id=='owyv' or id=='hgry' or id=='hdhw') then
+            call IssuePointOrder(fU,"attack",Game_EASTX,0.)
+        elseif owner==Game_players[1] and (id=='owyv' or id=='hgry' or id=='hdhw') then
+            call IssuePointOrder(fU,"attack",Game_WESTX,0.)
+        endif
+		set fU=null
+        return false
+    endfunction
+	
+    private function i takes nothing returns nothing
+        local region regA=CreateRegion()
+        local rect recA=rectFromXY(Game_OUTPOST1_X,Game_OUTPOST1_Y,RECT_SIZE)
+        local region regB=CreateRegion()
+        local rect recB=rectFromXY(Game_OUTPOST2_X,Game_OUTPOST2_Y,RECT_SIZE)
+        local trigger t=CreateTrigger()
+        call RegionAddRect(regA,recA)
+        call RegionAddRect(regB,recB)
+        call TriggerRegisterEnterRegion(t,regA,Filter(function f))
+        call TriggerRegisterEnterRegion(t,regB,Filter(function f))
+		call RemoveRect(recA)
+		call RemoveRect(recB)
+		set recA=null
+		set recB=null
+		set t=null
+    endfunction
+endscope

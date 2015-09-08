@@ -1,0 +1,18 @@
+scope TradingExperience initializer i
+	globals
+		private constant integer SHOW_ID = 'A00N'
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local player owner
+		local integer id
+		if GetSpellAbilityId() == SHOW_ID then
+			set id = GetPlayerId(GetOwningPlayer(GetTriggerUnit()))
+			call DisplayTextToPlayer(Game_players[id],0.,0.,"You have |cffffcc00"+I2S(Game_tradeExp[id])+"|r Trading Experience.")
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope

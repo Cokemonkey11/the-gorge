@@ -1,0 +1,28 @@
+scope SelectShip initializer i
+	globals
+		private constant integer SELECT_SHIP_ID = 'A00K'
+		private constant string DEAD_ERROR = "Your ship has been destroyed."
+	endglobals
+	
+	private function c takes nothing returns nothing
+		local player owner
+		local integer id
+		if GetSpellAbilityId() == SELECT_SHIP_ID then
+			set owner = GetOwningPlayer(GetTriggerUnit())
+			set id = GetPlayerId(owner)
+			if UnitAlive(Ships_ships[id]) and GetUnitTypeId(Ships_ships[id])!=0 then
+				if Game_localPlayer == owner then
+					call ClearSelection()
+					call SelectUnit(Ships_ships[id],true)
+					call PanCameraToTimed(GetUnitX(Ships_ships[id]),GetUnitY(Ships_ships[id]),0.)
+				endif
+			else
+				call SimError(owner,DEAD_ERROR)
+			endif
+		endif
+	endfunction
+	
+	private function i takes nothing returns nothing
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+	endfunction
+endscope
