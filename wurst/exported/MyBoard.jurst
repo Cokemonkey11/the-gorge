@@ -9,7 +9,7 @@ package MyBoard
 	endglobals
 
 	public class MyBoard
-		readonly multiboard           board        = null
+		multiboard                    board        = null
 		private  integer              colCount     = 0
 		private  integer              rowCount     = 0
 		private  boolean              isMinimized  = false
@@ -26,316 +26,317 @@ package MyBoard
 		// Getting the correct values from arrays.
 
 		method getCharCount takes integer col, integer row returns integer
-			return .charCnt[MAX_COLUMN_COUNT*col + row]
-		endmethod
+			return this.charCnt[MAX_COLUMN_COUNT*col + row]
+		end
 
 		method getWidth takes integer col, integer row returns real
-			return .width[MAX_COLUMN_COUNT*col + row]
-		endmethod
+			return this.width[MAX_COLUMN_COUNT*col + row]
+		end
 
 		method getIconPath takes integer col, integer row returns string
-			return .curIcon[MAX_COLUMN_COUNT*col + row]
-		endmethod
+			return this.curIcon[MAX_COLUMN_COUNT*col + row]
+		end
 
 		method getValue takes integer col, integer row returns string
-			return .curValue[MAX_COLUMN_COUNT*col + row]
-		endmethod
+			return this.curValue[MAX_COLUMN_COUNT*col + row]
+		end
 
 		method getItem takes integer col, integer row returns multiboarditem
-			return .brdItem[MAX_COLUMN_COUNT*col + row]
-		endmethod
+			return this.brdItem[MAX_COLUMN_COUNT*col + row]
+		end
 
 		method isValueShown takes integer col, integer row returns boolean
 			return showVal[MAX_COLUMN_COUNT*col + row]
-		endmethod
+		end
 
 		method isIconShown takes integer col, integer row returns boolean
 			return showIcon[MAX_COLUMN_COUNT*col + row]
-		endmethod
+		end
 
 		// Local parameter changes.
 		method displayLocalIcon takes player whichPlayer, integer col, integer row, boolean doDisplay returns nothing
-			local integer arrIndex = MAX_COLUMN_COUNT*col + row
+			integer arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
-				set .showIcon[arrIndex] = doDisplay
+				this.showIcon[arrIndex] = doDisplay
 			endif
 
-			call MultiboardSetItemStyle(.brdItem[arrIndex],.showVal[arrIndex],.showIcon[arrIndex])
-		endmethod
+			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], this.showIcon[arrIndex])
+		end
 
 		method displayLocalValue takes player whichPlayer, integer col, integer row, boolean doDisplay returns nothing
-			local integer arrIndex = MAX_COLUMN_COUNT*col + row
+			integer arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
-				set .showVal[arrIndex] = doDisplay
+				this.showVal[arrIndex] = doDisplay
 			endif
 
-			call MultiboardSetItemStyle(.brdItem[arrIndex],.showVal[arrIndex],.showIcon[arrIndex])
-		endmethod
+			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex],.showIcon[arrIndex])
+		end
 
 		method setLocalIcon takes player whichPlayer, integer col, integer row, string newIcon returns nothing
-			local integer arrIndex = MAX_COLUMN_COUNT*col + row
+			integer arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
-				set .curIcon[arrIndex] = newIcon
+				this.curIcon[arrIndex] = newIcon
 			endif
 
-			call MultiboardSetItemIcon(.brdItem[arrIndex],.curIcon[arrIndex])
-		endmethod
+			MultiboardSetItemIcon(this.brdItem[arrIndex], this.curIcon[arrIndex])
+		end
 
 		method setLocalValue takes player whichPlayer, integer col, integer row, string newValue returns nothing
-			local integer arrIndex = MAX_COLUMN_COUNT*col + row
+			integer arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
-				set .curValue[arrIndex] = newValue
+				this.curValue[arrIndex] = newValue
 			endif
 
-			call MultiboardSetItemValue(.brdItem[arrIndex],.curValue[arrIndex])
-		endmethod
+			MultiboardSetItemValue(this.brdItem[arrIndex], this.curValue[arrIndex])
+		end
 
 		method setLocalWidth takes player whichPlayer, integer col, integer row, real width returns nothing
-			local integer arrIndex = MAX_COLUMN_COUNT*col + row
+			integer arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
-				set .width[arrIndex] = width
-				set .charCnt[arrIndex] = R2I(width/AVERAGE_LETTER_WIDTH)
+				this.width[arrIndex] = width
+				this.charCnt[arrIndex] = R2I(width/AVERAGE_LETTER_WIDTH)
 			endif
 
-			call MultiboardSetItemWidth(.brdItem[arrIndex],.width[arrIndex])
-		endmethod
+			MultiboardSetItemWidth(this.brdItem[arrIndex], this.width[arrIndex])
+		end
 
 		method setLocalTitleText takes player whichPlayer, string newTitle returns nothing
 			if GetLocalPlayer() == whichPlayer then
-				set .titleText = newTitle
+				this.titleText = newTitle
 			endif
 
-			call MultiboardSetTitleText(.board,.titleText)
-		endmethod
+			MultiboardSetTitleText(.board, this.titleText)
+		end
 
 		// Global parameter changes.
 
 		method displayIcon takes integer col, integer row, boolean doDisplay returns nothing
-			call .displayLocalIcon(GetLocalPlayer(),col,row,doDisplay)
-		endmethod
+			this.displayLocalIcon(GetLocalPlayer(),col,row,doDisplay)
+		end
 
 		method displayValue takes integer col, integer row, boolean doDisplay returns nothing
-			call .displayLocalValue(GetLocalPlayer(),col,row,doDisplay)
-		endmethod
+			this.displayLocalValue(GetLocalPlayer(),col,row,doDisplay)
+		end
 
 		method setIcon takes integer col, integer row, string newIcon returns nothing
-			call .setLocalIcon(GetLocalPlayer(),col,row,newIcon)
-		endmethod
+			this.setLocalIcon(GetLocalPlayer(),col,row,newIcon)
+		end
 
 		method setValue takes integer col, integer row, string newValue returns nothing
-			call .setLocalValue(GetLocalPlayer(),col,row,newValue)
-		endmethod
+			this.setLocalValue(GetLocalPlayer(),col,row,newValue)
+		end
 
 		method setWidth takes integer col, integer row, real width returns nothing
-			call .setLocalWidth(GetLocalPlayer(),col,row,width)
-		endmethod
+			this.setLocalWidth(GetLocalPlayer(),col,row,width)
+		end
 
 		// General stuff.
 
 		method minimize takes boolean doMinimize returns nothing
-			if .isShown then
-				call MultiboardMinimize(.board,doMinimize)
+			if this.isShown then
+				MultiboardMinimize(.board,doMinimize)
 			endif
-			set .isMinimized = doMinimize
-		endmethod
+			this.isMinimized = doMinimize
+		end
 
 		method display takes boolean doDisplay returns nothing
-			set .isShown = doDisplay
-			call MultiboardDisplay(.board,doDisplay)
+			this.isShown = doDisplay
+			MultiboardDisplay(.board,doDisplay)
 			if doDisplay then
 				// Unbug the minimization - known issue.
-				call .minimize(not .isMinimized)
-				call .minimize(not .isMinimized)
-				call .minimize(not .isMinimized)
-				call .minimize(not .isMinimized)
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
 			endif
-		endmethod
+		end
 
 		method setRowCount takes integer rows returns nothing
-			local integer colLoop  = 0
-			local integer rowLoop  = 0
-			local integer arrIndex = 0
+			integer colLoop
+			integer rowLoop
+			integer arrIndex
 			// No actions if it's same.
-			if rows != .rowCount then
+			if rows != this.rowCount then
 				// Here's the anti-lag snippet: remove unneeded multiboard items from memory.
 				// (or add new!)
-				if rows < .rowCount then
-					set rowLoop = rows
+				if rows < this.rowCount then
+					rowLoop = rows
 					loop
-						exitwhen rowLoop > .rowCount
-						set colLoop = 0
+						exitwhen rowLoop > this.rowCount
+						colLoop = 0
 						loop
-							exitwhen colLoop > .colCount
-							set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							call MultiboardReleaseItem(.brdItem[arrIndex])
-							set .brdItem[arrIndex] = null
-							set colLoop = colLoop + 1
-						endloop
-						set rowLoop = rowLoop + 1
-					endloop
+							exitwhen colLoop > this.colCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							MultiboardReleaseItem(this.brdItem[arrIndex])
+							this.brdItem[arrIndex] = null
+							colLoop = colLoop + 1
+						end
+						rowLoop = rowLoop + 1
+					end
 				else
-					set rowLoop = .rowCount
+					rowLoop = this.rowCount
 					loop
 						exitwhen rowLoop > rows
-						set colLoop = 0
+						colLoop = 0
 						loop
-							exitwhen colLoop > .colCount
-							set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							set brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
-							set width   [arrIndex] = .01
-							set showVal [arrIndex] = true
-							set showIcon[arrIndex] = true
-							set curValue[arrIndex] = ""
-							set curIcon [arrIndex] = ""
-							set colLoop = colLoop + 1
-						endloop
-						set rowLoop = rowLoop + 1
-					endloop
+							exitwhen colLoop > this.colCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
+							width   [arrIndex] = .01
+							showVal [arrIndex] = true
+							showIcon[arrIndex] = true
+							curValue[arrIndex] = ""
+							curIcon [arrIndex] = ""
+							colLoop = colLoop + 1
+						end
+						rowLoop = rowLoop + 1
+					end
 				endif
 
-				set .rowCount = rows
-				call MultiboardSetRowCount(.board,.rowCount)
+				this.rowCount = rows
+				MultiboardSetRowCount(.board, this.rowCount)
 			endif
-		endmethod
+		end
 
 		method setColCount takes integer cols returns nothing
-			local integer colLoop  = 0
-			local integer rowLoop  = 0
-			local integer arrIndex = 0
+			integer colLoop
+			integer rowLoop
+			integer arrIndex
+
 			// No actions if it's same.
-			if cols != .colCount then
+			if cols != this.colCount then
 				// Here's the anti-lag snippet: remove unneeded multiboard items from memory.
 				// (or add new!)
-				if cols < .colCount then
-					set colLoop = cols
+				if cols < this.colCount then
+					colLoop = cols
 					loop
-						exitwhen colLoop > .colCount
-						set rowLoop = 0
+						exitwhen colLoop > this.colCount
+						rowLoop = 0
 						loop
-							exitwhen rowLoop > .rowCount
-							set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							call MultiboardReleaseItem(.brdItem[arrIndex])
-							set .brdItem[arrIndex] = null
-							set rowLoop = rowLoop + 1
-						endloop
-						set colLoop = colLoop + 1
-					endloop
+							exitwhen rowLoop > this.rowCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							MultiboardReleaseItem(this.brdItem[arrIndex])
+							this.brdItem[arrIndex] = null
+							rowLoop = rowLoop + 1
+						end
+						colLoop = colLoop + 1
+					end
 				else
-					set colLoop = .colCount
+					colLoop = this.colCount
 					loop
 						exitwhen colLoop > cols
-						set rowLoop = 0
+						rowLoop = 0
 						loop
-							exitwhen rowLoop > .rowCount
-							set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							set brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
-							set width   [arrIndex] = .01
-							set showVal [arrIndex] = true
-							set showIcon[arrIndex] = true
-							set curValue[arrIndex] = ""
-							set curIcon [arrIndex] = ""
-							set rowLoop = rowLoop + 1
-						endloop
-						set colLoop = colLoop + 1
-					endloop
+							exitwhen rowLoop > this.rowCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
+							width   [arrIndex] = .01
+							showVal [arrIndex] = true
+							showIcon[arrIndex] = true
+							curValue[arrIndex] = ""
+							curIcon [arrIndex] = ""
+							rowLoop = rowLoop + 1
+						end
+						colLoop = colLoop + 1
+					end
 				endif
 
-				set .colCount = cols
-				call MultiboardSetColumnCount(.board,.colCount)
+				this.colCount = cols
+				MultiboardSetColumnCount(.board, this.colCount)
 			endif
-		endmethod
+		end
 
 		method setTitleText takes string newTitle returns nothing
-			set .titleText = newTitle
-			call MultiboardSetTitleText(.board,.titleText)
-		endmethod
+			this.titleText = newTitle
+			MultiboardSetTitleText(.board, this.titleText)
+		end
 
 		// Operator API.
 
 		method title takes nothing returns string
-			return .titleText
-		endmethod
+			return this.titleText
+		end
 
 		method setTitle takes string newTitle returns nothing
-			call .setTitleText(newTitle)
-		endmethod
+			this.setTitleText(newTitle)
+		end
 
 		method columns takes nothing returns integer
-			return .colCount
-		endmethod
+			return this.colCount
+		end
 
 		method setColumns takes integer cols returns nothing
-			call .setColCount(cols)
-		endmethod
+			this.setColCount(cols)
+		end
 
 		method rows takes nothing returns integer
-			return .rowCount
-		endmethod
+			return this.rowCount
+		end
 
 		method setRows takes integer cols returns nothing
-			call .setRowCount(cols)
-		endmethod
+			this.setRowCount(cols)
+		end
 
 		method show takes nothing returns boolean
-			return .isShown
-		endmethod
+			return this.isShown
+		end
 
 		method setShow takes boolean doDisplay returns nothing
-			call .display(doDisplay)
-		endmethod
+			this.display(doDisplay)
+		end
 
 		method suppress takes nothing returns boolean
-			return .isMinimized
-		endmethod
+			return this.isMinimized
+		end
 
 		method setSuppress takes boolean doMinimize returns nothing
-			call .minimize(doMinimize)
-		endmethod
+			this.minimize(doMinimize)
+		end
 
 		// Initializer.
 
 		static method create takes integer cols, integer rows, string title returns MyBoard
-			local MyBoard  board    = new MyBoard
-			local integer  colLoop  = 0
-			local integer  rowLoop  = 0
-			local integer  arrIndex = 0
+			MyBoard  board    = new MyBoard
+			integer  colLoop  = 0
+			integer  rowLoop
+			integer  arrIndex
 
-			set board.board         = CreateMultiboard()
-			set board.colCount      = cols
-			set board.rowCount      = rows
-			set board.isMinimized   = false
-			set board.isShown       = false
-			set board.titleText     = title
+			board.board         = CreateMultiboard()
+			board.colCount      = cols
+			board.rowCount      = rows
+			board.isMinimized   = false
+			board.isShown       = false
+			board.titleText     = title
 
-			call MultiboardSetColumnCount(board.board,cols)
-			call MultiboardSetRowCount(board.board,rows)
-			call MultiboardSetTitleText(board.board,title)
+			MultiboardSetColumnCount(board.board,cols)
+			MultiboardSetRowCount(board.board,rows)
+			MultiboardSetTitleText(board.board,title)
 
 			// Pre-initializing board items.
 			// This is needed to drastically reduce function calls afterwards.
 			loop
 				exitwhen colLoop > cols
-				set rowLoop = 0
+				rowLoop = 0
 				loop
 					exitwhen rowLoop > rows
-					set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-					set board.brdItem [arrIndex] = MultiboardGetItem(board.board,rowLoop,colLoop)
-					set board.width   [arrIndex] = .01
-					set board.charCnt [arrIndex] = 4
-					set board.showVal [arrIndex] = true
-					set board.showIcon[arrIndex] = true
-					set board.curValue[arrIndex] = ""
-					set board.curIcon [arrIndex] = ""
-					set rowLoop = rowLoop + 1
-				endloop
-				set colLoop = colLoop + 1
-			endloop
+					arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+					board.brdItem [arrIndex] = MultiboardGetItem(board.board,rowLoop,colLoop)
+					board.width   [arrIndex] = .01
+					board.charCnt [arrIndex] = 4
+					board.showVal [arrIndex] = true
+					board.showIcon[arrIndex] = true
+					board.curValue[arrIndex] = ""
+					board.curIcon [arrIndex] = ""
+					rowLoop = rowLoop + 1
+				end
+				colLoop++
+			end
 
 			return board
-		endmethod
+		end
 	end

@@ -1,68 +1,71 @@
 scope ChangeShip initializer i
-    globals
+	import Ships
+	import Game
+
+	globals
 		private constant string ERROR_MESSAGE   = "You cannot purchase ships from your opponent."
 		private constant string SAME_SHIP_ERROR = "You cannot purchase the same ship you already own."
 		private constant string FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
-		
-		private integer array tempIds[6]
-    endglobals
-    
-    private function c takes nothing returns nothing
+
+		private integer array tempIds
+	endglobals
+
+	private function c takes nothing returns nothing
 		local unit selU = GetSellingUnit()
 		local unit bU=GetBuyingUnit()
 		local unit sU=GetSoldUnit()
 		local player buyer = GetOwningPlayer(sU)
-		local integer class = Ships_getClass(sU)
+		local integer class = Ships.getClass(sU)
 		local integer id
 		local integer val
 		local integer index=0
-		if class!=Ships_CLASS_UNKNOWN then
+		if class!=Ships.CLASS_UNKNOWN then
 			if IsUnitAlly(bU,GetOwningPlayer(selU)) then
 				if GetUnitTypeId(sU) != GetUnitTypeId(bU) then
 					if GetUnitFoodMade(sU) >= GetPlayerState(buyer,PLAYER_STATE_RESOURCE_FOOD_USED) then
 						set id = GetPlayerId(buyer)
-						set val = Ships_getSellValue(Ships_ships[id])
+						set val = Ships.getSellValue(Ships.ships[id])
 						call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+val)
 						call DisplayTextToPlayer(buyer,0.,0.,"You sold your |cffffcc00"+GetUnitName(bU)+"|r for |cffffcc00"+I2S(val)+"|r gold and acquired a |cffffcc00"+GetUnitName(sU)+"|r.")
-						set Game_shipClass[id] = GetUnitTypeId(sU)
-						call Game_updateIcon(id)
-						call SetUnitX(sU,GetUnitX(Ships_ships[id]))
-						call SetUnitY(sU,GetUnitY(Ships_ships[id]))
+						set Game.shipClass[id] = GetUnitTypeId(sU)
+						call Game.updateIcon(id)
+						call SetUnitX(sU,GetUnitX(Ships.ships[id]))
+						call SetUnitY(sU,GetUnitY(Ships.ships[id]))
 						loop
 							exitwhen index>5
 							set tempIds[index] = GetItemTypeId(UnitItemInSlot(bU,index))
 							set index=index+1
 						endloop
-						call RemoveUnit(Ships_ships[id])
-						set Ships_ships[id] = sU
-						call Equipment_playerAddItemsFromIdConditional(id,tempIds[0],tempIds[1],tempIds[2],tempIds[3],tempIds[4],tempIds[5])
-						call Equipment_resetUnitDamageReduction(Ships_ships[id])
-						if Game_localPlayer == buyer then
-							call SelectUnit(Ships_ships[id],true)
+						call RemoveUnit(Ships.ships[id])
+						set Ships.ships[id] = sU
+						call Equipment.playerAddItemsFromIdConditional(id,tempIds[0],tempIds[1],tempIds[2],tempIds[3],tempIds[4],tempIds[5])
+						call Equipment.resetUnitDamageReduction(Ships.ships[id])
+						if Game.localPlayer == buyer then
+							call SelectUnit(Ships.ships[id],true)
 							call SelectUnit(selU,false)
 						endif
 					else
 						call SimError(GetOwningPlayer(bU),FOOD_ERROR)
-						call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships_getSellValue(sU))/Ships_SELL_RATIO))
+						call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
 						call RemoveUnit(sU)
 					endif
 				else
 					call SimError(GetOwningPlayer(bU),SAME_SHIP_ERROR)
-					call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships_getSellValue(sU))/Ships_SELL_RATIO))
+					call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
 					call RemoveUnit(sU)
 				endif
 			else
 				call SimError(GetOwningPlayer(bU),ERROR_MESSAGE)
-				call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships_getSellValue(sU))/Ships_SELL_RATIO))
+				call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
 				call RemoveUnit(sU)
 			endif
 		endif
 		set bU=null
 		set sU=null
 		set selU=null
-    endfunction
-    
-    private function i takes nothing returns nothing
+	endfunction
+
+	private function i takes nothing returns nothing
 		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL,function c)
-    endfunction
+	endfunction
 endscope
