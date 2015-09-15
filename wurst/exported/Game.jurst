@@ -1,512 +1,518 @@
-library Game initializer init requires Ships, MyBoardSystem, RegisterPlayerUnitEvent
+package Game
+	import Ships
+	import MyBoard
+	import RegisterPlayerUnitEvent
+	import Sound
+	import Muscii
+
 	struct AssistTimestamps
 		integer array vals[12]
 	end
 
-	public constant integer OUTPOST_ID         = 'h002'
-	public constant integer DUMMY_ID           = 'u000'
-	public constant integer ASSIST_TIME        = 15
-	public constant real WESTX	 	= -4100.
-	public constant real EASTX 		=  4100.
-	public constant real OUTPOST1_X =  380.
-	public constant real OUTPOST1_Y =  1030.
-	public constant real OUTPOST2_X = -140.
-	public constant real OUTPOST2_Y = -1020.
-	public constant real SAFE_X = -8064.
-	public constant real SAFE_Y = 3970.
-	public constant string HELICOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
-	public constant string PARACOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
-	public constant string ZEPPELIN_ICON   = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
-	public constant string SKYBARGE_ICON   = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
+	public class Game
+		constant integer OUTPOST_ID         = 'h002'
+		constant integer DUMMY_ID           = 'u000'
+		constant integer ASSIST_TIME        = 15
+		constant real WESTX	 	= -4100.
+		constant real EASTX 		=  4100.
+		constant real OUTPOST1_X =  380.
+		constant real OUTPOST1_Y =  1030.
+		constant real OUTPOST2_X = -140.
+		constant real OUTPOST2_Y = -1020.
+		constant real SAFE_X = -8064.
+		constant real SAFE_Y = 3970.
+		constant string HELICOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
+		constant string PARACOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
+		constant string ZEPPELIN_ICON   = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
+		constant string SKYBARGE_ICON   = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 
-	public constant string TRADE_SUCCESS_SOUND   = "Sound\\Interface\\QuestLog.wav"
+		constant string TRADE_SUCCESS_SOUND   = "Sound\\Interface\\QuestLog.wav"
 
-	constant integer KEEP_ID     = 'h001'
-	constant integer KEEP2_ID    = 'h00F'
-	constant integer SHIELD_ID   = 'h003'
-	constant integer REPAIR_ID   = 'h004'
-	constant integer HANGAR_ID   = 'h00A'
-	constant integer UTILITY_ID  = 'h006'
-	constant integer UTILITY2_ID = 'h007'
-	constant integer UTILITY3_ID = 'h008'
-	constant integer UTILITY4_ID = 'h009'
-	constant integer CAPTAIN_ID  = 'H00C'
-	constant integer START_GOLD   = 200
-	constant integer SHIELD_COUNT = 10
-	constant real SHIELDOFFS       = 200.
-	constant real FADEOUT_DURATION = 10.
-	constant real START_TIME       = 5.
-	constant real SHIP_OFFSET      = 328.
-	constant real LATER_OFFSET     = 128.
-	constant real UTILITY_Y        = -512.
+		constant integer KEEP_ID     = 'h001'
+		constant integer KEEP2_ID    = 'h00F'
+		static constant integer SHIELD_ID   = 'h003'
+		constant integer REPAIR_ID   = 'h004'
+		constant integer HANGAR_ID   = 'h00A'
+		constant integer UTILITY_ID  = 'h006'
+		constant integer UTILITY2_ID = 'h007'
+		constant integer UTILITY3_ID = 'h008'
+		constant integer UTILITY4_ID = 'h009'
+		constant integer CAPTAIN_ID  = 'H00C'
+		constant integer START_GOLD   = 200
+		constant integer SHIELD_COUNT = 10
+		constant real SHIELDOFFS       = 200.
+		static constant real FADEOUT_DURATION = 10.
+		constant real START_TIME       = 5.
+		constant real SHIP_OFFSET      = 328.
+		constant real LATER_OFFSET     = 128.
+		constant real UTILITY_Y        = -512.
 
-	constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
-		*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
-	constant string DESCRIPTION_ICON_PATH = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
-	constant string DESCRIPTION_TITLE     = "|cffffcc00Description|r"
+		constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
+			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
+		constant string DESCRIPTION_ICON_PATH = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
+		constant string DESCRIPTION_TITLE     = "|cffffcc00Description|r"
 
-	constant string WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
-		*/ "your base. Each crew member has unique stats and will attack automatically when in range of an enemy."
-	constant string WEAPONS_ICON          = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
-	constant string WEAPONS_TITLE         = "|cffffcc00Weapons|r"
+		constant string WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
+			*/ "your base. Each crew member has unique stats and will attack automatically when in range of an enemy."
+		constant string WEAPONS_ICON          = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
+		constant string WEAPONS_TITLE         = "|cffffcc00Weapons|r"
 
-	constant string EQUIP_DESCRIP         = "Equipment are items which can be carried by your ship. Equipment are separated into classes: " + /*
-		*/ "|cffffcc00Engine|r, |cffffcc00Mechanic|r, |cffffcc00Hull|r, |cffffcc00Teleporter|r, |cffffcc00Shield Generator|r, |cffffcc00Contract|r, " + /*
-		*/ "and |cffffcc00Special|r. A ship can only carry one item of each class, except for |cffffcc00Special|r and |cffffcc00Contract|r. " + /*
-		*/ "Additionally, some |cffffcc00Ship Classes|r cannot use certain item classes."
-	constant string EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
-	constant string EQUIP_TITLE           = "|cffffcc00Equipment|r"
+		constant string EQUIP_DESCRIP         = "Equipment are items which can be carried by your ship. Equipment are separated into classes: " + /*
+			*/ "|cffffcc00Engine|r, |cffffcc00Mechanic|r, |cffffcc00Hull|r, |cffffcc00Teleporter|r, |cffffcc00Shield Generator|r, |cffffcc00Contract|r, " + /*
+			*/ "and |cffffcc00Special|r. A ship can only carry one item of each class, except for |cffffcc00Special|r and |cffffcc00Contract|r. " + /*
+			*/ "Additionally, some |cffffcc00Ship Classes|r cannot use certain item classes."
+		constant string EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
+		constant string EQUIP_TITLE           = "|cffffcc00Equipment|r"
 
-	constant string CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
-		*/ "Ship: |cffffcc00Frigates|r are well rounded ships designed to do well in most scenarios; |cffffcc00Battleships|r are heavy ships designed " + /*
-		*/ "for warfare with large space for crew and good ability to tank damage; |cffffcc00Interceptors|r are fast moving ships which excel in " + /*
-		*/ "chasing enemies and stopping smugglers; |cffffcc00Smugglers|r are small, light ships with abilities that aid in completing trade routes " + /*
-		*/ "for earning money."
-	constant string CLASS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNGreaterRejuvScroll.blp"
-	constant string CLASS_TITLE           = "|cffffcc00Ship Classes|r"
+		constant string CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
+			*/ "Ship: |cffffcc00Frigates|r are well rounded ships designed to do well in most scenarios; |cffffcc00Battleships|r are heavy ships designed " + /*
+			*/ "for warfare with large space for crew and good ability to tank damage; |cffffcc00Interceptors|r are fast moving ships which excel in " + /*
+			*/ "chasing enemies and stopping smugglers; |cffffcc00Smugglers|r are small, light ships with abilities that aid in completing trade routes " + /*
+			*/ "for earning money."
+		constant string CLASS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNGreaterRejuvScroll.blp"
+		constant string CLASS_TITLE           = "|cffffcc00Ship Classes|r"
 
-	constant string INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
-		*/ "map updates, or to say hello, find me on |cffffcc00hiveworkshop.com|r."
-	constant string INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
-	constant string INFO_TITLE            = "|cff88dd66Information|r"
+		constant string INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
+			*/ "map updates, or to say hello, find me on |cffffcc00hiveworkshop.com|r."
+		constant string INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
+		constant string INFO_TITLE            = "|cff88dd66Information|r"
 
-	constant string CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
-		*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). |cffffcc00Vexorian, MindWorX, and Pitzermike|r (among others) who " + /*
-		*/ "developed many classic snippets and tools like JassHelper, JNGP, Table, SimError, and more. |cffffcc00looking_for_help|r for discovering a " + /*
-		*/ "new method in 2013 for recognizing spells and physical damage independantly in damage detectors. |cffffcc00kr0mat1k|r for the artwork used " + /*
-		*/ "in the map preview. |cffffcc00Cage the Elephant|r for writing the song played in the background. |cffffcc00Zwiebelchen|r for writing " + /*
-		*/ "TabReader, which inspired me to build Muscii. |cffffcc00bowser499|r for creading myBoard, a multiboard framework. |cffffcc00Kino|r for " + /*
-		*/ "doing extensive Terrain work for The Gorge."
-	constant string CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
-	constant string CREDS_TITLE           = "|cff88dd66Credits|r"
+		constant string CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
+			*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). |cffffcc00Vexorian, MindWorX, and Pitzermike|r (among others) who " + /*
+			*/ "developed many classic snippets and tools like JassHelper, JNGP, Table, SimError, and more. |cffffcc00looking_for_help|r for discovering a " + /*
+			*/ "new method in 2013 for recognizing spells and physical damage independantly in damage detectors. |cffffcc00kr0mat1k|r for the artwork used " + /*
+			*/ "in the map preview. |cffffcc00Cage the Elephant|r for writing the song played in the background. |cffffcc00Zwiebelchen|r for writing " + /*
+			*/ "TabReader, which inspired me to build Muscii. |cffffcc00bowser499|r for creading myBoard, a multiboard framework. |cffffcc00Kino|r for " + /*
+			*/ "doing extensive Terrain work for The Gorge."
+		constant string CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
+		constant string CREDS_TITLE           = "|cff88dd66Credits|r"
 
-	constant string WELCOME_MESSAGE	      = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
-	constant string START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
-	constant string WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
-	constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
+		constant string WELCOME_MESSAGE	      = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
+		static constant string START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
+		static constant string WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
+		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
 
-	public boolean ended = false
-	public integer playerCount=0
-	public integer westCount=0
-	public integer eastCount=0
-	public integer array shipClass[12]
-	public integer array tradeExp[12]
-	public integer array scoreboardRows[12]
-	public real seconds = 0.
-	public unit westRepair
-	public unit eastRepair
-	public unit westHangar
-	public unit eastHangar
-	public unit array westUtility[4]
-	public unit array eastUtility[4]
-	public unit array captains[12]
-	public player array players[12]
-	public player localPlayer
-	public player playerPassive
-	public boolean array playing[12]
-	public string array colors[12]
-	public string array names[12]
-	public AssistTimestamps array assistTimestamps[12]
-	public integer array kills[12]
-	public integer array deaths[12]
-	public integer array assists[12]
-	public integer array farm[12]
+		static boolean ended = false
+		static integer playerCount=0
+		integer westCount=0
+		integer eastCount=0
+		integer array shipClass[12]
+		int array tradeExp[12]
+		integer array scoreboardRows[12]
+		static real seconds = 0.
+		unit westRepair
+		unit eastRepair
+		unit westHangar
+		unit eastHangar
+		unit array westUtility[4]
+		unit array eastUtility[4]
+		unit array captains[4]
+		static player array players
+		static player localPlayer
+		player playerPassive
+		boolean array playing[12]
+		string array colors[12]
+		string array names[12]
+		AssistTimestamps array assistTimestamps[12]
+		integer array kills[12]
+		integer array deaths[12]
+		integer array assists[12]
+		integer array farm[12]
 
-	public MyBoard scoreboard
+		MyBoard scoreboard
 
-	public unit array westKeep[2]
-	public unit array eastKeep[2]
-	integer westShieldsLeft = 10
-	integer eastShieldsLeft = 10
-	integer secondsFSM = 0
-	integer minutesFSM = 0
-	group grp = CreateGroup()
+		static unit array westKeep
+		static unit array eastKeep
+		static integer westShieldsLeft = 10
+		static integer eastShieldsLeft = 10
+		static integer secondsFSM = 0
+		static integer minutesFSM = 0
+		static group grp = CreateGroup()
 
-	constant string REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
+		constant string REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
 
-	public function reward takes unit u, integer gold, integer tradeExp returns nothing
-		local player owner = GetOwningPlayer(u)
-		local integer id = GetPlayerId(owner)
-		set Game_tradeExp[id] = Game_tradeExp[id] + tradeExp
-		call SetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD)+gold)
-		call DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL,u,"origin"))
-		call DisplayTextToPlayer(owner,0.,0.,"You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(tradeExp)+"|r trading experience.")
-	endfunction
+		function reward takes unit u, integer gold, integer bonus_experience returns nothing
+			player owner = GetOwningPlayer(u)
+			integer id = GetPlayerId(owner)
+			tradeExp[id] += bonus_experience
+			SetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD)+gold)
+			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL,u,"origin"))
+			DisplayTextToPlayer(owner,0.,0.,"You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonus_experience)+"|r trading experience.")
+		endfunction
 
-	public function playerIsWest takes integer id returns boolean
-		return GetUnitX(Ships_ships[id])<0.
-	endfunction
+		function playerIsWest takes integer id returns boolean
+			return GetUnitX(Ships.ships[id])<0.
+		endfunction
 
-	public function getMinutes takes nothing returns integer
-		return minutesFSM
-	endfunction
+		function getMinutes takes nothing returns integer
+			return minutesFSM
+		endfunction
 
-	public function farmIncrement takes integer pID returns nothing
-		set farm[pID] = farm[pID] + 1
-		call scoreboard.setValue(4,scoreboardRows[pID],I2S(farm[pID]))
-	endfunction
+		function farmIncrement takes integer pID returns nothing
+			farm[pID] = farm[pID] + 1
+			scoreboard.setValue(4,scoreboardRows[pID],I2S(farm[pID]))
+		endfunction
 
-	public function parseKill takes integer pID returns nothing
-		set kills[pID] = kills[pID] + 1
-		if pID<7 then
-			set kills[0] = kills[0] + 1
-		else
-			set kills[1] = kills[1] + 1
-		endif
-		call scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
-		call scoreboard.setValue(1,scoreboardRows[pID],I2S(kills[pID]))
-	endfunction
-
-	public function addDeath takes unit u returns nothing
-		local integer id = GetPlayerId(GetOwningPlayer(u))
-		set deaths[id] = deaths[id] + 1
-		if id<7 then
-			set deaths[0] = deaths[0] + 1
-		else
-			set deaths[1] = deaths[1] + 1
-		endif
-		call scoreboard.setValue(2,scoreboardRows[id],I2S(deaths[id]))
-	endfunction
-
-	public function updateIcon takes integer pID returns nothing
-		local integer unitType = shipClass[pID]
-		if unitType==Ships_HELICOPTER_ID then
-			call scoreboard.setIcon(0,scoreboardRows[pID],HELICOPTER_ICON)
-		elseif unitType==Ships_PARACOPTER_ID then
-			call scoreboard.setIcon(0,scoreboardRows[pID],PARACOPTER_ICON)
-		elseif unitType==Ships_ZEPPELIN_ID then
-			call scoreboard.setIcon(0,scoreboardRows[pID],ZEPPELIN_ICON)
-		elseif unitType==Ships_SKYBARGE_ID then
-			call scoreboard.setIcon(0,scoreboardRows[pID],SKYBARGE_ICON)
-		endif
-	endfunction
-
-	function addQuest takes string desc, string iconPath, boolean required, string title returns quest
-		local quest q = CreateQuest()
-		call QuestSetCompleted(q,false)
-		call QuestSetDescription(q,desc)
-		call QuestSetDiscovered(q,true)
-		call QuestSetEnabled(q,true)
-		call QuestSetIconPath(q,iconPath)
-		call QuestSetRequired(q,required)
-		call QuestSetTitle(q,title)
-		return q
-	endfunction
-
-	function initializeQuests takes nothing returns nothing
-		// Primary Quests (Left)
-		// description
-		call addQuest(MAP_DESCRIPTION,DESCRIPTION_ICON_PATH,true,DESCRIPTION_TITLE)
-		// weapons
-		call addQuest(WEAPONS_DESCRIP,WEAPONS_ICON,true,WEAPONS_TITLE)
-		// equipment
-		call addQuest(EQUIP_DESCRIP,EQUIP_ICON,true,EQUIP_TITLE)
-		// classes
-		call addQuest(CLASS_DESCRIP,CLASS_ICON,true,CLASS_TITLE)
-		// Secondary Quests (Right)
-		// info
-		call addQuest(INFO_DESCRIP,INFO_ICON,false,INFO_TITLE)
-		// credits
-		call addQuest(CREDS_DESCRIP,CREDS_ICON,false,CREDS_TITLE)
-	endfunction
-
-	function c takes nothing returns nothing
-		local unit tU=GetTriggerUnit()
-		if GetUnitTypeId(tU) == SHIELD_ID then
-			if GetOwningPlayer(tU) == Player(0) then
-				set westShieldsLeft = westShieldsLeft - 1
-				if westShieldsLeft < 1 then
-					call SetUnitInvulnerable(westKeep[0],false)
-				endif
+		function parseKill takes integer pID returns nothing
+			kills[pID] = kills[pID] + 1
+			if pID<7 then
+				kills[0] = kills[0] + 1
 			else
-				set eastShieldsLeft = eastShieldsLeft - 1
-				if eastShieldsLeft < 1 then
-					call SetUnitInvulnerable(eastKeep[0],false)
-				endif
+				kills[1] = kills[1] + 1
 			endif
-		endif
-		set tU=null
-	endfunction
+			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
+			scoreboard.setValue(1,scoreboardRows[pID],I2S(kills[pID]))
+		endfunction
 
-	function fadeOut takes real duration returns nothing
-		call EnableUserUI(false)
-		call SetCineFilterTexture("ReplaceableTextures\\CameraMasks\\White_mask.blp")
-		call SetCineFilterBlendMode(BLEND_MODE_BLEND)
-		call SetCineFilterTexMapFlags(TEXMAP_FLAG_NONE)
-		call SetCineFilterStartUV(0, 0, 1, 1)
-		call SetCineFilterEndUV(0, 0, 1, 1)
-		call SetCineFilterStartColor(0, 0, 0, 0)
-		call SetCineFilterEndColor(0, 0, 0, 255)
-		call SetCineFilterDuration(duration)
-		call DisplayCineFilter(true)
-	endfunction
+		function addDeath takes unit u returns nothing
+			integer id = GetPlayerId(GetOwningPlayer(u))
+			deaths[id] = deaths[id] + 1
+			if id<7 then
+				deaths[0] = deaths[0] + 1
+			else
+				deaths[1] = deaths[1] + 1
+			endif
+			scoreboard.setValue(2,scoreboardRows[id],I2S(deaths[id]))
+		endfunction
 
-	function fadeIn takes real duration returns nothing
-		call EnableUserUI(true)
-		call SetCineFilterTexture("ReplaceableTextures\\CameraMasks\\White_mask.blp")
-		call SetCineFilterBlendMode(BLEND_MODE_BLEND)
-		call SetCineFilterTexMapFlags(TEXMAP_FLAG_NONE)
-		call SetCineFilterStartUV(0, 0, 1, 1)
-		call SetCineFilterEndUV(0, 0, 1, 1)
-		call SetCineFilterStartColor(0, 0, 0, 255)
-		call SetCineFilterEndColor(0, 0, 0, 0)
-		call SetCineFilterDuration(duration)
-		call DisplayCineFilter(true)
-	endfunction
+		function updateIcon takes integer pID returns nothing
+			integer unitType = shipClass[pID]
+			if unitType==Ships.HELICOPTER_ID then
+				scoreboard.setIcon(0,scoreboardRows[pID],HELICOPTER_ICON)
+			elseif unitType==Ships.PARACOPTER_ID then
+				scoreboard.setIcon(0,scoreboardRows[pID],PARACOPTER_ICON)
+			elseif unitType==Ships.ZEPPELIN_ID then
+				scoreboard.setIcon(0,scoreboardRows[pID],ZEPPELIN_ICON)
+			elseif unitType==Ships.SKYBARGE_ID then
+				scoreboard.setIcon(0,scoreboardRows[pID],SKYBARGE_ICON)
+			endif
+		endfunction
 
-	function defeatTeam takes integer team returns nothing
-		if team == 0 then
-			call RemovePlayer(Game_players[1],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[7],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[8],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[9],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[10],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[11],PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Game_players[0],PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Game_players[2],PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Game_players[3],PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Game_players[4],PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Game_players[5],PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Game_players[6],PLAYER_GAME_RESULT_DEFEAT)
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[2])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[3])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[4])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[5])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[6])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[7])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[8])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[9])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[10])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[11])
-		else
-			call RemovePlayer(Player(1),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(7),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(8),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(9),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(10),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(11),PLAYER_GAME_RESULT_DEFEAT)
-			call RemovePlayer(Player(0),PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Player(2),PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Player(3),PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Player(4),PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Player(5),PLAYER_GAME_RESULT_VICTORY)
-			call RemovePlayer(Player(6),PLAYER_GAME_RESULT_VICTORY)
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[2])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[3])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[4])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[5])
-			call Sound.playForPlayer(WIN_SOUND,1.,Game_players[6])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[7])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[8])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[9])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[10])
-			call Sound.playForPlayer(DEF_SOUND,1.,Game_players[11])
-		endif
-	endfunction
+		function addQuest takes string desc, string iconPath, boolean required, string title returns quest
+			quest q = CreateQuest()
+			QuestSetCompleted(q,false)
+			QuestSetDescription(q,desc)
+			QuestSetDiscovered(q,true)
+			QuestSetEnabled(q,true)
+			QuestSetIconPath(q,iconPath)
+			QuestSetRequired(q,required)
+			QuestSetTitle(q,title)
+			return q
+		endfunction
 
-	function defeatAfter takes nothing returns nothing
-		call EndGame(true)
-	endfunction
+		function initializeQuests takes nothing returns nothing
+			// Primary Quests (Left)
+			// description
+			addQuest(MAP_DESCRIPTION,DESCRIPTION_ICON_PATH,true,DESCRIPTION_TITLE)
+			// weapons
+			addQuest(WEAPONS_DESCRIP,WEAPONS_ICON,true,WEAPONS_TITLE)
+			// equipment
+			addQuest(EQUIP_DESCRIP,EQUIP_ICON,true,EQUIP_TITLE)
+			// classes
+			addQuest(CLASS_DESCRIP,CLASS_ICON,true,CLASS_TITLE)
+			// Secondary Quests (Right)
+			// info
+			addQuest(INFO_DESCRIP,INFO_ICON,false,INFO_TITLE)
+			// credits
+			addQuest(CREDS_DESCRIP,CREDS_ICON,false,CREDS_TITLE)
+		endfunction
 
-	function pauseUnits takes nothing returns nothing
-		local unit FoG
-		call GroupEnumUnitsInRect(grp,bj_mapInitialPlayableArea,null)
-		loop
-			set FoG=FirstOfGroup(grp)
-			exitwhen FoG==null
-			call PauseUnit(FoG,true)
-			call SetUnitTimeScale(FoG,0.)
-			call UnitAddAbility(FoG,'Aloc')
-			call GroupRemoveUnit(grp,FoG)
-		endloop
-	endfunction
-
-	function defeatC takes nothing returns nothing
-		local unit tU=GetTriggerUnit()
-		if tU==westKeep[0] then
-			call DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
-			call pauseUnits()
-			set ended = true
-			call fadeOut(FADEOUT_DURATION)
-			call defeatTeam(0)
-			call Muscii.interrupt()
-			call TimerStart(CreateTimer(),30.,false,function defeatAfter)
-		elseif tU==eastKeep[0] then
-			call DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
-			call pauseUnits()
-			set ended = true
-			call fadeOut(FADEOUT_DURATION)
-			call Muscii.interrupt()
-			call defeatTeam(1)
-			call TimerStart(CreateTimer(),30.,false,function defeatAfter)
-		endif
-		set tU=null
-	endfunction
-
-	function second takes nothing returns nothing
-		set seconds = seconds + 1.
-		set secondsFSM = secondsFSM + 1
-		if secondsFSM == 60 then
-			set secondsFSM = 0
-			set minutesFSM = minutesFSM+1
-		endif
-		debug if seconds < 0. or (seconds == (seconds + 1.)) then
-		debug	call BJDebugMsg("Seconds overflow!")
-		debug endif
-	endfunction
-
-	function after takes nothing returns nothing
-		local integer id = GetPlayerId(localPlayer)
-		call DestroyTimer(GetExpiredTimer())
-		call Sound.play(START_SOUND,.75,127)
-		call fadeIn(1.)
-		call PanCameraToTimed(GetUnitX(Ships_ships[id]),GetUnitY(Ships_ships[id]),0.)
-		if localPlayer==GetOwningPlayer(Ships_ships[id]) then
-			call ClearSelection()
-			call SelectUnit(Ships_ships[id],true)
-		endif
-	endfunction
-
-	function init takes nothing returns nothing
-		local integer index=00
-
-		// initialize assist stamps
-		local integer i = 0
-		local integer j = 0
-		loop
-			exitwhen i>11
-
-			assistTimestamps[i] = new AssistTimestamps()
-
-			loop
-				exitwhen j>11
-
-				assistTimestamps[i].vals[j] = -1 * ASSIST_TIME
-
-				set j = j +1
-			endloop
-			set i = i +1
-		endloop
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function defeatC)
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
-		set localPlayer = GetLocalPlayer()
-		set playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
-		call initializeQuests()
-
-		// Set Starting Gold and initialize player array
-		loop
-			exitwhen index>11
-			set players[index]=Player(index)
-			call SetPlayerState(players[index],PLAYER_STATE_RESOURCE_GOLD,START_GOLD)
-			set index=index+1
-		endloop
-
-		// Create starting ships for players
-		set index=2
-		loop
-			exitwhen index>11
-			if GetPlayerSlotState(players[index])==PLAYER_SLOT_STATE_PLAYING and GetPlayerController(players[index])==MAP_CONTROL_USER then
-				set playerCount=playerCount+1
-				set playing[index] = true
-				set shipClass[index] = Ships_HELICOPTER_ID
-				set captains[index] = CreateUnit(players[index],CAPTAIN_ID,GetStartLocationX(index),GetStartLocationY(index),270.)
-				set tradeExp[index] = 0
-				set kills[index] = 0
-				set deaths[index] = 0
-				set assists[index] = 0
-				set farm[index] = 0
-				set names[index] = GetPlayerName(players[index])
-				if index<7 then
-					set Ships_ships[index] = CreateUnit(players[index],Ships_HELICOPTER_ID,WESTX+SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
-					set westCount=westCount+1
+		static function c takes nothing returns nothing
+			unit tU=GetTriggerUnit()
+			if GetUnitTypeId(tU) == SHIELD_ID then
+				if GetOwningPlayer(tU) == Player(0) then
+					westShieldsLeft = westShieldsLeft - 1
+					if westShieldsLeft < 1 then
+						SetUnitInvulnerable(westKeep[0],false)
+					endif
 				else
-					set Ships_ships[index] = CreateUnit(players[index],Ships_HELICOPTER_ID,EASTX-SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
-					set eastCount=eastCount+1
+					eastShieldsLeft = eastShieldsLeft - 1
+					if eastShieldsLeft < 1 then
+						SetUnitInvulnerable(eastKeep[0],false)
+					endif
 				endif
-			else
-				set playing[index] = false
 			endif
-			set index=index+1
-		endloop
+		endfunction
 
-		// Make alliance units give bounty
-		call SetPlayerState(players[0],PLAYER_STATE_GIVES_BOUNTY,1)
-		call SetPlayerState(players[1],PLAYER_STATE_GIVES_BOUNTY,1)
+		static function fadeOut takes real duration returns nothing
+			EnableUserUI(false)
+			SetCineFilterTexture("ReplaceableTextures\\CameraMasks\\White_mask.blp")
+			SetCineFilterBlendMode(BLEND_MODE_BLEND)
+			SetCineFilterTexMapFlags(TEXMAP_FLAG_NONE)
+			SetCineFilterStartUV(0, 0, 1, 1)
+			SetCineFilterEndUV(0, 0, 1, 1)
+			SetCineFilterStartColor(0, 0, 0, 0)
+			SetCineFilterEndColor(0, 0, 0, 255)
+			SetCineFilterDuration(duration)
+			DisplayCineFilter(true)
+		endfunction
 
-		// Create keeps
-		set westKeep[0] = CreateUnit(players[0],KEEP_ID,WESTX,0,270)
-		set eastKeep[0] = CreateUnit(players[1],KEEP_ID,EASTX,0,270)
-		call SetUnitInvulnerable(westKeep[0],true)
-		call SetUnitInvulnerable(eastKeep[0],true)
-		set westKeep[1] = CreateUnit(players[0],KEEP2_ID,WESTX,0.,270.)
-		set eastKeep[1] = CreateUnit(players[1],KEEP2_ID,EASTX,0.,270.)
+		static function fadeIn takes real duration returns nothing
+			EnableUserUI(true)
+			SetCineFilterTexture("ReplaceableTextures\\CameraMasks\\White_mask.blp")
+			SetCineFilterBlendMode(BLEND_MODE_BLEND)
+			SetCineFilterTexMapFlags(TEXMAP_FLAG_NONE)
+			SetCineFilterStartUV(0, 0, 1, 1)
+			SetCineFilterEndUV(0, 0, 1, 1)
+			SetCineFilterStartColor(0, 0, 0, 255)
+			SetCineFilterEndColor(0, 0, 0, 0)
+			SetCineFilterDuration(duration)
+			DisplayCineFilter(true)
+		endfunction
 
-		// Create shields
-		set index=0
-		loop
-			exitwhen index>=SHIELD_COUNT
-			call CreateUnit(players[0],SHIELD_ID,WESTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
-			set index=index+1
-		endloop
-		set index=0
-		loop
-			exitwhen index>=SHIELD_COUNT
-			call CreateUnit(players[1],SHIELD_ID,EASTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
-			set index=index+1
-		endloop
+		static function defeatTeam takes integer team returns nothing
+			if team == 0 then
+				RemovePlayer(players[1],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[7],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[8],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[9],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[10],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[11],PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[0],PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[2],PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[3],PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[4],PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[5],PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[6],PLAYER_GAME_RESULT_DEFEAT)
+				Sound.playForPlayer(DEF_SOUND,1.,players[2])
+				Sound.playForPlayer(DEF_SOUND,1.,players[3])
+				Sound.playForPlayer(DEF_SOUND,1.,players[4])
+				Sound.playForPlayer(DEF_SOUND,1.,players[5])
+				Sound.playForPlayer(DEF_SOUND,1.,players[6])
+				Sound.playForPlayer(WIN_SOUND,1.,players[7])
+				Sound.playForPlayer(WIN_SOUND,1.,players[8])
+				Sound.playForPlayer(WIN_SOUND,1.,players[9])
+				Sound.playForPlayer(WIN_SOUND,1.,players[10])
+				Sound.playForPlayer(WIN_SOUND,1.,players[11])
+			else
+				RemovePlayer(Player(1),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(7),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(8),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(9),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(10),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(11),PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(0),PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(2),PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(3),PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(4),PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(5),PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(6),PLAYER_GAME_RESULT_VICTORY)
+				Sound.playForPlayer(WIN_SOUND,1.,players[2])
+				Sound.playForPlayer(WIN_SOUND,1.,players[3])
+				Sound.playForPlayer(WIN_SOUND,1.,players[4])
+				Sound.playForPlayer(WIN_SOUND,1.,players[5])
+				Sound.playForPlayer(WIN_SOUND,1.,players[6])
+				Sound.playForPlayer(DEF_SOUND,1.,players[7])
+				Sound.playForPlayer(DEF_SOUND,1.,players[8])
+				Sound.playForPlayer(DEF_SOUND,1.,players[9])
+				Sound.playForPlayer(DEF_SOUND,1.,players[10])
+				Sound.playForPlayer(DEF_SOUND,1.,players[11])
+			endif
+		endfunction
 
-		// Create Outposts
-		call CreateUnit(players[0],OUTPOST_ID,OUTPOST2_X,OUTPOST2_Y,270.)
-		call CreateUnit(players[1],OUTPOST_ID,OUTPOST1_X,OUTPOST1_Y,270.)
+		static function defeatAfter takes nothing returns nothing
+			EndGame(true)
+		endfunction
 
-		// Stop Time of Day
-		call SetTimeOfDayScale(0.)
+		static function pauseUnits takes nothing returns nothing
+			unit first
 
-		// Create Repair Ports
-		set westRepair = CreateUnit(players[0],REPAIR_ID,WESTX,1024.,270.)
-		set eastRepair = CreateUnit(players[1],REPAIR_ID,EASTX,1024.,270.)
+			GroupEnumUnitsInRect(grp, bj_mapInitialPlayableArea, null)
+			loop
+				first=FirstOfGroup(grp)
+				exitwhen first==null
+				PauseUnit(first,true)
+				SetUnitTimeScale(first,0.)
+				UnitAddAbility(first,'Aloc')
+				GroupRemoveUnit(grp,first)
+			endloop
+		endfunction
 
-		// Create Hangars
-		set westHangar = CreateUnit(players[0],HANGAR_ID,WESTX-768.,0.,270.)
-		set eastHangar = CreateUnit(players[1],HANGAR_ID,EASTX+768.,0.,270.)
+		static function defeatC takes nothing returns nothing
+			unit tU=GetTriggerUnit()
+			if tU==westKeep[0] then
+				DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
+				pauseUnits()
+				ended = true
+				fadeOut(FADEOUT_DURATION)
+				defeatTeam(0)
+				Muscii.interrupt()
+				TimerStart(CreateTimer(),30.,false,function defeatAfter)
+			elseif tU==eastKeep[0] then
+				DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
+				pauseUnits()
+				ended = true
+				fadeOut(FADEOUT_DURATION)
+				Muscii.interrupt()
+				defeatTeam(1)
+				TimerStart(CreateTimer(),30.,false,function defeatAfter)
+			endif
+		endfunction
 
-		// Create Utility Ports
-		set westUtility[0] = CreateUnit(players[0],UTILITY_ID,WESTX,UTILITY_Y,270.)
-		set westUtility[1] = CreateUnit(players[0],UTILITY2_ID,WESTX,UTILITY_Y,270.)
-		set westUtility[2] = CreateUnit(players[0],UTILITY3_ID,WESTX,UTILITY_Y,270.)
-		set westUtility[3] = CreateUnit(players[0],UTILITY4_ID,WESTX,UTILITY_Y,270.)
-		set eastUtility[0] = CreateUnit(players[1],UTILITY_ID,EASTX,UTILITY_Y,270.)
-		set eastUtility[1] = CreateUnit(players[1],UTILITY2_ID,EASTX,UTILITY_Y,270.)
-		set eastUtility[2] = CreateUnit(players[1],UTILITY3_ID,EASTX,UTILITY_Y,270.)
-		set eastUtility[3] = CreateUnit(players[1],UTILITY4_ID,EASTX,UTILITY_Y,270.)
+		static function second takes nothing returns nothing
+			seconds = seconds + 1.
+			secondsFSM = secondsFSM + 1
+			if secondsFSM == 60 then
+				secondsFSM = 0
+				minutesFSM = minutesFSM+1
+			endif
+			debug if seconds < 0. or (seconds == (seconds + 1.)) then
+			debug	BJDebugMsg("Seconds overflow!")
+			debug endif
+		endfunction
 
-		// Start game timer
-		call TimerStart(CreateTimer(),1.,true,function second)
+		static function after takes nothing returns nothing
+			integer id = GetPlayerId(localPlayer)
+			DestroyTimer(GetExpiredTimer())
+			Sound.play(START_SOUND,.75,127)
+			fadeIn(1.)
+			PanCameraToTimed(GetUnitX(Ships.ships[id]),GetUnitY(Ships.ships[id]),0.)
+			if localPlayer==GetOwningPlayer(Ships.ships[id]) then
+				ClearSelection()
+				SelectUnit(Ships.ships[id],true)
+			endif
+		endfunction
 
-		// Do starting sound stuff
-		call Sound.preload(START_SOUND)
-		call TimerStart(CreateTimer(),START_TIME,false,function after)
+		method onInit takes nothing returns nothing
+			integer index=00
 
-		// Initial blackness
-		call fadeOut(0.)
-		call DisplayTimedTextToPlayer(localPlayer,0.,0.,10.,WELCOME_MESSAGE)
+			// initialize assist stamps
+			integer i = 0
+			integer j = 0
+			loop
+				exitwhen i>11
 
-		call Sound.preload(WIN_SOUND)
-		call Sound.preload(DEF_SOUND)
-		call Sound.preload(TRADE_SUCCESS_SOUND)
+				assistTimestamps[i] = new AssistTimestamps()
 
-		// colors
-		set colors[0] = "|cffff0303"
-		set colors[1] = "|cff0042ff"
-		set colors[2] = "|cff1ce6b9"
-		set colors[3] = "|cff540081"
-		set colors[4] = "|cfffffc01"
-		set colors[5] = "|cfffeba0e"
-		set colors[6] = "|cff20c000"
-		set colors[7] = "|cffe55bb0"
-		set colors[8] = "|cff959697"
-		set colors[9] = "|cff7ebff1"
-		set colors[10] = "|cff106246"
-		set colors[11] = "|cff4e2a04"
-	endfunction
-endlibrary
+				loop
+					exitwhen j>11
+
+					assistTimestamps[i].vals[j] = -1 * ASSIST_TIME
+
+					j = j +1
+				endloop
+				i = i +1
+			endloop
+			registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function defeatC)
+			registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+			localPlayer = GetLocalPlayer()
+			playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
+			initializeQuests()
+
+			// Set Starting Gold and initialize player array
+			loop
+				exitwhen index>11
+				players[index]=Player(index)
+				SetPlayerState(players[index],PLAYER_STATE_RESOURCE_GOLD,START_GOLD)
+				index=index+1
+			endloop
+
+			// Create starting ships for players
+			index=2
+			loop
+				exitwhen index>11
+				if GetPlayerSlotState(players[index])==PLAYER_SLOT_STATE_PLAYING and GetPlayerController(players[index])==MAP_CONTROL_USER then
+					playerCount=playerCount+1
+					playing[index] = true
+					shipClass[index] = Ships.HELICOPTER_ID
+					captains[index] = CreateUnit(players[index],CAPTAIN_ID,GetStartLocationX(index),GetStartLocationY(index),270.)
+					tradeExp[index] = 0
+					kills[index] = 0
+					deaths[index] = 0
+					assists[index] = 0
+					farm[index] = 0
+					names[index] = GetPlayerName(players[index])
+					if index<7 then
+						Ships.ships[index] = CreateUnit(players[index],Ships.HELICOPTER_ID,WESTX+SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
+						westCount=westCount+1
+					else
+						Ships.ships[index] = CreateUnit(players[index],Ships.HELICOPTER_ID,EASTX-SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
+						eastCount=eastCount+1
+					endif
+				else
+					playing[index] = false
+				endif
+				index=index+1
+			endloop
+
+			// Make alliance units give bounty
+			SetPlayerState(players[0],PLAYER_STATE_GIVES_BOUNTY,1)
+			SetPlayerState(players[1],PLAYER_STATE_GIVES_BOUNTY,1)
+
+			// Create keeps
+			westKeep[0] = CreateUnit(players[0],KEEP_ID,WESTX,0,270)
+			eastKeep[0] = CreateUnit(players[1],KEEP_ID,EASTX,0,270)
+			SetUnitInvulnerable(westKeep[0],true)
+			SetUnitInvulnerable(eastKeep[0],true)
+			westKeep[1] = CreateUnit(players[0],KEEP2_ID,WESTX,0.,270.)
+			eastKeep[1] = CreateUnit(players[1],KEEP2_ID,EASTX,0.,270.)
+
+			// Create shields
+			index=0
+			loop
+				exitwhen index>=SHIELD_COUNT
+				CreateUnit(players[0],SHIELD_ID,WESTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
+				index=index+1
+			endloop
+			index=0
+			loop
+				exitwhen index>=SHIELD_COUNT
+				CreateUnit(players[1],SHIELD_ID,EASTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
+				index=index+1
+			endloop
+
+			// Create Outposts
+			CreateUnit(players[0],OUTPOST_ID,OUTPOST2_X,OUTPOST2_Y,270.)
+			CreateUnit(players[1],OUTPOST_ID,OUTPOST1_X,OUTPOST1_Y,270.)
+
+			// Stop Time of Day
+			SetTimeOfDayScale(0.)
+
+			// Create Repair Ports
+			westRepair = CreateUnit(players[0],REPAIR_ID,WESTX,1024.,270.)
+			eastRepair = CreateUnit(players[1],REPAIR_ID,EASTX,1024.,270.)
+
+			// Create Hangars
+			westHangar = CreateUnit(players[0],HANGAR_ID,WESTX-768.,0.,270.)
+			eastHangar = CreateUnit(players[1],HANGAR_ID,EASTX+768.,0.,270.)
+
+			// Create Utility Ports
+			westUtility[0] = CreateUnit(players[0],UTILITY_ID,WESTX,UTILITY_Y,270.)
+			westUtility[1] = CreateUnit(players[0],UTILITY2_ID,WESTX,UTILITY_Y,270.)
+			westUtility[2] = CreateUnit(players[0],UTILITY3_ID,WESTX,UTILITY_Y,270.)
+			westUtility[3] = CreateUnit(players[0],UTILITY4_ID,WESTX,UTILITY_Y,270.)
+			eastUtility[0] = CreateUnit(players[1],UTILITY_ID,EASTX,UTILITY_Y,270.)
+			eastUtility[1] = CreateUnit(players[1],UTILITY2_ID,EASTX,UTILITY_Y,270.)
+			eastUtility[2] = CreateUnit(players[1],UTILITY3_ID,EASTX,UTILITY_Y,270.)
+			eastUtility[3] = CreateUnit(players[1],UTILITY4_ID,EASTX,UTILITY_Y,270.)
+
+			// Start game timer
+			TimerStart(CreateTimer(),1.,true,function second)
+
+			// Do starting sound stuff
+			Sound.preload(START_SOUND)
+			TimerStart(CreateTimer(),START_TIME,false,function after)
+
+			// Initial blackness
+			fadeOut(0.)
+			DisplayTimedTextToPlayer(localPlayer,0.,0.,10.,WELCOME_MESSAGE)
+
+			Sound.preload(WIN_SOUND)
+			Sound.preload(DEF_SOUND)
+			Sound.preload(TRADE_SUCCESS_SOUND)
+
+			// colors
+			colors[0] = "|cffff0303"
+			colors[1] = "|cff0042ff"
+			colors[2] = "|cff1ce6b9"
+			colors[3] = "|cff540081"
+			colors[4] = "|cfffffc01"
+			colors[5] = "|cfffeba0e"
+			colors[6] = "|cff20c000"
+			colors[7] = "|cffe55bb0"
+			colors[8] = "|cff959697"
+			colors[9] = "|cff7ebff1"
+			colors[10] = "|cff106246"
+			colors[11] = "|cff4e2a04"
+		endfunction
+	end

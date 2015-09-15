@@ -1,77 +1,79 @@
-library Muscii requires Sound
+package Muscii
+	import Sound
+
 	struct Note
 		string path
 		integer volume
 		real pitch
 		Note previous
 		Note next
-		
-		public method copy takes nothing returns Note
+
+		method copy takes nothing returns Note
 			return Note.create(this.path,this.volume,this.pitch)
-		endmethod
-		
-		public method play takes nothing returns nothing
-			call Sound.play(this.path,this.pitch,this.volume)
-		endmethod
-		
-		public static method create takes string path, integer volume, real pitch returns Note
-			local Note n = Note.allocate()
-			set n.path = path
-			set n.volume = volume
-			set n.pitch = pitch
-			set n.previous = -1
-			set n.next = -1
+		end
+
+		method play takes nothing returns nothing
+			Sound.play(this.path,this.pitch,this.volume)
+		end
+
+		static method create takes string path, integer volume, real pitch returns Note
+			Note n = new Note
+			n.path = path
+			n.volume = volume
+			n.pitch = pitch
+			n.previous = null
+			n.next = null
 			return n
-		endmethod
+		end
 	endstruct
-	
+
 	struct Chord
 		Note first
 		Note last
 		Chord previous
 		Chord next
-		
-		public method copy takes nothing returns Chord
-			local Note iterator = this.first
-			local Chord new = Chord.create(iterator)
+
+		method copy takes nothing returns Chord
+			Note iterator = this.first
+			Chord new = Chord.create(iterator)
 			loop
-				set iterator = iterator.next
-				exitwhen iterator == -1
-				call new.addNote(iterator)
+				iterator = iterator.next
+				exitwhen iterator == null
+				new.addNote(iterator)
 			endloop
 			return new
-		endmethod
-		
-		public method play takes nothing returns nothing
-			local Note iterator = this.first
+		end
+
+		method play takes nothing returns nothing
+			Note iterator = this.first
 			loop
-				exitwhen iterator == -1
-				call iterator.play()
-				set iterator = iterator.next
+				exitwhen iterator == null
+				iterator.play()
+				iterator = iterator.next
 			endloop
-		endmethod
-		
-		public method addNote takes Note n returns Chord
-			local Note copy = n.copy()
-			local Note temp = this.last
-			set temp.next = copy
-			set copy.previous = temp
+		end
+
+		method addNote takes Note n returns Chord
+			Note copy = n.copy()
+			Note temp = this.last
+			temp.next = copy
+			copy.previous = temp
 			return this
-		endmethod
-		
-		public static method create takes Note n returns Chord
-			local Note q = Note.create(n.path,n.volume,n.pitch)
-			local Chord c = Chord.allocate()
-			set c.previous = -1
-			set c.next = -1
-			set c.first = q
-			set c.last = q
+		end
+
+		static method create takes Note n returns Chord
+			Note q = Note.create(n.path,n.volume,n.pitch)
+			Chord c = new Chord
+			c.previous = null
+			c.next = null
+			c.first = q
+			c.last = q
 			return c
-		endmethod
+		end
 	endstruct
-	
-	struct Muscii
-		private static HandleTable fromClock
+
+	public class Muscii
+		private static Table fromClock
 		private static Muscii array db
 		private static integer dbIndex = -1
 		Chord first
@@ -83,117 +85,117 @@ library Muscii requires Sound
 		integer queueCount
 		string cbf
 		Muscii queued
-		
-		public static method interrupt takes nothing returns nothing
-			local integer index = 0
-			local Muscii temp
+
+		static method interrupt takes nothing returns nothing
+			integer index = 0
+			Muscii temp
 			loop
 				exitwhen index>dbIndex
-				set temp = db[index]
-				call PauseTimer(temp.clock)
-				set index = index + 1
+				temp = db[index]
+				PauseTimer(temp.clock)
+				index = index + 1
 			endloop
-		endmethod
-		
-		public method callback takes string func returns Muscii
-			set this.cbf = func
+		end
+
+		method callback takes string func returns Muscii
+			this.cbf = func
 			return this
-		endmethod
-		
-		public method copy takes nothing returns Muscii
-			local Chord iterator = this.first
-			local Muscii new = Muscii.create(iterator,this.tempo)
+		end
+
+		method copy takes nothing returns Muscii
+			Chord iterator = this.first
+			Muscii new = Muscii.create(iterator,this.tempo)
 			loop
-				set iterator = iterator.next
-				exitwhen iterator == -1
-				call new.addChord(iterator.copy())
+				iterator = iterator.next
+				exitwhen iterator == null
+				new.addChord(iterator.copy())
 			endloop
 			return new
-		endmethod
-		
-		public method play takes nothing returns Muscii
-			call playCounted(-1)
+		end
+
+		method play takes nothing returns Muscii
+			playCounted(-1)
 			return this // for chaining
-		endmethod
-		
-		public method playCounted takes integer count returns Muscii
-			set this.count = count
-			call TimerStart(this.clock,1. / (this.tempo / 60.),true,function thistype.p)
+		end
+
+		method playCounted takes integer count returns Muscii
+			this.count = count
+			TimerStart(this.clock,1. / (this.tempo / 60.),true,function Muscii.p)
 			return this
-		endmethod
-		
-		public method enqueue takes Muscii next, integer queueCount returns Muscii
+		end
+
+		method enqueue takes Muscii next, integer queueCount returns Muscii
 			// if the target Muscii is already queuing something, it is in use - we
 			// therefore copy it.
-			if next.queued == -1 then
-				set this.queued = next
+			if next.queued == null then
+				this.queued = next
 			else
-				set this.queued = next.copy()
+				this.queued = next.copy()
 			endif
-			set this.queueCount = queueCount
+			this.queueCount = queueCount
 			return this.queued
-		endmethod
-		
-		public method stop takes nothing returns Muscii
-			call PauseTimer(this.clock)
-			set this.iterator = this.first
-			return this 
-		endmethod
-		
-		public method addChord takes Chord c returns Muscii
-			local Chord q = this.last
-			local Chord copy = c.copy()
-			set q.next = copy
-			set this.last = copy
-			set copy.previous = q
+		end
+
+		method stop takes nothing returns Muscii
+			PauseTimer(this.clock)
+			this.iterator = this.first
 			return this
-		endmethod
-		
-		public static method create takes Chord c, real tempo returns Muscii
-			local Muscii m = Muscii.allocate()
-			local Chord cop = c.copy()
-			set m.first = cop
-			set m.last = cop
-			set m.iterator = cop
-			set m.tempo = tempo
-			set m.clock = CreateTimer()
-			set m.queued = -1
-			set m.cbf = ""
-			set fromClock[m.clock] = m
-			set dbIndex = dbIndex + 1
-			set db[dbIndex] = m
+		end
+
+		method addChord takes Chord c returns Muscii
+			Chord q = this.last
+			Chord copy = c.copy()
+			q.next = copy
+			this.last = copy
+			copy.previous = q
+			return this
+		end
+
+		static method create takes Chord c, real tempo returns Muscii
+			Muscii m = new Muscii
+			Chord cop = c.copy()
+			m.first = cop
+			m.last = cop
+			m.iterator = cop
+			m.tempo = tempo
+			m.clock = CreateTimer()
+			m.queued = null
+			m.cbf = ""
+			fromClock.saveInt(m.clock.getHandleId(), m castTo int)
+			dbIndex = dbIndex + 1
+			db[dbIndex] = m
 			return m
-		endmethod
-		
+		end
+
 		private static method p takes nothing returns nothing
-			local Muscii m = fromClock[GetExpiredTimer()]
-			local Muscii next
-			local Chord now = m.iterator
-			call now.play()
-			if now.next != -1 then
-				set m.iterator = now.next
+			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
+			Muscii next
+			Chord now = m.iterator
+			now.play()
+			if now.next != null then
+				m.iterator = now.next
 			else
-				set m.iterator = m.first
+				m.iterator = m.first
 				if m.count>-1 then
-					set m.count=m.count-1
-					if m.count==-1 then
-						call m.stop()
-						set next = m.queued
-						if next != -1 then
-							call next.playCounted(m.queueCount)
+					m.count=m.count-1
+					if m.count == -1 then
+						m.stop()
+						next = m.queued
+						if next != null then
+							next.playCounted(m.queueCount)
 						endif
-						set m.queued = -1
+						m.queued = null
 						if m.cbf != "" then
-							call ExecuteFunc(m.cbf)
-							set m.cbf = ""
+							// TODO: Fix this up!
+							// ExecuteFunc(m.cbf)
+							m.cbf = ""
 						endif
 					endif
 				endif
 			endif
-		endmethod
-		
+		end
+
 		private static method onInit takes nothing returns nothing
-			set fromClock=HandleTable.create()
-		endmethod
-	endstruct
-endlibrary
+			fromClock = new Table
+		end
+	end

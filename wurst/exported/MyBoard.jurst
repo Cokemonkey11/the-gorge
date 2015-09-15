@@ -1,4 +1,4 @@
-library MyBoardSystem
+package MyBoard
 	globals
 		boolean             DEBUG_MODE           = false
 
@@ -8,7 +8,7 @@ library MyBoardSystem
 		constant real       AVERAGE_LETTER_WIDTH = .01484375
 	endglobals
 
-	struct MyBoard
+	public class MyBoard
 		readonly multiboard           board        = null
 		private  integer              colCount     = 0
 		private  integer              rowCount     = 0
@@ -299,22 +299,22 @@ library MyBoardSystem
 
 		// Initializer.
 
-		static method create takes integer cols, integer rows, string title returns thistype
-			local thistype this     = thistype.allocate()
+		static method create takes integer cols, integer rows, string title returns MyBoard
+			local MyBoard  board    = new MyBoard
 			local integer  colLoop  = 0
 			local integer  rowLoop  = 0
 			local integer  arrIndex = 0
 
-			set .board         = CreateMultiboard()
-			set .colCount      = cols
-			set .rowCount      = rows
-			set .isMinimized   = false
-			set .isShown       = false
-			set .titleText     = title
+			set board.board         = CreateMultiboard()
+			set board.colCount      = cols
+			set board.rowCount      = rows
+			set board.isMinimized   = false
+			set board.isShown       = false
+			set board.titleText     = title
 
-			call MultiboardSetColumnCount(.board,cols)
-			call MultiboardSetRowCount(.board,rows)
-			call MultiboardSetTitleText(.board,title)
+			call MultiboardSetColumnCount(board.board,cols)
+			call MultiboardSetRowCount(board.board,rows)
+			call MultiboardSetTitleText(board.board,title)
 
 			// Pre-initializing board items.
 			// This is needed to drastically reduce function calls afterwards.
@@ -324,19 +324,18 @@ library MyBoardSystem
 				loop
 					exitwhen rowLoop > rows
 					set arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-					set .brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
-					set .width   [arrIndex] = .01
-					set .charCnt [arrIndex] = 4
-					set .showVal [arrIndex] = true
-					set .showIcon[arrIndex] = true
-					set .curValue[arrIndex] = ""
-					set .curIcon [arrIndex] = ""
+					set board.brdItem [arrIndex] = MultiboardGetItem(board.board,rowLoop,colLoop)
+					set board.width   [arrIndex] = .01
+					set board.charCnt [arrIndex] = 4
+					set board.showVal [arrIndex] = true
+					set board.showIcon[arrIndex] = true
+					set board.curValue[arrIndex] = ""
+					set board.curIcon [arrIndex] = ""
 					set rowLoop = rowLoop + 1
 				endloop
 				set colLoop = colLoop + 1
 			endloop
 
-			return this
+			return board
 		endmethod
-	endstruct
-endlibrary
+	end
