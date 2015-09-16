@@ -1,12 +1,12 @@
 scope Leave initializer init
-	private function c takes nothing returns boolean
+	function c takes nothing returns boolean
 		player p = GetTriggerPlayer()
 		integer id = GetPlayerId(p)
 		DisplayTextToPlayer(Game.localPlayer,0.,0.,Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
 	endfunction
 
-	private function init takes nothing returns nothing
+	function init takes nothing returns nothing
 		trigger t = CreateTrigger()
 		integer index = 2
 		loop

@@ -106,7 +106,7 @@ package Game
 		unit eastHangar
 		static unit array westUtility
 		static unit array eastUtility
-		unit array captains[4]
+		static unit array captains[4]
 		static player array players
 		static player localPlayer
 		player playerPassive

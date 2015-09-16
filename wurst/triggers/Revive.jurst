@@ -31,7 +31,7 @@ scope Revive initializer i
 		private unit eastDummy
     endglobals
 
-    private function p takes nothing returns nothing
+    function p takes nothing returns nothing
         deathDat tempDat
         integer index=0
         loop
@@ -73,11 +73,11 @@ scope Revive initializer i
         endloop
     endfunction
 
-	private function getBounty takes nothing returns integer
+	function getBounty takes nothing returns integer
 		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
 	endfunction
 
-	private function parseAssists takes integer pID returns nothing
+	function parseAssists takes integer pID returns nothing
 		integer index = 2
 		loop
 			exitwhen index>11
@@ -89,7 +89,7 @@ scope Revive initializer i
 		endloop
 	endfunction
 
-    private function c takes nothing returns nothing
+    function c takes nothing returns nothing
 		deathDat tempDat
 		unit tU=GetTriggerUnit()
 		unit kU
@@ -177,7 +177,7 @@ scope Revive initializer i
 		tU=null
     endfunction
 
-    private function i takes nothing returns nothing
+    function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
 
 		// Initialize circle of power dummies

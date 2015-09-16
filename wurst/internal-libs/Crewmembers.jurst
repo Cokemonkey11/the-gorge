@@ -118,7 +118,7 @@ package Crewmembers
 			endif
 		end
 
-		static private function p takes nothing returns nothing
+		static function p takes nothing returns nothing
 			CrewMember temp
 			integer index=0
 			loop

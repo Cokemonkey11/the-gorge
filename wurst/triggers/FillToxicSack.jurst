@@ -10,7 +10,7 @@ scope FillToxicSack initializer i
 		private constant integer TRADE = 1
 	endglobals
 
-	private function f takes nothing returns boolean
+	function f takes nothing returns boolean
 		unit fU = GetFilterUnit()
 		integer slt = Equipment.unitHasItemOfTypeSlot(fU,Equipment.TOXIC_SUBST)
 		player owner = GetOwningPlayer(fU)
@@ -24,7 +24,7 @@ scope FillToxicSack initializer i
 		return false
 	endfunction
 
-	private function f2 takes nothing returns boolean
+	function f2 takes nothing returns boolean
 		unit fU = GetFilterUnit()
 		integer id = GetPlayerId(GetOwningPlayer(fU))
 		integer slt = Equipment.unitHasItemOfTypeSlot(fU,Equipment.TOXIC_SUBST_FULL)
@@ -47,7 +47,7 @@ scope FillToxicSack initializer i
 		return false
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 
 		// Initialize triggers for shop and utility ports
 		trigger shopTrigger= CreateTrigger()

@@ -1,5 +1,5 @@
 scope ItemPickup initializer i
-	private function c takes nothing returns nothing
+	function c takes nothing returns nothing
 		integer id=GetPlayerId(GetTriggerPlayer())
 		item it = GetManipulatedItem()
 		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(),GetItemTypeId(it)) then
@@ -9,7 +9,7 @@ scope ItemPickup initializer i
 		endif
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM,function c)
 	endfunction
 endscope

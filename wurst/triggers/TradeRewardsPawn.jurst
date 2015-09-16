@@ -1,11 +1,11 @@
 scope TradeRewardsPawn initializer i
-	private function c takes nothing returns nothing
+	function c takes nothing returns nothing
 		if GetItemTypeId(GetSoldItem())==Equipment.DATA_ID then
 			Game.reward(GetTriggerUnit(),15,1)
 		endif
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PAWN_ITEM, function c)
 	endfunction
 endscope

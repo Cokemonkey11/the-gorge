@@ -8,7 +8,7 @@ scope TurretDestroyed initializer i
 		private constant string WARNING         = "Sound\\Interface\\Warning.wav"
 	endglobals
 
-	private function c takes nothing returns nothing
+	function c takes nothing returns nothing
 		unit tU=GetTriggerUnit()
 		integer index=2
 		if GetUnitTypeId(tU)==TURRET_ID then
@@ -28,7 +28,7 @@ scope TurretDestroyed initializer i
 		tU=null
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
 		Sound.preload(GOODJOB)
 		Sound.preload(WARNING)

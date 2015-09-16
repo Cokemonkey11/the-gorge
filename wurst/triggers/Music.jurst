@@ -32,35 +32,35 @@ scope Music initializer i
 		private Muscii chorus3P8
 	endglobals
 
-	private function playIntro takes nothing returns nothing
+	function playIntro takes nothing returns nothing
 		m.playCounted(3).callback(SCOPE_PRIVATE+"playVerse1")
 	endfunction
 
-	private function playVerse1 takes nothing returns nothing
+	function playVerse1 takes nothing returns nothing
 		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus")
 	endfunction
 
-	private function playChorus takes nothing returns nothing
+	function playChorus takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP2,0).enqueue(chorusP3,0).enqueue(chorusP2,0).callback(SCOPE_PRIVATE+"playVerse2")
 	endfunction
 
-	private function playVerse2 takes nothing returns nothing
+	function playVerse2 takes nothing returns nothing
 		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus2")
 	endfunction
 
-	private function playChorus2 takes nothing returns nothing
+	function playChorus2 takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP3,1).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus2P7,0).enqueue(chorus2P8,0).callback(SCOPE_PRIVATE+"playVerse3")
 	endfunction
 
-	private function playVerse3 takes nothing returns nothing
+	function playVerse3 takes nothing returns nothing
 		v1.playCounted(0).enqueue(verse3P2,0).enqueue(v1p2,2).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorusRepeat")
 	endfunction
 
-	private function playChorus3Repeat takes nothing returns nothing
+	function playChorus3Repeat takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP3,0).enqueue(chorusP3,0).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus3P7,0).enqueue(chorus3P8,0).callback(SCOPE_PRIVATE+"playVerse1")
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		//		song3
 		Note hat = Note.create(HAT_PATH,90,1.)
 		Note snr = Note.create(SNR_PATH,110,1.)

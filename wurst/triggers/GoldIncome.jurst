@@ -4,7 +4,7 @@ scope GoldIncome initializer i
 		private constant integer GOLD_PER_SECOND = 1
 	endglobals
 
-    private function c takes nothing returns nothing
+    function c takes nothing returns nothing
         integer index=0
 		if not Game.ended then
 			loop
@@ -15,7 +15,7 @@ scope GoldIncome initializer i
 		endif
     endfunction
 
-    private function i takes nothing returns nothing
+    function i takes nothing returns nothing
 		TimerStart(CreateTimer(),CLOCK_PERIOD,true,function c)
     endfunction
 endscope

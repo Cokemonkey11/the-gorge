@@ -1,9 +1,12 @@
 scope SelectCaptain initializer init
+	import Game
+	import RegisterPlayerUnitEvent
+
 	globals
-		private constant integer SELECT_CAPT_ID = 'A00Z'
+		constant integer SELECT_CAPT_ID = 'A00Z'
 	endglobals
 
-	private function c takes nothing returns nothing
+	function c takes nothing returns nothing
 		player owner
 		integer id
 		if GetSpellAbilityId() == SELECT_CAPT_ID then
@@ -17,7 +20,7 @@ scope SelectCaptain initializer init
 		endif
 	endfunction
 
-	private function init takes nothing returns nothing
+	function init takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
 	endfunction
 endscope
