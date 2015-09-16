@@ -1,0 +1,22 @@
+scope DamageReduction initializer i
+	import DamageType
+	import Equipment
+	import StructuredDD
+
+	function h takes nothing returns boolean
+		real d=GetEventDamage()
+		unit tU=GetTriggerUnit()
+		if DamageType.get() != DamageType.CODE and Equipment.reduction.hasInt(tU.getHandleId()) then
+			if d<0. then
+				d=d*-1.
+			endif
+			d = d*I2R(Equipment.reduction.loadInt(tU.getHandleId()))/100.
+			SetWidgetLife(tU,GetWidgetLife(tU)+d)
+		endif
+		return false
+	endfunction
+
+	function i takes nothing returns nothing
+		StructuredDD.addHandler(function h)
+	endfunction
+endscope

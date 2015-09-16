@@ -10,24 +10,17 @@ scope Repair initializer i
 		private constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 		private real array lastRepair[12]
 	endglobals
-	
-	private function c takes nothing returns boolean
+
+	private function c takes nothing returns nothing
 		local player p
 		local unit tU=GetTriggerUnit()
 		local integer id
 		local real max
 		local real life
 		local integer index=0
-		if not Game_ended then
-			loop
-				exitwhen index>11
-				if IsUnitSelected(tU,Game_players[index]) then
-					set id=index
-					exitwhen true
-				endif
-				set index=index+1
-			endloop
-			set p = Player(id)
+		if not Game_ended and (tU == Game_westRepair or tU == Game_eastRepair) then
+			set p = GetTriggerPlayer()
+			set id = GetPlayerId(p)
 			if Game_localPlayer==p then
 				call SelectUnit(tU,false)
 				call SelectUnit(Ships_ships[id],true)
@@ -55,21 +48,15 @@ scope Repair initializer i
 			endif
 		endif
 		set tU=null
-		return false
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		local trigger t = CreateTrigger()
 		local integer index=0
 		loop
 			exitwhen index>11
 			set lastRepair[index] = -1.*REPAIR_TIMEOUT
 			set index=index+1
 		endloop
-		call TriggerRegisterUnitEvent(t,Game_westRepair,EVENT_UNIT_SELECTED)
-		call TriggerRegisterUnitEvent(t,Game_eastRepair,EVENT_UNIT_SELECTED)
-		call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_SELECTED
-		call TriggerAddCondition(t,Condition(function c))
-		set t=null
+		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
 	endfunction
 endscope

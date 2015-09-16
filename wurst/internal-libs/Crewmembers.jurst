@@ -1,3 +1,6 @@
+// Creating a crew member: Create necessary phoenix fire abilities, create
+// necessary crew member unit, create necessary cargo unit, add crew member
+// unit to keep slot, link member + cargo in this script.
 package Crewmembers
 	import Ships
 	import Game
