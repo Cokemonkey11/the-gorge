@@ -1,14 +1,17 @@
 scope ShipLocator initializer i
+	import Game
+	import RegisterPlayerUnitEvent
+
 	globals
-		private constant integer SHIP_LOC_ID = 'A00I'
-		private constant real RANGE = 4000.
-		private constant real PING_DURATION = 5.
-		private group grp=CreateGroup()
+		constant integer SHIP_LOC_ID = 'A00I'
+		constant real RANGE = 4000.
+		constant real PING_DURATION = 5.
+		group grp=CreateGroup()
 	endglobals
 
-	private function c takes nothing returns nothing
+	function c takes nothing returns nothing
 		unit tU
-		unit FoG
+		unit first
 		integer id
 		player owner
 		if GetSpellAbilityId()==SHIP_LOC_ID then
@@ -16,21 +19,20 @@ scope ShipLocator initializer i
 			owner = GetOwningPlayer(tU)
 			GroupEnumUnitsInRange(grp,GetUnitX(tU),GetUnitY(tU),RANGE,null)
 			loop
-				FoG=FirstOfGroup(grp)
-				exitwhen FoG==null
-				id = GetPlayerId(GetOwningPlayer(FoG))
-				if IsUnitEnemy(FoG,owner) and id>1 then
+				first=FirstOfGroup(grp)
+				exitwhen first==null
+				id = GetPlayerId(GetOwningPlayer(first))
+				if IsUnitEnemy(first,owner) and id>1 then
 					if Game.localPlayer == owner then
-						PingMinimap(GetUnitX(FoG),GetUnitY(FoG),PING_DURATION)
+						PingMinimap(GetUnitX(first),GetUnitY(first),PING_DURATION)
 					endif
 				endif
-				GroupRemoveUnit(grp,FoG)
+				GroupRemoveUnit(grp,first)
 			endloop
-			tU=null
 		endif
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
 	endfunction
 endscope
