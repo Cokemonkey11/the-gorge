@@ -76,7 +76,7 @@ scope SL15ShroudGenerator initializer i
 				j = 0
 				loop
 					exitwhen j >= GEN_COUNT
-					g = Gen.create()
+					g = new Gen
 					g.dummy = DummyUnitStack.get()
 					g.mdl = AddSpecialEffectTarget(GEN_MODEL,g.dummy,"origin")
 					g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
@@ -121,7 +121,7 @@ scope SL15ShroudGenerator initializer i
 	function c takes nothing returns nothing
 		Shroud s
 		if GetSpellAbilityId()==SHROUD_ID then
-			s = Shroud.create()
+			s = new Shroud
 			s.caster = GetTriggerUnit()
 			s.cX = GetUnitX(s.caster)
 			s.cY = GetUnitY(s.caster)

@@ -26,7 +26,7 @@ scope DestroyDroppedContracts initializer i
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
 
 		// Initialize Table
-		tradeItems = Table.create()
+		tradeItems = new Table
 		tradeItems[Equipment.DATA_ID] = 1
 		tradeItems[Equipment.TOXIC_SUBST_FULL] = 1
 	endfunction

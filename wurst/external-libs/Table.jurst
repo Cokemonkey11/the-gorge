@@ -3,7 +3,7 @@ library Table
 //* Table object 3.1
 //* ------------
 //*
-//*   set t=Table.create() - instanceates a new table object
+//*   set t=new Table - instanceates a new table object
 //*   call destroy t     - destroys it
 //*   t[1234567]           - Get value for key 1234567
 //*                          (zero if not assigned previously)

@@ -147,7 +147,7 @@ library Shield requires DamageType
         //* This method adds a shield to a unit. You can use
         //* Shield.DEFAULT_EFFECT in the fx argument.
         public static method add takes unit u, real amount, real time, string fx, string fxpoint returns nothing
-            thistype tempDat=thistype.create()
+            thistype tempDat=new thistype
             thistype linkedDat
             real initialLife=GetWidgetLife(u)
             real maxLife=GetUnitState(u,UNIT_STATE_MAX_LIFE)
@@ -195,7 +195,7 @@ library Shield requires DamageType
         //* Auxillary method used to initialize the HandleTable and
         //* StructuredDD handler.
         private static method onInit takes nothing returns nothing
-            thistype.tab=HandleTable.create()
+            thistype.tab=new HandleTable
             StructuredDD.addHandler(function thistype.handler)
         endmethod
     endstruct

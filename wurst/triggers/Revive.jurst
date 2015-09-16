@@ -102,7 +102,7 @@ scope Revive initializer i
 			kU=GetKillingUnit()
 			kO=GetOwningPlayer(kU)
 			id = GetPlayerId(kO)
-			tempDat=deathDat.create()
+			tempDat=new deathDat
 			tempDat.u=tU
 			tempDat.timeL=REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
 			tempDat.ownerID=GetPlayerId(GetOwningPlayer(tU))
