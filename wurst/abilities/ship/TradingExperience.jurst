@@ -1,10 +1,12 @@
 scope TradingExperience initializer i
+	import RegisterPlayerUnitEvent
+	import Game
+
 	globals
-		private constant integer SHOW_ID = 'A00N'
+		constant integer SHOW_ID = 'A00N'
 	endglobals
 
 	function c takes nothing returns nothing
-		player owner
 		integer id
 		if GetSpellAbilityId() == SHOW_ID then
 			id = GetPlayerId(GetOwningPlayer(GetTriggerUnit()))
