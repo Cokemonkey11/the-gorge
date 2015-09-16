@@ -1,198 +1,198 @@
-library Crewmembers initializer i requires Ships
+package Crewmembers
+	import Ships
 	import Game
+	import SimError
+	import RegisterPlayerUnitEvent
 
-	private struct CrewMember
+	native UnitAlive takes unit u returns boolean
+
+	constant integer MAX_SLOTS = 10
+
+	class CrewMember
 		integer ownerID
 		unit dummy
 		unit phoenix
-	endstruct
+	end
 
-	private struct CrewInventory
+	class CrewInventory
 		CrewMember array slots[MAX_SLOTS]
 	end
 
-	globals
-		private constant integer MAX_SLOTS = 10
+	public class Crewmembers
+		static constant integer HEADHUNTER_ID    = 'o000'
+		static constant integer HEADHUNTER_D_ID  = 'o009'
 
-		private constant integer HEADHUNTER_ID    = 'o000'
-		private constant integer HEADHUNTER_D_ID  = 'o009'
+		static constant integer WITCHDOCTOR_ID   = 'o001'
+		static constant integer WITCHDOCTOR_D_ID = 'o00F'
 
-		private constant integer WITCHDOCTOR_ID   = 'o001'
-		private constant integer WITCHDOCTOR_D_ID = 'o00F'
+		static constant integer SPEARMAN_ID      = 'o002'
+		static constant integer SPEARMAN_D_ID    = 'o00D'
 
-		private constant integer SPEARMAN_ID      = 'o002'
-		private constant integer SPEARMAN_D_ID    = 'o00D'
+		static constant integer UNBROKEN_ID      = 'o003'
+		static constant integer UNBROKEN_D_ID    = 'o00E'
 
-		private constant integer UNBROKEN_ID      = 'o003'
-		private constant integer UNBROKEN_D_ID    = 'o00E'
+		static constant integer SHAMAN_ID        = 'o004'
+		static constant integer SHAMAN_D_ID      = 'o00C'
 
-		private constant integer SHAMAN_ID        = 'o004'
-		private constant integer SHAMAN_D_ID      = 'o00C'
+		static constant integer SEAWITCH_ID      = 'o005'
+		static constant integer SEAWITCH_D_ID    = 'o00B'
 
-		private constant integer SEAWITCH_ID      = 'o005'
-		private constant integer SEAWITCH_D_ID    = 'o00B'
+		static constant integer GRENADIER_ID     = 'o006'
+		static constant integer GRENADIER_D_ID   = 'o008'
 
-		private constant integer GRENADIER_ID     = 'o006'
-		private constant integer GRENADIER_D_ID   = 'o008'
+		static constant integer LASERRIFLE_ID    = 'o007'
+		static constant integer LASERRIFLE_D_ID  = 'o00A'
 
-		private constant integer LASERRIFLE_ID    = 'o007'
-		private constant integer LASERRIFLE_D_ID  = 'o00A'
+		static constant integer GRYPHON_ID       = 'o00G'
+		static constant integer GRYPHON_D_ID     = 'o00H'
 
-		private constant integer GRYPHON_ID       = 'o00G'
-		private constant integer GRYPHON_D_ID     = 'o00H'
+		static constant integer AMASTER_ID       = 'o00I'
+		static constant integer AMASTER_D_ID     = 'o00J'
 
-		private constant integer AMASTER_ID       = 'o00I'
-		private constant integer AMASTER_D_ID     = 'o00J'
+		static constant integer ODRAKE_ID        = 'o00K'
+		static constant integer ODRAKE_D_ID      = 'o00L'
 
-		private constant integer ODRAKE_ID        = 'o00K'
-		private constant integer ODRAKE_D_ID      = 'o00L'
+		static constant integer VTEMPT_ID        = 'o00M'
+		static constant integer VTEMPT_D_ID      = 'o00N'
 
-		private constant integer VTEMPT_ID        = 'o00M'
-		private constant integer VTEMPT_D_ID      = 'o00N'
+		private static constant string ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
+		private static constant real CLOCK_PERIOD = 1./30.
+		private static constant real OFFSET = 256.+64.
+		private static constant real SELL_RATE = .5
 
-		private constant string ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
-		private constant real CLOCK_PERIOD = 1./30.
-		private constant real OFFSET = 256.+64.
-		private constant real SELL_RATE = .5
+		private static CrewMember array db
+		private static integer dbIndex=-1
+		private static timer time=CreateTimer()
+		static Table fromDummy
+		static Table links
+		static CrewInventory array inventories
+		static integer array slotIndices
 
-		private CrewMember array db
-		private integer dbIndex=-1
-		private timer time=CreateTimer()
-		private HandleTable fromDummy
-		private Table links
-		private CrewInventory array inventories[12]
-		private integer array slotIndices[12]
-	endglobals
-
-	public function getMemberIndex takes integer id, CrewMember cre returns integer
-		local integer index=0
-		loop
-			exitwhen index > slotIndices[id]
-			if slots[id][index] == cre then
-				return index
-			endif
-			set index=index+1
-		endloop
-		return -1
-	endfunction
-
-	public function updatePosition takes CrewMember cre, integer index returns nothing
-		local real face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
-		local real x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
-		local real y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
-		call SetUnitPosition(cre.dummy,x,y)
-		call SetUnitFacing(cre.dummy,face*bj_RADTODEG)
-	endfunction
-
-	public function release takes unit u returns nothing
-		local CrewMember temp
-		local integer val
-		local integer index
-		if fromDummy.exists(u) then
-			set temp = fromDummy[u]
-			set val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
-			call SetPlayerState(Game_players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game_players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD)+val)
-			call DisplayTextToPlayer(Game_players[temp.ownerID],0.,0.,"You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
-			set index = getMemberIndex(temp.ownerID,temp)
-			if index!=-1 then
-				set slots[temp.ownerID][index] = slots[temp.ownerID][slotIndices[temp.ownerID]]
-				set slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
-				if slotIndices[temp.ownerID] != -1 then
-					call updatePosition(slots[temp.ownerID][index],index)
+		function getMemberIndex takes integer id, CrewMember cre returns integer
+			integer index=0
+			loop
+				exitwhen index > slotIndices[id]
+				if inventories[id].slots[index] == cre then
+					return index
 				endif
-				call RemoveUnit(temp.dummy)
-				call RemoveUnit(temp.phoenix)
-				call temp.destroy()
-			else
-				debug call BJDebugMsg("Error: tried to release a unit that had no index :(")
-			endif
-		else
-			debug call BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
-		endif
-	endfunction
+				index=index+1
+			endloop
+			return -1
+		end
 
-	private function p takes nothing returns nothing
-		local CrewMember temp
-		local integer index=0
-		loop
-			exitwhen index>dbIndex
-			set temp=db[index]
-			if UnitAlive(Ships_ships[temp.ownerID]) and not Game_ended then
-				call SetUnitX(temp.phoenix,GetUnitX(Ships_ships[temp.ownerID]))
-				call SetUnitY(temp.phoenix,GetUnitY(Ships_ships[temp.ownerID]))
-			else
-				call SetUnitX(temp.phoenix,Game_SAFE_X)
-				call SetUnitY(temp.phoenix,Game_SAFE_Y)
-			endif
-			set index=index+1
-		endloop
-	endfunction
+		function updatePosition takes CrewMember cre, integer index returns nothing
+			real face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
+			real x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
+			real y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
+			SetUnitPosition(cre.dummy,x,y)
+			SetUnitFacing(cre.dummy,face*bj_RADTODEG)
+		end
 
-	private function c takes nothing returns nothing
-		local CrewMember temp
-		local unit selU = GetSellingUnit()
-		local unit bU=GetBuyingUnit()
-		local unit sU=GetSoldUnit()
-		local real x
-		local real y
-		local real face
-		local timer sillyT
-		local player buyer = GetOwningPlayer(sU)
-		if Ships_getClass(sU)==Ships_CLASS_UNKNOWN then
-			if IsUnitAlly(bU,GetOwningPlayer(selU)) then
-				set temp = CrewMember.create()
-				set temp.ownerID=GetPlayerId(buyer)
-				set slotIndices[temp.ownerID] = slotIndices[temp.ownerID] + 1
-				set slots[temp.ownerID][slotIndices[temp.ownerID]] = temp
-				set face = I2R(slotIndices[temp.ownerID]) * 2. * bj_PI / I2R(MAX_SLOTS)
-				set x = GetStartLocationX(temp.ownerID) + OFFSET*Cos(face)
-				set y = GetStartLocationY(temp.ownerID) + OFFSET*Sin(face)
-				set temp.dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),links[GetUnitTypeId(sU)],x,y,face*bj_RADTODEG)
-				set temp.phoenix = sU
-				set dbIndex = dbIndex + 1
-				set db[dbIndex] = temp
-				set fromDummy[temp.dummy] = temp
-				if dbIndex == 0 then
-					call TimerStart(time,CLOCK_PERIOD,true,function p)
+		function release takes unit u returns nothing
+			CrewMember temp
+			integer val
+			integer index
+			if fromDummy.hasInt(u.getHandleId()) then
+				temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
+				val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
+				SetPlayerState(Game.players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD)+val)
+				DisplayTextToPlayer(Game.players[temp.ownerID],0.,0.,"You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
+				index = getMemberIndex(temp.ownerID,temp)
+				if index!=-1 then
+					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
+					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
+					if slotIndices[temp.ownerID] != -1 then
+						updatePosition(inventories[temp.ownerID].slots[index], index)
+					endif
+					RemoveUnit(temp.dummy)
+					RemoveUnit(temp.phoenix)
+					destroy temp
+				else
+					debug BJDebugMsg("Error: tried to release a unit that had no index :(")
 				endif
-				set sillyT = null
 			else
-				call SimError(GetOwningPlayer(bU),ERROR_MESSAGE)
-				call SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
-				call RemoveUnit(sU)
+				debug BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
 			endif
-		endif
-		set bU=null
-		set sU=null
-		set selU=null
-	endfunction
+		end
 
-	private function i takes nothing returns nothing
-		local integer index = 0
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function c)
+		static private function p takes nothing returns nothing
+			CrewMember temp
+			integer index=0
+			loop
+				exitwhen index>dbIndex
+				temp=db[index]
+				if UnitAlive(Ships.ships[temp.ownerID]) and not Game.ended then
+					SetUnitX(temp.phoenix,GetUnitX(Ships.ships[temp.ownerID]))
+					SetUnitY(temp.phoenix,GetUnitY(Ships.ships[temp.ownerID]))
+				else
+					SetUnitX(temp.phoenix,Game.SAFE_X)
+					SetUnitY(temp.phoenix,Game.SAFE_Y)
+				endif
+				index=index+1
+			endloop
+		end
+
+		static function c takes nothing returns nothing
+			CrewMember temp
+			unit selU = GetSellingUnit()
+			unit bU=GetBuyingUnit()
+			unit sU=GetSoldUnit()
+			real x
+			real y
+			real face
+			player buyer = GetOwningPlayer(sU)
+			if Ships.getClass(sU)==Ships.CLASS_UNKNOWN then
+				if IsUnitAlly(bU,GetOwningPlayer(selU)) then
+					temp = new CrewMember
+					temp.ownerID=GetPlayerId(buyer)
+					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] + 1
+					inventories[temp.ownerID].slots[slotIndices[temp.ownerID]] = temp
+					face = I2R(slotIndices[temp.ownerID]) * 2. * bj_PI / I2R(MAX_SLOTS)
+					x = GetStartLocationX(temp.ownerID) + OFFSET*Cos(face)
+					y = GetStartLocationY(temp.ownerID) + OFFSET*Sin(face)
+					temp.dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), links.loadInt(sU.getTypeId()), x, y, face*bj_RADTODEG)
+					temp.phoenix = sU
+					dbIndex = dbIndex + 1
+					db[dbIndex] = temp
+					fromDummy.saveInt(temp.dummy.getHandleId(), temp castTo int)
+					if dbIndex == 0 then
+						TimerStart(time,CLOCK_PERIOD,true,function p)
+					endif
+				else
+					simError(GetOwningPlayer(bU),ERROR_MESSAGE)
+					SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
+					RemoveUnit(sU)
+				endif
+			endif
+		end
+	end
+
+	init
+		integer index = 0
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function Crewmembers.c)
 
 		// Format Links
-		set links = Table.create()
-		set links[HEADHUNTER_ID]  = HEADHUNTER_D_ID
-		set links[WITCHDOCTOR_ID] = WITCHDOCTOR_D_ID
-		set links[SPEARMAN_ID]    = SPEARMAN_D_ID
-		set links[UNBROKEN_ID]    = UNBROKEN_D_ID
-		set links[SHAMAN_ID]      = SHAMAN_D_ID
-		set links[SEAWITCH_ID]    = SEAWITCH_D_ID
-		set links[GRENADIER_ID]   = GRENADIER_D_ID
-		set links[LASERRIFLE_ID]  = LASERRIFLE_D_ID
-		set links[GRYPHON_ID]     = GRYPHON_D_ID
-		set links[AMASTER_ID]     = AMASTER_D_ID
-		set links[ODRAKE_ID]      = ODRAKE_D_ID
-		set links[VTEMPT_ID]      = VTEMPT_D_ID
+		Crewmembers.links = new Table
+		Crewmembers.links.saveInt(Crewmembers.HEADHUNTER_ID, Crewmembers.HEADHUNTER_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.WITCHDOCTOR_ID, Crewmembers.WITCHDOCTOR_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.SPEARMAN_ID, Crewmembers.SPEARMAN_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.UNBROKEN_ID, Crewmembers.UNBROKEN_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.SHAMAN_ID, Crewmembers.SHAMAN_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.SEAWITCH_ID, Crewmembers.SEAWITCH_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.GRENADIER_ID, Crewmembers.GRENADIER_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.LASERRIFLE_ID, Crewmembers.LASERRIFLE_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.GRYPHON_ID, Crewmembers.GRYPHON_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.AMASTER_ID, Crewmembers.AMASTER_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.ODRAKE_ID, Crewmembers.ODRAKE_D_ID)
+		Crewmembers.links.saveInt(Crewmembers.VTEMPT_ID, Crewmembers.VTEMPT_D_ID)
 
-		set fromDummy = HandleTable.create()
+		Crewmembers.fromDummy = new Table
 
 		// Initialize slotInidices
 		loop
 			exitwhen index>11
-			set slotIndices[index] = -1
-			set index=index+1
+			Crewmembers.slotIndices[index] = -1
+			index=index+1
 		endloop
 
 		// Initialize CrewInventories
@@ -200,9 +200,8 @@ library Crewmembers initializer i requires Ships
 		loop
 			exitwhen index > 11
 
-			inventories[index] = new CrewInventory()
+			Crewmembers.inventories[index] = new CrewInventory()
 
 			index++
 		end
-	endfunction
-endlibrary
+	end

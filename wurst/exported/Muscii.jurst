@@ -187,6 +187,8 @@ package Muscii
 						m.queued = null
 						if m.cbf != "" then
 							// TODO: Fix this up!
+							// https://github.com/peq/WurstScript/issues/154#issuecomment-140669137
+							// http://peq.github.io/WurstScript/manual.html#lambda-expressions-and-closures
 							// ExecuteFunc(m.cbf)
 							m.cbf = ""
 						endif
