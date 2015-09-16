@@ -19,15 +19,15 @@ scope DestroyDroppedContracts initializer i
 		if isTradingItem(it) then
 			RemoveItem(it)
 		endif
-		set it = null
+		it = null
 	endfunction
 
 	private function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
 
 		// Initialize Table
-		set tradeItems = Table.create()
-		set tradeItems[Equipment.DATA_ID] = 1
-		set tradeItems[Equipment.TOXIC_SUBST_FULL] = 1
+		tradeItems = Table.create()
+		tradeItems[Equipment.DATA_ID] = 1
+		tradeItems[Equipment.TOXIC_SUBST_FULL] = 1
 	endfunction
 endscope

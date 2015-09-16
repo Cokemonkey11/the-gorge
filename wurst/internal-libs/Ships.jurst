@@ -48,7 +48,7 @@ package Ships
 				if GetItemTypeId(UnitItemInSlot(u,index))==t then
 					return true
 				endif
-				set index=index+1
+				index=index+1
 			endloop
 			return false
 		endfunction

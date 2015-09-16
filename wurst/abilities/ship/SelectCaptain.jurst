@@ -7,8 +7,8 @@ scope SelectCaptain initializer init
 		player owner
 		integer id
 		if GetSpellAbilityId() == SELECT_CAPT_ID then
-			set owner = GetOwningPlayer(GetTriggerUnit())
-			set id = GetPlayerId(owner)
+			owner = GetOwningPlayer(GetTriggerUnit())
+			id = GetPlayerId(owner)
 			if Game.localPlayer == owner then
 				ClearSelection()
 				SelectUnit(Game.captains[id],true)

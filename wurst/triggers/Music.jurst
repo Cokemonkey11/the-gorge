@@ -107,64 +107,64 @@ scope Music initializer i
 		Chord t5
 		Chord hf
 
-		set hsb = Chord.create(hat)
+		hsb = Chord.create(hat)
 		hsb.addNote(snr)
 		hsb.addNote(bas)
 
-		set hsbQuiet = Chord.create(hatQuiet)
+		hsbQuiet = Chord.create(hatQuiet)
 		hsbQuiet.addNote(snrQuiet)
 		hsbQuiet.addNote(basQuiet)
 
-		set hsbVQuiet = Chord.create(hatVQuiet)
+		hsbVQuiet = Chord.create(hatVQuiet)
 		hsbVQuiet.addNote(snrVQuiet)
 		hsbVQuiet.addNote(basVQuiet)
 
-		set rb = Chord.create(rid)
+		rb = Chord.create(rid)
 		rb.addNote(bas)
 
-		set rs = Chord.create(rid)
+		rs = Chord.create(rid)
 		rs.addNote(snr)
 
-		set rrim = Chord.create(rid)
+		rrim = Chord.create(rid)
 		rrim.addNote(rim)
 
-		set cb = Chord.create(crs)
+		cb = Chord.create(crs)
 		cb.addNote(bas)
 
-		set cs = Chord.create(crs)
+		cs = Chord.create(crs)
 		cs.addNote(snr)
 
-		set hs = Chord.create(hat)
+		hs = Chord.create(hat)
 		hs.addNote(snr)
 
-		set hb = Chord.create(hat)
+		hb = Chord.create(hat)
 		hb.addNote(bas)
 
-		set hopen = Chord.create(hop)
+		hopen = Chord.create(hop)
 
-		set hf = Chord.create(hft)
+		hf = Chord.create(hft)
 
-		set t1 = Chord.create(tm1)
+		t1 = Chord.create(tm1)
 
-		set t1d = Chord.create(tm1d)
+		t1d = Chord.create(tm1d)
 
-		set t4 = Chord.create(tm4)
+		t4 = Chord.create(tm4)
 
-		set t5 = Chord.create(tm5)
+		t5 = Chord.create(tm5)
 
-		set r = Chord.create(rid)
+		r = Chord.create(rid)
 
-		set z = Chord.create(nul)
+		z = Chord.create(nul)
 
-		set b = Chord.create(bas)
+		b = Chord.create(bas)
 
-		set f = Chord.create(flm)
+		f = Chord.create(flm)
 
-		set s = Chord.create(snr)
+		s = Chord.create(snr)
 
-		set h = Chord.create(hat)
+		h = Chord.create(hat)
 
-		set m = Muscii.create(rb,240.)
+		m = Muscii.create(rb,240.)
 		m.addChord(z)
 		m.addChord(r)
 		m.addChord(z)
@@ -181,7 +181,7 @@ scope Music initializer i
 		m.addChord(r)
 		m.addChord(z)
 
-		set v1 = Muscii.create(rb,240.)
+		v1 = Muscii.create(rb,240.)
 		v1.addChord(z)
 		v1.addChord(rrim)
 		v1.addChord(z)
@@ -198,7 +198,7 @@ scope Music initializer i
 		v1.addChord(rrim)
 		v1.addChord(z)
 
-		set v1p2 = Muscii.create(rb,240.)
+		v1p2 = Muscii.create(rb,240.)
 		v1p2.addChord(z)
 		v1p2.addChord(rrim)
 		v1p2.addChord(z)
@@ -215,7 +215,7 @@ scope Music initializer i
 		v1p2.addChord(rrim)
 		v1p2.addChord(b)
 
-		set v1p3 = Muscii.create(rb,240.)
+		v1p3 = Muscii.create(rb,240.)
 		v1p3.addChord(z)
 		v1p3.addChord(rrim)
 		v1p3.addChord(z)
@@ -232,7 +232,7 @@ scope Music initializer i
 		v1p3.addChord(f)
 		v1p3.addChord(b)
 
-		set chorusP1 = Muscii.create(cb,240.)
+		chorusP1 = Muscii.create(cb,240.)
 		chorusP1.addChord(b)
 		chorusP1.addChord(hs)
 		chorusP1.addChord(b)
@@ -249,7 +249,7 @@ scope Music initializer i
 		chorusP1.addChord(h)
 		chorusP1.addChord(hopen)
 
-		set chorusP2 = Muscii.create(hb,240.)
+		chorusP2 = Muscii.create(hb,240.)
 		chorusP2.addChord(b)
 		chorusP2.addChord(hs)
 		chorusP2.addChord(b)
@@ -266,7 +266,7 @@ scope Music initializer i
 		chorusP2.addChord(t1d)
 		chorusP2.addChord(t4)
 
-		set chorusP3 = Muscii.create(hb,240.)
+		chorusP3 = Muscii.create(hb,240.)
 		chorusP3.addChord(b)
 		chorusP3.addChord(hs)
 		chorusP3.addChord(b)
@@ -283,7 +283,7 @@ scope Music initializer i
 		chorusP3.addChord(h)
 		chorusP3.addChord(hopen)
 
-		set chorus2P4 = Muscii.create(hsbVQuiet,240.)
+		chorus2P4 = Muscii.create(hsbVQuiet,240.)
 		chorus2P4.addChord(hsbVQuiet)
 		chorus2P4.addChord(hsbVQuiet)
 		chorus2P4.addChord(hsbVQuiet)
@@ -300,7 +300,7 @@ scope Music initializer i
 		chorus2P4.addChord(f)
 		chorus2P4.addChord(cs)
 
-		set chorus2P5 = Muscii.create(cb,240.)
+		chorus2P5 = Muscii.create(cb,240.)
 		chorus2P5.addChord(z)
 		chorus2P5.addChord(hs)
 		chorus2P5.addChord(b)
@@ -317,7 +317,7 @@ scope Music initializer i
 		chorus2P5.addChord(hs)
 		chorus2P5.addChord(b)
 
-		set chorus2P7 = Muscii.create(cb,240.)
+		chorus2P7 = Muscii.create(cb,240.)
 		chorus2P7.addChord(z)
 		chorus2P7.addChord(hs)
 		chorus2P7.addChord(b)
@@ -334,7 +334,7 @@ scope Music initializer i
 		chorus2P7.addChord(cs)
 		chorus2P7.addChord(b)
 
-		set chorus2P8 = Muscii.create(cb,240.)
+		chorus2P8 = Muscii.create(cb,240.)
 		chorus2P8.addChord(z)
 		chorus2P8.addChord(hs)
 		chorus2P8.addChord(b)
@@ -351,7 +351,7 @@ scope Music initializer i
 		chorus2P8.addChord(t1)
 		chorus2P8.addChord(t5)
 
-		set verse3P2 = Muscii.create(rb,240.)
+		verse3P2 = Muscii.create(rb,240.)
 		verse3P2.addChord(z)
 		verse3P2.addChord(rrim)
 		verse3P2.addChord(z)
@@ -368,7 +368,7 @@ scope Music initializer i
 		verse3P2.addChord(rrim)
 		verse3P2.addChord(hf)
 
-		set chorus3P7 = Muscii.create(cb,240.)
+		chorus3P7 = Muscii.create(cb,240.)
 		chorus3P7.addChord(z)
 		chorus3P7.addChord(hs)
 		chorus3P7.addChord(b)
@@ -385,7 +385,7 @@ scope Music initializer i
 		chorus3P7.addChord(hs)
 		chorus3P7.addChord(b)
 
-		set chorus3P8 = Muscii.create(cb,240.)
+		chorus3P8 = Muscii.create(cb,240.)
 		chorus3P8.addChord(z)
 		chorus3P8.addChord(hs)
 		chorus3P8.addChord(b)

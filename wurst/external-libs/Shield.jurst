@@ -20,7 +20,7 @@ library Shield requires DamageType
 
     //* This struct is just a shim for a pretty API. (You don't instanciate
     //* Shield objects yourself)
-    struct Shield
+    public struct Shield
         //< BEGIN CUSTOMIZABLE SECTION
 
         //* How often to check for shield instances with expired durations. A
@@ -55,41 +55,41 @@ library Shield requires DamageType
             real damageLeft=GetEventDamage()
             boolean noShieldsLeft=false
             if DamageType.get()!=DamageType.SPELL and UnitAlive(tU) and tab.exists(tU) then
-                set tempDat=thistype.tab[tU]
+                tempDat=thistype.tab[tU]
                 //we need to loop until either all the damage is mitigated
                 //or there's no shield left on this unit.
                 loop
                     exitwhen damageLeft<=0. or noShieldsLeft
                     if tempDat.shieldLeft>damageLeft then
                         if tempDat.finiteShield then
-                            set tempDat.shieldLeft=tempDat.shieldLeft-damageLeft
+                            tempDat.shieldLeft=tempDat.shieldLeft-damageLeft
                         endif
                         SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+damageLeft)
-                        set damageLeft=0.
+                        damageLeft=0.
                     else
-                        set damageLeft=damageLeft-tempDat.shieldLeft
+                        damageLeft=damageLeft-tempDat.shieldLeft
                         SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
-                        set tempDat.shieldLeft=0.
+                        tempDat.shieldLeft=0.
                         if tempDat.falseHP>damageLeft then
-                            set tempDat.falseHP=tempDat.falseHP-damageLeft
-                            set damageLeft=0.
+                            tempDat.falseHP=tempDat.falseHP-damageLeft
+                            damageLeft=0.
                         else
-                            set damageLeft=damageLeft-tempDat.falseHP
-                            set tempDat.falseHP=0.
-                            set destroyingDat=tempDat
+                            damageLeft=damageLeft-tempDat.falseHP
+                            tempDat.falseHP=0.
+                            destroyingDat=tempDat
                             if destroyingDat.nextShield!=0 then
-                                set tempDat=destroyingDat.nextShield
-                                set tempDat.prevShield=0
-                                set thistype.tab[tempDat.u]=tempDat
+                                tempDat=destroyingDat.nextShield
+                                tempDat.prevShield=0
+                                thistype.tab[tempDat.u]=tempDat
                             else
-                                set noShieldsLeft=true
+                                noShieldsLeft=true
                             endif
-                            set destroyingDat.nextShield=0
+                            destroyingDat.nextShield=0
                         endif
                     endif
                 endloop
             endif
-            set tU=null
+            tU=null
         endmethod
 
         //* This method runs every TIMER_PERIOD seconds as long as the stack
@@ -100,8 +100,8 @@ library Shield requires DamageType
             thistype otherDat
             loop
                 exitwhen index>thistype.shieldIndex
-                set tempDat=thistype.allShields[index]
-                set tempDat.timeLeft=tempDat.timeLeft-TIMER_PERIOD
+                tempDat=thistype.allShields[index]
+                tempDat.timeLeft=tempDat.timeLeft-TIMER_PERIOD
                 if (tempDat.timeLeft<=0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP)<=0. or UnitAlive(tempDat.u)==false then
                     //deallocate it, depending on the values of prevShield
                     //and nextShield
@@ -111,21 +111,21 @@ library Shield requires DamageType
                     elseif tempDat.prevShield==0 and tempDat.nextShield!=0 then
                         //the shield was the first in a list so we have to
                         //make next into the new first!
-                        set otherDat=tempDat.nextShield
-                        set otherDat.prevShield=0
-                        set thistype.tab[tempDat.u]=otherDat
+                        otherDat=tempDat.nextShield
+                        otherDat.prevShield=0
+                        thistype.tab[tempDat.u]=otherDat
                     elseif tempDat.prevShield!=0 and tempDat.nextShield==0 then
                         //the shield was the end of the list so let's do the
                         //proper changes to the previous member.
-                        set otherDat=tempDat.prevShield
-                        set otherDat.nextShield=0
+                        otherDat=tempDat.prevShield
+                        otherDat.nextShield=0
                     elseif tempDat.prevShield!=0 and tempDat.nextShield!=0 then
                         //this shield was somewhere in the middle of the list
                         //so let's make the prev and next link to each other
-                        set otherDat=tempDat.prevShield
-                        set otherDat.nextShield=tempDat.nextShield
-                        set otherDat=tempDat.nextShield
-                        set otherDat.prevShield=tempDat.prevShield
+                        otherDat=tempDat.prevShield
+                        otherDat.nextShield=tempDat.nextShield
+                        otherDat=tempDat.nextShield
+                        otherDat.prevShield=tempDat.prevShield
                     endif
                     //let's reset the unit's hp if he has extra
                     if tempDat.falseHP>0. then
@@ -133,14 +133,14 @@ library Shield requires DamageType
                     endif
                     DestroyEffect(tempDat.fx)
                     tempDat.destroy()
-                    set thistype.allShields[index]=thistype.allShields[thistype.shieldIndex]
-                    set thistype.shieldIndex=thistype.shieldIndex-1
-                    set index=index-1
+                    thistype.allShields[index]=thistype.allShields[thistype.shieldIndex]
+                    thistype.shieldIndex=thistype.shieldIndex-1
+                    index=index-1
                     if thistype.shieldIndex==-1 then
                         PauseTimer(thistype.time)
                     endif
                 endif
-                set index=index+1
+                index=index+1
             endloop
         endmethod
 
@@ -152,40 +152,40 @@ library Shield requires DamageType
             real initialLife=GetWidgetLife(u)
             real maxLife=GetUnitState(u,UNIT_STATE_MAX_LIFE)
             real diff=maxLife-initialLife
-            set tempDat.u=u
-            set tempDat.timeLeft=time
-            set tempDat.fx=AddSpecialEffectTarget(fx,u,fxpoint)
+            tempDat.u=u
+            tempDat.timeLeft=time
+            tempDat.fx=AddSpecialEffectTarget(fx,u,fxpoint)
             if time==-1. then
-                set tempDat.useDuration=false
+                tempDat.useDuration=false
             endif
             if amount==-1. then
-                set amount=100000.
-                set tempDat.finiteShield=false
+                amount=100000.
+                tempDat.finiteShield=false
             endif
             //figure out how to partition the damage
             if diff>=amount then
                 //the unit has plenty of missing HP, so:
-                set tempDat.shieldLeft=0
-                set tempDat.falseHP=amount
+                tempDat.shieldLeft=0
+                tempDat.falseHP=amount
                 SetWidgetLife(u,initialLife+amount)
             else
                 //the unit has less hp missing than the shield has value, so:
                 SetWidgetLife(u,maxLife)
-                set tempDat.falseHP=diff
-                set tempDat.shieldLeft=amount-diff
+                tempDat.falseHP=diff
+                tempDat.shieldLeft=amount-diff
             endif
             //Now let's figure out if the unit already has a shield - if he
             //does, we add this shield to the front:
             if thistype.tab.exists(u) then
-                set linkedDat=thistype.tab[u]
-                set tempDat.nextShield=linkedDat
-                set linkedDat.prevShield=tempDat
+                linkedDat=thistype.tab[u]
+                tempDat.nextShield=linkedDat
+                linkedDat.prevShield=tempDat
             endif
-            set thistype.tab[u]=tempDat
+            thistype.tab[u]=tempDat
             //now let's add this shield to the stack so it can be properly
             //deallocated when its time runs out:
-            set thistype.shieldIndex=thistype.shieldIndex+1
-            set thistype.allShields[thistype.shieldIndex]=tempDat
+            thistype.shieldIndex=thistype.shieldIndex+1
+            thistype.allShields[thistype.shieldIndex]=tempDat
             //if allShields was previously empty we have to jumpstart the timer:
             if thistype.shieldIndex==0 then
                 TimerStart(thistype.time,thistype.TIMER_PERIOD,true,function thistype.timeout)
@@ -195,7 +195,7 @@ library Shield requires DamageType
         //* Auxillary method used to initialize the HandleTable and
         //* StructuredDD handler.
         private static method onInit takes nothing returns nothing
-            set thistype.tab=HandleTable.create()
+            thistype.tab=HandleTable.create()
             StructuredDD.addHandler(function thistype.handler)
         endmethod
     endstruct

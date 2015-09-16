@@ -36,11 +36,11 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 		integer i = GetHandleId(p)
 		integer k = 15
 		if t[i] == null then
-			set t[i] = CreateTrigger()
+			t[i] = CreateTrigger()
 			loop
 				TriggerRegisterPlayerUnitEvent(t[i], Player(k), p, null)
 				exitwhen k == 0
-				set k = k - 1
+				k = k - 1
 			endloop
 		endif
 		TriggerAddCondition(t[i], Filter(c))
@@ -49,7 +49,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 	public function registerPlayerUnitEventForPlayer takes playerunitevent p, code c, player pl returns nothing
 		integer i = 16 * GetHandleId(p) + GetPlayerId(pl)
 		if t[i] == null then
-			set t[i] = CreateTrigger()
+			t[i] = CreateTrigger()
 			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
 		endif
 		TriggerAddCondition(t[i], Filter(c))

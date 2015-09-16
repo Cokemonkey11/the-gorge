@@ -23,7 +23,7 @@ scope SeaWitchColdArrows initializer i
 
 	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
-		set dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),Game.DUMMY_ID,0.,0.,0.)
+		dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),Game.DUMMY_ID,0.,0.,0.)
 		UnitAddAbility(dummy,'Aloc')
 	endfunction
 endscope

@@ -22,10 +22,10 @@ scope TurretDestroyed initializer i
 					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,SUCCESS)
 					Sound.playForPlayer(GOODJOB,1.,Game.players[index])
 				endif
-				set index=index+1
+				index=index+1
 			endloop
 		endif
-		set tU=null
+		tU=null
 	endfunction
 
 	private function i takes nothing returns nothing

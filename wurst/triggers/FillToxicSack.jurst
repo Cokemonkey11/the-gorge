@@ -20,7 +20,7 @@ scope FillToxicSack initializer i
 			DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
 			Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
 		endif
-		set fU=null
+		fU=null
 		return false
 	endfunction
 
@@ -43,7 +43,7 @@ scope FillToxicSack initializer i
 				endif
 			endif
 		endif
-		set fU=null
+		fU=null
 		return false
 	endfunction
 
@@ -69,10 +69,10 @@ scope FillToxicSack initializer i
 
 		// Cleanup
 		RemoveRect(shopRect)
-		set shopTrigger = null
-		set utilityTrigger = null
-		set shopRect = null
-		set reg = null
-		set reg2 = null
+		shopTrigger = null
+		utilityTrigger = null
+		shopRect = null
+		reg = null
+		reg2 = null
 	endfunction
 endscope

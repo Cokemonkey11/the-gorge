@@ -14,15 +14,15 @@ scope Creeps initializer i
 		real face
 		unit u
 		if faction==0 then
-			set x = Game.WESTX
-			set face = 0.
+			x = Game.WESTX
+			face = 0.
 		else
-			set x = Game.EASTX
-			set face = 180.
+			x = Game.EASTX
+			face = 180.
 		endif
-		set u = CreateUnit(Game.players[faction],class,x,0.,face)
+		u = CreateUnit(Game.players[faction],class,x,0.,face)
 		IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
-		set u = CreateUnit(Game.players[faction],class,x,0.,face)
+		u = CreateUnit(Game.players[faction],class,x,0.,face)
 		IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
 	endfunction
 
@@ -46,7 +46,7 @@ scope Creeps initializer i
 					spawn(0,HAWK_ID)
 					spawn(1,HAWK_ID)
 				endif
-			set extra = not extra
+			extra = not extra
 		endif
 	endfunction
 

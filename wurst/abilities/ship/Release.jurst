@@ -9,10 +9,10 @@ scope Release initializer i
 		integer id
 		unit tU
 		if GetSpellAbilityId() == RELEASE_ID then
-			set tU=GetSpellTargetUnit()
+			tU=GetSpellTargetUnit()
 			Crewmembers_release(tU)
 			DestroyEffect(AddSpecialEffect(TRANSMUTE,GetUnitX(tU),GetUnitY(tU)))
-			set tU=null
+			tU=null
 		endif
 	endfunction
 

@@ -5,15 +5,15 @@ scope Damage initializer i
 		unit src
 		integer sID
 		if Ships.isPlayerShip(targ) then
-			set id = GetPlayerId(GetOwningPlayer(targ))
-			set src = GetEventDamageSource()
-			set sID = GetPlayerId(GetOwningPlayer(src))
+			id = GetPlayerId(GetOwningPlayer(targ))
+			src = GetEventDamageSource()
+			sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 then
-				set Game.assistStamps[id][sID] = R2I(Game.seconds)
+				Game.assistStamps[id][sID] = R2I(Game.seconds)
 			endif
-			set src = null
+			src = null
 		endif
-		set targ = null
+		targ = null
 		return false
 	endfunction
 

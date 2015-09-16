@@ -3,14 +3,14 @@ scope OutpostTaken initializer i
 		unit tU=GetTriggerUnit()
 		integer id
         if GetUnitTypeId(tU)==Game.OUTPOST_ID then
-		    set id = GetPlayerId(GetOwningPlayer(tU))
+		    id = GetPlayerId(GetOwningPlayer(tU))
 			if id==0 then
 				CreateUnit(Game.players[1],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
 			else
 				CreateUnit(Game.players[0],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
 			endif
 		endif
-		set tU=null
+		tU=null
     endfunction
 
     private function i takes nothing returns nothing

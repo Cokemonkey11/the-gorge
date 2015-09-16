@@ -40,22 +40,22 @@ scope SL15ShroudGenerator initializer i
 		Gen g
 		loop
 			exitwhen index>gensIndex
-			set g = gens[index]
-			set g.duration = g.duration - CLOCK_PERIOD
+			g = gens[index]
+			g.duration = g.duration - CLOCK_PERIOD
 			SetUnitX(g.dummy,GetUnitX(g.dummy)+g.dX)
 			SetUnitY(g.dummy,GetUnitY(g.dummy)+g.dY)
 			if g.duration <= 0. then
 				DestroyEffect(g.mdl)
 				DummyUnitStack.release(g.dummy)
 				g.destroy()
-				set gens[index] = gens[gensIndex]
-				set gensIndex = gensIndex - 1
-				set index = index - 1
+				gens[index] = gens[gensIndex]
+				gensIndex = gensIndex - 1
+				index = index - 1
 				if gensIndex == -1 then
 					PauseTimer(clock2)
 				endif
 			endif
-			set index=index+1
+			index=index+1
 		endloop
 	endfunction
 
@@ -66,29 +66,29 @@ scope SL15ShroudGenerator initializer i
 		Gen g
 		loop
 			exitwhen index > shroudsIndex
-			set s = shrouds[index]
-			set s.time = s.time + CLOCK_PERIOD
-			set s.genTime = s.genTime + CLOCK_PERIOD
+			s = shrouds[index]
+			s.time = s.time + CLOCK_PERIOD
+			s.genTime = s.genTime + CLOCK_PERIOD
 			if s.genTime > GEN_PERIOD then
-				set s.genTime = 0.
-				set j = 0
+				s.genTime = 0.
+				j = 0
 				loop
 					exitwhen j >= GEN_COUNT
-					set g = Gen.create()
-					set g.dummy = DummyUnitStack.get()
-					set g.mdl = AddSpecialEffectTarget(GEN_MODEL,g.dummy,"origin")
-					set g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
-					set g.dY = GEN_VELOCITY * Sin(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
-					set g.duration = SHROUD_RADIUS / GEN_VELOCITY
+					g = Gen.create()
+					g.dummy = DummyUnitStack.get()
+					g.mdl = AddSpecialEffectTarget(GEN_MODEL,g.dummy,"origin")
+					g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					g.dY = GEN_VELOCITY * Sin(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					g.duration = SHROUD_RADIUS / GEN_VELOCITY
 					SetUnitFlyHeight(g.dummy,100.,0.)
 					SetUnitX(g.dummy,s.cX)
 					SetUnitY(g.dummy,s.cY)
-					set gensIndex = gensIndex + 1
-					set gens[gensIndex] = g
+					gensIndex = gensIndex + 1
+					gens[gensIndex] = g
 					if gensIndex == 0 then
 						TimerStart(clock2,CLOCK_PERIOD,true,function p2)
 					endif
-					set j = j + 1
+					j = j + 1
 				endloop
 			endif
 			if IsUnitInRangeXY(s.caster,s.cX,s.cY,SHROUD_RADIUS) then
@@ -105,30 +105,30 @@ scope SL15ShroudGenerator initializer i
 			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)==0 or s.time>DURATION then
 				DummyUnitStack.release(s.dummy)
 				s.destroy()
-				set shrouds[index] = shrouds[shroudsIndex]
-				set shroudsIndex = shroudsIndex - 1
-				set index = index - 1
+				shrouds[index] = shrouds[shroudsIndex]
+				shroudsIndex = shroudsIndex - 1
+				index = index - 1
 				if shroudsIndex == -1 then
 					PauseTimer(clock)
 				endif
 			endif
-			set index = index +1
+			index = index +1
 		endloop
 	endfunction
 
 	private function c takes nothing returns nothing
 		Shroud s
 		if GetSpellAbilityId()==SHROUD_ID then
-			set s = Shroud.create()
-			set s.caster = GetTriggerUnit()
-			set s.cX = GetUnitX(s.caster)
-			set s.cY = GetUnitY(s.caster)
-			set s.dummy = DummyUnitStack.get()
-			set s.genTime = GEN_PERIOD
+			s = Shroud.create()
+			s.caster = GetTriggerUnit()
+			s.cX = GetUnitX(s.caster)
+			s.cY = GetUnitY(s.caster)
+			s.dummy = DummyUnitStack.get()
+			s.genTime = GEN_PERIOD
 			SetUnitX(s.dummy,s.cX)
 			SetUnitY(s.dummy,s.cY)
-			set shroudsIndex = shroudsIndex + 1
-			set shrouds[shroudsIndex] = s
+			shroudsIndex = shroudsIndex + 1
+			shrouds[shroudsIndex] = s
 			if shroudsIndex == 0 then
 				TimerStart(clock,CLOCK_PERIOD,true,function p)
 			endif

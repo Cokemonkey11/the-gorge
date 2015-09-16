@@ -10,7 +10,7 @@ scope GoldIncome initializer i
 			loop
 				exitwhen index>11
 				SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
-				set index=index+1
+				index=index+1
 			endloop
 		endif
     endfunction

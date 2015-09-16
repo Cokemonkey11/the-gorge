@@ -12,13 +12,13 @@ scope ShipLocator initializer i
 		integer id
 		player owner
 		if GetSpellAbilityId()==SHIP_LOC_ID then
-			set tU=GetTriggerUnit()
-			set owner = GetOwningPlayer(tU)
+			tU=GetTriggerUnit()
+			owner = GetOwningPlayer(tU)
 			GroupEnumUnitsInRange(grp,GetUnitX(tU),GetUnitY(tU),RANGE,null)
 			loop
-				set FoG=FirstOfGroup(grp)
+				FoG=FirstOfGroup(grp)
 				exitwhen FoG==null
-				set id = GetPlayerId(GetOwningPlayer(FoG))
+				id = GetPlayerId(GetOwningPlayer(FoG))
 				if IsUnitEnemy(FoG,owner) and id>1 then
 					if Game.localPlayer == owner then
 						PingMinimap(GetUnitX(FoG),GetUnitY(FoG),PING_DURATION)
@@ -26,7 +26,7 @@ scope ShipLocator initializer i
 				endif
 				GroupRemoveUnit(grp,FoG)
 			endloop
-			set tU=null
+			tU=null
 		endif
 	endfunction
 

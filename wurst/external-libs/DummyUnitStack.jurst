@@ -28,8 +28,8 @@ library DummyUnitStack
             UnitAddAbility(u,'Aloc')
             UnitAddAbility(u,'Arav')
             if preloading then
-                set thistype.stackIndex=thistype.stackIndex+1
-                set thistype.dummyStack[thistype.stackIndex]=u
+                thistype.stackIndex=thistype.stackIndex+1
+                thistype.dummyStack[thistype.stackIndex]=u
             else
                 return u
             endif
@@ -37,7 +37,7 @@ library DummyUnitStack
         endmethod
 
         private static method deferredPreloader takes nothing returns nothing
-            set thistype.deferredTodoCount=thistype.deferredTodoCount-1
+            thistype.deferredTodoCount=thistype.deferredTodoCount-1
             thistype.add(true)
             if thistype.deferredTodoCount<1 then
                 PauseTimer(thistype.clock)
@@ -47,14 +47,14 @@ library DummyUnitStack
         public static method get takes nothing returns unit
             unit result
             if thistype.stackIndex!=-1 then
-                set thistype.stackIndex=thistype.stackIndex-1
-                set result=thistype.dummyStack[thistype.stackIndex+1]
+                thistype.stackIndex=thistype.stackIndex-1
+                result=thistype.dummyStack[thistype.stackIndex+1]
             else
-                set result=thistype.add(false)
+                result=thistype.add(false)
             endif
             static if DO_DDPC then
                 if thistype.stackIndex<(thistype.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and thistype.deferredTodoCount<1 then
-                    set thistype.deferredTodoCount=thistype.MIN_PRELOAD_BLOCK_SIZE
+                    thistype.deferredTodoCount=thistype.MIN_PRELOAD_BLOCK_SIZE
                     TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
                 endif
             endif
@@ -73,8 +73,8 @@ library DummyUnitStack
             SetUnitOwner(u,Player(PLAYER_NEUTRAL_PASSIVE),true)
             SetUnitX(u,thistype.SAFE_LOC_X)
             SetUnitY(u,thistype.SAFE_LOC_Y)
-            set thistype.stackIndex=thistype.stackIndex+1
-            set thistype.dummyStack[thistype.stackIndex]=u
+            thistype.stackIndex=thistype.stackIndex+1
+            thistype.dummyStack[thistype.stackIndex]=u
         endmethod
 
         private static method onInit takes nothing returns nothing
@@ -83,11 +83,11 @@ library DummyUnitStack
                 loop
                     exitwhen index>thistype.PRELOAD_INIT_COUNT
                     thistype.add(true)
-                    set index=index+1
+                    index=index+1
                 endloop
             endif
             static if DO_IDPC then
-                set thistype.deferredTodoCount=thistype.INITIAL_DEFERRED_PRELOAD_COUNT
+                thistype.deferredTodoCount=thistype.INITIAL_DEFERRED_PRELOAD_COUNT
                 TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
             endif
         endmethod

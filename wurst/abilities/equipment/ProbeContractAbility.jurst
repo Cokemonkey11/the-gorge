@@ -17,8 +17,8 @@ scope ProbeContractAbility initializer i
 		unit tU
 		player owner
 		if GetSpellAbilityId()==PROBE_ID then
-			set tU=GetTriggerUnit()
-			set owner = GetOwningPlayer(tU)
+			tU=GetTriggerUnit()
+			owner = GetOwningPlayer(tU)
 			if GetUnitTypeId(GetSpellTargetUnit())!=ROCK_FORMATION_ID then
 				simError(owner,ERROR_MESSAGE)
 			elseif Ships.hasItemOfType(tU,Equipment.DATA_ID) then

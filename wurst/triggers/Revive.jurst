@@ -36,11 +36,11 @@ scope Revive initializer i
         integer index=0
         loop
             exitwhen index>dbIndex
-            set tempDat=deathDB[index]
+            tempDat=deathDB[index]
 			FloatText_reviveNumbers(tempDat.teamX,0.,I2S(tempDat.timeL),tempDat.ownerID)
-            set tempDat.timeL=tempDat.timeL-1
+            tempDat.timeL=tempDat.timeL-1
             if tempDat.timeL<1 and not Game.ended then
-                set Ships.ships[tempDat.ownerID] = CreateUnit(Game.players[tempDat.ownerID],Game.shipClass[tempDat.ownerID],tempDat.teamX,0,270.)
+                Ships.ships[tempDat.ownerID] = CreateUnit(Game.players[tempDat.ownerID],Game.shipClass[tempDat.ownerID],tempDat.teamX,0,270.)
 				Equipment.playerAddItemsFromId(tempDat.ownerID,tempDat.item0Id,tempDat.item1Id,tempDat.item2Id,tempDat.item3Id,tempDat.item4Id,tempDat.item5Id)
 				DestroyEffect(AddSpecialEffectTarget(REVIVE_MODEL,Ships.ships[tempDat.ownerID],"origin"))
 				if Game.localPlayer == Game.players[tempDat.ownerID] then
@@ -49,27 +49,27 @@ scope Revive initializer i
 					SelectUnit(Ships.ships[tempDat.ownerID],true)
 				endif
 				if tempDat.ownerID<7 then
-					set westDeadCount = westDeadCount - 1
+					westDeadCount = westDeadCount - 1
 					if westDeadCount == 0 then
 						SetUnitX(westDummy,Game.SAFE_X)
 						SetUnitY(westDummy,Game.SAFE_Y)
 					endif
 				else
-					set eastDeadCount = eastDeadCount - 1
+					eastDeadCount = eastDeadCount - 1
 					if eastDeadCount == 0 then
 						SetUnitX(eastDummy,Game.SAFE_X)
 						SetUnitY(eastDummy,Game.SAFE_Y)
 					endif
 				endif
                 tempDat.destroy()
-                set deathDB[index]=deathDB[dbIndex]
-                set dbIndex=dbIndex-1
-				set index = index-1
+                deathDB[index]=deathDB[dbIndex]
+                dbIndex=dbIndex-1
+				index = index-1
                 if dbIndex==-1 then
                     PauseTimer(time)
                 endif
             endif
-            set index=index+1
+            index=index+1
         endloop
     endfunction
 
@@ -82,10 +82,10 @@ scope Revive initializer i
 		loop
 			exitwhen index>11
 			if Game.seconds - Game.assistStamps[pID][index] <= Game.ASSIST_TIME then
-				set Game.assists[index] = Game.assists[index] +1
+				Game.assists[index] = Game.assists[index] +1
 				Game.scoreboard.setValue(3,Game.scoreboardRows[index],I2S(Game.assists[index]))
 			endif
-			set index = index+1
+			index = index+1
 		endloop
 	endfunction
 
@@ -99,18 +99,18 @@ scope Revive initializer i
 		item ti
 		integer pID
         if Ships.isPlayerShip(tU)then
-			set kU=GetKillingUnit()
-			set kO=GetOwningPlayer(kU)
-			set id = GetPlayerId(kO)
-			set tempDat=deathDat.create()
-			set tempDat.u=tU
-			set tempDat.timeL=REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
-			set tempDat.ownerID=GetPlayerId(GetOwningPlayer(tU))
-			set pID=GetPlayerId(GetOwningPlayer(kU))
+			kU=GetKillingUnit()
+			kO=GetOwningPlayer(kU)
+			id = GetPlayerId(kO)
+			tempDat=deathDat.create()
+			tempDat.u=tU
+			tempDat.timeL=REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
+			tempDat.ownerID=GetPlayerId(GetOwningPlayer(tU))
+			pID=GetPlayerId(GetOwningPlayer(kU))
 			if id>1 then
 				Game.parseKill(id)
 				parseAssists(tempDat.ownerID)
-				set bounty = getBounty()
+				bounty = getBounty()
 				SetPlayerState(kO,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(kO,PLAYER_STATE_RESOURCE_GOLD)+bounty)
 				if Game.localPlayer == Game.players[tempDat.ownerID] then
 					DisplayTimedTextToPlayer(Game.localPlayer,0.,0.,10.,"Your ship was destroyed by "+Game.colors[id]+Game.names[id]+"|r; you will be rebuilt in "+I2S(tempDat.timeL)+"|r seconds.")
@@ -128,60 +128,60 @@ scope Revive initializer i
 			endif
 			Game.addDeath(tU)
 
-			set ti = UnitItemInSlot(tU,0)
-			set tempDat.item0Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,0)
+			tempDat.item0Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
-			set ti = UnitItemInSlot(tU,1)
-			set tempDat.item1Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,1)
+			tempDat.item1Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
-			set ti = UnitItemInSlot(tU,2)
-			set tempDat.item2Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,2)
+			tempDat.item2Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
-			set ti = UnitItemInSlot(tU,3)
-			set tempDat.item3Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,3)
+			tempDat.item3Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
-			set ti = UnitItemInSlot(tU,4)
-			set tempDat.item4Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,4)
+			tempDat.item4Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
-			set ti = UnitItemInSlot(tU,5)
-			set tempDat.item5Id=GetItemTypeId(ti)
+			ti = UnitItemInSlot(tU,5)
+			tempDat.item5Id=GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			if tempDat.ownerID<7 then
-				set tempDat.teamX=Game.WESTX+REVIVE_OFFSET
-				set westDeadCount=westDeadCount+1
+				tempDat.teamX=Game.WESTX+REVIVE_OFFSET
+				westDeadCount=westDeadCount+1
 				if westDeadCount==1 then
 					SetUnitX(westDummy,Game.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy,0.)
 				endif
 			else
-				set tempDat.teamX=Game.EASTX-REVIVE_OFFSET
-				set eastDeadCount=eastDeadCount+1
+				tempDat.teamX=Game.EASTX-REVIVE_OFFSET
+				eastDeadCount=eastDeadCount+1
 				if eastDeadCount==1 then
 					SetUnitX(eastDummy,Game.EASTX-REVIVE_OFFSET)
 					SetUnitY(eastDummy,0.)
 				endif
 			endif
-			set dbIndex=dbIndex+1
-			set deathDB[dbIndex]=tempDat
+			dbIndex=dbIndex+1
+			deathDB[dbIndex]=tempDat
 			if dbIndex==0 then
 				TimerStart(time,CLOCK_PERIOD,true,function p)
 			endif
-			set kU=null
+			kU=null
 		endif
-		set tU=null
+		tU=null
     endfunction
 
     private function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
 
 		// Initialize circle of power dummies
-		set westDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
-		set eastDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
+		westDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
+		eastDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
     endfunction
 endscope

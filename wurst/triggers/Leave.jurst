@@ -12,9 +12,9 @@ scope Leave initializer init
 		loop
 			exitwhen index>11
 			TriggerRegisterPlayerEvent(t,Player(index),EVENT_PLAYER_LEAVE)
-			set index = index + 1
+			index = index + 1
 		endloop
 		TriggerAddCondition(t,Condition(function c))
-		set t = null
+		t = null
 	endfunction
 endscope
