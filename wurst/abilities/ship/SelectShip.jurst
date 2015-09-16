@@ -1,7 +1,14 @@
 scope SelectShip initializer i
+	import Game
+	import SimError
+	import Ships
+	import RegisterPlayerUnitEvent
+
+	native UnitAlive takes unit u returns boolean
+
 	globals
-		private constant integer SELECT_SHIP_ID = 'A00K'
-		private constant string DEAD_ERROR = "Your ship has been destroyed."
+		constant integer SELECT_SHIP_ID = 'A00K'
+		constant string DEAD_ERROR = "Your ship has been destroyed."
 	endglobals
 
 	function c takes nothing returns nothing
