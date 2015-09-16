@@ -10,17 +10,17 @@ package Game
 	end
 
 	public class Game
-		constant integer OUTPOST_ID         = 'h002'
-		constant integer DUMMY_ID           = 'u000'
-		constant integer ASSIST_TIME        = 15
-		constant real WESTX	 	= -4100.
-		constant real EASTX 		=  4100.
-		constant real OUTPOST1_X =  380.
-		constant real OUTPOST1_Y =  1030.
-		constant real OUTPOST2_X = -140.
-		constant real OUTPOST2_Y = -1020.
-		constant real SAFE_X = -8064.
-		constant real SAFE_Y = 3970.
+		static constant integer OUTPOST_ID         = 'h002'
+		static constant integer DUMMY_ID           = 'u000'
+		static constant integer ASSIST_TIME        = 15
+		static constant real WESTX	 	= -4100.
+		static constant real EASTX 		=  4100.
+		static constant real OUTPOST1_X =  380.
+		static constant real OUTPOST1_Y =  1030.
+		static constant real OUTPOST2_X = -140.
+		static constant real OUTPOST2_Y = -1020.
+		static constant real SAFE_X = -8064.
+		static constant real SAFE_Y = 3970.
 		static constant string HELICOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
 		static constant string PARACOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
 		static constant string ZEPPELIN_ICON   = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
