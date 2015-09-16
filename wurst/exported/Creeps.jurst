@@ -1,45 +1,46 @@
 scope Creeps initializer i
+	import Game
+
 	globals
-		private constant integer GRYPH_ID  = 'hgry'
-		private constant integer WYVERN_ID = 'owyv'
-		private constant integer HAWK_ID   = 'hdhw'
-		private constant real SPAWN_PERIOD = 30.
-		private boolean extra = false
+		constant integer GRYPH_ID  = 'hgry'
+		constant integer WYVERN_ID = 'owyv'
+		constant integer HAWK_ID   = 'hdhw'
+		constant real SPAWN_PERIOD = 30.
+		boolean extra = false
 	endglobals
-	
-	private function spawn takes integer faction, integer class returns nothing
+
+	function spawn takes integer faction, integer class returns nothing
 		local real x
 		local real face
-		local unit u 
+		local unit u
 		if faction==0 then
-			set x = Game_WESTX
+			set x = Game.WESTX
 			set face = 0.
 		else
-			set x = Game_EASTX
+			set x = Game.EASTX
 			set face = 180.
 		endif
-		set u = CreateUnit(Game_players[faction],class,x,0.,face)
-		call IssuePointOrder(u,"attack",Game_OUTPOST1_X,Game_OUTPOST1_Y)
-		set u = CreateUnit(Game_players[faction],class,x,0.,face)
-		call IssuePointOrder(u,"attack",Game_OUTPOST2_X,Game_OUTPOST2_Y)
+		set u = CreateUnit(Game.players[faction],class,x,0.,face)
+		call IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
+		set u = CreateUnit(Game.players[faction],class,x,0.,face)
+		call IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
 	endfunction
-	
-    private function c takes nothing returns nothing
-        local unit u
-		if not Game_ended then
+
+	function c takes nothing returns nothing
+		if not Game.ended then
 				// West units
 				call spawn(0,GRYPH_ID)
 				call spawn(0,WYVERN_ID)
 				call spawn(0,GRYPH_ID)
 				call spawn(0,WYVERN_ID)
-				
-				
+
+
 				// East units
 				call spawn(1,GRYPH_ID)
 				call spawn(1,WYVERN_ID)
 				call spawn(1,GRYPH_ID)
 				call spawn(1,WYVERN_ID)
-				
+
 				// Extra
 				if extra then
 					call spawn(0,HAWK_ID)
@@ -47,9 +48,9 @@ scope Creeps initializer i
 				endif
 			set extra = not extra
 		endif
-    endfunction
-    
-    private function i takes nothing returns nothing
+	endfunction
+
+	function i takes nothing returns nothing
 		call TimerStart(CreateTimer(),SPAWN_PERIOD,true,function c)
-    endfunction
+	endfunction
 endscope
