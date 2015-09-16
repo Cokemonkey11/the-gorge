@@ -1,11 +1,15 @@
 scope SeaWitchColdArrows initializer i
+	import DamageType
+	import StructuredDD
+	import Game
+
 	globals
-		private constant integer SEAWITCH_ID = 'o005'
-		private constant integer SLOW_ID = 'A009'
-		private unit dummy
+		constant integer SEAWITCH_ID = 'o005'
+		constant integer SLOW_ID = 'A009'
+		unit dummy
 	endglobals
 
-	private function h takes nothing returns boolean
+	function h takes nothing returns boolean
 		unit tU=GetTriggerUnit()
 		if DamageType.get()==DamageType.SPELL and GetUnitTypeId(GetEventDamageSource())==SEAWITCH_ID then
 			SetUnitX(dummy,GetUnitX(tU))
@@ -14,11 +18,10 @@ scope SeaWitchColdArrows initializer i
 			IssueTargetOrder(dummy,"slow",tU)
 			UnitRemoveAbility(dummy,SLOW_ID)
 		endif
-		set tU=null
 		return false
 	endfunction
 
-	private function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
 		set dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),Game.DUMMY_ID,0.,0.,0.)
 		UnitAddAbility(dummy,'Aloc')
