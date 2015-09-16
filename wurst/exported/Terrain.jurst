@@ -1,44 +1,33 @@
-library Terrain initializer init
-	globals
-		/**
-		 * Corners of a region that contains the central island + towers
-		 */ 
-		private constant real CENTRAL_MINX     = -770.
-		private constant real CENTRAL_MINY     = -1950.
-		private constant real CENTRAL_MAXX     = 1060.
-		private constant real CENTRAL_MAXY     = 1870.
-		
-		/**
-		 * Corners of regions around the utility ports at west base
-		 */ 
-		private constant real UTILITY_WEST_MINX = -4330.
-		private constant real UTILITY_WEST_MINY = -780.
-		private constant real UTILITY_WEST_MAXX = -3842.
-		private constant real UTILITY_WEST_MAXY = -270.
-		
-		/**
-		 * Corners of regions around the utility ports at east base
-		 */ 
-		private constant real UTILITY_EAST_MINX = 3841.
-		private constant real UTILITY_EAST_MINY = -780.
-		private constant real UTILITY_EAST_MAXX = 4326.
-		private constant real UTILITY_EAST_MAXY = -270.
-		
-		/**
-		 * Used by Creeps2 (Trigger)
-		 */ 
-		public rect centralArea
-		
-		/**
-		 * Used by FillToxicSack (Trigger)
-		 */
-		public rect utilityWest
-		public rect utilityEast
-	endglobals
-	
-	private function init takes nothing returns nothing
-		set centralArea = Rect(CENTRAL_MINX,CENTRAL_MINY,CENTRAL_MAXX,CENTRAL_MAXY)
-		set utilityWest = Rect(UTILITY_WEST_MINX,UTILITY_WEST_MINY,UTILITY_WEST_MAXX,UTILITY_WEST_MAXY)
-		set utilityEast = Rect(UTILITY_EAST_MINX,UTILITY_EAST_MINY,UTILITY_EAST_MAXX,UTILITY_EAST_MAXY)
-	endfunction
-endlibrary
+package Terrain
+	public class Terrain
+		// Corners of a region that contains the central island + towers
+		static constant real CENTRAL_MINX     = -770.
+		static constant real CENTRAL_MINY     = -1950.
+		static constant real CENTRAL_MAXX     = 1060.
+		static constant real CENTRAL_MAXY     = 1870.
+
+		// Corners of regions around the utility ports at west base
+		static constant real UTILITY_WEST_MINX = -4330.
+		static constant real UTILITY_WEST_MINY = -780.
+		static constant real UTILITY_WEST_MAXX = -3842.
+		static constant real UTILITY_WEST_MAXY = -270.
+
+		// Corners of regions around the utility ports at east base
+		static constant real UTILITY_EAST_MINX = 3841.
+		static constant real UTILITY_EAST_MINY = -780.
+		static constant real UTILITY_EAST_MAXX = 4326.
+		static constant real UTILITY_EAST_MAXY = -270.
+
+		// Used by Creeps2 (Trigger)
+		static rect centralArea
+
+		// Used by FillToxicSack (Trigger)
+		static rect utilityWest
+		static rect utilityEast
+	end
+
+	init
+		Terrain.centralArea = Rect(Terrain.CENTRAL_MINX, Terrain.CENTRAL_MINY, Terrain.CENTRAL_MAXX, Terrain.CENTRAL_MAXY)
+		Terrain.utilityWest = Rect(Terrain.UTILITY_WEST_MINX, Terrain.UTILITY_WEST_MINY, Terrain.UTILITY_WEST_MAXX, Terrain.UTILITY_WEST_MAXY)
+		Terrain.utilityEast = Rect(Terrain.UTILITY_EAST_MINX, Terrain.UTILITY_EAST_MINY, Terrain.UTILITY_EAST_MAXX, Terrain.UTILITY_EAST_MAXY)
+	end
