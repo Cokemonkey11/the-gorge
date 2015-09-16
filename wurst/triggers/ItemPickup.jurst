@@ -1,15 +1,15 @@
 scope ItemPickup initializer i
 	private function c takes nothing returns nothing
-		local integer id=GetPlayerId(GetTriggerPlayer())
-		local item it = GetManipulatedItem()
-		if not Equipment_unitCanAcquireItemIdPost(GetTriggerUnit(),GetItemTypeId(it)) then
-			call Equipment_autoPawnItemForPlayer(id,it)
+		integer id=GetPlayerId(GetTriggerPlayer())
+		item it = GetManipulatedItem()
+		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(),GetItemTypeId(it)) then
+			Equipment.autoPawnItemForPlayer(id,it)
 		else
-			call Equipment_resetUnitDamageReduction(GetTriggerUnit())
+			Equipment.resetUnitDamageReduction(GetTriggerUnit())
 		endif
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM,function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM,function c)
 	endfunction
 endscope

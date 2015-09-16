@@ -10,9 +10,9 @@ scope Creeps initializer i
 	endglobals
 
 	function spawn takes integer faction, integer class returns nothing
-		local real x
-		local real face
-		local unit u
+		real x
+		real face
+		unit u
 		if faction==0 then
 			set x = Game.WESTX
 			set face = 0.
@@ -21,36 +21,36 @@ scope Creeps initializer i
 			set face = 180.
 		endif
 		set u = CreateUnit(Game.players[faction],class,x,0.,face)
-		call IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
+		IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
 		set u = CreateUnit(Game.players[faction],class,x,0.,face)
-		call IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
+		IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
 	endfunction
 
 	function c takes nothing returns nothing
 		if not Game.ended then
 				// West units
-				call spawn(0,GRYPH_ID)
-				call spawn(0,WYVERN_ID)
-				call spawn(0,GRYPH_ID)
-				call spawn(0,WYVERN_ID)
+				spawn(0,GRYPH_ID)
+				spawn(0,WYVERN_ID)
+				spawn(0,GRYPH_ID)
+				spawn(0,WYVERN_ID)
 
 
 				// East units
-				call spawn(1,GRYPH_ID)
-				call spawn(1,WYVERN_ID)
-				call spawn(1,GRYPH_ID)
-				call spawn(1,WYVERN_ID)
+				spawn(1,GRYPH_ID)
+				spawn(1,WYVERN_ID)
+				spawn(1,GRYPH_ID)
+				spawn(1,WYVERN_ID)
 
 				// Extra
 				if extra then
-					call spawn(0,HAWK_ID)
-					call spawn(1,HAWK_ID)
+					spawn(0,HAWK_ID)
+					spawn(1,HAWK_ID)
 				endif
 			set extra = not extra
 		endif
 	endfunction
 
 	function i takes nothing returns nothing
-		call TimerStart(CreateTimer(),SPAWN_PERIOD,true,function c)
+		TimerStart(CreateTimer(),SPAWN_PERIOD,true,function c)
 	endfunction
 endscope

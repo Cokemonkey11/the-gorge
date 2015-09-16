@@ -62,8 +62,8 @@ package DTS12MissileArray
 		end
 
 		static function disjoint takes unit u returns nothing
-			local integer index = 0
-			local Missile temp
+			integer index = 0
+			Missile temp
 			loop
 				exitwhen index>dbIndex
 				temp = db[index]
@@ -75,15 +75,15 @@ package DTS12MissileArray
 		end
 
 		static function p takes nothing returns nothing
-			local integer index = 0
-			local Missile temp
-			local real ang
-			local unit first
-			local boolean hit
-			local real newX
-			local real newY
-			local real oldX
-			local real oldY
+			integer index = 0
+			Missile temp
+			real ang
+			unit first
+			boolean hit
+			real newX
+			real newY
+			real oldX
+			real oldY
 			loop
 				exitwhen index>dbIndex
 				temp = db[index]
@@ -170,15 +170,15 @@ package DTS12MissileArray
 		end
 
 		static function c takes nothing returns nothing
-			local unit targ
-			local unit tU
-			local Missile temp
-			local real face
-			local real cX
-			local real cY
-			local real tX
-			local real tY
-			local player owner
+			unit targ
+			unit tU
+			Missile temp
+			real face
+			real cX
+			real cY
+			real tX
+			real tY
+			player owner
 			if GetSpellAbilityId()==ARRAY_ID then
 				targ = GetSpellTargetUnit()
 				tU = GetTriggerUnit()

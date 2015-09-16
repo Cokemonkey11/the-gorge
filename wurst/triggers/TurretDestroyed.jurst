@@ -7,30 +7,30 @@ scope TurretDestroyed initializer i
 		private constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
 		private constant string WARNING         = "Sound\\Interface\\Warning.wav"
 	endglobals
-	
+
 	private function c takes nothing returns nothing
-		local unit tU=GetTriggerUnit()
-		local integer index=2
+		unit tU=GetTriggerUnit()
+		integer index=2
 		if GetUnitTypeId(tU)==TURRET_ID then
 			loop
 				exitwhen index>11
-				if IsUnitAlly(tU,Game_players[index]) then
-					call DisplayTimedTextToPlayer(Game_players[index],0.,0.,10.,WARNING_MESSAGE)
-					call Sound.playForPlayer(WARNING,1.,Game_players[index])
+				if IsUnitAlly(tU,Game.players[index]) then
+					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,WARNING_MESSAGE)
+					Sound.playForPlayer(WARNING,1.,Game.players[index])
 				else
-					call SetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
-					call DisplayTimedTextToPlayer(Game_players[index],0.,0.,10.,SUCCESS)
-					call Sound.playForPlayer(GOODJOB,1.,Game_players[index])
+					SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
+					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,SUCCESS)
+					Sound.playForPlayer(GOODJOB,1.,Game.players[index])
 				endif
 				set index=index+1
 			endloop
 		endif
 		set tU=null
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
-		call Sound.preload(GOODJOB)
-		call Sound.preload(WARNING)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+		Sound.preload(GOODJOB)
+		Sound.preload(WARNING)
 	endfunction
 endscope

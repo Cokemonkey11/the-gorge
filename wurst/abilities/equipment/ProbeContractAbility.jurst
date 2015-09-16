@@ -1,32 +1,37 @@
 scope ProbeContractAbility initializer i
+	import RegisterPlayerUnitEvent
+	import SimError
+	import Ships
+	import Equipment
+	import Game
+
 	globals
-		private constant integer PROBE_ID='A00J'
-		private constant integer ROCK_FORMATION_ID = 'u001'
-		private constant string ERROR_MESSAGE = "This probe can only be used on unusual rock formations."
-		private constant string ALREADY_MESSAGE = "You already have data on this rock formation."
-		private constant string SUCCESS_MESSAGE = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
+		constant integer PROBE_ID='A00J'
+		constant integer ROCK_FORMATION_ID = 'u001'
+		constant string ERROR_MESSAGE = "This probe can only be used on unusual rock formations."
+		constant string ALREADY_MESSAGE = "You already have data on this rock formation."
+		constant string SUCCESS_MESSAGE = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
 	endglobals
-	
-	private function effectC takes nothing returns nothing
-		local unit tU
-		local player owner
+
+	function effectC takes nothing returns nothing
+		unit tU
+		player owner
 		if GetSpellAbilityId()==PROBE_ID then
 			set tU=GetTriggerUnit()
 			set owner = GetOwningPlayer(tU)
 			if GetUnitTypeId(GetSpellTargetUnit())!=ROCK_FORMATION_ID then
-				call SimError(owner,ERROR_MESSAGE)
-			elseif Ships_hasItemOfType(tU,Equipment_DATA_ID) then
-				call SimError(owner,ALREADY_MESSAGE)
+				simError(owner,ERROR_MESSAGE)
+			elseif Ships.hasItemOfType(tU,Equipment.DATA_ID) then
+				simError(owner,ALREADY_MESSAGE)
 			else
-				call UnitAddItem(tU,CreateItem(Equipment_DATA_ID,GetUnitX(tU),GetUnitY(tU)))
-				call DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
-				call Sound.playForPlayer(Game_TRADE_SUCCESS_SOUND,1.,owner)
+				UnitAddItem(tU,CreateItem(Equipment.DATA_ID,GetUnitX(tU),GetUnitY(tU)))
+				DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
+				Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
 			endif
-			set tU=null
 		endif
 	endfunction
-	
-	private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)
+
+	function i takes nothing returns nothing
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)
 	endfunction
 endscope

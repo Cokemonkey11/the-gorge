@@ -1,19 +1,19 @@
 scope OutpostTaken initializer i
     private function c takes nothing returns nothing
-		local unit tU=GetTriggerUnit()
-		local integer id
-        if GetUnitTypeId(tU)==Game_OUTPOST_ID then
+		unit tU=GetTriggerUnit()
+		integer id
+        if GetUnitTypeId(tU)==Game.OUTPOST_ID then
 		    set id = GetPlayerId(GetOwningPlayer(tU))
 			if id==0 then
-				call CreateUnit(Game_players[1],Game_OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
+				CreateUnit(Game.players[1],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
 			else
-				call CreateUnit(Game_players[0],Game_OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
+				CreateUnit(Game.players[0],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
 			endif
 		endif
 		set tU=null
     endfunction
-    
+
     private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
     endfunction
 endscope

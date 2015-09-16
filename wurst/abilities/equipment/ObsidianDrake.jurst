@@ -11,15 +11,15 @@ scope ObsidianDrake initializer i
 	endglobals
 
 	function h takes nothing returns boolean
-		local unit tU=GetTriggerUnit()
-		local unit dS=GetEventDamageSource()
+		unit tU=GetTriggerUnit()
+		unit dS=GetEventDamageSource()
 		if DamageType.get()==DamageType.SPELL and GetUnitTypeId(dS)==DRAKE_ID and GetWidgetLife(tU)<=HEALTH_PROC then
-			call DamageType.dealCodeDamage(dS,tU,BONUS_DAMAGE)
+			DamageType.dealCodeDamage(dS,tU,BONUS_DAMAGE)
 		endif
 		return false
 	endfunction
 
 	function i takes nothing returns nothing
-		call StructuredDD.addHandler(function h)
+		StructuredDD.addHandler(function h)
 	endfunction
 endscope

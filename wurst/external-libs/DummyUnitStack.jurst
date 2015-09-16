@@ -2,19 +2,19 @@ library DummyUnitStack
     struct DummyUnitStack
         private static constant integer DUMMY_UNIT_ID='u000'
         private static constant integer MIN_PRELOAD_BLOCK_SIZE=10 //How many units to preload when the preloading algorithm turns on, at a minimum?
-        
+
         private static constant integer PRELOAD_INIT_COUNT=200 //How many units to preload during initialization
         private static constant boolean DO_PIC=true
-        
+
         private static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT=20 //How many units should DummyUnitStack keep preloaded at a minimum?
         private static constant boolean DO_DDPC=true
-        
+
         private static constant integer INITIAL_DEFERRED_PRELOAD_COUNT=20 //How many units should be queued on the preloader on map start?
         private static constant boolean DO_IDPC=true
-        
+
         private static constant integer MAX_PRELOADED_UNITS=5000
         private static constant boolean DO_MPU=true
-        
+
         private static constant real SAFE_LOC_X=-3820.
         private static constant real SAFE_LOC_Y=3700.
         private static constant real CLOCK_PERIOD=1./60.
@@ -22,11 +22,11 @@ library DummyUnitStack
         private static integer stackIndex=-1
         private static integer deferredTodoCount=0
         private static timer clock=CreateTimer()
-        
+
         private static method add takes boolean preloading returns unit
-            local unit u=CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),thistype.DUMMY_UNIT_ID,thistype.SAFE_LOC_X,thistype.SAFE_LOC_Y,0.)
-            call UnitAddAbility(u,'Aloc')
-            call UnitAddAbility(u,'Arav')
+            unit u=CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),thistype.DUMMY_UNIT_ID,thistype.SAFE_LOC_X,thistype.SAFE_LOC_Y,0.)
+            UnitAddAbility(u,'Aloc')
+            UnitAddAbility(u,'Arav')
             if preloading then
                 set thistype.stackIndex=thistype.stackIndex+1
                 set thistype.dummyStack[thistype.stackIndex]=u
@@ -35,17 +35,17 @@ library DummyUnitStack
             endif
             return null
         endmethod
-        
+
         private static method deferredPreloader takes nothing returns nothing
             set thistype.deferredTodoCount=thistype.deferredTodoCount-1
-            call thistype.add(true)
+            thistype.add(true)
             if thistype.deferredTodoCount<1 then
-                call PauseTimer(thistype.clock)
+                PauseTimer(thistype.clock)
             endif
         endmethod
-        
+
         public static method get takes nothing returns unit
-            local unit result
+            unit result
             if thistype.stackIndex!=-1 then
                 set thistype.stackIndex=thistype.stackIndex-1
                 set result=thistype.dummyStack[thistype.stackIndex+1]
@@ -55,40 +55,40 @@ library DummyUnitStack
             static if DO_DDPC then
                 if thistype.stackIndex<(thistype.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and thistype.deferredTodoCount<1 then
                     set thistype.deferredTodoCount=thistype.MIN_PRELOAD_BLOCK_SIZE
-                    call TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
+                    TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
                 endif
             endif
             return result
         endmethod
-        
+
         public static method release takes unit u returns nothing
             static if DO_MPU then
                 if thistype.stackIndex>=thistype.MAX_PRELOADED_UNITS then
-                    call RemoveUnit(u)
+                    RemoveUnit(u)
                     return
                 endif
             endif
-            call SetUnitFlyHeight(u,0.,0.)
-            call SetUnitScale(u,1.,1.,1.)
-            call SetUnitOwner(u,Player(PLAYER_NEUTRAL_PASSIVE),true)
-            call SetUnitX(u,thistype.SAFE_LOC_X)
-            call SetUnitY(u,thistype.SAFE_LOC_Y)
+            SetUnitFlyHeight(u,0.,0.)
+            SetUnitScale(u,1.,1.,1.)
+            SetUnitOwner(u,Player(PLAYER_NEUTRAL_PASSIVE),true)
+            SetUnitX(u,thistype.SAFE_LOC_X)
+            SetUnitY(u,thistype.SAFE_LOC_Y)
             set thistype.stackIndex=thistype.stackIndex+1
             set thistype.dummyStack[thistype.stackIndex]=u
         endmethod
-        
+
         private static method onInit takes nothing returns nothing
-            local integer index=1
+            integer index=1
             static if DO_PIC then
                 loop
                     exitwhen index>thistype.PRELOAD_INIT_COUNT
-                    call thistype.add(true)
+                    thistype.add(true)
                     set index=index+1
                 endloop
             endif
             static if DO_IDPC then
                 set thistype.deferredTodoCount=thistype.INITIAL_DEFERRED_PRELOAD_COUNT
-                call TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
+                TimerStart(thistype.clock,thistype.CLOCK_PERIOD,true,function thistype.deferredPreloader)
             endif
         endmethod
     endstruct

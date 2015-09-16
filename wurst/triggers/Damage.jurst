@@ -1,23 +1,23 @@
 scope Damage initializer i
 	private function h takes nothing returns boolean
-		local integer id
-		local unit targ = GetTriggerUnit()
-		local unit src
-		local integer sID
-		if Ships_isPlayerShip(targ) then
+		integer id
+		unit targ = GetTriggerUnit()
+		unit src
+		integer sID
+		if Ships.isPlayerShip(targ) then
 			set id = GetPlayerId(GetOwningPlayer(targ))
 			set src = GetEventDamageSource()
 			set sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 then
-				set Game_assistStamps[id][sID] = R2I(Game_seconds)
+				set Game.assistStamps[id][sID] = R2I(Game.seconds)
 			endif
 			set src = null
 		endif
 		set targ = null
 		return false
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		call StructuredDD.addHandler(function h)
+		StructuredDD.addHandler(function h)
 	endfunction
 endscope

@@ -25,8 +25,8 @@ package Equipment
 		static constant integer KPAGE_1_2      = 'I00E'
 		static constant integer KPAGE_2_1      = 'I00F'
 
-		constant integer DATA_ID         = 'I00D'
-		constant integer TOXIC_SUBST_FULL= 'I00H'
+		static constant integer DATA_ID         = 'I00D'
+		static constant integer TOXIC_SUBST_FULL= 'I00H'
 
 		// Engines
 		static constant integer STEAM_CORE     = 'I000'
@@ -55,7 +55,7 @@ package Equipment
 
 		static Table reduction
 
-		function autoPawnItemForPlayer takes integer pID, item it returns nothing
+		static function autoPawnItemForPlayer takes integer pID, item it returns nothing
 			integer val = R2I(GetWidgetLife(it))
 			if val>1 then
 				DisplayTextToPlayer(Game.players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
@@ -199,7 +199,7 @@ package Equipment
 			return unitCanAcquireItemId(u,GetItemTypeId(it))
 		end
 
-		function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
+		static function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			item temp

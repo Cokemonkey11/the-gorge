@@ -1,20 +1,20 @@
 scope Leave initializer init
 	private function c takes nothing returns boolean
-		local player p = GetTriggerPlayer()
-		local integer id = GetPlayerId(p)
-		call DisplayTextToPlayer(Game_localPlayer,0.,0.,Game_colors[id]+Game_names[id]+"|r has left the game.")
+		player p = GetTriggerPlayer()
+		integer id = GetPlayerId(p)
+		DisplayTextToPlayer(Game.localPlayer,0.,0.,Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
 	endfunction
-	
+
 	private function init takes nothing returns nothing
-		local trigger t = CreateTrigger()
-		local integer index = 2
+		trigger t = CreateTrigger()
+		integer index = 2
 		loop
 			exitwhen index>11
-			call TriggerRegisterPlayerEvent(t,Player(index),EVENT_PLAYER_LEAVE)
+			TriggerRegisterPlayerEvent(t,Player(index),EVENT_PLAYER_LEAVE)
 			set index = index + 1
 		endloop
-		call TriggerAddCondition(t,Condition(function c))
+		TriggerAddCondition(t,Condition(function c))
 		set t = null
 	endfunction
 endscope

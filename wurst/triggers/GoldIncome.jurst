@@ -3,19 +3,19 @@ scope GoldIncome initializer i
 		private constant real CLOCK_PERIOD = 1.
 		private constant integer GOLD_PER_SECOND = 1
 	endglobals
-	
+
     private function c takes nothing returns nothing
-        local integer index=0
-		if not Game_ended then
+        integer index=0
+		if not Game.ended then
 			loop
 				exitwhen index>11
-				call SetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game_players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
+				SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
 				set index=index+1
 			endloop
 		endif
     endfunction
-    
+
     private function i takes nothing returns nothing
-		call TimerStart(CreateTimer(),CLOCK_PERIOD,true,function c)
+		TimerStart(CreateTimer(),CLOCK_PERIOD,true,function c)
     endfunction
 endscope

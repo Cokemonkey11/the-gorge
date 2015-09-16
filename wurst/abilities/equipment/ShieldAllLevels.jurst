@@ -7,9 +7,9 @@ scope ShieldAllLevels initializer i
 		private constant real AMOUNT_1 = 500.
 		private constant real TIME_1 = 5.
 	endglobals
-	
+
 	private function getUnitShieldId takes unit u returns integer
-		local integer index=0
+		integer index=0
 		loop
 			exitwhen index>5
 			if GetItemTypeId(UnitItemInSlot(u,index))==SHIELD_1 then
@@ -19,21 +19,21 @@ scope ShieldAllLevels initializer i
 		endloop
 		return -1
 	endfunction
-	
+
 	private function c takes nothing returns nothing
-		local integer sId
-		local unit tU
+		integer sId
+		unit tU
 		if GetSpellAbilityId()==SHIELD_ID then
 			set tU=GetTriggerUnit()
 			set sId=getUnitShieldId(tU)
 			if sId==SHIELD_1 then
-				call Shield.add(tU,AMOUNT_1,TIME_1,SHIELD_FX,SHIELD_FX_POINT)
+				Shield.add(tU,AMOUNT_1,TIME_1,SHIELD_FX,SHIELD_FX_POINT)
 			endif
 			set tU=null
 		endif
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
 	endfunction
 endscope

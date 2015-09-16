@@ -20,9 +20,9 @@ package SimError
 	public function simError takes player forPlayer, string msg returns nothing
 		set msg="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n|cffffcc00"+msg+"|r"
 		if (GetLocalPlayer() == forPlayer) then
-			call ClearTextMessages()
-			call DisplayTimedTextToPlayer(forPlayer, 0.52, 0.96, 2.00, msg)
-			call StartSound(error)
+			ClearTextMessages()
+			DisplayTimedTextToPlayer(forPlayer, 0.52, 0.96, 2.00, msg)
+			StartSound(error)
 		endif
 	endfunction
 

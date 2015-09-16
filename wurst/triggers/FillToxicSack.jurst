@@ -4,71 +4,71 @@ scope FillToxicSack initializer i
 		private constant real MIN_Y = 2865.
 		private constant real MAX_X = 1017.
 		private constant real MAX_Y = 3174.
-		
+
 		private constant string SUCCESS_MESSAGE = "You filled your container with |cffffcc00Toxic Waste|r; return to your Utility Port for a reward."
 		private constant integer GOLD = 30
 		private constant integer TRADE = 1
 	endglobals
-	
+
 	private function f takes nothing returns boolean
-		local unit fU = GetFilterUnit()
-		local integer slt = Equipment_unitHasItemOfTypeSlot(fU,Equipment_TOXIC_SUBST)
-		local player owner = GetOwningPlayer(fU)
+		unit fU = GetFilterUnit()
+		integer slt = Equipment.unitHasItemOfTypeSlot(fU,Equipment.TOXIC_SUBST)
+		player owner = GetOwningPlayer(fU)
 		if slt>-1 then
-			call RemoveItem(UnitItemInSlot(fU,slt))
-			call UnitAddItem(fU,CreateItem(Equipment_TOXIC_SUBST_FULL,GetUnitX(fU),GetUnitY(fU)))
-			call DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
-			call Sound.playForPlayer(Game_TRADE_SUCCESS_SOUND,1.,owner)
+			RemoveItem(UnitItemInSlot(fU,slt))
+			UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST_FULL,GetUnitX(fU),GetUnitY(fU)))
+			DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
+			Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
 		endif
 		set fU=null
 		return false
 	endfunction
-	
+
 	private function f2 takes nothing returns boolean
-		local unit fU = GetFilterUnit()
-		local integer id = GetPlayerId(GetOwningPlayer(fU))
-		local integer slt = Equipment_unitHasItemOfTypeSlot(fU,Equipment_TOXIC_SUBST_FULL)
+		unit fU = GetFilterUnit()
+		integer id = GetPlayerId(GetOwningPlayer(fU))
+		integer slt = Equipment.unitHasItemOfTypeSlot(fU,Equipment.TOXIC_SUBST_FULL)
 		if slt>-1 then
 			if id<7 then
-				if Game_playerIsWest(id) then
-					call RemoveItem(UnitItemInSlot(fU,slt))
-					call UnitAddItem(fU,CreateItem(Equipment_TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
-					call Game_reward(fU,GOLD,TRADE)
+				if Game.playerIsWest(id) then
+					RemoveItem(UnitItemInSlot(fU,slt))
+					UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
+					Game.reward(fU,GOLD,TRADE)
 				endif
 			else
-				if not Game_playerIsWest(id) then
-					call RemoveItem(UnitItemInSlot(fU,slt))
-					call UnitAddItem(fU,CreateItem(Equipment_TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
-					call Game_reward(fU,GOLD,TRADE)
+				if not Game.playerIsWest(id) then
+					RemoveItem(UnitItemInSlot(fU,slt))
+					UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
+					Game.reward(fU,GOLD,TRADE)
 				endif
 			endif
 		endif
 		set fU=null
 		return false
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-	
+
 		// Initialize triggers for shop and utility ports
-		local trigger shopTrigger= CreateTrigger()
-		local trigger utilityTrigger = CreateTrigger()
-		
+		trigger shopTrigger= CreateTrigger()
+		trigger utilityTrigger = CreateTrigger()
+
 		// Initialize rect near shop
-		local rect shopRect = Rect(MIN_X,MIN_Y,MAX_X,MAX_Y)
-		
+		rect shopRect = Rect(MIN_X,MIN_Y,MAX_X,MAX_Y)
+
 		// Create regions which spasely define the trigger spots (near shop, near utilities)
-		local region reg = CreateRegion()
-		local region reg2 = CreateRegion()
-		call RegionAddRect(reg,shopRect)
-		call RegionAddRect(reg2,Terrain_utilityWest)
-		call RegionAddRect(reg2,Terrain_utilityEast)
-		
+		region reg = CreateRegion()
+		region reg2 = CreateRegion()
+		RegionAddRect(reg,shopRect)
+		RegionAddRect(reg2,Terrain_utilityWest)
+		RegionAddRect(reg2,Terrain_utilityEast)
+
 		// Register triggers
-		call TriggerRegisterEnterRegion(utilityTrigger,reg2,Filter(function f2))
-		call TriggerRegisterEnterRegion(shopTrigger,reg,Filter(function f))
-		
+		TriggerRegisterEnterRegion(utilityTrigger,reg2,Filter(function f2))
+		TriggerRegisterEnterRegion(shopTrigger,reg,Filter(function f))
+
 		// Cleanup
-		call RemoveRect(shopRect)
+		RemoveRect(shopRect)
 		set shopTrigger = null
 		set utilityTrigger = null
 		set shopRect = null

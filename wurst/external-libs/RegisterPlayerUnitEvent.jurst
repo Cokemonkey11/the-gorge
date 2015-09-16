@@ -33,26 +33,26 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 	endglobals
 
 	public function registerPlayerUnitEvent takes playerunitevent p, code c returns nothing
-		local integer i = GetHandleId(p)
-		local integer k = 15
+		integer i = GetHandleId(p)
+		integer k = 15
 		if t[i] == null then
 			set t[i] = CreateTrigger()
 			loop
-				call TriggerRegisterPlayerUnitEvent(t[i], Player(k), p, null)
+				TriggerRegisterPlayerUnitEvent(t[i], Player(k), p, null)
 				exitwhen k == 0
 				set k = k - 1
 			endloop
 		endif
-		call TriggerAddCondition(t[i], Filter(c))
+		TriggerAddCondition(t[i], Filter(c))
 	endfunction
 
 	public function registerPlayerUnitEventForPlayer takes playerunitevent p, code c, player pl returns nothing
-		local integer i = 16 * GetHandleId(p) + GetPlayerId(pl)
+		integer i = 16 * GetHandleId(p) + GetPlayerId(pl)
 		if t[i] == null then
 			set t[i] = CreateTrigger()
-			call TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
+			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
 		endif
-		call TriggerAddCondition(t[i], Filter(c))
+		TriggerAddCondition(t[i], Filter(c))
 	endfunction
 
 	public function getPlayerUnitEventTrigger takes playerunitevent p returns trigger

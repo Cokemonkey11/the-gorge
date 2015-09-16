@@ -45,11 +45,11 @@ library Table
     private struct GTable[MAX_INSTANCES]
 
         method reset takes nothing returns nothing
-            call FlushChildHashtable(ht, integer(this) )
+            FlushChildHashtable(ht, integer(this) )
         endmethod
 
         private method onDestroy takes nothing returns nothing
-            call this.reset()
+            this.reset()
         endmethod
 
     endstruct
@@ -63,11 +63,11 @@ library Table
         endmethod
 
         method operator []= takes $type$ key, integer value returns nothing
-            call SaveInteger(ht,  integer(this)  ,$key$, value)
+            SaveInteger(ht,  integer(this)  ,$key$, value)
         endmethod
 
         method flush takes $type$ key returns nothing
-            call RemoveSavedInteger(ht, integer(this), $key$)
+            RemoveSavedInteger(ht, integer(this), $key$)
         endmethod
 
         method exists takes $type$ key returns boolean
@@ -75,7 +75,7 @@ library Table
         endmethod
 
         static method flush2D takes string firstkey returns nothing
-            call $name$(- StringHash(firstkey)).reset()
+            $name$(- StringHash(firstkey)).reset()
         endmethod
 
         static method operator [] takes string firstkey returns $name$

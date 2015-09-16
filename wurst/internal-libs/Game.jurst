@@ -26,68 +26,68 @@ package Game
 		static constant string ZEPPELIN_ICON   = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
 		static constant string SKYBARGE_ICON   = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 
-		constant string TRADE_SUCCESS_SOUND   = "Sound\\Interface\\QuestLog.wav"
+		static constant string TRADE_SUCCESS_SOUND   = "Sound\\Interface\\QuestLog.wav"
 
-		constant integer KEEP_ID     = 'h001'
-		constant integer KEEP2_ID    = 'h00F'
+		static constant integer KEEP_ID     = 'h001'
+		static constant integer KEEP2_ID    = 'h00F'
 		static constant integer SHIELD_ID   = 'h003'
-		constant integer REPAIR_ID   = 'h004'
-		constant integer HANGAR_ID   = 'h00A'
-		constant integer UTILITY_ID  = 'h006'
-		constant integer UTILITY2_ID = 'h007'
-		constant integer UTILITY3_ID = 'h008'
-		constant integer UTILITY4_ID = 'h009'
-		constant integer CAPTAIN_ID  = 'H00C'
-		constant integer START_GOLD   = 200
-		constant integer SHIELD_COUNT = 10
-		constant real SHIELDOFFS       = 200.
+		static constant integer REPAIR_ID   = 'h004'
+		static constant integer HANGAR_ID   = 'h00A'
+		static constant integer UTILITY_ID  = 'h006'
+		static constant integer UTILITY2_ID = 'h007'
+		static constant integer UTILITY3_ID = 'h008'
+		static constant integer UTILITY4_ID = 'h009'
+		static constant integer CAPTAIN_ID  = 'H00C'
+		static constant integer START_GOLD   = 200
+		static constant integer SHIELD_COUNT = 10
+		static constant real SHIELDOFFS       = 200.
 		static constant real FADEOUT_DURATION = 10.
-		constant real START_TIME       = 5.
-		constant real SHIP_OFFSET      = 328.
-		constant real LATER_OFFSET     = 128.
-		constant real UTILITY_Y        = -512.
+		static constant real START_TIME       = 5.
+		static constant real SHIP_OFFSET      = 328.
+		static constant real LATER_OFFSET     = 128.
+		static constant real UTILITY_Y        = -512.
 
-		constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
+		static constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
 			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
-		constant string DESCRIPTION_ICON_PATH = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
-		constant string DESCRIPTION_TITLE     = "|cffffcc00Description|r"
+		static constant string DESCRIPTION_ICON_PATH = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
+		static constant string DESCRIPTION_TITLE     = "|cffffcc00Description|r"
 
-		constant string WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
+		static constant string WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
 			*/ "your base. Each crew member has unique stats and will attack automatically when in range of an enemy."
-		constant string WEAPONS_ICON          = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
-		constant string WEAPONS_TITLE         = "|cffffcc00Weapons|r"
+		static constant string WEAPONS_ICON          = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
+		static constant string WEAPONS_TITLE         = "|cffffcc00Weapons|r"
 
-		constant string EQUIP_DESCRIP         = "Equipment are items which can be carried by your ship. Equipment are separated into classes: " + /*
+		static constant string EQUIP_DESCRIP         = "Equipment are items which can be carried by your ship. Equipment are separated into classes: " + /*
 			*/ "|cffffcc00Engine|r, |cffffcc00Mechanic|r, |cffffcc00Hull|r, |cffffcc00Teleporter|r, |cffffcc00Shield Generator|r, |cffffcc00Contract|r, " + /*
 			*/ "and |cffffcc00Special|r. A ship can only carry one item of each class, except for |cffffcc00Special|r and |cffffcc00Contract|r. " + /*
 			*/ "Additionally, some |cffffcc00Ship Classes|r cannot use certain item classes."
-		constant string EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
-		constant string EQUIP_TITLE           = "|cffffcc00Equipment|r"
+		static constant string EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
+		static constant string EQUIP_TITLE           = "|cffffcc00Equipment|r"
 
-		constant string CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
+		static constant string CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
 			*/ "Ship: |cffffcc00Frigates|r are well rounded ships designed to do well in most scenarios; |cffffcc00Battleships|r are heavy ships designed " + /*
 			*/ "for warfare with large space for crew and good ability to tank damage; |cffffcc00Interceptors|r are fast moving ships which excel in " + /*
 			*/ "chasing enemies and stopping smugglers; |cffffcc00Smugglers|r are small, light ships with abilities that aid in completing trade routes " + /*
 			*/ "for earning money."
-		constant string CLASS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNGreaterRejuvScroll.blp"
-		constant string CLASS_TITLE           = "|cffffcc00Ship Classes|r"
+		static constant string CLASS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNGreaterRejuvScroll.blp"
+		static constant string CLASS_TITLE           = "|cffffcc00Ship Classes|r"
 
-		constant string INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
+		static constant string INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
 			*/ "map updates, or to say hello, find me on |cffffcc00hiveworkshop.com|r."
-		constant string INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
-		constant string INFO_TITLE            = "|cff88dd66Information|r"
+		static constant string INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
+		static constant string INFO_TITLE            = "|cff88dd66Information|r"
 
-		constant string CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
+		static constant string CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
 			*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). |cffffcc00Vexorian, MindWorX, and Pitzermike|r (among others) who " + /*
 			*/ "developed many classic snippets and tools like JassHelper, JNGP, Table, SimError, and more. |cffffcc00looking_for_help|r for discovering a " + /*
 			*/ "new method in 2013 for recognizing spells and physical damage independantly in damage detectors. |cffffcc00kr0mat1k|r for the artwork used " + /*
 			*/ "in the map preview. |cffffcc00Cage the Elephant|r for writing the song played in the background. |cffffcc00Zwiebelchen|r for writing " + /*
 			*/ "TabReader, which inspired me to build Muscii. |cffffcc00bowser499|r for creading myBoard, a multiboard framework. |cffffcc00Kino|r for " + /*
 			*/ "doing extensive Terrain work for The Gorge."
-		constant string CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
-		constant string CREDS_TITLE           = "|cff88dd66Credits|r"
+		static constant string CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
+		static constant string CREDS_TITLE           = "|cff88dd66Credits|r"
 
-		constant string WELCOME_MESSAGE	      = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
+		static constant string WELCOME_MESSAGE	      = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
 		static constant string START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
 		static constant string WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
 		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"

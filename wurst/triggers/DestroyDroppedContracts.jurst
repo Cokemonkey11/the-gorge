@@ -2,32 +2,32 @@ scope DestroyDroppedContracts initializer i
 	globals
 		private Table tradeItems
 	endglobals
-	
+
 	private function isTradingItem takes item it returns boolean
 		if tradeItems.exists(GetItemTypeId(it)) then
 			return true
 		endif
 		return false
 	endfunction
-	
+
 	private function c takes nothing returns nothing
-		local item it = GetManipulatedItem()
-		if Equipment_getItemClass(it) == Equipment_CLASS_CONTRACT then
-			call RemoveItem(it)
+		item it = GetManipulatedItem()
+		if Equipment.getItemClass(it) == Equipment.CLASS_CONTRACT then
+			RemoveItem(it)
 		endif
 		// Remove trading items as well
 		if isTradingItem(it) then
-			call RemoveItem(it)
+			RemoveItem(it)
 		endif
 		set it = null
 	endfunction
-	
+
 	private function i takes nothing returns nothing
-		call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
-		
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
+
 		// Initialize Table
 		set tradeItems = Table.create()
-		set tradeItems[Equipment_DATA_ID] = 1
-		set tradeItems[Equipment_TOXIC_SUBST_FULL] = 1
+		set tradeItems[Equipment.DATA_ID] = 1
+		set tradeItems[Equipment.TOXIC_SUBST_FULL] = 1
 	endfunction
 endscope
