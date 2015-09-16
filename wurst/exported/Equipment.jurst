@@ -1,419 +1,418 @@
-library Equipment initializer i
+package Equipment
 	import SimError
 	import Ships
 	import Game
 	import RegisterPlayerUnitEvent
 
-	globals
-		constant integer CLASS_UNKNOWN   = -1
-		constant integer CLASS_ENGINE    =  0
-		constant integer CLASS_MECHANIC  =  1
-		constant integer CLASS_HULL      =  2
-		constant integer CLASS_SHIELDGEN =  3
-		constant integer CLASS_TELEPORT  =  4
-		constant integer CLASS_SPECIAL   =  5
+	public class Equipment
+		static constant integer CLASS_UNKNOWN   = -1
+		static constant integer CLASS_ENGINE    =  0
+		static constant integer CLASS_MECHANIC  =  1
+		static constant integer CLASS_HULL      =  2
+		static constant integer CLASS_SHIELDGEN =  3
+		static constant integer CLASS_TELEPORT  =  4
+		static constant integer CLASS_SPECIAL   =  5
 
-		public constant integer CLASS_CONTRACT   =  6
+		static constant integer CLASS_CONTRACT   =  6
 
-		constant integer PAGE_1_2       = 'I003'
-		constant integer PAGE_2_1		= 'I004'
-		constant integer PAGE_2_3       = 'I006'
-		constant integer PAGE_3_2       = 'I007'
-		constant integer PAGE_3_4       = 'I00A'
-		constant integer PAGE_4_3       = 'I00B'
+		static constant integer PAGE_1_2       = 'I003'
+		static constant integer PAGE_2_1		= 'I004'
+		static constant integer PAGE_2_3       = 'I006'
+		static constant integer PAGE_3_2       = 'I007'
+		static constant integer PAGE_3_4       = 'I00A'
+		static constant integer PAGE_4_3       = 'I00B'
 
-		constant integer KPAGE_1_2      = 'I00E'
-		constant integer KPAGE_2_1      = 'I00F'
+		static constant integer KPAGE_1_2      = 'I00E'
+		static constant integer KPAGE_2_1      = 'I00F'
 
-		public constant integer DATA_ID         = 'I00D'
-		public constant integer TOXIC_SUBST_FULL= 'I00H'
+		constant integer DATA_ID         = 'I00D'
+		constant integer TOXIC_SUBST_FULL= 'I00H'
 
 		// Engines
-		constant integer STEAM_CORE     = 'I000'
+		static constant integer STEAM_CORE     = 'I000'
 		// Mechanics
-		constant integer PROBLEM_SOLVER = 'I001'
+		static constant integer PROBLEM_SOLVER = 'I001'
 		// Hulls
-		constant integer STONE_HULL     = 'I002'
+		static constant integer STONE_HULL     = 'I002'
 		// Shield Generators
-		constant integer BRONZE_GEN     = 'I005'
+		static constant integer BRONZE_GEN     = 'I005'
 		// Teleporters
-		constant integer IONIC_TELEPORT = 'I008'
+		static constant integer IONIC_TELEPORT = 'I008'
 		// Special
-		constant integer SHIP_LOCATOR   = 'I009'
+		static constant integer SHIP_LOCATOR   = 'I009'
 		// Contracts
-		constant integer DATA_ACQUISIT  = 'I00C'
-		public constant integer TOXIC_SUBST     = 'I00G'
+		static constant integer DATA_ACQUISIT  = 'I00C'
+		static constant integer TOXIC_SUBST     = 'I00G'
 
-		constant integer REDUCTION1 = 10
+		static constant integer REDUCTION1 = 10
 
-		constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
-		constant string INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
+		static constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
+		static constant string INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
 
-		constant real EQUIPMENT_SELL_VALUE = 1.
+		static constant real EQUIPMENT_SELL_VALUE = 1.
 
-		Table classes
+		static Table classes
 
-		public Table reduction
-	endglobals
+		static Table reduction
 
-	public function autoPawnItemForPlayer takes integer pID, item it returns nothing
-		integer val = R2I(GetWidgetLife(it))
-		if val>1 then
-			DisplayTextToPlayer(Game.players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
-			SetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD)+val)
-		endif
-		RemoveItem(it)
-	end
+		function autoPawnItemForPlayer takes integer pID, item it returns nothing
+			integer val = R2I(GetWidgetLife(it))
+			if val>1 then
+				DisplayTextToPlayer(Game.players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
+				SetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD)+val)
+			endif
+			RemoveItem(it)
+		end
 
-	public function getItemClassId takes integer id returns integer
-		if classes.hasInt(id) then
-			return classes.loadInt(id)
-		endif
-		return CLASS_UNKNOWN
-	end
+		static function getItemClassId takes integer id returns integer
+			if classes.hasInt(id) then
+				return classes.loadInt(id)
+			endif
+			return CLASS_UNKNOWN
+		end
 
-	public function getItemClass takes item it returns integer
-		return getItemClassId(GetItemTypeId(it))
-	end
+		static function getItemClass takes item it returns integer
+			return getItemClassId(GetItemTypeId(it))
+		end
 
-	// Checks if a unit has a pair of items with the same item class.
-	//
-	// Parameters:
-	//   unit u:      the unit in question
-	//   integer cls: the item class for validation
-	//
-	// Returns true if `u` has two items of class `cls`
-	function unitHasClassPair takes unit u, integer cls returns boolean
-		integer index = 0
-		integer count = 0
+		// Checks if a unit has a pair of items with the same item class.
+		//
+		// Parameters:
+		//   unit u:      the unit in question
+		//   integer cls: the item class for validation
+		//
+		// Returns true if `u` has two items of class `cls`
+		function unitHasClassPair takes unit u, integer cls returns boolean
+			integer index = 0
+			integer count = 0
 
-		loop
-			exitwhen index > 5
+			loop
+				exitwhen index > 5
 
-			if getItemClass(UnitItemInSlot(u, index)) == cls then
-				count++
-				if count > 1 then
-					return true
+				if getItemClass(UnitItemInSlot(u, index)) == cls then
+					count++
+					if count > 1 then
+						return true
+					endif
 				endif
-			endif
 
-			index++
+				index++
+			end
+
+			return false
 		end
 
-		return false
-	end
+		static function unitHasItemOfClass takes unit u, integer cls returns item
+			integer index = 0
+			item it = null
 
-	function unitHasItemOfClass takes unit u, integer cls returns item
-		integer index = 0
-		item it = null
+			loop
+				exitwhen index > 5
 
-		loop
-			exitwhen index > 5
-
-			it = UnitItemInSlot(u, index)
-			if getItemClass(it) == cls then
-				return it
-			endif
-
-			index++
-		end
-
-		return it
-	end
-
-	public function unitHasItemOfTypeSlot takes unit u, integer id returns integer
-		integer index=0
-		loop
-			exitwhen index>5
-			if GetItemTypeId(UnitItemInSlot(u,index))==id then
-				return index
-			endif
-			index = index + 1
-		end
-		return -1
-	end
-
-	function unitHasItemOfType takes unit u, integer id returns boolean
-		return unitHasItemOfTypeSlot(u,id)>-1
-	end
-
-	function unitHasTypePair takes unit u, integer id returns boolean
-		integer index = 0
-		integer count = 0
-		loop
-			exitwhen index>5
-			if GetItemTypeId(UnitItemInSlot(u,index)) == id then
-				count = count +1
-				if count>1 then
-					return true
+				it = UnitItemInSlot(u, index)
+				if getItemClass(it) == cls then
+					return it
 				endif
-			endif
-			index=index+1
+
+				index++
+			end
+
+			return it
 		end
-		return false
-	end
 
-	public function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
-		integer shipClass = Ships.getClass(u)
-		integer itemClass = getItemClassId(id)
+		static function unitHasItemOfTypeSlot takes unit u, integer id returns integer
+			integer index=0
+			loop
+				exitwhen index>5
+				if GetItemTypeId(UnitItemInSlot(u,index))==id then
+					return index
+				endif
+				index = index + 1
+			end
+			return -1
+		end
 
-		if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
-			return false
-		elseif unitHasTypePair(u,id) then
-			return false
-		elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
-			return false
-		elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
-			return false
-		elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
-			return false
-		elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
-			return false
-		endif
-		return true
-	end
+		static function unitHasItemOfType takes unit u, integer id returns boolean
+			return unitHasItemOfTypeSlot(u,id)>-1
+		end
 
-	function unitCanAcquireItemId takes unit u, integer id returns boolean
-		integer shipClass = Ships.getClass(u)
-		integer itemClass = getItemClassId(id)
-		if unitHasItemOfClass(u,itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+		function unitHasTypePair takes unit u, integer id returns boolean
+			integer index = 0
+			integer count = 0
+			loop
+				exitwhen index>5
+				if GetItemTypeId(UnitItemInSlot(u,index)) == id then
+					count = count +1
+					if count>1 then
+						return true
+					endif
+				endif
+				index=index+1
+			end
 			return false
-		elseif unitHasItemOfType(u,id) then
-			return false
-		elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
-			return false
-		elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
-			return false
-		elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
-			return false
-		elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
-			return false
-		endif
-		return true
-	end
+		end
 
-	public function playerCanAcquireItem takes integer pID, item it returns boolean
-		return unitCanAcquireItemId(Ships.ships[pID],GetItemTypeId(it))
-	end
+		function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
+			integer shipClass = Ships.getClass(u)
+			integer itemClass = getItemClassId(id)
 
-	function unitCanAcquireItem takes unit u, item it returns boolean
-		return unitCanAcquireItemId(u,GetItemTypeId(it))
-	end
-
-	function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
-		real x = GetUnitX(Ships.ships[pID])
-		real y = GetUnitY(Ships.ships[pID])
-		item temp
-		if unitCanAcquireItemId(Ships.ships[pID],id) then
-			UnitAddItem(Ships.ships[pID],CreateItem(id,x,y))
+			if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+				return false
+			elseif unitHasTypePair(u,id) then
+				return false
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+				return false
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+				return false
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+				return false
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+				return false
+			endif
 			return true
-		else
-			temp = CreateItem(id,0.,0.)
-			autoPawnItemForPlayer(pID, temp)
-		endif
-		return false
-	end
-
-	public function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
-		if i0>0 then
-			playerAddItemFromIdConditional(pID,i0)
-		endif
-		if i1>0 then
-			playerAddItemFromIdConditional(pID,i1)
-		endif
-		if i2>0 then
-			playerAddItemFromIdConditional(pID,i2)
-		endif
-		if i3>0 then
-			playerAddItemFromIdConditional(pID,i3)
-		endif
-		if i4>0 then
-			playerAddItemFromIdConditional(pID,i4)
-		endif
-		if i5>0 then
-			playerAddItemFromIdConditional(pID,i5)
-		endif
-	end
-
-	public function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
-		real x = GetUnitX(Ships.ships[pID])
-		real y = GetUnitY(Ships.ships[pID])
-		if i0>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i0,x,y))
-		endif
-		if i1>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i1,x,y))
-		endif
-		if i2>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i2,x,y))
-		endif
-		if i3>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i3,x,y))
-		endif
-		if i4>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i4,x,y))
-		endif
-		if i5>0 then
-			UnitAddItem(Ships.ships[pID],CreateItem(i5,x,y))
-		endif
-	end
-
-	function tradeExperience takes player who returns integer
-		return Game.tradeExp[GetPlayerId(who)]
-	end
-
-	function getContractCost takes item it returns integer
-		integer typ = GetItemTypeId(it)
-		if typ == DATA_ACQUISIT then
-			return 0
-		elseif typ == TOXIC_SUBST then
-			return 1
-		endif
-		return -1
-	end
-
-	function pageC takes nothing returns boolean
-		item sI=GetSoldItem()
-		unit seller = GetTriggerUnit()
-		unit buyer = GetBuyingUnit()
-		unit toSelect = null
-		integer id = GetItemTypeId(sI)
-		player owner = GetOwningPlayer(buyer)
-		boolean was = false
-		if id == PAGE_1_2 then
-			was = true
-			if seller == Game.westUtility[0] then
-				toSelect = Game.westUtility[1]
-			else
-				toSelect = Game.eastUtility[1]
-			endif
-		elseif id==PAGE_2_1 then
-			was = true
-			if seller == Game.westUtility[1] then
-				toSelect = Game.westUtility[0]
-			else
-				toSelect = Game.eastUtility[0]
-			endif
-		elseif id==PAGE_2_3 then
-			was = true
-			if seller == Game.westUtility[1] then
-				toSelect = Game.westUtility[2]
-			else
-				toSelect = Game.eastUtility[2]
-			endif
-		elseif id==PAGE_3_2 then
-			was = true
-			if seller == Game.westUtility[2] then
-				toSelect = Game.westUtility[1]
-			else
-				toSelect=Game.eastUtility[1]
-			endif
-		elseif id==PAGE_3_4 then
-			was = true
-			if seller == Game.westUtility[2] then
-				toSelect = Game.westUtility[3]
-			else
-				toSelect = Game.eastUtility[3]
-			endif
-		elseif id==PAGE_4_3 then
-			was = true
-			if seller == Game.westUtility[3] then
-				toSelect = Game.westUtility[2]
-			else
-				toSelect = Game.eastUtility[2]
-			endif
-		elseif id==KPAGE_1_2 then
-			was = true
-			if seller == Game.westKeep[0] then
-				toSelect = Game.westKeep[1]
-			else
-				toSelect = Game.eastKeep[1]
-			endif
-		elseif id==KPAGE_2_1 then
-			was = true
-			if seller == Game.westKeep[1] then
-				toSelect = Game.westKeep[0]
-			else
-				toSelect = Game.eastKeep[0]
-			endif
-		endif
-		if was then
-			RemoveItem(sI)
-			if Game.localPlayer == owner then
-				SelectUnit(seller,false)
-				SelectUnit(toSelect,true)
-			endif
-		endif
-
-		return false
-	end
-
-	public function resetUnitDamageReduction takes unit u returns nothing
-		integer index = 0
-		loop
-			exitwhen index>5
-			if GetItemTypeId(UnitItemInSlot(u,index)) == STONE_HULL then
-				reduction.saveInt(u.getHandleId(), REDUCTION1)
-				return
-			endif
-			index = index +1
 		end
 
-		reduction.saveInt(u.getHandleId(), 0)
-	end
-
-	function c takes nothing returns boolean
-		unit buyer = GetBuyingUnit()
-		item sI=GetSoldItem()
-		player buyerP = GetOwningPlayer(buyer)
-		real val
-		integer class = getItemClass(sI)
-		boolean has = unitHasItemOfType(buyer,GetItemTypeId(sI))
-		item it = unitHasItemOfClass(buyer,class)
-
-		if has or GetItemTypeId(sI) == GetItemTypeId(it) then
-			simError(buyerP,"You can't carry two of the same equipment.")
-			val = GetWidgetLife(sI)
-			if val>1. then
-				SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+		static function unitCanAcquireItemId takes unit u, integer id returns boolean
+			integer shipClass = Ships.getClass(u)
+			integer itemClass = getItemClassId(id)
+			if unitHasItemOfClass(u,itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+				return false
+			elseif unitHasItemOfType(u,id) then
+				return false
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+				return false
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+				return false
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+				return false
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+				return false
 			endif
-			RemoveItem(sI)
-		elseif not unitCanAcquireItem(buyer,sI) then
-			val = GetWidgetLife(sI)
-			RemoveItem(sI)
-			SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-			simError(buyerP,WRONG_CLASS)
-		else
-			if it!=null and class!=CLASS_UNKNOWN and class!=CLASS_SPECIAL and class!=CLASS_CONTRACT then
-				val = GetWidgetLife(it)
-				SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-				DisplayTextToPlayer(buyerP,0.,0.,"|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
-				RemoveItem(it)
-			elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
+			return true
+		end
+
+		function playerCanAcquireItem takes integer pID, item it returns boolean
+			return unitCanAcquireItemId(Ships.ships[pID],GetItemTypeId(it))
+		end
+
+		static function unitCanAcquireItem takes unit u, item it returns boolean
+			return unitCanAcquireItemId(u,GetItemTypeId(it))
+		end
+
+		function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
+			real x = GetUnitX(Ships.ships[pID])
+			real y = GetUnitY(Ships.ships[pID])
+			item temp
+			if unitCanAcquireItemId(Ships.ships[pID],id) then
+				UnitAddItem(Ships.ships[pID],CreateItem(id,x,y))
+				return true
+			else
+				temp = CreateItem(id,0.,0.)
+				autoPawnItemForPlayer(pID, temp)
+			endif
+			return false
+		end
+
+		static function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+			if i0>0 then
+				playerAddItemFromIdConditional(pID,i0)
+			endif
+			if i1>0 then
+				playerAddItemFromIdConditional(pID,i1)
+			endif
+			if i2>0 then
+				playerAddItemFromIdConditional(pID,i2)
+			endif
+			if i3>0 then
+				playerAddItemFromIdConditional(pID,i3)
+			endif
+			if i4>0 then
+				playerAddItemFromIdConditional(pID,i4)
+			endif
+			if i5>0 then
+				playerAddItemFromIdConditional(pID,i5)
+			endif
+		end
+
+		function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+			real x = GetUnitX(Ships.ships[pID])
+			real y = GetUnitY(Ships.ships[pID])
+			if i0>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i0,x,y))
+			endif
+			if i1>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i1,x,y))
+			endif
+			if i2>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i2,x,y))
+			endif
+			if i3>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i3,x,y))
+			endif
+			if i4>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i4,x,y))
+			endif
+			if i5>0 then
+				UnitAddItem(Ships.ships[pID],CreateItem(i5,x,y))
+			endif
+		end
+
+		static function tradeExperience takes player who returns integer
+			return Game.tradeExp[GetPlayerId(who)]
+		end
+
+		static function getContractCost takes item it returns integer
+			integer typ = GetItemTypeId(it)
+			if typ == DATA_ACQUISIT then
+				return 0
+			elseif typ == TOXIC_SUBST then
+				return 1
+			endif
+			return -1
+		end
+
+		static function pageC takes nothing returns boolean
+			item sI=GetSoldItem()
+			unit seller = GetTriggerUnit()
+			unit buyer = GetBuyingUnit()
+			unit toSelect = null
+			integer id = GetItemTypeId(sI)
+			player owner = GetOwningPlayer(buyer)
+			boolean was = false
+			if id == PAGE_1_2 then
+				was = true
+				if seller == Game.westUtility[0] then
+					toSelect = Game.westUtility[1]
+				else
+					toSelect = Game.eastUtility[1]
+				endif
+			elseif id==PAGE_2_1 then
+				was = true
+				if seller == Game.westUtility[1] then
+					toSelect = Game.westUtility[0]
+				else
+					toSelect = Game.eastUtility[0]
+				endif
+			elseif id==PAGE_2_3 then
+				was = true
+				if seller == Game.westUtility[1] then
+					toSelect = Game.westUtility[2]
+				else
+					toSelect = Game.eastUtility[2]
+				endif
+			elseif id==PAGE_3_2 then
+				was = true
+				if seller == Game.westUtility[2] then
+					toSelect = Game.westUtility[1]
+				else
+					toSelect=Game.eastUtility[1]
+				endif
+			elseif id==PAGE_3_4 then
+				was = true
+				if seller == Game.westUtility[2] then
+					toSelect = Game.westUtility[3]
+				else
+					toSelect = Game.eastUtility[3]
+				endif
+			elseif id==PAGE_4_3 then
+				was = true
+				if seller == Game.westUtility[3] then
+					toSelect = Game.westUtility[2]
+				else
+					toSelect = Game.eastUtility[2]
+				endif
+			elseif id==KPAGE_1_2 then
+				was = true
+				if seller == Game.westKeep[0] then
+					toSelect = Game.westKeep[1]
+				else
+					toSelect = Game.eastKeep[1]
+				endif
+			elseif id==KPAGE_2_1 then
+				was = true
+				if seller == Game.westKeep[1] then
+					toSelect = Game.westKeep[0]
+				else
+					toSelect = Game.eastKeep[0]
+				endif
+			endif
+			if was then
 				RemoveItem(sI)
-				simError(buyerP,INSUFFICIENT_EXPERIENCE)
+				if Game.localPlayer == owner then
+					SelectUnit(seller,false)
+					SelectUnit(toSelect,true)
+				endif
 			endif
-		endif
 
-		resetUnitDamageReduction(buyer)
-		return false
+			return false
+		end
+
+		static function resetUnitDamageReduction takes unit u returns nothing
+			integer index = 0
+			loop
+				exitwhen index>5
+				if GetItemTypeId(UnitItemInSlot(u,index)) == STONE_HULL then
+					reduction.saveInt(u.getHandleId(), REDUCTION1)
+					return
+				endif
+				index = index +1
+			end
+
+			reduction.saveInt(u.getHandleId(), 0)
+		end
+
+		static function c takes nothing returns boolean
+			unit buyer = GetBuyingUnit()
+			item sI=GetSoldItem()
+			player buyerP = GetOwningPlayer(buyer)
+			real val
+			integer class = getItemClass(sI)
+			boolean has = unitHasItemOfType(buyer,GetItemTypeId(sI))
+			item it = unitHasItemOfClass(buyer,class)
+
+			if has or GetItemTypeId(sI) == GetItemTypeId(it) then
+				simError(buyerP,"You can't carry two of the same equipment.")
+				val = GetWidgetLife(sI)
+				if val>1. then
+					SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				endif
+				RemoveItem(sI)
+			elseif not unitCanAcquireItem(buyer,sI) then
+				val = GetWidgetLife(sI)
+				RemoveItem(sI)
+				SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				simError(buyerP,WRONG_CLASS)
+			else
+				if it!=null and class!=CLASS_UNKNOWN and class!=CLASS_SPECIAL and class!=CLASS_CONTRACT then
+					val = GetWidgetLife(it)
+					SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+					DisplayTextToPlayer(buyerP,0.,0.,"|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
+					RemoveItem(it)
+				elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
+					RemoveItem(sI)
+					simError(buyerP,INSUFFICIENT_EXPERIENCE)
+				endif
+			endif
+
+			resetUnitDamageReduction(buyer)
+			return false
+		end
 	end
 
-	function i takes nothing returns nothing
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM,function c)
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM,function pageC)
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.pageC)
 
 		// Initialize class table
-		classes = new Table
-		classes.saveInt(STEAM_CORE, CLASS_ENGINE)
-		classes.saveInt(PROBLEM_SOLVER, CLASS_MECHANIC)
-		classes.saveInt(STONE_HULL, CLASS_HULL)
-		classes.saveInt(BRONZE_GEN, CLASS_SHIELDGEN)
-		classes.saveInt(IONIC_TELEPORT, CLASS_TELEPORT)
-		classes.saveInt(SHIP_LOCATOR, CLASS_SPECIAL)
-		classes.saveInt(DATA_ACQUISIT, CLASS_CONTRACT)
-		classes.saveInt(TOXIC_SUBST, CLASS_CONTRACT)
+		Equipment.classes = new Table
+		Equipment.classes.saveInt(Equipment.STEAM_CORE, Equipment.CLASS_ENGINE)
+		Equipment.classes.saveInt(Equipment.PROBLEM_SOLVER, Equipment.CLASS_MECHANIC)
+		Equipment.classes.saveInt(Equipment.STONE_HULL, Equipment.CLASS_HULL)
+		Equipment.classes.saveInt(Equipment.BRONZE_GEN, Equipment.CLASS_SHIELDGEN)
+		Equipment.classes.saveInt(Equipment.IONIC_TELEPORT, Equipment.CLASS_TELEPORT)
+		Equipment.classes.saveInt(Equipment.SHIP_LOCATOR, Equipment.CLASS_SPECIAL)
+		Equipment.classes.saveInt(Equipment.DATA_ACQUISIT, Equipment.CLASS_CONTRACT)
+		Equipment.classes.saveInt(Equipment.TOXIC_SUBST, Equipment.CLASS_CONTRACT)
 
-		reduction = new Table
+		Equipment.reduction = new Table
 	end
-endlibrary
