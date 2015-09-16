@@ -4,7 +4,7 @@ library Table
 //* ------------
 //*
 //*   set t=Table.create() - instanceates a new table object
-//*   call t.destroy()     - destroys it
+//*   call destroy t     - destroys it
 //*   t[1234567]           - Get value for key 1234567
 //*                          (zero if not assigned previously)
 //*   set t[12341]=32      - Assigning it.
@@ -15,7 +15,7 @@ library Table
 //*   call t.reset()       - Flushes the whole contents of the
 //*                          Table.
 //*
-//*   call t.destroy()     - Does reset() and also recycles the id.
+//*   call destroy t     - Does reset() and also recycles the id.
 //*
 //*   If you use HandleTable instead of Table, it is the same
 //* but it uses handles as keys, the same with StringTable.
@@ -42,7 +42,7 @@ library Table
         private hashtable ht = InitHashtable()
     endglobals
 
-    private struct GTable[MAX_INSTANCES]
+    struct GTable[MAX_INSTANCES]
 
         method reset takes nothing returns nothing
             FlushChildHashtable(ht, integer(this) )

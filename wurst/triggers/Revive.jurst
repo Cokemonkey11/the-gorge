@@ -1,5 +1,5 @@
 scope Revive initializer i
-    private struct deathDat
+    struct deathDat
         unit u
         integer timeL
         real teamX
@@ -61,7 +61,7 @@ scope Revive initializer i
 						SetUnitY(eastDummy,Game.SAFE_Y)
 					endif
 				endif
-                tempDat.destroy()
+                destroy tempDat
                 deathDB[index]=deathDB[dbIndex]
                 dbIndex=dbIndex-1
 				index = index-1

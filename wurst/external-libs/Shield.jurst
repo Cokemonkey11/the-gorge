@@ -132,7 +132,7 @@ library Shield requires DamageType
                         SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)-tempDat.falseHP)
                     endif
                     DestroyEffect(tempDat.fx)
-                    tempDat.destroy()
+                    destroy tempDat
                     thistype.allShields[index]=thistype.allShields[thistype.shieldIndex]
                     thistype.shieldIndex=thistype.shieldIndex-1
                     index=index-1
