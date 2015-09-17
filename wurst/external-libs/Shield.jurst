@@ -37,7 +37,7 @@ package Shield
 		private static Shield array allShields
 		private static integer shieldIndex= -1
 		private static timer time= CreateTimer()
-		private static Table tab
+		static Table tab
 
 		private boolean useDuration= true
 		private boolean finiteShield= true
@@ -51,7 +51,7 @@ package Shield
 
 		//* This method is used for handling when a unit with a shield
 		//* receives damage.
-		private static method handler takes nothing returns nothing
+		static method handler takes nothing returns nothing
 			Shield tempDat
 			Shield destroyingDat
 			unit tU= GetTriggerUnit()
