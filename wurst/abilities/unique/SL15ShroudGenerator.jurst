@@ -47,8 +47,8 @@ scope SL15ShroudGenerator initializer i
 			exitwhen index>gensIndex
 			g = gens[index]
 			g.duration = g.duration - CLOCK_PERIOD
-			SetUnitX(g.dummy,GetUnitX(g.dummy)+g.dX)
-			SetUnitY(g.dummy,GetUnitY(g.dummy)+g.dY)
+			SetUnitX(g.dummy, GetUnitX(g.dummy)+g.dX)
+			SetUnitY(g.dummy, GetUnitY(g.dummy)+g.dY)
 			if g.duration <= 0. then
 				DestroyEffect(g.mdl)
 				DummyUnitStack.release(g.dummy)
@@ -81,31 +81,31 @@ scope SL15ShroudGenerator initializer i
 					exitwhen j >= GEN_COUNT
 					g = new Gen
 					g.dummy = DummyUnitStack.get()
-					g.mdl = AddSpecialEffectTarget(GEN_MODEL,g.dummy,"origin")
+					g.mdl = AddSpecialEffectTarget(GEN_MODEL, g.dummy, "origin")
 					g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
 					g.dY = GEN_VELOCITY * Sin(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
 					g.duration = SHROUD_RADIUS / GEN_VELOCITY
-					SetUnitFlyHeight(g.dummy,100.,0.)
-					SetUnitX(g.dummy,s.cX)
-					SetUnitY(g.dummy,s.cY)
+					SetUnitFlyHeight(g.dummy, 100., 0.)
+					SetUnitX(g.dummy, s.cX)
+					SetUnitY(g.dummy, s.cY)
 					gensIndex = gensIndex + 1
 					gens[gensIndex] = g
 					if gensIndex == 0 then
-						TimerStart(clock2,CLOCK_PERIOD,true,function p2)
+						TimerStart(clock2, CLOCK_PERIOD, true, function p2)
 					end
 					j = j + 1
 				endloop
 			end
-			if IsUnitInRangeXY(s.caster,s.cX,s.cY,SHROUD_RADIUS) then
-				if GetUnitAbilityLevel(s.caster,BUF_ID)<1 then
-					SetUnitX(s.dummy,GetUnitX(s.caster))
-					SetUnitY(s.dummy,GetUnitY(s.caster))
-					UnitAddAbility(s.dummy,INVIS_ID)
-					IssueTargetOrder(s.dummy,"invisibility",s.caster)
-					UnitRemoveAbility(s.dummy,INVIS_ID)
+			if IsUnitInRangeXY(s.caster, s.cX, s.cY, SHROUD_RADIUS) then
+				if GetUnitAbilityLevel(s.caster, BUF_ID)<1 then
+					SetUnitX(s.dummy, GetUnitX(s.caster))
+					SetUnitY(s.dummy, GetUnitY(s.caster))
+					UnitAddAbility(s.dummy, INVIS_ID)
+					IssueTargetOrder(s.dummy, "invisibility", s.caster)
+					UnitRemoveAbility(s.dummy, INVIS_ID)
 				end
 			else
-				UnitRemoveAbility(s.caster,BUF_ID)
+				UnitRemoveAbility(s.caster, BUF_ID)
 			end
 			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)==0 or s.time>DURATION then
 				DummyUnitStack.release(s.dummy)
@@ -130,12 +130,12 @@ scope SL15ShroudGenerator initializer i
 			s.cY = GetUnitY(s.caster)
 			s.dummy = DummyUnitStack.get()
 			s.genTime = GEN_PERIOD
-			SetUnitX(s.dummy,s.cX)
-			SetUnitY(s.dummy,s.cY)
+			SetUnitX(s.dummy, s.cX)
+			SetUnitY(s.dummy, s.cY)
 			shroudsIndex = shroudsIndex + 1
 			shrouds[shroudsIndex] = s
 			if shroudsIndex == 0 then
-				TimerStart(clock,CLOCK_PERIOD,true,function p)
+				TimerStart(clock, CLOCK_PERIOD, true, function p)
 			end
 		end
 	end

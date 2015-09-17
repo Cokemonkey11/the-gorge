@@ -2,7 +2,7 @@ scope Leave initializer init
 	function c takes nothing returns boolean
 		player p = GetTriggerPlayer()
 		integer id = GetPlayerId(p)
-		DisplayTextToPlayer(Game.localPlayer,0.,0.,Game.colors[id]+Game.names[id]+"|r has left the game.")
+		DisplayTextToPlayer(Game.localPlayer, 0., 0., Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
 	end
 
@@ -11,10 +11,10 @@ scope Leave initializer init
 		integer index = 2
 		loop
 			exitwhen index>11
-			TriggerRegisterPlayerEvent(t,Player(index),EVENT_PLAYER_LEAVE)
+			TriggerRegisterPlayerEvent(t, Player(index), EVENT_PLAYER_LEAVE)
 			index = index + 1
 		endloop
-		TriggerAddCondition(t,Condition(function c))
+		TriggerAddCondition(t, Condition(function c))
 		t = null
 	end
 endscope

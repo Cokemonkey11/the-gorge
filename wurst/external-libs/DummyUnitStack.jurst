@@ -24,9 +24,9 @@ library DummyUnitStack
         private static timer clock=CreateTimer()
 
         private static method add takes boolean preloading returns unit
-            unit u=CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),DummyUnitStack.DUMMY_UNIT_ID,DummyUnitStack.SAFE_LOC_X,DummyUnitStack.SAFE_LOC_Y,0.)
-            UnitAddAbility(u,'Aloc')
-            UnitAddAbility(u,'Arav')
+            unit u=CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
+            UnitAddAbility(u, 'Aloc')
+            UnitAddAbility(u, 'Arav')
             if preloading then
                 DummyUnitStack.stackIndex=DummyUnitStack.stackIndex+1
                 DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]=u
@@ -55,7 +55,7 @@ library DummyUnitStack
             static if DO_DDPC then
                 if DummyUnitStack.stackIndex<(DummyUnitStack.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and DummyUnitStack.deferredTodoCount<1 then
                     DummyUnitStack.deferredTodoCount=DummyUnitStack.MIN_PRELOAD_BLOCK_SIZE
-                    TimerStart(DummyUnitStack.clock,DummyUnitStack.CLOCK_PERIOD,true,function DummyUnitStack.deferredPreloader)
+                    TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
                 end
             end
             return result
@@ -68,11 +68,11 @@ library DummyUnitStack
                     return
                 end
             end
-            SetUnitFlyHeight(u,0.,0.)
-            SetUnitScale(u,1.,1.,1.)
-            SetUnitOwner(u,Player(PLAYER_NEUTRAL_PASSIVE),true)
-            SetUnitX(u,DummyUnitStack.SAFE_LOC_X)
-            SetUnitY(u,DummyUnitStack.SAFE_LOC_Y)
+            SetUnitFlyHeight(u, 0., 0.)
+            SetUnitScale(u, 1., 1., 1.)
+            SetUnitOwner(u, Player(PLAYER_NEUTRAL_PASSIVE), true)
+            SetUnitX(u, DummyUnitStack.SAFE_LOC_X)
+            SetUnitY(u, DummyUnitStack.SAFE_LOC_Y)
             DummyUnitStack.stackIndex=DummyUnitStack.stackIndex+1
             DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]=u
         endmethod
@@ -88,7 +88,7 @@ library DummyUnitStack
             end
             static if DO_IDPC then
                 DummyUnitStack.deferredTodoCount=DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
-                TimerStart(DummyUnitStack.clock,DummyUnitStack.CLOCK_PERIOD,true,function DummyUnitStack.deferredPreloader)
+                TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
             end
         endmethod
     endstruct

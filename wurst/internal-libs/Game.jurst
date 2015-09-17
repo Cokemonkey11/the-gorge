@@ -94,8 +94,8 @@ package Game
 
 		static boolean ended = false
 		static integer playerCount=0
-		integer westCount=0
-		integer eastCount=0
+		static integer westCount=0
+		static integer eastCount=0
 		static integer array shipClass
 		static int array tradeExp
 		static integer array scoreboardRows
@@ -109,10 +109,10 @@ package Game
 		static unit array captains
 		static player array players
 		static player localPlayer
-		player playerPassive
-		boolean array playing[12]
-		string array colors[12]
-		string array names[12]
+		static player playerPassive
+		static boolean array playing
+		static string array colors
+		static string array names
 		static AssistTimestamps array assistTimestamps
 		static integer array kills
 		static integer array deaths
@@ -135,9 +135,9 @@ package Game
 			player owner = GetOwningPlayer(u)
 			integer id = GetPlayerId(owner)
 			tradeExp[id] += bonus_experience
-			SetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD)+gold)
-			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL,u,"origin"))
-			DisplayTextToPlayer(owner,0.,0.,"You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonus_experience)+"|r trading experience.")
+			SetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD)+gold)
+			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL, u, "origin"))
+			DisplayTextToPlayer(owner, 0., 0., "You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonus_experience)+"|r trading experience.")
 		end
 
 		static function playerIsWest takes integer id returns boolean
@@ -150,7 +150,7 @@ package Game
 
 		static function farmIncrement takes integer pID returns nothing
 			farm[pID] = farm[pID] + 1
-			scoreboard.setValue(4,scoreboardRows[pID],I2S(farm[pID]))
+			scoreboard.setValue(4, scoreboardRows[pID], I2S(farm[pID]))
 		end
 
 		static function parseKill takes integer pID returns nothing
@@ -161,7 +161,7 @@ package Game
 				kills[1] = kills[1] + 1
 			end
 			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
-			scoreboard.setValue(1,scoreboardRows[pID],I2S(kills[pID]))
+			scoreboard.setValue(1, scoreboardRows[pID], I2S(kills[pID]))
 		end
 
 		static function addDeath takes unit u returns nothing
@@ -172,49 +172,49 @@ package Game
 			else
 				deaths[1] = deaths[1] + 1
 			end
-			scoreboard.setValue(2,scoreboardRows[id],I2S(deaths[id]))
+			scoreboard.setValue(2, scoreboardRows[id], I2S(deaths[id]))
 		end
 
 		static function updateIcon takes integer pID returns nothing
 			integer unitType = shipClass[pID]
 			if unitType==Ships.HELICOPTER_ID then
-				scoreboard.setIcon(0,scoreboardRows[pID],HELICOPTER_ICON)
+				scoreboard.setIcon(0, scoreboardRows[pID], HELICOPTER_ICON)
 			elseif unitType==Ships.PARACOPTER_ID then
-				scoreboard.setIcon(0,scoreboardRows[pID],PARACOPTER_ICON)
+				scoreboard.setIcon(0, scoreboardRows[pID], PARACOPTER_ICON)
 			elseif unitType==Ships.ZEPPELIN_ID then
-				scoreboard.setIcon(0,scoreboardRows[pID],ZEPPELIN_ICON)
+				scoreboard.setIcon(0, scoreboardRows[pID], ZEPPELIN_ICON)
 			elseif unitType==Ships.SKYBARGE_ID then
-				scoreboard.setIcon(0,scoreboardRows[pID],SKYBARGE_ICON)
+				scoreboard.setIcon(0, scoreboardRows[pID], SKYBARGE_ICON)
 			end
 		end
 
 		function addQuest takes string desc, string iconPath, boolean required, string title returns quest
 			quest q = CreateQuest()
-			QuestSetCompleted(q,false)
-			QuestSetDescription(q,desc)
-			QuestSetDiscovered(q,true)
-			QuestSetEnabled(q,true)
-			QuestSetIconPath(q,iconPath)
-			QuestSetRequired(q,required)
-			QuestSetTitle(q,title)
+			QuestSetCompleted(q, false)
+			QuestSetDescription(q, desc)
+			QuestSetDiscovered(q, true)
+			QuestSetEnabled(q, true)
+			QuestSetIconPath(q, iconPath)
+			QuestSetRequired(q, required)
+			QuestSetTitle(q, title)
 			return q
 		end
 
 		function initializeQuests takes nothing returns nothing
 			// Primary Quests (Left)
 			// description
-			addQuest(MAP_DESCRIPTION,DESCRIPTION_ICON_PATH,true,DESCRIPTION_TITLE)
+			addQuest(MAP_DESCRIPTION, DESCRIPTION_ICON_PATH, true, DESCRIPTION_TITLE)
 			// weapons
-			addQuest(WEAPONS_DESCRIP,WEAPONS_ICON,true,WEAPONS_TITLE)
+			addQuest(WEAPONS_DESCRIP, WEAPONS_ICON, true, WEAPONS_TITLE)
 			// equipment
-			addQuest(EQUIP_DESCRIP,EQUIP_ICON,true,EQUIP_TITLE)
+			addQuest(EQUIP_DESCRIP, EQUIP_ICON, true, EQUIP_TITLE)
 			// classes
-			addQuest(CLASS_DESCRIP,CLASS_ICON,true,CLASS_TITLE)
+			addQuest(CLASS_DESCRIP, CLASS_ICON, true, CLASS_TITLE)
 			// Secondary Quests (Right)
 			// info
-			addQuest(INFO_DESCRIP,INFO_ICON,false,INFO_TITLE)
+			addQuest(INFO_DESCRIP, INFO_ICON, false, INFO_TITLE)
 			// credits
-			addQuest(CREDS_DESCRIP,CREDS_ICON,false,CREDS_TITLE)
+			addQuest(CREDS_DESCRIP, CREDS_ICON, false, CREDS_TITLE)
 		end
 
 		static function c takes nothing returns nothing
@@ -223,12 +223,12 @@ package Game
 				if GetOwningPlayer(tU) == Player(0) then
 					westShieldsLeft = westShieldsLeft - 1
 					if westShieldsLeft < 1 then
-						SetUnitInvulnerable(westKeep[0],false)
+						SetUnitInvulnerable(westKeep[0], false)
 					end
 				else
 					eastShieldsLeft = eastShieldsLeft - 1
 					if eastShieldsLeft < 1 then
-						SetUnitInvulnerable(eastKeep[0],false)
+						SetUnitInvulnerable(eastKeep[0], false)
 					end
 				end
 			end
@@ -262,51 +262,51 @@ package Game
 
 		static function defeatTeam takes integer team returns nothing
 			if team == 0 then
-				RemovePlayer(players[1],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[7],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[8],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[9],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[10],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[11],PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(players[0],PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(players[2],PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(players[3],PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(players[4],PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(players[5],PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(players[6],PLAYER_GAME_RESULT_DEFEAT)
-				Sound.playForPlayer(DEF_SOUND,1.,players[2])
-				Sound.playForPlayer(DEF_SOUND,1.,players[3])
-				Sound.playForPlayer(DEF_SOUND,1.,players[4])
-				Sound.playForPlayer(DEF_SOUND,1.,players[5])
-				Sound.playForPlayer(DEF_SOUND,1.,players[6])
-				Sound.playForPlayer(WIN_SOUND,1.,players[7])
-				Sound.playForPlayer(WIN_SOUND,1.,players[8])
-				Sound.playForPlayer(WIN_SOUND,1.,players[9])
-				Sound.playForPlayer(WIN_SOUND,1.,players[10])
-				Sound.playForPlayer(WIN_SOUND,1.,players[11])
+				RemovePlayer(players[1], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[7], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[8], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[9], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[10], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[11], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[0], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[2], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[3], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[4], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[5], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[6], PLAYER_GAME_RESULT_DEFEAT)
+				Sound.playForPlayer(DEF_SOUND, 1., players[2])
+				Sound.playForPlayer(DEF_SOUND, 1., players[3])
+				Sound.playForPlayer(DEF_SOUND, 1., players[4])
+				Sound.playForPlayer(DEF_SOUND, 1., players[5])
+				Sound.playForPlayer(DEF_SOUND, 1., players[6])
+				Sound.playForPlayer(WIN_SOUND, 1., players[7])
+				Sound.playForPlayer(WIN_SOUND, 1., players[8])
+				Sound.playForPlayer(WIN_SOUND, 1., players[9])
+				Sound.playForPlayer(WIN_SOUND, 1., players[10])
+				Sound.playForPlayer(WIN_SOUND, 1., players[11])
 			else
-				RemovePlayer(Player(1),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(7),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(8),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(9),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(10),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(11),PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Player(0),PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Player(2),PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Player(3),PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Player(4),PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Player(5),PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Player(6),PLAYER_GAME_RESULT_VICTORY)
-				Sound.playForPlayer(WIN_SOUND,1.,players[2])
-				Sound.playForPlayer(WIN_SOUND,1.,players[3])
-				Sound.playForPlayer(WIN_SOUND,1.,players[4])
-				Sound.playForPlayer(WIN_SOUND,1.,players[5])
-				Sound.playForPlayer(WIN_SOUND,1.,players[6])
-				Sound.playForPlayer(DEF_SOUND,1.,players[7])
-				Sound.playForPlayer(DEF_SOUND,1.,players[8])
-				Sound.playForPlayer(DEF_SOUND,1.,players[9])
-				Sound.playForPlayer(DEF_SOUND,1.,players[10])
-				Sound.playForPlayer(DEF_SOUND,1.,players[11])
+				RemovePlayer(Player(1), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(7), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(8), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(9), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(10), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(11), PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(Player(0), PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(2), PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(3), PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(4), PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(5), PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(Player(6), PLAYER_GAME_RESULT_VICTORY)
+				Sound.playForPlayer(WIN_SOUND, 1., players[2])
+				Sound.playForPlayer(WIN_SOUND, 1., players[3])
+				Sound.playForPlayer(WIN_SOUND, 1., players[4])
+				Sound.playForPlayer(WIN_SOUND, 1., players[5])
+				Sound.playForPlayer(WIN_SOUND, 1., players[6])
+				Sound.playForPlayer(DEF_SOUND, 1., players[7])
+				Sound.playForPlayer(DEF_SOUND, 1., players[8])
+				Sound.playForPlayer(DEF_SOUND, 1., players[9])
+				Sound.playForPlayer(DEF_SOUND, 1., players[10])
+				Sound.playForPlayer(DEF_SOUND, 1., players[11])
 			end
 		end
 
@@ -321,31 +321,31 @@ package Game
 			loop
 				first=FirstOfGroup(grp)
 				exitwhen first==null
-				PauseUnit(first,true)
-				SetUnitTimeScale(first,0.)
-				UnitAddAbility(first,'Aloc')
-				GroupRemoveUnit(grp,first)
+				PauseUnit(first, true)
+				SetUnitTimeScale(first, 0.)
+				UnitAddAbility(first, 'Aloc')
+				GroupRemoveUnit(grp, first)
 			endloop
 		end
 
 		static function defeatC takes nothing returns nothing
 			unit tU=GetTriggerUnit()
 			if tU==westKeep[0] then
-				DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
 				defeatTeam(0)
 				Muscii.interrupt()
-				TimerStart(CreateTimer(),30.,false,function defeatAfter)
+				TimerStart(CreateTimer(), 30., false, function defeatAfter)
 			elseif tU==eastKeep[0] then
-				DisplayTextToPlayer(GetLocalPlayer(),0.,0.,"The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
 				Muscii.interrupt()
 				defeatTeam(1)
-				TimerStart(CreateTimer(),30.,false,function defeatAfter)
+				TimerStart(CreateTimer(), 30., false, function defeatAfter)
 			end
 		end
 
@@ -364,12 +364,12 @@ package Game
 		static function after takes nothing returns nothing
 			integer id = GetPlayerId(localPlayer)
 			DestroyTimer(GetExpiredTimer())
-			Sound.play(START_SOUND,.75,127)
+			Sound.play(START_SOUND, .75, 127)
 			fadeIn(1.)
-			PanCameraToTimed(GetUnitX(Ships.ships[id]),GetUnitY(Ships.ships[id]),0.)
+			PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
 			if localPlayer==GetOwningPlayer(Ships.ships[id]) then
 				ClearSelection()
-				SelectUnit(Ships.ships[id],true)
+				SelectUnit(Ships.ships[id], true)
 			end
 		end
 
@@ -403,7 +403,7 @@ package Game
 			loop
 				exitwhen index>11
 				players[index]=Player(index)
-				SetPlayerState(players[index],PLAYER_STATE_RESOURCE_GOLD,START_GOLD)
+				SetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD, START_GOLD)
 				index=index+1
 			endloop
 
@@ -415,7 +415,7 @@ package Game
 					playerCount=playerCount+1
 					playing[index] = true
 					shipClass[index] = Ships.HELICOPTER_ID
-					captains[index] = CreateUnit(players[index],CAPTAIN_ID,GetStartLocationX(index),GetStartLocationY(index),270.)
+					captains[index] = CreateUnit(players[index], CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
 					tradeExp[index] = 0
 					kills[index] = 0
 					deaths[index] = 0
@@ -423,10 +423,10 @@ package Game
 					farm[index] = 0
 					names[index] = GetPlayerName(players[index])
 					if index<7 then
-						Ships.ships[index] = CreateUnit(players[index],Ships.HELICOPTER_ID,WESTX+SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
+						Ships.ships[index] = CreateUnit(players[index], Ships.HELICOPTER_ID, WESTX+SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 						westCount=westCount+1
 					else
-						Ships.ships[index] = CreateUnit(players[index],Ships.HELICOPTER_ID,EASTX-SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
+						Ships.ships[index] = CreateUnit(players[index], Ships.HELICOPTER_ID, EASTX-SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 						eastCount=eastCount+1
 					end
 				else
@@ -436,66 +436,66 @@ package Game
 			endloop
 
 			// Make alliance units give bounty
-			SetPlayerState(players[0],PLAYER_STATE_GIVES_BOUNTY,1)
-			SetPlayerState(players[1],PLAYER_STATE_GIVES_BOUNTY,1)
+			SetPlayerState(players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
+			SetPlayerState(players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
 			// Create keeps
-			westKeep[0] = CreateUnit(players[0],KEEP_ID,WESTX,0,270)
-			eastKeep[0] = CreateUnit(players[1],KEEP_ID,EASTX,0,270)
-			SetUnitInvulnerable(westKeep[0],true)
-			SetUnitInvulnerable(eastKeep[0],true)
-			westKeep[1] = CreateUnit(players[0],KEEP2_ID,WESTX,0.,270.)
-			eastKeep[1] = CreateUnit(players[1],KEEP2_ID,EASTX,0.,270.)
+			westKeep[0] = CreateUnit(players[0], KEEP_ID, WESTX, 0, 270)
+			eastKeep[0] = CreateUnit(players[1], KEEP_ID, EASTX, 0, 270)
+			SetUnitInvulnerable(westKeep[0], true)
+			SetUnitInvulnerable(eastKeep[0], true)
+			westKeep[1] = CreateUnit(players[0], KEEP2_ID, WESTX, 0., 270.)
+			eastKeep[1] = CreateUnit(players[1], KEEP2_ID, EASTX, 0., 270.)
 
 			// Create shields
 			index=0
 			loop
 				exitwhen index>=SHIELD_COUNT
-				CreateUnit(players[0],SHIELD_ID,WESTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
+				CreateUnit(players[0], SHIELD_ID, WESTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.), SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.), 270.)
 				index=index+1
 			endloop
 			index=0
 			loop
 				exitwhen index>=SHIELD_COUNT
-				CreateUnit(players[1],SHIELD_ID,EASTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.),270.)
+				CreateUnit(players[1], SHIELD_ID, EASTX+SHIELDOFFS*Cos(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.), SHIELDOFFS*Sin(I2R(index)/I2R(SHIELD_COUNT)*bj_PI*2.), 270.)
 				index=index+1
 			endloop
 
 			// Create Outposts
-			CreateUnit(players[0],OUTPOST_ID,OUTPOST2_X,OUTPOST2_Y,270.)
-			CreateUnit(players[1],OUTPOST_ID,OUTPOST1_X,OUTPOST1_Y,270.)
+			CreateUnit(players[0], OUTPOST_ID, OUTPOST2_X, OUTPOST2_Y, 270.)
+			CreateUnit(players[1], OUTPOST_ID, OUTPOST1_X, OUTPOST1_Y, 270.)
 
 			// Stop Time of Day
 			SetTimeOfDayScale(0.)
 
 			// Create Repair Ports
-			westRepair = CreateUnit(players[0],REPAIR_ID,WESTX,1024.,270.)
-			eastRepair = CreateUnit(players[1],REPAIR_ID,EASTX,1024.,270.)
+			westRepair = CreateUnit(players[0], REPAIR_ID, WESTX, 1024., 270.)
+			eastRepair = CreateUnit(players[1], REPAIR_ID, EASTX, 1024., 270.)
 
 			// Create Hangars
-			westHangar = CreateUnit(players[0],HANGAR_ID,WESTX-768.,0.,270.)
-			eastHangar = CreateUnit(players[1],HANGAR_ID,EASTX+768.,0.,270.)
+			westHangar = CreateUnit(players[0], HANGAR_ID, WESTX-768., 0., 270.)
+			eastHangar = CreateUnit(players[1], HANGAR_ID, EASTX+768., 0., 270.)
 
 			// Create Utility Ports
-			westUtility[0] = CreateUnit(players[0],UTILITY_ID,WESTX,UTILITY_Y,270.)
-			westUtility[1] = CreateUnit(players[0],UTILITY2_ID,WESTX,UTILITY_Y,270.)
-			westUtility[2] = CreateUnit(players[0],UTILITY3_ID,WESTX,UTILITY_Y,270.)
-			westUtility[3] = CreateUnit(players[0],UTILITY4_ID,WESTX,UTILITY_Y,270.)
-			eastUtility[0] = CreateUnit(players[1],UTILITY_ID,EASTX,UTILITY_Y,270.)
-			eastUtility[1] = CreateUnit(players[1],UTILITY2_ID,EASTX,UTILITY_Y,270.)
-			eastUtility[2] = CreateUnit(players[1],UTILITY3_ID,EASTX,UTILITY_Y,270.)
-			eastUtility[3] = CreateUnit(players[1],UTILITY4_ID,EASTX,UTILITY_Y,270.)
+			westUtility[0] = CreateUnit(players[0], UTILITY_ID, WESTX, UTILITY_Y, 270.)
+			westUtility[1] = CreateUnit(players[0], UTILITY2_ID, WESTX, UTILITY_Y, 270.)
+			westUtility[2] = CreateUnit(players[0], UTILITY3_ID, WESTX, UTILITY_Y, 270.)
+			westUtility[3] = CreateUnit(players[0], UTILITY4_ID, WESTX, UTILITY_Y, 270.)
+			eastUtility[0] = CreateUnit(players[1], UTILITY_ID, EASTX, UTILITY_Y, 270.)
+			eastUtility[1] = CreateUnit(players[1], UTILITY2_ID, EASTX, UTILITY_Y, 270.)
+			eastUtility[2] = CreateUnit(players[1], UTILITY3_ID, EASTX, UTILITY_Y, 270.)
+			eastUtility[3] = CreateUnit(players[1], UTILITY4_ID, EASTX, UTILITY_Y, 270.)
 
 			// Start game timer
-			TimerStart(CreateTimer(),1.,true,function second)
+			TimerStart(CreateTimer(), 1., true, function second)
 
 			// Do starting sound stuff
 			Sound.preload(START_SOUND)
-			TimerStart(CreateTimer(),START_TIME,false,function after)
+			TimerStart(CreateTimer(), START_TIME, false, function after)
 
 			// Initial blackness
 			fadeOut(0.)
-			DisplayTimedTextToPlayer(localPlayer,0.,0.,10.,WELCOME_MESSAGE)
+			DisplayTimedTextToPlayer(localPlayer, 0., 0., 10., WELCOME_MESSAGE)
 
 			Sound.preload(WIN_SOUND)
 			Sound.preload(DEF_SOUND)

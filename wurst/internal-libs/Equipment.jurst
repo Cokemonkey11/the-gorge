@@ -58,8 +58,8 @@ package Equipment
 		static function autoPawnItemForPlayer takes integer pID, item it returns nothing
 			integer val = R2I(GetWidgetLife(it))
 			if val>1 then
-				DisplayTextToPlayer(Game.players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
-				SetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD)+val)
+				DisplayTextToPlayer(Game.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
+				SetPlayerState(Game.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
 			end
 			RemoveItem(it)
 		end
@@ -124,7 +124,7 @@ package Equipment
 			integer index=0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u,index))==id then
+				if GetItemTypeId(UnitItemInSlot(u, index))==id then
 					return index
 				end
 				index = index + 1
@@ -133,7 +133,7 @@ package Equipment
 		end
 
 		static function unitHasItemOfType takes unit u, integer id returns boolean
-			return unitHasItemOfTypeSlot(u,id)>-1
+			return unitHasItemOfTypeSlot(u, id)>-1
 		end
 
 		function unitHasTypePair takes unit u, integer id returns boolean
@@ -141,7 +141,7 @@ package Equipment
 			integer count = 0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u,index)) == id then
+				if GetItemTypeId(UnitItemInSlot(u, index)) == id then
 					count = count +1
 					if count>1 then
 						return true
@@ -158,7 +158,7 @@ package Equipment
 
 			if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
 				return false
-			elseif unitHasTypePair(u,id) then
+			elseif unitHasTypePair(u, id) then
 				return false
 			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
 				return false
@@ -175,9 +175,9 @@ package Equipment
 		static function unitCanAcquireItemId takes unit u, integer id returns boolean
 			integer shipClass = Ships.getClass(u)
 			integer itemClass = getItemClassId(id)
-			if unitHasItemOfClass(u,itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+			if unitHasItemOfClass(u, itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
 				return false
-			elseif unitHasItemOfType(u,id) then
+			elseif unitHasItemOfType(u, id) then
 				return false
 			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
 				return false
@@ -192,22 +192,22 @@ package Equipment
 		end
 
 		function playerCanAcquireItem takes integer pID, item it returns boolean
-			return unitCanAcquireItemId(Ships.ships[pID],GetItemTypeId(it))
+			return unitCanAcquireItemId(Ships.ships[pID], GetItemTypeId(it))
 		end
 
 		static function unitCanAcquireItem takes unit u, item it returns boolean
-			return unitCanAcquireItemId(u,GetItemTypeId(it))
+			return unitCanAcquireItemId(u, GetItemTypeId(it))
 		end
 
 		static function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			item temp
-			if unitCanAcquireItemId(Ships.ships[pID],id) then
-				UnitAddItem(Ships.ships[pID],CreateItem(id,x,y))
+			if unitCanAcquireItemId(Ships.ships[pID], id) then
+				UnitAddItem(Ships.ships[pID], CreateItem(id, x, y))
 				return true
 			else
-				temp = CreateItem(id,0.,0.)
+				temp = CreateItem(id, 0., 0.)
 				autoPawnItemForPlayer(pID, temp)
 			end
 			return false
@@ -215,22 +215,22 @@ package Equipment
 
 		static function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
 			if i0>0 then
-				playerAddItemFromIdConditional(pID,i0)
+				playerAddItemFromIdConditional(pID, i0)
 			end
 			if i1>0 then
-				playerAddItemFromIdConditional(pID,i1)
+				playerAddItemFromIdConditional(pID, i1)
 			end
 			if i2>0 then
-				playerAddItemFromIdConditional(pID,i2)
+				playerAddItemFromIdConditional(pID, i2)
 			end
 			if i3>0 then
-				playerAddItemFromIdConditional(pID,i3)
+				playerAddItemFromIdConditional(pID, i3)
 			end
 			if i4>0 then
-				playerAddItemFromIdConditional(pID,i4)
+				playerAddItemFromIdConditional(pID, i4)
 			end
 			if i5>0 then
-				playerAddItemFromIdConditional(pID,i5)
+				playerAddItemFromIdConditional(pID, i5)
 			end
 		end
 
@@ -238,22 +238,22 @@ package Equipment
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			if i0>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i0,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i0, x, y))
 			end
 			if i1>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i1,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i1, x, y))
 			end
 			if i2>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i2,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i2, x, y))
 			end
 			if i3>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i3,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i3, x, y))
 			end
 			if i4>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i4,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i4, x, y))
 			end
 			if i5>0 then
-				UnitAddItem(Ships.ships[pID],CreateItem(i5,x,y))
+				UnitAddItem(Ships.ships[pID], CreateItem(i5, x, y))
 			end
 		end
 
@@ -339,8 +339,8 @@ package Equipment
 			if was then
 				RemoveItem(sI)
 				if Game.localPlayer == owner then
-					SelectUnit(seller,false)
-					SelectUnit(toSelect,true)
+					SelectUnit(seller, false)
+					SelectUnit(toSelect, true)
 				end
 			end
 
@@ -351,7 +351,7 @@ package Equipment
 			integer index = 0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u,index)) == STONE_HULL then
+				if GetItemTypeId(UnitItemInSlot(u, index)) == STONE_HULL then
 					reduction.saveInt(u.getHandleId(), REDUCTION1)
 					return
 				end
@@ -367,30 +367,30 @@ package Equipment
 			player buyerP = GetOwningPlayer(buyer)
 			real val
 			integer class = getItemClass(sI)
-			boolean has = unitHasItemOfType(buyer,GetItemTypeId(sI))
-			item it = unitHasItemOfClass(buyer,class)
+			boolean has = unitHasItemOfType(buyer, GetItemTypeId(sI))
+			item it = unitHasItemOfClass(buyer, class)
 
 			if has or GetItemTypeId(sI) == GetItemTypeId(it) then
-				simError(buyerP,"You can't carry two of the same equipment.")
+				simError(buyerP, "You can't carry two of the same equipment.")
 				val = GetWidgetLife(sI)
 				if val>1. then
-					SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
 				end
 				RemoveItem(sI)
-			elseif not unitCanAcquireItem(buyer,sI) then
+			elseif not unitCanAcquireItem(buyer, sI) then
 				val = GetWidgetLife(sI)
 				RemoveItem(sI)
-				SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-				simError(buyerP,WRONG_CLASS)
+				SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				simError(buyerP, WRONG_CLASS)
 			else
 				if it!=null and class!=CLASS_UNKNOWN and class!=CLASS_SPECIAL and class!=CLASS_CONTRACT then
 					val = GetWidgetLife(it)
-					SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-					DisplayTextToPlayer(buyerP,0.,0.,"|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
+					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
 					RemoveItem(it)
 				elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
 					RemoveItem(sI)
-					simError(buyerP,INSUFFICIENT_EXPERIENCE)
+					simError(buyerP, INSUFFICIENT_EXPERIENCE)
 				end
 			end
 

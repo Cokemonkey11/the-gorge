@@ -2,14 +2,14 @@ scope ItemPickup initializer i
 	function c takes nothing returns nothing
 		integer id=GetPlayerId(GetTriggerPlayer())
 		item it = GetManipulatedItem()
-		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(),GetItemTypeId(it)) then
-			Equipment.autoPawnItemForPlayer(id,it)
+		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(), GetItemTypeId(it)) then
+			Equipment.autoPawnItemForPlayer(id, it)
 		else
 			Equipment.resetUnitDamageReduction(GetTriggerUnit())
 		end
 	end
 
 	function i takes nothing returns nothing
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM,function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function c)
 	end
 endscope

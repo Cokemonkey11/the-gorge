@@ -14,13 +14,13 @@ scope TurretDestroyed initializer i
 		if GetUnitTypeId(tU)==TURRET_ID then
 			loop
 				exitwhen index>11
-				if IsUnitAlly(tU,Game.players[index]) then
-					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,WARNING_MESSAGE)
-					Sound.playForPlayer(WARNING,1.,Game.players[index])
+				if IsUnitAlly(tU, Game.players[index]) then
+					DisplayTimedTextToPlayer(Game.players[index], 0., 0., 10., WARNING_MESSAGE)
+					Sound.playForPlayer(WARNING, 1., Game.players[index])
 				else
-					SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
-					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,SUCCESS)
-					Sound.playForPlayer(GOODJOB,1.,Game.players[index])
+					SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
+					DisplayTimedTextToPlayer(Game.players[index], 0., 0., 10., SUCCESS)
+					Sound.playForPlayer(GOODJOB, 1., Game.players[index])
 				end
 				index=index+1
 			endloop

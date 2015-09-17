@@ -11,7 +11,7 @@ scope DamageReduction initializer i
 				d=d*-1.
 			end
 			d = d*I2R(Equipment.reduction.loadInt(tU.getHandleId()))/100.
-			SetWidgetLife(tU,GetWidgetLife(tU)+d)
+			SetWidgetLife(tU, GetWidgetLife(tU)+d)
 		end
 		return false
 	end

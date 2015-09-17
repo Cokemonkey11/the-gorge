@@ -20,13 +20,13 @@ scope ProbeContractAbility initializer i
 			tU=GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 			if GetUnitTypeId(GetSpellTargetUnit())!=ROCK_FORMATION_ID then
-				simError(owner,ERROR_MESSAGE)
-			elseif Ships.hasItemOfType(tU,Equipment.DATA_ID) then
-				simError(owner,ALREADY_MESSAGE)
+				simError(owner, ERROR_MESSAGE)
+			elseif Ships.hasItemOfType(tU, Equipment.DATA_ID) then
+				simError(owner, ALREADY_MESSAGE)
 			else
-				UnitAddItem(tU,CreateItem(Equipment.DATA_ID,GetUnitX(tU),GetUnitY(tU)))
-				DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
-				Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
+				UnitAddItem(tU, CreateItem(Equipment.DATA_ID, GetUnitX(tU), GetUnitY(tU)))
+				DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
+				Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 			end
 		end
 	end

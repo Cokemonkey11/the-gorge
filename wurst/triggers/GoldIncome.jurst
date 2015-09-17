@@ -11,13 +11,13 @@ scope GoldIncome initializer i
 		if not Game.ended then
 			loop
 				exitwhen index>11
-				SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
+				SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
 				index=index+1
 			endloop
 		end
     end
 
     function i takes nothing returns nothing
-		TimerStart(CreateTimer(),CLOCK_PERIOD,true,function c)
+		TimerStart(CreateTimer(), CLOCK_PERIOD, true, function c)
     end
 endscope

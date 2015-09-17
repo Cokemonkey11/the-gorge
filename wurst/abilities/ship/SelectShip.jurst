@@ -20,11 +20,11 @@ scope SelectShip initializer i
 			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id])!=0 then
 				if Game.localPlayer == owner then
 					ClearSelection()
-					SelectUnit(Ships.ships[id],true)
-					PanCameraToTimed(GetUnitX(Ships.ships[id]),GetUnitY(Ships.ships[id]),0.)
+					SelectUnit(Ships.ships[id], true)
+					PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
 				end
 			else
-				simError(owner,DEAD_ERROR)
+				simError(owner, DEAD_ERROR)
 			end
 		end
 	end

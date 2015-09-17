@@ -6,7 +6,7 @@ scope Continue initializer i
 	endglobals
 
 	function rectFromXY takes real x, real y, real size returns rect
-		return Rect(x-size/2.,y-size/2.,x+size/2.,y+size/2.)
+		return Rect(x-size/2., y-size/2., x+size/2., y+size/2.)
 	end
 
 	function f takes nothing returns boolean
@@ -14,23 +14,23 @@ scope Continue initializer i
 		integer id=GetUnitTypeId(fU)
 		player owner = GetOwningPlayer(fU)
 		if owner==Game.players[0] and (id=='owyv' or id=='hgry' or id=='hdhw') then
-			IssuePointOrder(fU,"attack",Game.EASTX,0.)
+			IssuePointOrder(fU, "attack", Game.EASTX, 0.)
 		elseif owner==Game.players[1] and (id=='owyv' or id=='hgry' or id=='hdhw') then
-			IssuePointOrder(fU,"attack",Game.WESTX,0.)
+			IssuePointOrder(fU, "attack", Game.WESTX, 0.)
 		end
 		return false
 	end
 
 	function i takes nothing returns nothing
 		region regA=CreateRegion()
-		rect recA=rectFromXY(Game.OUTPOST1_X,Game.OUTPOST1_Y,RECT_SIZE)
+		rect recA=rectFromXY(Game.OUTPOST1_X, Game.OUTPOST1_Y, RECT_SIZE)
 		region regB=CreateRegion()
-		rect recB=rectFromXY(Game.OUTPOST2_X,Game.OUTPOST2_Y,RECT_SIZE)
+		rect recB=rectFromXY(Game.OUTPOST2_X, Game.OUTPOST2_Y, RECT_SIZE)
 		trigger t=CreateTrigger()
-		RegionAddRect(regA,recA)
-		RegionAddRect(regB,recB)
-		TriggerRegisterEnterRegion(t,regA,Filter(function f))
-		TriggerRegisterEnterRegion(t,regB,Filter(function f))
+		RegionAddRect(regA, recA)
+		RegionAddRect(regB, recB)
+		TriggerRegisterEnterRegion(t, regA, Filter(function f))
+		TriggerRegisterEnterRegion(t, regB, Filter(function f))
 		RemoveRect(recA)
 		RemoveRect(recB)
 	end

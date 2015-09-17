@@ -14,8 +14,8 @@ scope SelectCaptain initializer init
 			id = GetPlayerId(owner)
 			if Game.localPlayer == owner then
 				ClearSelection()
-				SelectUnit(Game.captains[id],true)
-				PanCameraToTimed(GetUnitX(Game.captains[id]),GetUnitY(Game.captains[id]),0.)
+				SelectUnit(Game.captains[id], true)
+				PanCameraToTimed(GetUnitX(Game.captains[id]), GetUnitY(Game.captains[id]), 0.)
 			end
 		end
 	end

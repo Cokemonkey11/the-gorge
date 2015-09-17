@@ -5,7 +5,7 @@
 //*                         duration. A smaller value means that shields are less
 //*                         likely to block damage when their duration has passed,
 //*                         while a larger value is less computationally expensive.
-//*                         A good value lies on [1./60.,1./2.].
+//*                         A good value lies on [1./60., 1./2.].
 //* static method add:      This is the one and only important method for
 //*                         instanciating a Shield. The arguments are of the
 //*                         form (unit u, real a, real t, string f, string p)
@@ -18,7 +18,7 @@ library Shield
 
     //* We must declare the UnitAlive native because StructuredDD no longer
     //* declares it for us :) UnitAlive is proven to have less computational
-    //* cost compared to IsUnitType(u,UNIT_TYPE_DEAD)
+    //* cost compared to IsUnitType(u, UNIT_TYPE_DEAD)
     native UnitAlive takes unit u returns boolean
 
     //* This struct is just a shim for a pretty API. (You don't instanciate
@@ -67,11 +67,11 @@ library Shield
                         if tempDat.finiteShield then
                             tempDat.shieldLeft=tempDat.shieldLeft-damageLeft
                         end
-                        SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+damageLeft)
+                        SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+damageLeft)
                         damageLeft=0.
                     else
                         damageLeft=damageLeft-tempDat.shieldLeft
-                        SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
+                        SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
                         tempDat.shieldLeft=0.
                         if tempDat.falseHP>damageLeft then
                             tempDat.falseHP=tempDat.falseHP-damageLeft
@@ -131,7 +131,7 @@ library Shield
                     end
                     //let's reset the unit's hp if he has extra
                     if tempDat.falseHP>0. then
-                        SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)-tempDat.falseHP)
+                        SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)-tempDat.falseHP)
                     end
                     DestroyEffect(tempDat.fx)
                     destroy tempDat
@@ -152,11 +152,11 @@ library Shield
             Shield tempDat=new Shield
             Shield linkedDat
             real initialLife=GetWidgetLife(u)
-            real maxLife=GetUnitState(u,UNIT_STATE_MAX_LIFE)
+            real maxLife=GetUnitState(u, UNIT_STATE_MAX_LIFE)
             real diff=maxLife-initialLife
             tempDat.u=u
             tempDat.timeLeft=time
-            tempDat.fx=AddSpecialEffectTarget(fx,u,fxpoint)
+            tempDat.fx=AddSpecialEffectTarget(fx, u, fxpoint)
             if time==-1. then
                 tempDat.useDuration=false
             end
@@ -169,10 +169,10 @@ library Shield
                 //the unit has plenty of missing HP, so:
                 tempDat.shieldLeft=0
                 tempDat.falseHP=amount
-                SetWidgetLife(u,initialLife+amount)
+                SetWidgetLife(u, initialLife+amount)
             else
                 //the unit has less hp missing than the shield has value, so:
-                SetWidgetLife(u,maxLife)
+                SetWidgetLife(u, maxLife)
                 tempDat.falseHP=diff
                 tempDat.shieldLeft=amount-diff
             end
@@ -190,7 +190,7 @@ library Shield
             Shield.allShields[Shield.shieldIndex]=tempDat
             //if allShields was previously empty we have to jumpstart the timer:
             if Shield.shieldIndex==0 then
-                TimerStart(Shield.time,Shield.TIMER_PERIOD,true,function Shield.timeout)
+                TimerStart(Shield.time, Shield.TIMER_PERIOD, true, function Shield.timeout)
             end
         endmethod
 

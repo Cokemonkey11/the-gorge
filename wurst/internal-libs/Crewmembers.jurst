@@ -87,8 +87,8 @@ package Crewmembers
 			real face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
 			real x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
 			real y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
-			SetUnitPosition(cre.dummy,x,y)
-			SetUnitFacing(cre.dummy,face*bj_RADTODEG)
+			SetUnitPosition(cre.dummy, x, y)
+			SetUnitFacing(cre.dummy, face*bj_RADTODEG)
 		end
 
 		static function release takes unit u returns nothing
@@ -98,9 +98,9 @@ package Crewmembers
 			if fromDummy.hasInt(u.getHandleId()) then
 				temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
 				val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
-				SetPlayerState(Game.players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[temp.ownerID],PLAYER_STATE_RESOURCE_GOLD)+val)
-				DisplayTextToPlayer(Game.players[temp.ownerID],0.,0.,"You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
-				index = getMemberIndex(temp.ownerID,temp)
+				SetPlayerState(Game.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD)+val)
+				DisplayTextToPlayer(Game.players[temp.ownerID], 0., 0., "You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
+				index = getMemberIndex(temp.ownerID, temp)
 				if index!=-1 then
 					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
 					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
@@ -125,11 +125,11 @@ package Crewmembers
 				exitwhen index>dbIndex
 				temp=db[index]
 				if UnitAlive(Ships.ships[temp.ownerID]) and not Game.ended then
-					SetUnitX(temp.phoenix,GetUnitX(Ships.ships[temp.ownerID]))
-					SetUnitY(temp.phoenix,GetUnitY(Ships.ships[temp.ownerID]))
+					SetUnitX(temp.phoenix, GetUnitX(Ships.ships[temp.ownerID]))
+					SetUnitY(temp.phoenix, GetUnitY(Ships.ships[temp.ownerID]))
 				else
-					SetUnitX(temp.phoenix,Game.SAFE_X)
-					SetUnitY(temp.phoenix,Game.SAFE_Y)
+					SetUnitX(temp.phoenix, Game.SAFE_X)
+					SetUnitY(temp.phoenix, Game.SAFE_Y)
 				end
 				index=index+1
 			endloop
@@ -145,7 +145,7 @@ package Crewmembers
 			real face
 			player buyer = GetOwningPlayer(sU)
 			if Ships.getClass(sU)==Ships.CLASS_UNKNOWN then
-				if IsUnitAlly(bU,GetOwningPlayer(selU)) then
+				if IsUnitAlly(bU, GetOwningPlayer(selU)) then
 					temp = new CrewMember
 					temp.ownerID=GetPlayerId(buyer)
 					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] + 1
@@ -159,11 +159,11 @@ package Crewmembers
 					db[dbIndex] = temp
 					fromDummy.saveInt(temp.dummy.getHandleId(), temp castTo int)
 					if dbIndex == 0 then
-						TimerStart(time,CLOCK_PERIOD,true,function p)
+						TimerStart(time, CLOCK_PERIOD, true, function p)
 					end
 				else
-					simError(GetOwningPlayer(bU),ERROR_MESSAGE)
-					SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
+					simError(GetOwningPlayer(bU), ERROR_MESSAGE)
+					SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
 					RemoveUnit(sU)
 				end
 			end

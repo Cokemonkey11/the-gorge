@@ -52,12 +52,12 @@ package DTS12MissileArray
 		static timer clock = CreateTimer()
 		static Missile array db
 		static integer dbIndex = -1
-		static location loc = Location(0.,0.)
+		static location loc = Location(0., 0.)
 		static group grp = CreateGroup()
 		static Table ht
 
 		static function getZ takes real x, real y returns real
-			MoveLocation(loc,x,y)
+			MoveLocation(loc, x, y)
 			return GetLocationZ(loc)
 		end
 
@@ -96,22 +96,22 @@ package DTS12MissileArray
 					oldY = GetUnitY(temp.missile)
 					newX = oldX+temp.dX
 					newY = oldY+temp.dY
-					SetUnitX(temp.missile,newX)
-					SetUnitY(temp.missile,newY)
-					SetUnitFlyHeight(temp.missile,GetUnitFlyHeight(temp.missile)-(getZ(newX,newY)-getZ(oldX,oldY)),0.)
+					SetUnitX(temp.missile, newX)
+					SetUnitY(temp.missile, newY)
+					SetUnitFlyHeight(temp.missile, GetUnitFlyHeight(temp.missile)-(getZ(newX, newY)-getZ(oldX, oldY)), 0.)
 					temp.vel = temp.vel + ACCELERATION * CLOCK_PERIOD
 					temp.vel = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.vel
 					temp.dist = temp.dist + temp.vel
-					GroupEnumUnitsInRange(grp,newX,newY,COLLISION_RADIUS,null)
+					GroupEnumUnitsInRange(grp, newX, newY, COLLISION_RADIUS, null)
 					hit = false
 					loop
 						first=FirstOfGroup(grp)
 						exitwhen first==null
-						if IsUnitEnemy(first,Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first,UNIT_TYPE_STRUCTURE)==false and not hit then
+						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)==false and not hit then
 							hit = true
-							DamageType.dealCodeDamage(Ships.ships[temp.ownerID],first,DAMAGE)
+							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
-						GroupRemoveUnit(grp,first)
+						GroupRemoveUnit(grp, first)
 					endloop
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
@@ -125,8 +125,8 @@ package DTS12MissileArray
 						end
 					end
 				else
-					ang = Atan2(GetUnitY(temp.target)-GetUnitY(temp.missile),GetUnitX(temp.target)-GetUnitX(temp.missile))
-					SetUnitFacing(temp.missile,ang*bj_RADTODEG)
+					ang = Atan2(GetUnitY(temp.target)-GetUnitY(temp.missile), GetUnitX(temp.target)-GetUnitX(temp.missile))
+					SetUnitFacing(temp.missile, ang*bj_RADTODEG)
 					temp.ddX = ACCELERATION * CLOCK_PERIOD * Cos(ang)
 					temp.ddY = ACCELERATION * CLOCK_PERIOD * Sin(ang)
 					temp.dX = temp.dX + temp.ddX
@@ -135,23 +135,23 @@ package DTS12MissileArray
 					temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
 					newX = GetUnitX(temp.missile)+temp.dX
 					newY = GetUnitY(temp.missile)+temp.dY
-					SetUnitX(temp.missile,newX)
-					SetUnitY(temp.missile,newY)
+					SetUnitX(temp.missile, newX)
+					SetUnitY(temp.missile, newY)
 					temp.vel = SquareRoot(temp.dX*temp.dX + temp.dY*temp.dY)
 					temp.dist = temp.dist + temp.vel
 					if not UnitAlive(temp.target) then
 						temp.target = null
 					end
-					GroupEnumUnitsInRange(grp,newX,newY,COLLISION_RADIUS,null)
+					GroupEnumUnitsInRange(grp, newX, newY, COLLISION_RADIUS, null)
 					hit = false
 					loop
 						first=FirstOfGroup(grp)
 						exitwhen first==null
-						if IsUnitEnemy(first,Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first,UNIT_TYPE_STRUCTURE)==false and not hit then
+						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)==false and not hit then
 							hit = true
-							DamageType.dealCodeDamage(Ships.ships[temp.ownerID],first,DAMAGE)
+							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
-						GroupRemoveUnit(grp,first)
+						GroupRemoveUnit(grp, first)
 					endloop
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
@@ -184,23 +184,23 @@ package DTS12MissileArray
 				tU = GetTriggerUnit()
 				cX=GetUnitX(tU)
 				cY=GetUnitY(tU)
-				Sound.play3D(SOUND,1.,cX,cY,100.)
+				Sound.play3D(SOUND, 1., cX, cY, 100.)
 				if targ!= null then
 					tU=GetTriggerUnit()
 					owner = GetOwningPlayer(tU)
 					cX=GetUnitX(tU)
 					cY=GetUnitY(tU)
-					face = Atan2(GetUnitY(targ)-cY,GetUnitX(targ)-cX)
+					face = Atan2(GetUnitY(targ)-cY, GetUnitX(targ)-cX)
 					temp = new Missile
 					temp.target = targ
-					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
-					SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
-					SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
-					UnitAddAbility(temp.missile,'Arav')
-					UnitAddAbility(temp.missile,'Aloc')
-					SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
-					SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
-					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
 					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
 					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
 					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
@@ -208,18 +208,18 @@ package DTS12MissileArray
 					dbIndex = dbIndex + 1
 					db[dbIndex] = temp
 					if dbIndex==0 then
-						TimerStart(clock,CLOCK_PERIOD,true,function p)
+						TimerStart(clock, CLOCK_PERIOD, true, function p)
 					end
 					temp = new Missile
 					temp.target = targ
-					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
-					SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
-					SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
-					UnitAddAbility(temp.missile,'Arav')
-					UnitAddAbility(temp.missile,'Aloc')
-					SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
-					SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
-					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
 					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
 					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
 					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
@@ -233,17 +233,17 @@ package DTS12MissileArray
 					cY=GetUnitY(tU)
 					tX=GetSpellTargetX()
 					tY=GetSpellTargetY()
-					face = Atan2(tY-cY,tX-cX)
+					face = Atan2(tY-cY, tX-cX)
 					temp = new Missile
 					temp.target = null
-					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
-					SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
-					SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
-					UnitAddAbility(temp.missile,'Arav')
-					UnitAddAbility(temp.missile,'Aloc')
-					SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
-					SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
-					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
 					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
 					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
 					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
@@ -253,18 +253,18 @@ package DTS12MissileArray
 					dbIndex = dbIndex + 1
 					db[dbIndex] = temp
 					if dbIndex==0 then
-						TimerStart(clock,CLOCK_PERIOD,true,function p)
+						TimerStart(clock, CLOCK_PERIOD, true, function p)
 					end
 					temp = new Missile
 					temp.target = null
-					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
-					SetUnitX(temp.missile,cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
-					SetUnitY(temp.missile,cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
-					UnitAddAbility(temp.missile,'Arav')
-					UnitAddAbility(temp.missile,'Aloc')
-					SetUnitFlyHeight(temp.missile,FLY_HEIGHT,0.)
-					SetUnitScale(temp.missile,SCALE,SCALE,SCALE)
-					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL,temp.missile,"origin")
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
 					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
 					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
 					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
@@ -279,8 +279,8 @@ package DTS12MissileArray
 				end
 				ht.saveInt(tU.getHandleId(), ht.loadInt(tU.getHandleId()) + 1)
 				if ht.loadInt(tU.getHandleId()) == 1 then
-					UnitRemoveAbility(tU,ARRAY_ID)
-					UnitAddAbility(tU,ARRAY_ID)
+					UnitRemoveAbility(tU, ARRAY_ID)
+					UnitAddAbility(tU, ARRAY_ID)
 				else
 					ht.saveInt(tU.getHandleId(), 0)
 				end

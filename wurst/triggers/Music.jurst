@@ -37,52 +37,52 @@ scope Music initializer i
 	end
 
 	function playVerse1 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus")
+		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorus")
 	end
 
 	function playChorus takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP2,0).enqueue(chorusP3,0).enqueue(chorusP2,0).callback(SCOPE_PRIVATE+"playVerse2")
+		chorusP1.playCounted(0).enqueue(chorusP2, 0).enqueue(chorusP3, 0).enqueue(chorusP2, 0).callback(SCOPE_PRIVATE+"playVerse2")
 	end
 
 	function playVerse2 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus2")
+		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorus2")
 	end
 
 	function playChorus2 takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3,1).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus2P7,0).enqueue(chorus2P8,0).callback(SCOPE_PRIVATE+"playVerse3")
+		chorusP1.playCounted(0).enqueue(chorusP3, 1).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus2P7, 0).enqueue(chorus2P8, 0).callback(SCOPE_PRIVATE+"playVerse3")
 	end
 
 	function playVerse3 takes nothing returns nothing
-		v1.playCounted(0).enqueue(verse3P2,0).enqueue(v1p2,2).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorusRepeat")
+		v1.playCounted(0).enqueue(verse3P2, 0).enqueue(v1p2, 2).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorusRepeat")
 	end
 
 	function playChorus3Repeat takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3,0).enqueue(chorusP3,0).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus3P7,0).enqueue(chorus3P8,0).callback(SCOPE_PRIVATE+"playVerse1")
+		chorusP1.playCounted(0).enqueue(chorusP3, 0).enqueue(chorusP3, 0).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus3P7, 0).enqueue(chorus3P8, 0).callback(SCOPE_PRIVATE+"playVerse1")
 	end
 
 	function i takes nothing returns nothing
 		//		song3
-		Note hat = Note.create(HAT_PATH,90,1.)
-		Note snr = Note.create(SNR_PATH,110,1.)
-		Note bas = Note.create(BAS_PATH,127,1.)
-		Note hatQuiet = Note.create(HAT_PATH,75,1.)
-		Note snrQuiet = Note.create(SNR_PATH,97,1.)
-		Note basQuiet = Note.create(BAS_PATH,105,1.)
-		Note hatVQuiet = Note.create(HAT_PATH,60,1.)
-		Note snrVQuiet = Note.create(SNR_PATH,83,1.)
-		Note basVQuiet = Note.create(BAS_PATH,89,1.)
-		Note rid = Note.create(RID_PATH,75,1.)
-		Note nul = Note.create(HAT_PATH,0,1.)
-		Note flm = Note.create(FLM_PATH,110,1.)
-		Note rim = Note.create(RIM_PATH,100,1.)
-		Note crs = Note.create(CRS_PATH,55,1.)
-		Note hop = Note.create(HATOPEN_PATH,90,1.)
-		Note tm1 = Note.create(TM1_PATH,110,1.)
-		Note tm1d= Note.create(TM1DOUBLE_PATH,110,1.)
-		Note tm4 = Note.create(TM4_PATH,110,1.)
-		Note tm5 = Note.create(TM5_PATH,110,1.)
-		Note tm5d= Note.create(TM5DOUBLE_PATH,110,1.)
-		Note hft = Note.create(HATPDL_PATH,75,1.)
+		Note hat = Note.create(HAT_PATH, 90, 1.)
+		Note snr = Note.create(SNR_PATH, 110, 1.)
+		Note bas = Note.create(BAS_PATH, 127, 1.)
+		Note hatQuiet = Note.create(HAT_PATH, 75, 1.)
+		Note snrQuiet = Note.create(SNR_PATH, 97, 1.)
+		Note basQuiet = Note.create(BAS_PATH, 105, 1.)
+		Note hatVQuiet = Note.create(HAT_PATH, 60, 1.)
+		Note snrVQuiet = Note.create(SNR_PATH, 83, 1.)
+		Note basVQuiet = Note.create(BAS_PATH, 89, 1.)
+		Note rid = Note.create(RID_PATH, 75, 1.)
+		Note nul = Note.create(HAT_PATH, 0, 1.)
+		Note flm = Note.create(FLM_PATH, 110, 1.)
+		Note rim = Note.create(RIM_PATH, 100, 1.)
+		Note crs = Note.create(CRS_PATH, 55, 1.)
+		Note hop = Note.create(HATOPEN_PATH, 90, 1.)
+		Note tm1 = Note.create(TM1_PATH, 110, 1.)
+		Note tm1d= Note.create(TM1DOUBLE_PATH, 110, 1.)
+		Note tm4 = Note.create(TM4_PATH, 110, 1.)
+		Note tm5 = Note.create(TM5_PATH, 110, 1.)
+		Note tm5d= Note.create(TM5DOUBLE_PATH, 110, 1.)
+		Note hft = Note.create(HATPDL_PATH, 75, 1.)
 
 		Chord rb
 		Chord rs
@@ -164,7 +164,7 @@ scope Music initializer i
 
 		h = Chord.create(hat)
 
-		m = Muscii.create(rb,240.)
+		m = Muscii.create(rb, 240.)
 		m.addChord(z)
 		m.addChord(r)
 		m.addChord(z)
@@ -181,7 +181,7 @@ scope Music initializer i
 		m.addChord(r)
 		m.addChord(z)
 
-		v1 = Muscii.create(rb,240.)
+		v1 = Muscii.create(rb, 240.)
 		v1.addChord(z)
 		v1.addChord(rrim)
 		v1.addChord(z)
@@ -198,7 +198,7 @@ scope Music initializer i
 		v1.addChord(rrim)
 		v1.addChord(z)
 
-		v1p2 = Muscii.create(rb,240.)
+		v1p2 = Muscii.create(rb, 240.)
 		v1p2.addChord(z)
 		v1p2.addChord(rrim)
 		v1p2.addChord(z)
@@ -215,7 +215,7 @@ scope Music initializer i
 		v1p2.addChord(rrim)
 		v1p2.addChord(b)
 
-		v1p3 = Muscii.create(rb,240.)
+		v1p3 = Muscii.create(rb, 240.)
 		v1p3.addChord(z)
 		v1p3.addChord(rrim)
 		v1p3.addChord(z)
@@ -232,7 +232,7 @@ scope Music initializer i
 		v1p3.addChord(f)
 		v1p3.addChord(b)
 
-		chorusP1 = Muscii.create(cb,240.)
+		chorusP1 = Muscii.create(cb, 240.)
 		chorusP1.addChord(b)
 		chorusP1.addChord(hs)
 		chorusP1.addChord(b)
@@ -249,7 +249,7 @@ scope Music initializer i
 		chorusP1.addChord(h)
 		chorusP1.addChord(hopen)
 
-		chorusP2 = Muscii.create(hb,240.)
+		chorusP2 = Muscii.create(hb, 240.)
 		chorusP2.addChord(b)
 		chorusP2.addChord(hs)
 		chorusP2.addChord(b)
@@ -266,7 +266,7 @@ scope Music initializer i
 		chorusP2.addChord(t1d)
 		chorusP2.addChord(t4)
 
-		chorusP3 = Muscii.create(hb,240.)
+		chorusP3 = Muscii.create(hb, 240.)
 		chorusP3.addChord(b)
 		chorusP3.addChord(hs)
 		chorusP3.addChord(b)
@@ -283,7 +283,7 @@ scope Music initializer i
 		chorusP3.addChord(h)
 		chorusP3.addChord(hopen)
 
-		chorus2P4 = Muscii.create(hsbVQuiet,240.)
+		chorus2P4 = Muscii.create(hsbVQuiet, 240.)
 		chorus2P4.addChord(hsbVQuiet)
 		chorus2P4.addChord(hsbVQuiet)
 		chorus2P4.addChord(hsbVQuiet)
@@ -300,7 +300,7 @@ scope Music initializer i
 		chorus2P4.addChord(f)
 		chorus2P4.addChord(cs)
 
-		chorus2P5 = Muscii.create(cb,240.)
+		chorus2P5 = Muscii.create(cb, 240.)
 		chorus2P5.addChord(z)
 		chorus2P5.addChord(hs)
 		chorus2P5.addChord(b)
@@ -317,7 +317,7 @@ scope Music initializer i
 		chorus2P5.addChord(hs)
 		chorus2P5.addChord(b)
 
-		chorus2P7 = Muscii.create(cb,240.)
+		chorus2P7 = Muscii.create(cb, 240.)
 		chorus2P7.addChord(z)
 		chorus2P7.addChord(hs)
 		chorus2P7.addChord(b)
@@ -334,7 +334,7 @@ scope Music initializer i
 		chorus2P7.addChord(cs)
 		chorus2P7.addChord(b)
 
-		chorus2P8 = Muscii.create(cb,240.)
+		chorus2P8 = Muscii.create(cb, 240.)
 		chorus2P8.addChord(z)
 		chorus2P8.addChord(hs)
 		chorus2P8.addChord(b)
@@ -351,7 +351,7 @@ scope Music initializer i
 		chorus2P8.addChord(t1)
 		chorus2P8.addChord(t5)
 
-		verse3P2 = Muscii.create(rb,240.)
+		verse3P2 = Muscii.create(rb, 240.)
 		verse3P2.addChord(z)
 		verse3P2.addChord(rrim)
 		verse3P2.addChord(z)
@@ -368,7 +368,7 @@ scope Music initializer i
 		verse3P2.addChord(rrim)
 		verse3P2.addChord(hf)
 
-		chorus3P7 = Muscii.create(cb,240.)
+		chorus3P7 = Muscii.create(cb, 240.)
 		chorus3P7.addChord(z)
 		chorus3P7.addChord(hs)
 		chorus3P7.addChord(b)
@@ -385,7 +385,7 @@ scope Music initializer i
 		chorus3P7.addChord(hs)
 		chorus3P7.addChord(b)
 
-		chorus3P8 = Muscii.create(cb,240.)
+		chorus3P8 = Muscii.create(cb, 240.)
 		chorus3P8.addChord(z)
 		chorus3P8.addChord(hs)
 		chorus3P8.addChord(b)

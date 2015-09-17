@@ -10,7 +10,7 @@
 //*     DamageType.get()            Requests what type of damage was dealt in the
 //*                                     scope of a StructuredDD handler
 //*     DamageType.dealCodeDamage() Deals an exact amount of damage to a unit. Arguments
-//*                                     are of the form (unit,unit,real) where the
+//*                                     are of the form (unit, unit, real) where the
 //*                                     first unit deals real damage to the second
 //*                                     unit.
 library DamageType initializer ini

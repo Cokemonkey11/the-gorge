@@ -12,7 +12,7 @@ scope Release initializer i
 		if GetSpellAbilityId() == RELEASE_ID then
 			tU=GetSpellTargetUnit()
 			Crewmembers.release(tU)
-			DestroyEffect(AddSpecialEffect(TRANSMUTE,GetUnitX(tU),GetUnitY(tU)))
+			DestroyEffect(AddSpecialEffect(TRANSMUTE, GetUnitX(tU), GetUnitY(tU)))
 		end
 	end
 

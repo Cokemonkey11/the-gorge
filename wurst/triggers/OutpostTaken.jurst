@@ -5,15 +5,15 @@ scope OutpostTaken initializer i
         if GetUnitTypeId(tU)==Game.OUTPOST_ID then
 		    id = GetPlayerId(GetOwningPlayer(tU))
 			if id==0 then
-				CreateUnit(Game.players[1],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
+				CreateUnit(Game.players[1], Game.OUTPOST_ID, GetUnitX(tU), GetUnitY(tU), 270.)
 			else
-				CreateUnit(Game.players[0],Game.OUTPOST_ID,GetUnitX(tU),GetUnitY(tU),270.)
+				CreateUnit(Game.players[0], Game.OUTPOST_ID, GetUnitX(tU), GetUnitY(tU), 270.)
 			end
 		end
 		tU=null
     end
 
     function i takes nothing returns nothing
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
     end
 endscope

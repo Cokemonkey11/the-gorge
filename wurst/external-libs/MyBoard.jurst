@@ -71,7 +71,7 @@ package MyBoard
 				this.showVal[arrIndex] = doDisplay
 			end
 
-			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex],.showIcon[arrIndex])
+			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], .showIcon[arrIndex])
 		end
 
 		method setLocalIcon takes player whichPlayer, integer col, integer row, string newIcon returns nothing
@@ -116,37 +116,37 @@ package MyBoard
 		// Global parameter changes.
 
 		method displayIcon takes integer col, integer row, boolean doDisplay returns nothing
-			this.displayLocalIcon(GetLocalPlayer(),col,row,doDisplay)
+			this.displayLocalIcon(GetLocalPlayer(), col, row, doDisplay)
 		end
 
 		method displayValue takes integer col, integer row, boolean doDisplay returns nothing
-			this.displayLocalValue(GetLocalPlayer(),col,row,doDisplay)
+			this.displayLocalValue(GetLocalPlayer(), col, row, doDisplay)
 		end
 
 		method setIcon takes integer col, integer row, string newIcon returns nothing
-			this.setLocalIcon(GetLocalPlayer(),col,row,newIcon)
+			this.setLocalIcon(GetLocalPlayer(), col, row, newIcon)
 		end
 
 		method setValue takes integer col, integer row, string newValue returns nothing
-			this.setLocalValue(GetLocalPlayer(),col,row,newValue)
+			this.setLocalValue(GetLocalPlayer(), col, row, newValue)
 		end
 
 		method setWidth takes integer col, integer row, real width returns nothing
-			this.setLocalWidth(GetLocalPlayer(),col,row,width)
+			this.setLocalWidth(GetLocalPlayer(), col, row, width)
 		end
 
 		// General stuff.
 
 		method minimize takes boolean doMinimize returns nothing
 			if this.isShown then
-				MultiboardMinimize(.board,doMinimize)
+				MultiboardMinimize(.board, doMinimize)
 			end
 			this.isMinimized = doMinimize
 		end
 
 		method display takes boolean doDisplay returns nothing
 			this.isShown = doDisplay
-			MultiboardDisplay(.board,doDisplay)
+			MultiboardDisplay(.board, doDisplay)
 			if doDisplay then
 				// Unbug the minimization - known issue.
 				this.minimize(not this.isMinimized)
@@ -186,7 +186,7 @@ package MyBoard
 						loop
 							exitwhen colLoop > this.colCount
 							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
+							brdItem [arrIndex] = MultiboardGetItem(.board, rowLoop, colLoop)
 							width   [arrIndex] = .01
 							showVal [arrIndex] = true
 							showIcon[arrIndex] = true
@@ -234,7 +234,7 @@ package MyBoard
 						loop
 							exitwhen rowLoop > this.rowCount
 							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-							brdItem [arrIndex] = MultiboardGetItem(.board,rowLoop,colLoop)
+							brdItem [arrIndex] = MultiboardGetItem(.board, rowLoop, colLoop)
 							width   [arrIndex] = .01
 							showVal [arrIndex] = true
 							showIcon[arrIndex] = true
@@ -313,9 +313,9 @@ package MyBoard
 			board.isShown       = false
 			board.titleText     = title
 
-			MultiboardSetColumnCount(board.board,cols)
-			MultiboardSetRowCount(board.board,rows)
-			MultiboardSetTitleText(board.board,title)
+			MultiboardSetColumnCount(board.board, cols)
+			MultiboardSetRowCount(board.board, rows)
+			MultiboardSetTitleText(board.board, title)
 
 			// Pre-initializing board items.
 			// This is needed to drastically reduce function calls afterwards.
@@ -325,7 +325,7 @@ package MyBoard
 				loop
 					exitwhen rowLoop > rows
 					arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
-					board.brdItem [arrIndex] = MultiboardGetItem(board.board,rowLoop,colLoop)
+					board.brdItem [arrIndex] = MultiboardGetItem(board.board, rowLoop, colLoop)
 					board.width   [arrIndex] = .01
 					board.charCnt [arrIndex] = 4
 					board.showVal [arrIndex] = true

@@ -9,11 +9,11 @@ package Muscii
 		Note next
 
 		method copy takes nothing returns Note
-			return Note.create(this.path,this.volume,this.pitch)
+			return Note.create(this.path, this.volume, this.pitch)
 		end
 
 		method play takes nothing returns nothing
-			Sound.play(this.path,this.pitch,this.volume)
+			Sound.play(this.path, this.pitch, this.volume)
 		end
 
 		static method create takes string path, integer volume, real pitch returns Note
@@ -62,7 +62,7 @@ package Muscii
 		end
 
 		static method create takes Note n returns Chord
-			Note q = Note.create(n.path,n.volume,n.pitch)
+			Note q = Note.create(n.path, n.volume, n.pitch)
 			Chord c = new Chord
 			c.previous = null
 			c.next = null
@@ -104,7 +104,7 @@ package Muscii
 
 		method copy takes nothing returns Muscii
 			Chord iterator = this.first
-			Muscii new = Muscii.create(iterator,this.tempo)
+			Muscii new = Muscii.create(iterator, this.tempo)
 			loop
 				iterator = iterator.next
 				exitwhen iterator == null
@@ -120,7 +120,7 @@ package Muscii
 
 		method playCounted takes integer count returns Muscii
 			this.count = count
-			TimerStart(this.clock,1. / (this.tempo / 60.),true,function Muscii.p)
+			TimerStart(this.clock, 1. / (this.tempo / 60.), true, function Muscii.p)
 			return this
 		end
 

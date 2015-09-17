@@ -15,25 +15,25 @@ scope Creeps2 initializer i
 		unit u
 		player owner
 		if not Game.ended then
-			GroupEnumUnitsInRect(g,Terrain.centralArea, null)
+			GroupEnumUnitsInRect(g, Terrain.centralArea, null)
 			loop
 				first=FirstOfGroup(g)
 				exitwhen first==null
 				if GetUnitTypeId(first) == Game.OUTPOST_ID and UnitAlive(first) then
 					owner=GetOwningPlayer(first)
-					u=CreateUnit(owner,'ufro',GetUnitX(first),GetUnitY(first),270.)
+					u=CreateUnit(owner, 'ufro', GetUnitX(first), GetUnitY(first), 270.)
 					if owner==Game.players[0] then
-						IssuePointOrder(u,"attack",Game.EASTX,0.)
+						IssuePointOrder(u, "attack", Game.EASTX, 0.)
 					else
-						IssuePointOrder(u,"attack",Game.WESTX,0.)
+						IssuePointOrder(u, "attack", Game.WESTX, 0.)
 					end
 				end
-				GroupRemoveUnit(g,first)
+				GroupRemoveUnit(g, first)
 			end
 		end
 	end
 
 	function i takes nothing returns nothing
-		TimerStart(CreateTimer(),BONUS_CREEPS_RATE,true,function c)
+		TimerStart(CreateTimer(), BONUS_CREEPS_RATE, true, function c)
 	end
 endscope

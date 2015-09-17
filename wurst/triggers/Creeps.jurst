@@ -20,37 +20,37 @@ scope Creeps initializer i
 			x = Game.EASTX
 			face = 180.
 		end
-		u = CreateUnit(Game.players[faction],class,x,0.,face)
-		IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
-		u = CreateUnit(Game.players[faction],class,x,0.,face)
-		IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
+		u = CreateUnit(Game.players[faction], class, x, 0., face)
+		IssuePointOrder(u, "attack", Game.OUTPOST1_X, Game.OUTPOST1_Y)
+		u = CreateUnit(Game.players[faction], class, x, 0., face)
+		IssuePointOrder(u, "attack", Game.OUTPOST2_X, Game.OUTPOST2_Y)
 	end
 
 	function c takes nothing returns nothing
 		if not Game.ended then
 				// West units
-				spawn(0,GRYPH_ID)
-				spawn(0,WYVERN_ID)
-				spawn(0,GRYPH_ID)
-				spawn(0,WYVERN_ID)
+				spawn(0, GRYPH_ID)
+				spawn(0, WYVERN_ID)
+				spawn(0, GRYPH_ID)
+				spawn(0, WYVERN_ID)
 
 
 				// East units
-				spawn(1,GRYPH_ID)
-				spawn(1,WYVERN_ID)
-				spawn(1,GRYPH_ID)
-				spawn(1,WYVERN_ID)
+				spawn(1, GRYPH_ID)
+				spawn(1, WYVERN_ID)
+				spawn(1, GRYPH_ID)
+				spawn(1, WYVERN_ID)
 
 				// Extra
 				if extra then
-					spawn(0,HAWK_ID)
-					spawn(1,HAWK_ID)
+					spawn(0, HAWK_ID)
+					spawn(1, HAWK_ID)
 				end
 			extra = not extra
 		end
 	end
 
 	function i takes nothing returns nothing
-		TimerStart(CreateTimer(),SPAWN_PERIOD,true,function c)
+		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function c)
 	end
 endscope

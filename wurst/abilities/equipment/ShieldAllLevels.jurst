@@ -15,7 +15,7 @@ scope ShieldAllLevels initializer i
 		integer index=0
 		loop
 			exitwhen index>5
-			if GetItemTypeId(UnitItemInSlot(u,index))==SHIELD_1 then
+			if GetItemTypeId(UnitItemInSlot(u, index))==SHIELD_1 then
 				return SHIELD_1
 			end
 			index=index+1
@@ -30,7 +30,7 @@ scope ShieldAllLevels initializer i
 			tU=GetTriggerUnit()
 			sId=getUnitShieldId(tU)
 			if sId==SHIELD_1 then
-				Shield.add(tU,AMOUNT_1,TIME_1,SHIELD_FX,SHIELD_FX_POINT)
+				Shield.add(tU, AMOUNT_1, TIME_1, SHIELD_FX, SHIELD_FX_POINT)
 			end
 		end
 	end

@@ -22,29 +22,29 @@ scope Repair initializer i
 			p = GetTriggerPlayer()
 			id = GetPlayerId(p)
 			if Game.localPlayer==p then
-				SelectUnit(tU,false)
-				SelectUnit(Ships.ships[id],true)
+				SelectUnit(tU, false)
+				SelectUnit(Ships.ships[id], true)
 			end
-			if IsUnitAlly(tU,p) then
-				if IsUnitInRange(tU,Ships.ships[id],MAX_DISTANCE) then
+			if IsUnitAlly(tU, p) then
+				if IsUnitInRange(tU, Ships.ships[id], MAX_DISTANCE) then
 					life = GetWidgetLife(Ships.ships[id])
-					max = GetUnitState(Ships.ships[id],UNIT_STATE_MAX_LIFE)
+					max = GetUnitState(Ships.ships[id], UNIT_STATE_MAX_LIFE)
 					if life<max then
 						if Game.seconds - lastRepair[id] > REPAIR_TIMEOUT then
 							lastRepair[id] = Game.seconds
-							SetWidgetLife(Ships.ships[id],life + (max-life)*FRAC)
-							DestroyEffect(AddSpecialEffectTarget(HEAL_MODEL,Ships.ships[id],"origin"))
+							SetWidgetLife(Ships.ships[id], life + (max-life)*FRAC)
+							DestroyEffect(AddSpecialEffectTarget(HEAL_MODEL, Ships.ships[id], "origin"))
 						else
-							simError(p,TOO_OFTEN_ERROR)
+							simError(p, TOO_OFTEN_ERROR)
 						end
 					else
-						simError(p,MAX_HEALTH_ERROR)
+						simError(p, MAX_HEALTH_ERROR)
 					end
 				else
-					simError(p,DISTANCE_ERROR)
+					simError(p, DISTANCE_ERROR)
 				end
 			else
-				simError(p,ALLIANCE_ERROR)
+				simError(p, ALLIANCE_ERROR)
 			end
 		end
 		tU=null

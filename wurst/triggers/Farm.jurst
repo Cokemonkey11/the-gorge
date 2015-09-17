@@ -11,6 +11,6 @@ scope Farm initializer i
 	end
 
 	function i takes nothing returns nothing
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
 	end
 endscope
