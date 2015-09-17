@@ -1,63 +1,65 @@
 scope Music initializer i
+	import Muscii
+
 	// Back Against the Wall by Cage the Elephant ( http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm )
 	globals
-		private constant string HAT_PATH       = "musRad-khatClosed.mp3"
-		private constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
-		private constant string SNR_PATH       = "musRad-sonorSnr.mp3"
-		private constant string BAS_PATH	   = "musRad-bass.mp3"
-		private constant string RID_PATH 	   = "zildj-ride.mp3"
-		private constant string FLM_PATH 	   = "musRad-sonorFlam.mp3"
-		private constant string RIM_PATH	   = "musRad-sonorRim.mp3"
-		private constant string CRS_PATH 	   = "zildj-crash.mp3"
-		private constant string TM1_PATH	   = "musRad-tom1.mp3"
-		private constant string TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
-		private constant string TM4_PATH       = "musRad-tom4.mp3"
-		private constant string TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
-		private constant string TM5_PATH       = "musRad-tom5.mp3"
-		private constant string HATPDL_PATH    = "musRad-khatPdl.mp3"
+		constant string HAT_PATH       = "musRad-khatClosed.mp3"
+		constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
+		constant string SNR_PATH       = "musRad-sonorSnr.mp3"
+		constant string BAS_PATH	   = "musRad-bass.mp3"
+		constant string RID_PATH 	   = "zildj-ride.mp3"
+		constant string FLM_PATH 	   = "musRad-sonorFlam.mp3"
+		constant string RIM_PATH	   = "musRad-sonorRim.mp3"
+		constant string CRS_PATH 	   = "zildj-crash.mp3"
+		constant string TM1_PATH	   = "musRad-tom1.mp3"
+		constant string TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
+		constant string TM4_PATH       = "musRad-tom4.mp3"
+		constant string TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
+		constant string TM5_PATH       = "musRad-tom5.mp3"
+		constant string HATPDL_PATH    = "musRad-khatPdl.mp3"
 
-		private Muscii m
-		private Muscii v1
-		private Muscii v1p2
-		private Muscii v1p3
-		private Muscii chorusP1
-		private Muscii chorusP2
-		private Muscii chorusP3
-		private Muscii chorus2P4
-		private Muscii chorus2P5
-		private Muscii chorus2P7
-		private Muscii chorus2P8
-		private Muscii verse3P2
-		private Muscii chorus3P7
-		private Muscii chorus3P8
+		Muscii m
+		Muscii v1
+		Muscii v1p2
+		Muscii v1p3
+		Muscii chorusP1
+		Muscii chorusP2
+		Muscii chorusP3
+		Muscii chorus2P4
+		Muscii chorus2P5
+		Muscii chorus2P7
+		Muscii chorus2P8
+		Muscii verse3P2
+		Muscii chorus3P7
+		Muscii chorus3P8
 	endglobals
 
 	function playIntro takes nothing returns nothing
-		m.playCounted(3).callback(SCOPE_PRIVATE+"playVerse1")
+		m.playCounted(3)//.callback(SCOPE_PRIVATE+"playVerse1")
 	end
 
 	function playVerse1 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorus")
+		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorus")
 	end
 
 	function playChorus takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP2, 0).enqueue(chorusP3, 0).enqueue(chorusP2, 0).callback(SCOPE_PRIVATE+"playVerse2")
+		chorusP1.playCounted(0).enqueue(chorusP2, 0).enqueue(chorusP3, 0).enqueue(chorusP2, 0)//.callback(SCOPE_PRIVATE+"playVerse2")
 	end
 
 	function playVerse2 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorus2")
+		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorus2")
 	end
 
 	function playChorus2 takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3, 1).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus2P7, 0).enqueue(chorus2P8, 0).callback(SCOPE_PRIVATE+"playVerse3")
+		chorusP1.playCounted(0).enqueue(chorusP3, 1).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus2P7, 0).enqueue(chorus2P8, 0)//.callback(SCOPE_PRIVATE+"playVerse3")
 	end
 
 	function playVerse3 takes nothing returns nothing
-		v1.playCounted(0).enqueue(verse3P2, 0).enqueue(v1p2, 2).enqueue(v1p3, 0).callback(SCOPE_PRIVATE+"playChorusRepeat")
+		v1.playCounted(0).enqueue(verse3P2, 0).enqueue(v1p2, 2).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorusRepeat")
 	end
 
 	function playChorus3Repeat takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3, 0).enqueue(chorusP3, 0).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus3P7, 0).enqueue(chorus3P8, 0).callback(SCOPE_PRIVATE+"playVerse1")
+		chorusP1.playCounted(0).enqueue(chorusP3, 0).enqueue(chorusP3, 0).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus3P7, 0).enqueue(chorus3P8, 0)//.callback(SCOPE_PRIVATE+"playVerse1")
 	end
 
 	function i takes nothing returns nothing
@@ -81,7 +83,7 @@ scope Music initializer i
 		Note tm1d= Note.create(TM1DOUBLE_PATH, 110, 1.)
 		Note tm4 = Note.create(TM4_PATH, 110, 1.)
 		Note tm5 = Note.create(TM5_PATH, 110, 1.)
-		Note tm5d= Note.create(TM5DOUBLE_PATH, 110, 1.)
+		//Note tm5d= Note.create(TM5DOUBLE_PATH, 110, 1.)
 		Note hft = Note.create(HATPDL_PATH, 75, 1.)
 
 		Chord rb

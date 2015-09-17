@@ -1,7 +1,7 @@
 package Muscii
 	import Sound
 
-	struct Note
+	public struct Note
 		string path
 		integer volume
 		real pitch
@@ -27,7 +27,7 @@ package Muscii
 		end
 	endstruct
 
-	struct Chord
+	public struct Chord
 		Note first
 		Note last
 		Chord previous
