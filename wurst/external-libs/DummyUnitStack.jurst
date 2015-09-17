@@ -23,7 +23,7 @@ package DummyUnitStack
 		static integer deferredTodoCount= 0
 		static timer clock= CreateTimer()
 
-		private static method add takes boolean preloading returns unit
+		static method add takes boolean preloading returns unit
 			unit u= CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
 			UnitAddAbility(u, 'Aloc')
 			UnitAddAbility(u, 'Arav')
@@ -36,7 +36,7 @@ package DummyUnitStack
 			return null
 		endmethod
 
-		private static method deferredPreloader takes nothing returns nothing
+		static method deferredPreloader takes nothing returns nothing
 			DummyUnitStack.deferredTodoCount= DummyUnitStack.deferredTodoCount-1
 			DummyUnitStack.add(true)
 			if DummyUnitStack.deferredTodoCount<1 then
