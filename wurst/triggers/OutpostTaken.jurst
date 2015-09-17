@@ -1,4 +1,7 @@
 scope OutpostTaken initializer i
+    import Game
+    import RegisterPlayerUnitEvent
+
     function c takes nothing returns nothing
 		unit tU= GetTriggerUnit()
 		integer id
@@ -10,7 +13,6 @@ scope OutpostTaken initializer i
 				CreateUnit(Game.players[0], Game.OUTPOST_ID, GetUnitX(tU), GetUnitY(tU), 270.)
 			end
 		end
-		tU= null
     end
 
     function i takes nothing returns nothing
