@@ -1,4 +1,8 @@
 scope TradeRewardsPawn initializer i
+    import Game
+    import RegisterPlayerUnitEvent
+    import Equipment
+
 	function c takes nothing returns nothing
 		if GetItemTypeId(GetSoldItem())== Equipment.DATA_ID then
 			Game.reward(GetTriggerUnit(), 15, 1)
