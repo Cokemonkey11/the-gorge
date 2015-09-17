@@ -1,7 +1,7 @@
 package Muscii
-	import Sound
+	import Sounds
 
-	public struct Note
+	public class Note
 		string path
 		integer volume
 		real pitch
@@ -13,7 +13,7 @@ package Muscii
 		end
 
 		method play takes nothing returns nothing
-			Sound.play(this.path, this.pitch, this.volume)
+			Sounds.play(this.path, this.pitch, this.volume)
 		end
 
 		static method create takes string path, integer volume, real pitch returns Note
@@ -27,7 +27,7 @@ package Muscii
 		end
 	endstruct
 
-	public struct Chord
+	public class Chord
 		Note first
 		Note last
 		Chord previous
@@ -197,7 +197,7 @@ package Muscii
 			end
 		end
 
-		private static method onInit takes nothing returns nothing
+		init
 			fromClock = new Table
 		end
 	end

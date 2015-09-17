@@ -12,7 +12,7 @@
 //*                         which imparts a shield of size 'a' for time 't' on
 //*                         'u' using effect with model 'f' on attachment
 //*                         point 'p'.
-library Shield
+package Shield
 	import DamageType
 	import StructuredDD
 
@@ -23,7 +23,7 @@ library Shield
 
 	//* This struct is just a shim for a pretty API. (You don't instanciate
 	//* Shield objects yourself)
-	public struct Shield
+	public class Shield
 		//< BEGIN CUSTOMIZABLE SECTION
 
 		//* How often to check for shield instances with expired durations. A
@@ -193,12 +193,9 @@ library Shield
 				TimerStart(Shield.time, Shield.TIMER_PERIOD, true, function Shield.timeout)
 			end
 		endmethod
+	end
 
-		//* Auxillary method used to initialize the Table and
-		//* StructuredDD handler.
-		private static method onInit takes nothing returns nothing
-			Shield.tab= new Table
-			StructuredDD.addHandler(function Shield.handler)
-		endmethod
-	endstruct
-endlibrary
+	init
+		Shield.tab = new Table
+		StructuredDD.addHandler(function Shield.handler)
+	end

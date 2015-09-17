@@ -1,5 +1,5 @@
-package Terrain
-	public class Terrain
+package TerrainData
+	public class TerrainData
 		// Corners of a region that contains the central island + towers
 		static constant real CENTRAL_MINX     = -770.
 		static constant real CENTRAL_MINY     = -1950.
@@ -27,7 +27,7 @@ package Terrain
 	end
 
 	init
-		Terrain.centralArea = Rect(Terrain.CENTRAL_MINX, Terrain.CENTRAL_MINY, Terrain.CENTRAL_MAXX, Terrain.CENTRAL_MAXY)
-		Terrain.utilityWest = Rect(Terrain.UTILITY_WEST_MINX, Terrain.UTILITY_WEST_MINY, Terrain.UTILITY_WEST_MAXX, Terrain.UTILITY_WEST_MAXY)
-		Terrain.utilityEast = Rect(Terrain.UTILITY_EAST_MINX, Terrain.UTILITY_EAST_MINY, Terrain.UTILITY_EAST_MAXX, Terrain.UTILITY_EAST_MAXY)
+		TerrainData.centralArea = Rect(TerrainData.CENTRAL_MINX, TerrainData.CENTRAL_MINY, TerrainData.CENTRAL_MAXX, TerrainData.CENTRAL_MAXY)
+		TerrainData.utilityWest = Rect(TerrainData.UTILITY_WEST_MINX, TerrainData.UTILITY_WEST_MINY, TerrainData.UTILITY_WEST_MAXX, TerrainData.UTILITY_WEST_MAXY)
+		TerrainData.utilityEast = Rect(TerrainData.UTILITY_EAST_MINX, TerrainData.UTILITY_EAST_MINY, TerrainData.UTILITY_EAST_MAXX, TerrainData.UTILITY_EAST_MAXY)
 	end

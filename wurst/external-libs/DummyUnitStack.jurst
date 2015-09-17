@@ -1,27 +1,27 @@
-library DummyUnitStack
-	public struct DummyUnitStack
-		private static constant integer DUMMY_UNIT_ID= 'u000'
-		private static constant integer MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
+package DummyUnitStack
+	public class DummyUnitStack
+		static constant integer DUMMY_UNIT_ID= 'u000'
+		static constant integer MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
 
-		private static constant integer PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
-		private static constant boolean DO_PIC= true
+		static constant integer PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
+		static constant boolean DO_PIC= true
 
-		private static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
-		private static constant boolean DO_DDPC= true
+		static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
+		static constant boolean DO_DDPC= true
 
-		private static constant integer INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
-		private static constant boolean DO_IDPC= true
+		static constant integer INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
+		static constant boolean DO_IDPC= true
 
-		private static constant integer MAX_PRELOADED_UNITS= 5000
-		private static constant boolean DO_MPU= true
+		static constant integer MAX_PRELOADED_UNITS= 5000
+		static constant boolean DO_MPU= true
 
-		private static constant real SAFE_LOC_X= -3820.
-		private static constant real SAFE_LOC_Y= 3700.
-		private static constant real CLOCK_PERIOD= 1./60.
-		private static unit array dummyStack
-		private static integer stackIndex= -1
-		private static integer deferredTodoCount= 0
-		private static timer clock= CreateTimer()
+		static constant real SAFE_LOC_X= -3820.
+		static constant real SAFE_LOC_Y= 3700.
+		static constant real CLOCK_PERIOD= 1./60.
+		static unit array dummyStack
+		static integer stackIndex= -1
+		static integer deferredTodoCount= 0
+		static timer clock= CreateTimer()
 
 		private static method add takes boolean preloading returns unit
 			unit u= CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
@@ -76,20 +76,21 @@ library DummyUnitStack
 			DummyUnitStack.stackIndex= DummyUnitStack.stackIndex+1
 			DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]= u
 		endmethod
+	end
 
-		private static method onInit takes nothing returns nothing
-			integer index= 1
-			static if DO_PIC then
-				loop
-					exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
-					DummyUnitStack.add(true)
-					index= index+1
-				endloop
-			end
-			static if DO_IDPC then
-				DummyUnitStack.deferredTodoCount= DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
-				TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
-			end
-		endmethod
-	endstruct
-endlibrary
+	init
+		integer index= 1
+
+		if DummyUnitStack.DO_PIC then
+			loop
+				exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
+				DummyUnitStack.add(true)
+				index= index+1
+			endloop
+		end
+
+		if DummyUnitStack.DO_IDPC then
+			DummyUnitStack.deferredTodoCount= DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
+			TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
+		end
+	end

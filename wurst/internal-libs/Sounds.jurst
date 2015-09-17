@@ -1,12 +1,12 @@
-package Sound
+package Sounds
 	import Table
 
-	class Slop
+	struct Slop
 		string snd
 	end
 
-	public class Sound
-		private static Table preloadDB
+	public class Sounds
+		static Table preloadDB
 
 		private static method preloadAfter takes nothing returns nothing
 			timer time= GetExpiredTimer()
@@ -23,8 +23,10 @@ package Sound
 			timer time= CreateTimer()
 			Slop s= new Slop
 			s.snd= str
+			BJDebugMsg("preloading " + str)
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
-			TimerStart(time, .01, false, function Sound.preloadAfter)
+			BJDebugMsg("preloaded")
+			TimerStart(time, .01, false, function Sounds.preloadAfter)
 		end
 
 		static method play3D takes string str, real pitch, real x, real y, real z returns nothing
@@ -55,8 +57,8 @@ package Sound
 			StartSound(s)
 			KillSoundWhenDone(s)
 		end
+	end
 
-		private static method onInit takes nothing returns nothing
-			preloadDB = new Table
-		end
+	init
+		Sounds.preloadDB = new Table
 	end

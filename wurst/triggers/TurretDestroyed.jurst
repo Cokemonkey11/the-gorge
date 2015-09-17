@@ -1,11 +1,15 @@
 scope TurretDestroyed initializer i
+	import Sounds
+	import RegisterPlayerUnitEvent
+	import Game
+
 	globals
-		private constant integer TURRET_ID = 'h005'
-		private constant integer GOLD_BONUS = 200
-		private constant string WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
-		private constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
-		private constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
-		private constant string WARNING         = "Sound\\Interface\\Warning.wav"
+		constant integer TURRET_ID = 'h005'
+		constant integer GOLD_BONUS = 200
+		constant string WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
+		constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
+		constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
+		constant string WARNING         = "Sound\\Interface\\Warning.wav"
 	endglobals
 
 	function c takes nothing returns nothing
@@ -16,21 +20,20 @@ scope TurretDestroyed initializer i
 				exitwhen index>11
 				if IsUnitAlly(tU, Game.players[index]) then
 					DisplayTimedTextToPlayer(Game.players[index], 0., 0., 10., WARNING_MESSAGE)
-					Sound.playForPlayer(WARNING, 1., Game.players[index])
+					Sounds.playForPlayer(WARNING, 1., Game.players[index])
 				else
 					SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
 					DisplayTimedTextToPlayer(Game.players[index], 0., 0., 10., SUCCESS)
-					Sound.playForPlayer(GOODJOB, 1., Game.players[index])
+					Sounds.playForPlayer(GOODJOB, 1., Game.players[index])
 				end
 				index= index+1
 			endloop
 		end
-		tU= null
 	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
-		Sound.preload(GOODJOB)
-		Sound.preload(WARNING)
+		Sounds.preload(GOODJOB)
+		Sounds.preload(WARNING)
 	end
 endscope

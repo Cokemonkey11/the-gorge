@@ -1,6 +1,6 @@
 scope Creeps2 initializer i
 	import Game
-	import Terrain
+	import TerrainData
 
 	native UnitAlive takes unit u returns boolean
 
@@ -15,7 +15,7 @@ scope Creeps2 initializer i
 		unit u
 		player owner
 		if not Game.ended then
-			GroupEnumUnitsInRect(g, Terrain.centralArea, null)
+			GroupEnumUnitsInRect(g, TerrainData.centralArea, null)
 			loop
 				first= FirstOfGroup(g)
 				exitwhen first== null

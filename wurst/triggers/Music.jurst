@@ -1,5 +1,6 @@
 scope Music initializer i
 	import Muscii
+	import Sounds
 
 	// Back Against the Wall by Cage the Elephant ( http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm )
 	globals
@@ -409,19 +410,19 @@ scope Music initializer i
 		//		end song3
 
 
-		Sound.preload(HAT_PATH)
-		Sound.preload(SNR_PATH)
-		Sound.preload(BAS_PATH)
-		Sound.preload(RID_PATH)
-		Sound.preload(FLM_PATH)
-		Sound.preload(RIM_PATH)
-		Sound.preload(CRS_PATH)
-		Sound.preload(HATOPEN_PATH)
-		Sound.preload(TM1_PATH)
-		Sound.preload(TM1DOUBLE_PATH)
-		Sound.preload(TM4_PATH)
-		Sound.preload(TM5_PATH)
-		Sound.preload(TM5DOUBLE_PATH)
-		Sound.preload(HATPDL_PATH)
+		Sounds.preload(HAT_PATH)
+		Sounds.preload(SNR_PATH)
+		Sounds.preload(BAS_PATH)
+		Sounds.preload(RID_PATH)
+		Sounds.preload(FLM_PATH)
+		Sounds.preload(RIM_PATH)
+		Sounds.preload(CRS_PATH)
+		Sounds.preload(HATOPEN_PATH)
+		Sounds.preload(TM1_PATH)
+		Sounds.preload(TM1DOUBLE_PATH)
+		Sounds.preload(TM4_PATH)
+		Sounds.preload(TM5_PATH)
+		Sounds.preload(TM5DOUBLE_PATH)
+		Sounds.preload(HATPDL_PATH)
 	end
 endscope

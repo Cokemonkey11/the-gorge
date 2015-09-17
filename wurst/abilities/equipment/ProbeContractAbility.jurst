@@ -4,6 +4,7 @@ scope ProbeContractAbility initializer i
 	import Ships
 	import Equipment
 	import Game
+	import Sounds
 
 	globals
 		constant integer PROBE_ID= 'A00J'
@@ -26,7 +27,7 @@ scope ProbeContractAbility initializer i
 			else
 				UnitAddItem(tU, CreateItem(Equipment.DATA_ID, GetUnitX(tU), GetUnitY(tU)))
 				DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
-				Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+				Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 			end
 		end
 	end

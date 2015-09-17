@@ -1,7 +1,8 @@
 scope FillToxicSack initializer i
 	import Equipment
 	import Game
-	import Terrain
+	import TerrainData
+	import Sounds
 
 	globals
 		constant real MIN_X = 722.
@@ -22,7 +23,7 @@ scope FillToxicSack initializer i
 			RemoveItem(UnitItemInSlot(fU, slt))
 			UnitAddItem(fU, CreateItem(Equipment.TOXIC_SUBST_FULL, GetUnitX(fU), GetUnitY(fU)))
 			DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
-			Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+			Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 		end
 		return false
 	end
@@ -62,8 +63,8 @@ scope FillToxicSack initializer i
 		region reg = CreateRegion()
 		region reg2 = CreateRegion()
 		RegionAddRect(reg, shopRect)
-		RegionAddRect(reg2, Terrain.utilityWest)
-		RegionAddRect(reg2, Terrain.utilityEast)
+		RegionAddRect(reg2, TerrainData.utilityWest)
+		RegionAddRect(reg2, TerrainData.utilityEast)
 
 		// Register triggers
 		TriggerRegisterEnterRegion(utilityTrigger, reg2, Filter(function f2))
