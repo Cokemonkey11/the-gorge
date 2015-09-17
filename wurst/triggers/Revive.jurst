@@ -1,8 +1,14 @@
 scope Revive initializer i
-    struct deathDat
-        unit u
-        integer timeL
-        real teamX
+	import FloatText
+	import Game
+	import Ships
+	import Equipment
+	import RegisterPlayerUnitEvent
+
+	struct DeathDat
+		unit u
+		integer timeL
+		real teamX
 		integer ownerID= -1
 		integer item0Id= -1
 		integer item1Id= -1
@@ -10,37 +16,37 @@ scope Revive initializer i
 		integer item3Id= -1
 		integer item4Id= -1
 		integer item5Id= -1
-    endstruct
+	endstruct
 
-    globals
-		private constant real CLOCK_PERIOD = 1.
-		private constant real REVIVE_OFFSET = 328.
-		private constant integer REVIVE_DELAY_FLAT = 15
-		private constant integer REVIVE_DELAY_PERMINUTE = 1
-		private constant integer FLAT_BOUNTY = 100
-		private constant integer BOUNTY_PER_MINUTE = 2
-		private constant integer COP_ID = 'u003'
-		private constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
-		private constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
-        private deathDat array deathDB
-        private integer dbIndex= -1
-        private timer time= CreateTimer()
-		private integer westDeadCount= 0
-		private integer eastDeadCount= 0
-		private unit westDummy
-		private unit eastDummy
-    endglobals
+	globals
+		constant real CLOCK_PERIOD = 1.
+		constant real REVIVE_OFFSET = 328.
+		constant integer REVIVE_DELAY_FLAT = 15
+		constant integer REVIVE_DELAY_PERMINUTE = 1
+		constant integer FLAT_BOUNTY = 100
+		constant integer BOUNTY_PER_MINUTE = 2
+		constant integer COP_ID = 'u003'
+		constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
+		constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
+		DeathDat array deathDB
+		integer dbIndex= -1
+		timer time= CreateTimer()
+		integer westDeadCount= 0
+		integer eastDeadCount= 0
+		unit westDummy
+		unit eastDummy
+	endglobals
 
-    function p takes nothing returns nothing
-        deathDat tempDat
-        integer index= 0
-        loop
-            exitwhen index>dbIndex
-            tempDat= deathDB[index]
-			FloatText_reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
-            tempDat.timeL= tempDat.timeL-1
-            if tempDat.timeL<1 and not Game.ended then
-                Ships.ships[tempDat.ownerID] = CreateUnit(Game.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
+	function p takes nothing returns nothing
+		DeathDat tempDat
+		integer index= 0
+		loop
+			exitwhen index>dbIndex
+			tempDat= deathDB[index]
+			FloatText.reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
+			tempDat.timeL= tempDat.timeL-1
+			if tempDat.timeL<1 and not Game.ended then
+				Ships.ships[tempDat.ownerID] = CreateUnit(Game.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
 				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
 				DestroyEffect(AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin"))
 				if Game.localPlayer == Game.players[tempDat.ownerID] then
@@ -61,17 +67,17 @@ scope Revive initializer i
 						SetUnitY(eastDummy, Game.SAFE_Y)
 					end
 				end
-                destroy tempDat
-                deathDB[index]= deathDB[dbIndex]
-                dbIndex= dbIndex-1
+				destroy tempDat
+				deathDB[index]= deathDB[dbIndex]
+				dbIndex= dbIndex-1
 				index = index-1
-                if dbIndex== -1 then
-                    PauseTimer(time)
-                end
-            end
-            index= index+1
-        endloop
-    end
+				if dbIndex== -1 then
+					PauseTimer(time)
+				end
+			end
+			index= index+1
+		endloop
+	end
 
 	function getBounty takes nothing returns integer
 		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
@@ -81,7 +87,7 @@ scope Revive initializer i
 		integer index = 2
 		loop
 			exitwhen index>11
-			if Game.seconds - Game.assistTimestamps[pID][index] <= Game.ASSIST_TIME then
+			if Game.seconds - Game.assistTimestamps[pID].vals[index] <= Game.ASSIST_TIME then
 				Game.assists[index] = Game.assists[index] +1
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 			end
@@ -89,24 +95,22 @@ scope Revive initializer i
 		endloop
 	end
 
-    function c takes nothing returns nothing
-		deathDat tempDat
+	function c takes nothing returns nothing
+		DeathDat tempDat
 		unit tU= GetTriggerUnit()
 		unit kU
 		integer id
 		integer bounty
 		player kO
 		item ti
-		integer pID
-        if Ships.isPlayerShip(tU)then
+		if Ships.isPlayerShip(tU)then
 			kU= GetKillingUnit()
 			kO= GetOwningPlayer(kU)
 			id = GetPlayerId(kO)
-			tempDat= new deathDat
+			tempDat= new DeathDat
 			tempDat.u= tU
 			tempDat.timeL= REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
 			tempDat.ownerID= GetPlayerId(GetOwningPlayer(tU))
-			pID= GetPlayerId(GetOwningPlayer(kU))
 			if id>1 then
 				Game.parseKill(id)
 				parseAssists(tempDat.ownerID)
@@ -172,16 +176,14 @@ scope Revive initializer i
 			if dbIndex== 0 then
 				TimerStart(time, CLOCK_PERIOD, true, function p)
 			end
-			kU= null
 		end
-		tU= null
-    end
+	end
 
-    function i takes nothing returns nothing
+	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
 
 		// Initialize circle of power dummies
 		westDummy = CreateUnit(Game.playerPassive, COP_ID, Game.SAFE_X, Game.SAFE_Y, 270.)
 		eastDummy = CreateUnit(Game.playerPassive, COP_ID, Game.SAFE_X, Game.SAFE_Y, 270.)
-    end
+	end
 endscope

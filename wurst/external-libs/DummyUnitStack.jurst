@@ -1,95 +1,95 @@
 library DummyUnitStack
-    public struct DummyUnitStack
-        private static constant integer DUMMY_UNIT_ID= 'u000'
-        private static constant integer MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
+	public struct DummyUnitStack
+		private static constant integer DUMMY_UNIT_ID= 'u000'
+		private static constant integer MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
 
-        private static constant integer PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
-        private static constant boolean DO_PIC= true
+		private static constant integer PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
+		private static constant boolean DO_PIC= true
 
-        private static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
-        private static constant boolean DO_DDPC= true
+		private static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
+		private static constant boolean DO_DDPC= true
 
-        private static constant integer INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
-        private static constant boolean DO_IDPC= true
+		private static constant integer INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
+		private static constant boolean DO_IDPC= true
 
-        private static constant integer MAX_PRELOADED_UNITS= 5000
-        private static constant boolean DO_MPU= true
+		private static constant integer MAX_PRELOADED_UNITS= 5000
+		private static constant boolean DO_MPU= true
 
-        private static constant real SAFE_LOC_X= -3820.
-        private static constant real SAFE_LOC_Y= 3700.
-        private static constant real CLOCK_PERIOD= 1./60.
-        private static unit array dummyStack
-        private static integer stackIndex= -1
-        private static integer deferredTodoCount= 0
-        private static timer clock= CreateTimer()
+		private static constant real SAFE_LOC_X= -3820.
+		private static constant real SAFE_LOC_Y= 3700.
+		private static constant real CLOCK_PERIOD= 1./60.
+		private static unit array dummyStack
+		private static integer stackIndex= -1
+		private static integer deferredTodoCount= 0
+		private static timer clock= CreateTimer()
 
-        private static method add takes boolean preloading returns unit
-            unit u= CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
-            UnitAddAbility(u, 'Aloc')
-            UnitAddAbility(u, 'Arav')
-            if preloading then
-                DummyUnitStack.stackIndex= DummyUnitStack.stackIndex+1
-                DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]= u
-            else
-                return u
-            end
-            return null
-        endmethod
+		private static method add takes boolean preloading returns unit
+			unit u= CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
+			UnitAddAbility(u, 'Aloc')
+			UnitAddAbility(u, 'Arav')
+			if preloading then
+				DummyUnitStack.stackIndex= DummyUnitStack.stackIndex+1
+				DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]= u
+			else
+				return u
+			end
+			return null
+		endmethod
 
-        private static method deferredPreloader takes nothing returns nothing
-            DummyUnitStack.deferredTodoCount= DummyUnitStack.deferredTodoCount-1
-            DummyUnitStack.add(true)
-            if DummyUnitStack.deferredTodoCount<1 then
-                PauseTimer(DummyUnitStack.clock)
-            end
-        endmethod
+		private static method deferredPreloader takes nothing returns nothing
+			DummyUnitStack.deferredTodoCount= DummyUnitStack.deferredTodoCount-1
+			DummyUnitStack.add(true)
+			if DummyUnitStack.deferredTodoCount<1 then
+				PauseTimer(DummyUnitStack.clock)
+			end
+		endmethod
 
-        static method get takes nothing returns unit
-            unit result
-            if DummyUnitStack.stackIndex!= -1 then
-                DummyUnitStack.stackIndex= DummyUnitStack.stackIndex-1
-                result= DummyUnitStack.dummyStack[DummyUnitStack.stackIndex+1]
-            else
-                result= DummyUnitStack.add(false)
-            end
-            static if DO_DDPC then
-                if DummyUnitStack.stackIndex<(DummyUnitStack.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and DummyUnitStack.deferredTodoCount<1 then
-                    DummyUnitStack.deferredTodoCount= DummyUnitStack.MIN_PRELOAD_BLOCK_SIZE
-                    TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
-                end
-            end
-            return result
-        endmethod
+		static method get takes nothing returns unit
+			unit result
+			if DummyUnitStack.stackIndex!= -1 then
+				DummyUnitStack.stackIndex= DummyUnitStack.stackIndex-1
+				result= DummyUnitStack.dummyStack[DummyUnitStack.stackIndex+1]
+			else
+				result= DummyUnitStack.add(false)
+			end
+			static if DO_DDPC then
+				if DummyUnitStack.stackIndex<(DummyUnitStack.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and DummyUnitStack.deferredTodoCount<1 then
+					DummyUnitStack.deferredTodoCount= DummyUnitStack.MIN_PRELOAD_BLOCK_SIZE
+					TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
+				end
+			end
+			return result
+		endmethod
 
-        static method release takes unit u returns nothing
-            static if DO_MPU then
-                if DummyUnitStack.stackIndex>= DummyUnitStack.MAX_PRELOADED_UNITS then
-                    RemoveUnit(u)
-                    return
-                end
-            end
-            SetUnitFlyHeight(u, 0., 0.)
-            SetUnitScale(u, 1., 1., 1.)
-            SetUnitOwner(u, Player(PLAYER_NEUTRAL_PASSIVE), true)
-            SetUnitX(u, DummyUnitStack.SAFE_LOC_X)
-            SetUnitY(u, DummyUnitStack.SAFE_LOC_Y)
-            DummyUnitStack.stackIndex= DummyUnitStack.stackIndex+1
-            DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]= u
-        endmethod
+		static method release takes unit u returns nothing
+			static if DO_MPU then
+				if DummyUnitStack.stackIndex>= DummyUnitStack.MAX_PRELOADED_UNITS then
+					RemoveUnit(u)
+					return
+				end
+			end
+			SetUnitFlyHeight(u, 0., 0.)
+			SetUnitScale(u, 1., 1., 1.)
+			SetUnitOwner(u, Player(PLAYER_NEUTRAL_PASSIVE), true)
+			SetUnitX(u, DummyUnitStack.SAFE_LOC_X)
+			SetUnitY(u, DummyUnitStack.SAFE_LOC_Y)
+			DummyUnitStack.stackIndex= DummyUnitStack.stackIndex+1
+			DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]= u
+		endmethod
 
-        private static method onInit takes nothing returns nothing
-            integer index= 1
-            static if DO_PIC then
-                loop
-                    exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
-                    DummyUnitStack.add(true)
-                    index= index+1
-                endloop
-            end
-            static if DO_IDPC then
-                DummyUnitStack.deferredTodoCount= DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
-                TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
-            end
-        endmethod
-    endstruct
+		private static method onInit takes nothing returns nothing
+			integer index= 1
+			static if DO_PIC then
+				loop
+					exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
+					DummyUnitStack.add(true)
+					index= index+1
+				endloop
+			end
+			static if DO_IDPC then
+				DummyUnitStack.deferredTodoCount= DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
+				TimerStart(DummyUnitStack.clock, DummyUnitStack.CLOCK_PERIOD, true, function DummyUnitStack.deferredPreloader)
+			end
+		endmethod
+	endstruct
 endlibrary
