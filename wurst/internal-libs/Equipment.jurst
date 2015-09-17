@@ -82,7 +82,7 @@ package Equipment
 		//   integer cls: the item class for validation
 		//
 		// Returns true if `u` has two items of class `cls`
-		function unitHasClassPair takes unit u, integer cls returns boolean
+		static function unitHasClassPair takes unit u, integer cls returns boolean
 			integer index = 0
 			integer count = 0
 
@@ -121,10 +121,10 @@ package Equipment
 		end
 
 		static function unitHasItemOfTypeSlot takes unit u, integer id returns integer
-			integer index=0
+			integer index= 0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u, index))==id then
+				if GetItemTypeId(UnitItemInSlot(u, index))== id then
 					return index
 				end
 				index = index + 1
@@ -136,7 +136,7 @@ package Equipment
 			return unitHasItemOfTypeSlot(u, id)>-1
 		end
 
-		function unitHasTypePair takes unit u, integer id returns boolean
+		static function unitHasTypePair takes unit u, integer id returns boolean
 			integer index = 0
 			integer count = 0
 			loop
@@ -147,12 +147,12 @@ package Equipment
 						return true
 					end
 				end
-				index=index+1
+				index= index+1
 			end
 			return false
 		end
 
-		function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
+		static function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
 			integer shipClass = Ships.getClass(u)
 			integer itemClass = getItemClassId(id)
 
@@ -160,13 +160,13 @@ package Equipment
 				return false
 			elseif unitHasTypePair(u, id) then
 				return false
-			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR) then
 				return false
-			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR) then
 				return false
 			end
 			return true
@@ -175,23 +175,23 @@ package Equipment
 		static function unitCanAcquireItemId takes unit u, integer id returns boolean
 			integer shipClass = Ships.getClass(u)
 			integer itemClass = getItemClassId(id)
-			if unitHasItemOfClass(u, itemClass)!=null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
+			if unitHasItemOfClass(u, itemClass)!= null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
 				return false
 			elseif unitHasItemOfType(u, id) then
 				return false
-			elseif shipClass == Ships.CLASS_FRIGATE and itemClass==CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass==CLASS_HULL or itemClass==CLASS_SHIELDGEN or id==SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR) then
 				return false
-			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass==CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR) then
 				return false
 			end
 			return true
 		end
 
-		function playerCanAcquireItem takes integer pID, item it returns boolean
+		static function playerCanAcquireItem takes integer pID, item it returns boolean
 			return unitCanAcquireItemId(Ships.ships[pID], GetItemTypeId(it))
 		end
 
@@ -234,7 +234,7 @@ package Equipment
 			end
 		end
 
-		function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+		static function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			if i0>0 then
@@ -272,7 +272,7 @@ package Equipment
 		end
 
 		static function pageC takes nothing returns boolean
-			item sI=GetSoldItem()
+			item sI= GetSoldItem()
 			unit seller = GetTriggerUnit()
 			unit buyer = GetBuyingUnit()
 			unit toSelect = null
@@ -286,49 +286,49 @@ package Equipment
 				else
 					toSelect = Game.eastUtility[1]
 				end
-			elseif id==PAGE_2_1 then
+			elseif id== PAGE_2_1 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[0]
 				else
 					toSelect = Game.eastUtility[0]
 				end
-			elseif id==PAGE_2_3 then
+			elseif id== PAGE_2_3 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 				end
-			elseif id==PAGE_3_2 then
+			elseif id== PAGE_3_2 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[1]
 				else
-					toSelect=Game.eastUtility[1]
+					toSelect= Game.eastUtility[1]
 				end
-			elseif id==PAGE_3_4 then
+			elseif id== PAGE_3_4 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[3]
 				else
 					toSelect = Game.eastUtility[3]
 				end
-			elseif id==PAGE_4_3 then
+			elseif id== PAGE_4_3 then
 				was = true
 				if seller == Game.westUtility[3] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 				end
-			elseif id==KPAGE_1_2 then
+			elseif id== KPAGE_1_2 then
 				was = true
 				if seller == Game.westKeep[0] then
 					toSelect = Game.westKeep[1]
 				else
 					toSelect = Game.eastKeep[1]
 				end
-			elseif id==KPAGE_2_1 then
+			elseif id== KPAGE_2_1 then
 				was = true
 				if seller == Game.westKeep[1] then
 					toSelect = Game.westKeep[0]
@@ -363,7 +363,7 @@ package Equipment
 
 		static function c takes nothing returns boolean
 			unit buyer = GetBuyingUnit()
-			item sI=GetSoldItem()
+			item sI= GetSoldItem()
 			player buyerP = GetOwningPlayer(buyer)
 			real val
 			integer class = getItemClass(sI)
@@ -383,12 +383,12 @@ package Equipment
 				SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
 				simError(buyerP, WRONG_CLASS)
 			else
-				if it!=null and class!=CLASS_UNKNOWN and class!=CLASS_SPECIAL and class!=CLASS_CONTRACT then
+				if it!= null and class!= CLASS_UNKNOWN and class!= CLASS_SPECIAL and class!= CLASS_CONTRACT then
 					val = GetWidgetLife(it)
 					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
 					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
 					RemoveItem(it)
-				elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
+				elseif class== CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
 					RemoveItem(sI)
 					simError(buyerP, INSUFFICIENT_EXPERIENCE)
 				end

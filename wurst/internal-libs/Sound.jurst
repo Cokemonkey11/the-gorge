@@ -9,9 +9,9 @@ package Sound
 		private static Table preloadDB
 
 		private static method preloadAfter takes nothing returns nothing
-			timer time=GetExpiredTimer()
+			timer time= GetExpiredTimer()
 			Slop s = preloadDB.loadInt(time.getHandleId()) castTo Slop
-			sound sd=CreateSound(s.snd, false, false, false, 12700, 12700, "")
+			sound sd= CreateSound(s.snd, false, false, false, 12700, 12700, "")
 			SetSoundVolume(sd, 1)
 			StartSound(sd)
 			KillSoundWhenDone(sd)
@@ -20,9 +20,9 @@ package Sound
 		end
 
 		static method preload takes string str returns nothing
-			timer time=CreateTimer()
+			timer time= CreateTimer()
 			Slop s= new Slop
-			s.snd=str
+			s.snd= str
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
 			TimerStart(time, .01, false, function Sound.preloadAfter)
 		end
@@ -38,7 +38,7 @@ package Sound
 
 		static method playForPlayer takes string str, real pitch, player who returns nothing
 			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
-			if GetLocalPlayer()==who then
+			if GetLocalPlayer()== who then
 				SetSoundVolume(s, 127)
 			else
 				SetSoundVolume(s, 0)

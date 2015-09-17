@@ -12,13 +12,13 @@ scope ShieldAllLevels initializer i
 	endglobals
 
 	function getUnitShieldId takes unit u returns integer
-		integer index=0
+		integer index= 0
 		loop
 			exitwhen index>5
-			if GetItemTypeId(UnitItemInSlot(u, index))==SHIELD_1 then
+			if GetItemTypeId(UnitItemInSlot(u, index))== SHIELD_1 then
 				return SHIELD_1
 			end
-			index=index+1
+			index= index+1
 		endloop
 		return -1
 	end
@@ -26,10 +26,10 @@ scope ShieldAllLevels initializer i
 	function c takes nothing returns nothing
 		integer sId
 		unit tU
-		if GetSpellAbilityId()==SHIELD_ID then
-			tU=GetTriggerUnit()
-			sId=getUnitShieldId(tU)
-			if sId==SHIELD_1 then
+		if GetSpellAbilityId()== SHIELD_ID then
+			tU= GetTriggerUnit()
+			sId= getUnitShieldId(tU)
+			if sId== SHIELD_1 then
 				Shield.add(tU, AMOUNT_1, TIME_1, SHIELD_FX, SHIELD_FX_POINT)
 			end
 		end

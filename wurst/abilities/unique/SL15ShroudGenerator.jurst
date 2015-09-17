@@ -41,7 +41,7 @@ scope SL15ShroudGenerator initializer i
 	endglobals
 
 	function p2 takes nothing returns nothing
-		integer index=0
+		integer index= 0
 		Gen g
 		loop
 			exitwhen index>gensIndex
@@ -60,7 +60,7 @@ scope SL15ShroudGenerator initializer i
 					PauseTimer(clock2)
 				end
 			end
-			index=index+1
+			index= index+1
 		endloop
 	end
 
@@ -107,7 +107,7 @@ scope SL15ShroudGenerator initializer i
 			else
 				UnitRemoveAbility(s.caster, BUF_ID)
 			end
-			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)==0 or s.time>DURATION then
+			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)== 0 or s.time>DURATION then
 				DummyUnitStack.release(s.dummy)
 				destroy s
 				shrouds[index] = shrouds[shroudsIndex]
@@ -123,7 +123,7 @@ scope SL15ShroudGenerator initializer i
 
 	function c takes nothing returns nothing
 		Shroud s
-		if GetSpellAbilityId()==SHROUD_ID then
+		if GetSpellAbilityId()== SHROUD_ID then
 			s = new Shroud
 			s.caster = GetTriggerUnit()
 			s.cX = GetUnitX(s.caster)

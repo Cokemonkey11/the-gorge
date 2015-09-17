@@ -11,9 +11,9 @@ scope ObsidianDrake initializer i
 	endglobals
 
 	function h takes nothing returns boolean
-		unit tU=GetTriggerUnit()
-		unit dS=GetEventDamageSource()
-		if DamageType.get()==DamageType.SPELL and GetUnitTypeId(dS)==DRAKE_ID and GetWidgetLife(tU)<=HEALTH_PROC then
+		unit tU= GetTriggerUnit()
+		unit dS= GetEventDamageSource()
+		if DamageType.get()== DamageType.SPELL and GetUnitTypeId(dS)== DRAKE_ID and GetWidgetLife(tU)<= HEALTH_PROC then
 			DamageType.dealCodeDamage(dS, tU, BONUS_DAMAGE)
 		end
 		return false

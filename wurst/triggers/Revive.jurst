@@ -3,13 +3,13 @@ scope Revive initializer i
         unit u
         integer timeL
         real teamX
-		integer ownerID=-1
-		integer item0Id=-1
-		integer item1Id=-1
-		integer item2Id=-1
-		integer item3Id=-1
-		integer item4Id=-1
-		integer item5Id=-1
+		integer ownerID= -1
+		integer item0Id= -1
+		integer item1Id= -1
+		integer item2Id= -1
+		integer item3Id= -1
+		integer item4Id= -1
+		integer item5Id= -1
     endstruct
 
     globals
@@ -23,22 +23,22 @@ scope Revive initializer i
 		private constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
 		private constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
         private deathDat array deathDB
-        private integer dbIndex=-1
-        private timer time=CreateTimer()
-		private integer westDeadCount=0
-		private integer eastDeadCount=0
+        private integer dbIndex= -1
+        private timer time= CreateTimer()
+		private integer westDeadCount= 0
+		private integer eastDeadCount= 0
 		private unit westDummy
 		private unit eastDummy
     endglobals
 
     function p takes nothing returns nothing
         deathDat tempDat
-        integer index=0
+        integer index= 0
         loop
             exitwhen index>dbIndex
-            tempDat=deathDB[index]
+            tempDat= deathDB[index]
 			FloatText_reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
-            tempDat.timeL=tempDat.timeL-1
+            tempDat.timeL= tempDat.timeL-1
             if tempDat.timeL<1 and not Game.ended then
                 Ships.ships[tempDat.ownerID] = CreateUnit(Game.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
 				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
@@ -62,14 +62,14 @@ scope Revive initializer i
 					end
 				end
                 destroy tempDat
-                deathDB[index]=deathDB[dbIndex]
-                dbIndex=dbIndex-1
+                deathDB[index]= deathDB[dbIndex]
+                dbIndex= dbIndex-1
 				index = index-1
-                if dbIndex==-1 then
+                if dbIndex== -1 then
                     PauseTimer(time)
                 end
             end
-            index=index+1
+            index= index+1
         endloop
     end
 
@@ -91,7 +91,7 @@ scope Revive initializer i
 
     function c takes nothing returns nothing
 		deathDat tempDat
-		unit tU=GetTriggerUnit()
+		unit tU= GetTriggerUnit()
 		unit kU
 		integer id
 		integer bounty
@@ -99,14 +99,14 @@ scope Revive initializer i
 		item ti
 		integer pID
         if Ships.isPlayerShip(tU)then
-			kU=GetKillingUnit()
-			kO=GetOwningPlayer(kU)
+			kU= GetKillingUnit()
+			kO= GetOwningPlayer(kU)
 			id = GetPlayerId(kO)
-			tempDat=new deathDat
-			tempDat.u=tU
-			tempDat.timeL=REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
-			tempDat.ownerID=GetPlayerId(GetOwningPlayer(tU))
-			pID=GetPlayerId(GetOwningPlayer(kU))
+			tempDat= new deathDat
+			tempDat.u= tU
+			tempDat.timeL= REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
+			tempDat.ownerID= GetPlayerId(GetOwningPlayer(tU))
+			pID= GetPlayerId(GetOwningPlayer(kU))
 			if id>1 then
 				Game.parseKill(id)
 				parseAssists(tempDat.ownerID)
@@ -129,52 +129,52 @@ scope Revive initializer i
 			Game.addDeath(tU)
 
 			ti = UnitItemInSlot(tU, 0)
-			tempDat.item0Id=GetItemTypeId(ti)
+			tempDat.item0Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			ti = UnitItemInSlot(tU, 1)
-			tempDat.item1Id=GetItemTypeId(ti)
+			tempDat.item1Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			ti = UnitItemInSlot(tU, 2)
-			tempDat.item2Id=GetItemTypeId(ti)
+			tempDat.item2Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			ti = UnitItemInSlot(tU, 3)
-			tempDat.item3Id=GetItemTypeId(ti)
+			tempDat.item3Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			ti = UnitItemInSlot(tU, 4)
-			tempDat.item4Id=GetItemTypeId(ti)
+			tempDat.item4Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			ti = UnitItemInSlot(tU, 5)
-			tempDat.item5Id=GetItemTypeId(ti)
+			tempDat.item5Id= GetItemTypeId(ti)
 			RemoveItem(ti)
 
 			if tempDat.ownerID<7 then
-				tempDat.teamX=Game.WESTX+REVIVE_OFFSET
-				westDeadCount=westDeadCount+1
-				if westDeadCount==1 then
+				tempDat.teamX= Game.WESTX+REVIVE_OFFSET
+				westDeadCount= westDeadCount+1
+				if westDeadCount== 1 then
 					SetUnitX(westDummy, Game.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy, 0.)
 				end
 			else
-				tempDat.teamX=Game.EASTX-REVIVE_OFFSET
-				eastDeadCount=eastDeadCount+1
-				if eastDeadCount==1 then
+				tempDat.teamX= Game.EASTX-REVIVE_OFFSET
+				eastDeadCount= eastDeadCount+1
+				if eastDeadCount== 1 then
 					SetUnitX(eastDummy, Game.EASTX-REVIVE_OFFSET)
 					SetUnitY(eastDummy, 0.)
 				end
 			end
-			dbIndex=dbIndex+1
-			deathDB[dbIndex]=tempDat
-			if dbIndex==0 then
+			dbIndex= dbIndex+1
+			deathDB[dbIndex]= tempDat
+			if dbIndex== 0 then
 				TimerStart(time, CLOCK_PERIOD, true, function p)
 			end
-			kU=null
+			kU= null
 		end
-		tU=null
+		tU= null
     end
 
     function i takes nothing returns nothing

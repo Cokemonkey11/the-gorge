@@ -3,11 +3,11 @@ scope IonicTeleporter initializer i
 	import RegisterPlayerUnitEvent
 
 	globals
-		constant integer TELE_ID='A00H'
+		constant integer TELE_ID= 'A00H'
 	endglobals
 
 	function effectC takes nothing returns nothing
-		if GetSpellAbilityId()==TELE_ID then
+		if GetSpellAbilityId()== TELE_ID then
 			DTS12MissileArray.disjoint(GetTriggerUnit())
 		end
 	end

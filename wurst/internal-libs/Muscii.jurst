@@ -177,7 +177,7 @@ package Muscii
 			else
 				m.iterator = m.first
 				if m.count>-1 then
-					m.count=m.count-1
+					m.count= m.count-1
 					if m.count == -1 then
 						m.stop()
 						next = m.queued
