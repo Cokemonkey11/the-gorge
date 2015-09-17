@@ -1,7 +1,9 @@
 scope GoldIncome initializer i
+    import Game
+
 	globals
-		private constant real CLOCK_PERIOD = 1.
-		private constant integer GOLD_PER_SECOND = 1
+		constant real CLOCK_PERIOD = 1.
+		constant integer GOLD_PER_SECOND = 1
 	endglobals
 
     function c takes nothing returns nothing
