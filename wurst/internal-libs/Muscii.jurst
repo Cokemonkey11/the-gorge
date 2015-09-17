@@ -73,7 +73,7 @@ package Muscii
 	endstruct
 
 	public class Muscii
-		private static Table fromClock
+		static Table fromClock
 		private static Muscii array db
 		private static integer dbIndex = -1
 		Chord first
@@ -196,8 +196,8 @@ package Muscii
 				end
 			end
 		end
+	end
 
-		init
-			fromClock = new Table
-		end
+	init
+		Muscii.fromClock = new Table
 	end
