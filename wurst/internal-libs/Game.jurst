@@ -100,10 +100,10 @@ package Game
 		static int array tradeExp
 		static integer array scoreboardRows
 		static real seconds = 0.
-		unit westRepair
-		unit eastRepair
-		unit westHangar
-		unit eastHangar
+		static unit westRepair
+		static unit eastRepair
+		static unit westHangar
+		static unit eastHangar
 		static unit array westUtility
 		static unit array eastUtility
 		static unit array captains

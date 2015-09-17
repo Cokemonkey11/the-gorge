@@ -1,14 +1,19 @@
 scope Repair initializer i
+	import Game
+	import Ships
+	import SimError
+	import RegisterPlayerUnitEvent
+
 	globals
-		private constant real MAX_DISTANCE = 400.
-		private constant real REPAIR_TIMEOUT = 30.
-		private constant real FRAC = 1./2.
-		private constant string TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
-		private constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
-		private constant string DISTANCE_ERROR = "Your ship is too far away!"
-		private constant string ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
-		private constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
-		private real array lastRepair[12]
+		constant real MAX_DISTANCE = 400.
+		constant real REPAIR_TIMEOUT = 30.
+		constant real FRAC = 1./2.
+		constant string TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
+		constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
+		constant string DISTANCE_ERROR = "Your ship is too far away!"
+		constant string ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
+		constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+		real array lastRepair
 	endglobals
 
 	function c takes nothing returns nothing
@@ -17,7 +22,6 @@ scope Repair initializer i
 		integer id
 		real max
 		real life
-		integer index= 0
 		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
 			p = GetTriggerPlayer()
 			id = GetPlayerId(p)
@@ -47,7 +51,6 @@ scope Repair initializer i
 				simError(p, ALLIANCE_ERROR)
 			end
 		end
-		tU= null
 	end
 
 	function i takes nothing returns nothing
