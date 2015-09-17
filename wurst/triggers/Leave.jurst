@@ -4,7 +4,7 @@ scope Leave initializer init
 		integer id = GetPlayerId(p)
 		DisplayTextToPlayer(Game.localPlayer,0.,0.,Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
-	endfunction
+	end
 
 	function init takes nothing returns nothing
 		trigger t = CreateTrigger()
@@ -16,5 +16,5 @@ scope Leave initializer init
 		endloop
 		TriggerAddCondition(t,Condition(function c))
 		t = null
-	endfunction
+	end
 endscope

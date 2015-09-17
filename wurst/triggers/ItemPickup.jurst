@@ -7,9 +7,9 @@ scope ItemPickup initializer i
 		else
 			Equipment.resetUnitDamageReduction(GetTriggerUnit())
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM,function c)
-	endfunction
+	end
 endscope

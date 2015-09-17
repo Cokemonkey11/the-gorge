@@ -19,11 +19,11 @@ scope SeaWitchColdArrows initializer i
 			UnitRemoveAbility(dummy,SLOW_ID)
 		endif
 		return false
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
 		dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),Game.DUMMY_ID,0.,0.,0.)
 		UnitAddAbility(dummy,'Aloc')
-	endfunction
+	end
 endscope

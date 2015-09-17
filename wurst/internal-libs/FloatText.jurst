@@ -10,5 +10,5 @@ library FloatText requires Game
 		if Game.localPlayer == Game.players[pID] then
 			SetTextTagVisibility(t,true)
 		endif
-	endfunction
+	end
 endlibrary

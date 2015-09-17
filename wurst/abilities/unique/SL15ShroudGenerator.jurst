@@ -62,7 +62,7 @@ scope SL15ShroudGenerator initializer i
 			endif
 			index=index+1
 		endloop
-	endfunction
+	end
 
 	function p takes nothing returns nothing
 		integer index = 0
@@ -119,7 +119,7 @@ scope SL15ShroudGenerator initializer i
 			endif
 			index = index +1
 		endloop
-	endfunction
+	end
 
 	function c takes nothing returns nothing
 		Shroud s
@@ -138,9 +138,9 @@ scope SL15ShroudGenerator initializer i
 				TimerStart(clock,CLOCK_PERIOD,true,function p)
 			endif
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-	endfunction
+	end
 endscope

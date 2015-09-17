@@ -21,7 +21,7 @@ scope ShieldAllLevels initializer i
 			index=index+1
 		endloop
 		return -1
-	endfunction
+	end
 
 	function c takes nothing returns nothing
 		integer sId
@@ -33,9 +33,9 @@ scope ShieldAllLevels initializer i
 				Shield.add(tU,AMOUNT_1,TIME_1,SHIELD_FX,SHIELD_FX_POINT)
 			endif
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-	endfunction
+	end
 endscope

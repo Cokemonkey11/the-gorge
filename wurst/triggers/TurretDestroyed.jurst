@@ -26,11 +26,11 @@ scope TurretDestroyed initializer i
 			endloop
 		endif
 		tU=null
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
 		Sound.preload(GOODJOB)
 		Sound.preload(WARNING)
-	endfunction
+	end
 endscope

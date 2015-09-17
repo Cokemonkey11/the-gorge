@@ -71,23 +71,23 @@ scope Revive initializer i
             endif
             index=index+1
         endloop
-    endfunction
+    end
 
 	function getBounty takes nothing returns integer
 		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
-	endfunction
+	end
 
 	function parseAssists takes integer pID returns nothing
 		integer index = 2
 		loop
 			exitwhen index>11
-			if Game.seconds - Game.assistStamps[pID][index] <= Game.ASSIST_TIME then
+			if Game.seconds - Game.assistTimestamps[pID][index] <= Game.ASSIST_TIME then
 				Game.assists[index] = Game.assists[index] +1
 				Game.scoreboard.setValue(3,Game.scoreboardRows[index],I2S(Game.assists[index]))
 			endif
 			index = index+1
 		endloop
-	endfunction
+	end
 
     function c takes nothing returns nothing
 		deathDat tempDat
@@ -175,7 +175,7 @@ scope Revive initializer i
 			kU=null
 		endif
 		tU=null
-    endfunction
+    end
 
     function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
@@ -183,5 +183,5 @@ scope Revive initializer i
 		// Initialize circle of power dummies
 		westDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
 		eastDummy = CreateUnit(Game.playerPassive,COP_ID,Game.SAFE_X,Game.SAFE_Y,270.)
-    endfunction
+    end
 endscope

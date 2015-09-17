@@ -1,4 +1,8 @@
 scope Damage initializer i
+	import Ships
+	import Game
+	import StructuredDD
+
 	function h takes nothing returns boolean
 		integer id
 		unit targ = GetTriggerUnit()
@@ -9,15 +13,13 @@ scope Damage initializer i
 			src = GetEventDamageSource()
 			sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 then
-				Game.assistStamps[id][sID] = R2I(Game.seconds)
+				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
 			endif
-			src = null
 		endif
-		targ = null
 		return false
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
-	endfunction
+	end
 endscope

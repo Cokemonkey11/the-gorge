@@ -34,31 +34,31 @@ scope Music initializer i
 
 	function playIntro takes nothing returns nothing
 		m.playCounted(3).callback(SCOPE_PRIVATE+"playVerse1")
-	endfunction
+	end
 
 	function playVerse1 takes nothing returns nothing
 		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus")
-	endfunction
+	end
 
 	function playChorus takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP2,0).enqueue(chorusP3,0).enqueue(chorusP2,0).callback(SCOPE_PRIVATE+"playVerse2")
-	endfunction
+	end
 
 	function playVerse2 takes nothing returns nothing
 		v1.playCounted(0).enqueue(v1p2,1).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorus2")
-	endfunction
+	end
 
 	function playChorus2 takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP3,1).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus2P7,0).enqueue(chorus2P8,0).callback(SCOPE_PRIVATE+"playVerse3")
-	endfunction
+	end
 
 	function playVerse3 takes nothing returns nothing
 		v1.playCounted(0).enqueue(verse3P2,0).enqueue(v1p2,2).enqueue(v1p3,0).callback(SCOPE_PRIVATE+"playChorusRepeat")
-	endfunction
+	end
 
 	function playChorus3Repeat takes nothing returns nothing
 		chorusP1.playCounted(0).enqueue(chorusP3,0).enqueue(chorusP3,0).enqueue(chorus2P4,0).enqueue(chorus2P5,1).enqueue(chorus3P7,0).enqueue(chorus3P8,0).callback(SCOPE_PRIVATE+"playVerse1")
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		//		song3
@@ -421,5 +421,5 @@ scope Music initializer i
 		Sound.preload(TM5_PATH)
 		Sound.preload(TM5DOUBLE_PATH)
 		Sound.preload(HATPDL_PATH)
-	endfunction
+	end
 endscope

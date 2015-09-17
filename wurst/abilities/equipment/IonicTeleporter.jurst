@@ -10,9 +10,9 @@ scope IonicTeleporter initializer i
 		if GetSpellAbilityId()==TELE_ID then
 			DTS12MissileArray.disjoint(GetTriggerUnit())
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)
-	endfunction
+	end
 endscope

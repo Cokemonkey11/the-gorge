@@ -13,9 +13,9 @@ scope GoldIncome initializer i
 				index=index+1
 			endloop
 		endif
-    endfunction
+    end
 
     function i takes nothing returns nothing
 		TimerStart(CreateTimer(),CLOCK_PERIOD,true,function c)
-    endfunction
+    end
 endscope

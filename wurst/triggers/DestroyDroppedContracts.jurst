@@ -8,7 +8,7 @@ scope DestroyDroppedContracts initializer i
 			return true
 		endif
 		return false
-	endfunction
+	end
 
 	function c takes nothing returns nothing
 		item it = GetManipulatedItem()
@@ -20,7 +20,7 @@ scope DestroyDroppedContracts initializer i
 			RemoveItem(it)
 		endif
 		it = null
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
@@ -29,5 +29,5 @@ scope DestroyDroppedContracts initializer i
 		tradeItems = new Table
 		tradeItems[Equipment.DATA_ID] = 1
 		tradeItems[Equipment.TOXIC_SUBST_FULL] = 1
-	endfunction
+	end
 endscope

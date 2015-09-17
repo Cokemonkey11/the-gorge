@@ -14,9 +14,9 @@ scope Release initializer i
 			Crewmembers.release(tU)
 			DestroyEffect(AddSpecialEffect(TRANSMUTE,GetUnitX(tU),GetUnitY(tU)))
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-	endfunction
+	end
 endscope

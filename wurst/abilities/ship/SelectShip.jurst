@@ -27,9 +27,9 @@ scope SelectShip initializer i
 				simError(owner,DEAD_ERROR)
 			endif
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-	endfunction
+	end
 endscope

@@ -106,14 +106,14 @@ package Game
 		unit eastHangar
 		static unit array westUtility
 		static unit array eastUtility
-		static unit array captains[4]
+		static unit array captains
 		static player array players
 		static player localPlayer
 		player playerPassive
 		boolean array playing[12]
 		string array colors[12]
 		string array names[12]
-		AssistTimestamps array assistTimestamps[12]
+		static AssistTimestamps array assistTimestamps
 		integer array kills[12]
 		integer array deaths[12]
 		integer array assists[12]
@@ -138,20 +138,20 @@ package Game
 			SetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(owner,PLAYER_STATE_RESOURCE_GOLD)+gold)
 			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL,u,"origin"))
 			DisplayTextToPlayer(owner,0.,0.,"You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonus_experience)+"|r trading experience.")
-		endfunction
+		end
 
 		function playerIsWest takes integer id returns boolean
 			return GetUnitX(Ships.ships[id])<0.
-		endfunction
+		end
 
 		function getMinutes takes nothing returns integer
 			return minutesFSM
-		endfunction
+		end
 
 		function farmIncrement takes integer pID returns nothing
 			farm[pID] = farm[pID] + 1
 			scoreboard.setValue(4,scoreboardRows[pID],I2S(farm[pID]))
-		endfunction
+		end
 
 		function parseKill takes integer pID returns nothing
 			kills[pID] = kills[pID] + 1
@@ -162,7 +162,7 @@ package Game
 			endif
 			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
 			scoreboard.setValue(1,scoreboardRows[pID],I2S(kills[pID]))
-		endfunction
+		end
 
 		function addDeath takes unit u returns nothing
 			integer id = GetPlayerId(GetOwningPlayer(u))
@@ -173,7 +173,7 @@ package Game
 				deaths[1] = deaths[1] + 1
 			endif
 			scoreboard.setValue(2,scoreboardRows[id],I2S(deaths[id]))
-		endfunction
+		end
 
 		static function updateIcon takes integer pID returns nothing
 			integer unitType = shipClass[pID]
@@ -186,7 +186,7 @@ package Game
 			elseif unitType==Ships.SKYBARGE_ID then
 				scoreboard.setIcon(0,scoreboardRows[pID],SKYBARGE_ICON)
 			endif
-		endfunction
+		end
 
 		function addQuest takes string desc, string iconPath, boolean required, string title returns quest
 			quest q = CreateQuest()
@@ -198,7 +198,7 @@ package Game
 			QuestSetRequired(q,required)
 			QuestSetTitle(q,title)
 			return q
-		endfunction
+		end
 
 		function initializeQuests takes nothing returns nothing
 			// Primary Quests (Left)
@@ -215,7 +215,7 @@ package Game
 			addQuest(INFO_DESCRIP,INFO_ICON,false,INFO_TITLE)
 			// credits
 			addQuest(CREDS_DESCRIP,CREDS_ICON,false,CREDS_TITLE)
-		endfunction
+		end
 
 		static function c takes nothing returns nothing
 			unit tU=GetTriggerUnit()
@@ -232,7 +232,7 @@ package Game
 					endif
 				endif
 			endif
-		endfunction
+		end
 
 		static function fadeOut takes real duration returns nothing
 			EnableUserUI(false)
@@ -245,7 +245,7 @@ package Game
 			SetCineFilterEndColor(0, 0, 0, 255)
 			SetCineFilterDuration(duration)
 			DisplayCineFilter(true)
-		endfunction
+		end
 
 		static function fadeIn takes real duration returns nothing
 			EnableUserUI(true)
@@ -258,7 +258,7 @@ package Game
 			SetCineFilterEndColor(0, 0, 0, 0)
 			SetCineFilterDuration(duration)
 			DisplayCineFilter(true)
-		endfunction
+		end
 
 		static function defeatTeam takes integer team returns nothing
 			if team == 0 then
@@ -308,11 +308,11 @@ package Game
 				Sound.playForPlayer(DEF_SOUND,1.,players[10])
 				Sound.playForPlayer(DEF_SOUND,1.,players[11])
 			endif
-		endfunction
+		end
 
 		static function defeatAfter takes nothing returns nothing
 			EndGame(true)
-		endfunction
+		end
 
 		static function pauseUnits takes nothing returns nothing
 			unit first
@@ -326,7 +326,7 @@ package Game
 				UnitAddAbility(first,'Aloc')
 				GroupRemoveUnit(grp,first)
 			endloop
-		endfunction
+		end
 
 		static function defeatC takes nothing returns nothing
 			unit tU=GetTriggerUnit()
@@ -347,7 +347,7 @@ package Game
 				defeatTeam(1)
 				TimerStart(CreateTimer(),30.,false,function defeatAfter)
 			endif
-		endfunction
+		end
 
 		static function second takes nothing returns nothing
 			seconds = seconds + 1.
@@ -359,7 +359,7 @@ package Game
 			debug if seconds < 0. or (seconds == (seconds + 1.)) then
 			debug	BJDebugMsg("Seconds overflow!")
 			debug endif
-		endfunction
+		end
 
 		static function after takes nothing returns nothing
 			integer id = GetPlayerId(localPlayer)
@@ -371,7 +371,7 @@ package Game
 				ClearSelection()
 				SelectUnit(Ships.ships[id],true)
 			endif
-		endfunction
+		end
 
 		method onInit takes nothing returns nothing
 			integer index=00
@@ -514,5 +514,5 @@ package Game
 			colors[9] = "|cff7ebff1"
 			colors[10] = "|cff106246"
 			colors[11] = "|cff4e2a04"
-		endfunction
+		end
 	end

@@ -11,7 +11,7 @@ scope InitializeScoreboard initializer i
 			Game.scoreboard.displayIcon(col,i,show)
 			i = i +1
 		endloop
-	endfunction
+	end
 
 	function widthCol takes integer col, real width returns nothing
 		integer i = 0
@@ -20,7 +20,7 @@ scope InitializeScoreboard initializer i
 			Game.scoreboard.setWidth(col,i,width)
 			i = i +1
 		endloop
-	endfunction
+	end
 
 	function valueCol takes integer col, string val returns nothing
 		integer i = 0
@@ -29,7 +29,7 @@ scope InitializeScoreboard initializer i
 			Game.scoreboard.setValue(col,i,val)
 			i = i +1
 		endloop
-	endfunction
+	end
 
     function initialize takes nothing returns nothing
         integer i = 2
@@ -80,9 +80,9 @@ scope InitializeScoreboard initializer i
 		Game.scoreboard.suppress = true
 
         DestroyTimer(GetExpiredTimer())
-    endfunction
+    end
 
 	function i takes nothing returns nothing
 		TimerStart(CreateTimer(),0.,false,function initialize)
-	endfunction
+	end
 endscope

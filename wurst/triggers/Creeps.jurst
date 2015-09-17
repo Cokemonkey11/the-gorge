@@ -24,7 +24,7 @@ scope Creeps initializer i
 		IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
 		u = CreateUnit(Game.players[faction],class,x,0.,face)
 		IssuePointOrder(u,"attack",Game.OUTPOST2_X,Game.OUTPOST2_Y)
-	endfunction
+	end
 
 	function c takes nothing returns nothing
 		if not Game.ended then
@@ -48,9 +48,9 @@ scope Creeps initializer i
 				endif
 			extra = not extra
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		TimerStart(CreateTimer(),SPAWN_PERIOD,true,function c)
-	endfunction
+	end
 endscope

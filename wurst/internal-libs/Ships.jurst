@@ -27,7 +27,7 @@ package Ships
 				return tab.loadInt(id)
 			endif
 			return CLASS_UNKNOWN
-		endfunction
+		end
 
 		static function getSellValue takes unit u returns integer
 			integer id = GetUnitTypeId(u)
@@ -35,11 +35,11 @@ package Ships
 				return sellVals.loadInt(id)
 			endif
 			return -1
-		endfunction
+		end
 
-		function isPlayerShip takes unit u returns boolean
+		static function isPlayerShip takes unit u returns boolean
 			return getClass(u) != CLASS_UNKNOWN
-		endfunction
+		end
 
 		static function hasItemOfType takes unit u, integer t returns boolean
 			integer index=0
@@ -51,7 +51,7 @@ package Ships
 				index=index+1
 			endloop
 			return false
-		endfunction
+		end
 	end
 
 	init

@@ -5,9 +5,9 @@ scope Farm initializer i
 		if id>1 then
 			Game.farmIncrement(id)
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH,function c)
-	endfunction
+	end
 endscope

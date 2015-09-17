@@ -3,9 +3,9 @@ scope TradeRewardsPawn initializer i
 		if GetItemTypeId(GetSoldItem())==Equipment.DATA_ID then
 			Game.reward(GetTriggerUnit(),15,1)
 		endif
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PAWN_ITEM, function c)
-	endfunction
+	end
 endscope

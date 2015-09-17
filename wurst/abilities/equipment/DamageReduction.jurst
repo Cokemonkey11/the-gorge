@@ -14,9 +14,9 @@ scope DamageReduction initializer i
 			SetWidgetLife(tU,GetWidgetLife(tU)+d)
 		endif
 		return false
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
-	endfunction
+	end
 endscope

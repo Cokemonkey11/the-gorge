@@ -22,7 +22,7 @@ scope FillToxicSack initializer i
 		endif
 		fU=null
 		return false
-	endfunction
+	end
 
 	function f2 takes nothing returns boolean
 		unit fU = GetFilterUnit()
@@ -45,7 +45,7 @@ scope FillToxicSack initializer i
 		endif
 		fU=null
 		return false
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 
@@ -74,5 +74,5 @@ scope FillToxicSack initializer i
 		shopRect = null
 		reg = null
 		reg2 = null
-	endfunction
+	end
 endscope

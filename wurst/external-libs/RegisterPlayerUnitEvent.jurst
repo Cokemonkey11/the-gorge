@@ -44,7 +44,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 			endloop
 		endif
 		TriggerAddCondition(t[i], Filter(c))
-	endfunction
+	end
 
 	public function registerPlayerUnitEventForPlayer takes playerunitevent p, code c, player pl returns nothing
 		integer i = 16 * GetHandleId(p) + GetPlayerId(pl)
@@ -53,8 +53,8 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
 		endif
 		TriggerAddCondition(t[i], Filter(c))
-	endfunction
+	end
 
 	public function getPlayerUnitEventTrigger takes playerunitevent p returns trigger
 		return t[GetHandleId(p)]
-	endfunction
+	end

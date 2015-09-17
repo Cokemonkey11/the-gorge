@@ -17,9 +17,9 @@ scope ObsidianDrake initializer i
 			DamageType.dealCodeDamage(dS,tU,BONUS_DAMAGE)
 		endif
 		return false
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		StructuredDD.addHandler(function h)
-	endfunction
+	end
 endscope

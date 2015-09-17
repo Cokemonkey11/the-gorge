@@ -48,7 +48,7 @@ scope Repair initializer i
 			endif
 		endif
 		tU=null
-	endfunction
+	end
 
 	function i takes nothing returns nothing
 		integer index=0
@@ -58,5 +58,5 @@ scope Repair initializer i
 			index=index+1
 		endloop
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
-	endfunction
+	end
 endscope

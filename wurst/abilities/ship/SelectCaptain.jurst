@@ -18,9 +18,9 @@ scope SelectCaptain initializer init
 				PanCameraToTimed(GetUnitX(Game.captains[id]),GetUnitY(Game.captains[id]),0.)
 			endif
 		endif
-	endfunction
+	end
 
 	function init takes nothing returns nothing
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-	endfunction
+	end
 endscope
