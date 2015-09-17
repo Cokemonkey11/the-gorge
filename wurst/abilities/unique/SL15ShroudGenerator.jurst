@@ -58,8 +58,8 @@ scope SL15ShroudGenerator initializer i
 				index = index - 1
 				if gensIndex == -1 then
 					PauseTimer(clock2)
-				endif
-			endif
+				end
+			end
 			index=index+1
 		endloop
 	end
@@ -92,10 +92,10 @@ scope SL15ShroudGenerator initializer i
 					gens[gensIndex] = g
 					if gensIndex == 0 then
 						TimerStart(clock2,CLOCK_PERIOD,true,function p2)
-					endif
+					end
 					j = j + 1
 				endloop
-			endif
+			end
 			if IsUnitInRangeXY(s.caster,s.cX,s.cY,SHROUD_RADIUS) then
 				if GetUnitAbilityLevel(s.caster,BUF_ID)<1 then
 					SetUnitX(s.dummy,GetUnitX(s.caster))
@@ -103,10 +103,10 @@ scope SL15ShroudGenerator initializer i
 					UnitAddAbility(s.dummy,INVIS_ID)
 					IssueTargetOrder(s.dummy,"invisibility",s.caster)
 					UnitRemoveAbility(s.dummy,INVIS_ID)
-				endif
+				end
 			else
 				UnitRemoveAbility(s.caster,BUF_ID)
-			endif
+			end
 			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)==0 or s.time>DURATION then
 				DummyUnitStack.release(s.dummy)
 				destroy s
@@ -115,8 +115,8 @@ scope SL15ShroudGenerator initializer i
 				index = index - 1
 				if shroudsIndex == -1 then
 					PauseTimer(clock)
-				endif
-			endif
+				end
+			end
 			index = index +1
 		endloop
 	end
@@ -136,8 +136,8 @@ scope SL15ShroudGenerator initializer i
 			shrouds[shroudsIndex] = s
 			if shroudsIndex == 0 then
 				TimerStart(clock,CLOCK_PERIOD,true,function p)
-			endif
-		endif
+			end
+		end
 	end
 
 	function i takes nothing returns nothing

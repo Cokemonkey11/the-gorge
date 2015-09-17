@@ -42,7 +42,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 				exitwhen k == 0
 				k = k - 1
 			endloop
-		endif
+		end
 		TriggerAddCondition(t[i], Filter(c))
 	end
 
@@ -51,7 +51,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 		if t[i] == null then
 			t[i] = CreateTrigger()
 			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
-		endif
+		end
 		TriggerAddCondition(t[i], Filter(c))
 	end
 

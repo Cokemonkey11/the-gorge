@@ -9,7 +9,7 @@ scope DestroyDroppedContracts initializer i
 	function isTradingItem takes item it returns boolean
 		if tradeItems.hasInt(GetItemTypeId(it)) then
 			return true
-		endif
+		end
 		return false
 	end
 
@@ -17,11 +17,11 @@ scope DestroyDroppedContracts initializer i
 		item it = GetManipulatedItem()
 		if Equipment.getItemClass(it) == Equipment.CLASS_CONTRACT then
 			RemoveItem(it)
-		endif
+		end
 		// Remove trading items as well
 		if isTradingItem(it) then
 			RemoveItem(it)
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

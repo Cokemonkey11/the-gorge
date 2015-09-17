@@ -22,11 +22,11 @@ scope SelectShip initializer i
 					ClearSelection()
 					SelectUnit(Ships.ships[id],true)
 					PanCameraToTimed(GetUnitX(Ships.ships[id]),GetUnitY(Ships.ships[id]),0.)
-				endif
+				end
 			else
 				simError(owner,DEAD_ERROR)
-			endif
-		endif
+			end
+		end
 	end
 
 	function i takes nothing returns nothing

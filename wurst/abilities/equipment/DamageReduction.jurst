@@ -9,10 +9,10 @@ scope DamageReduction initializer i
 		if DamageType.get() != DamageType.CODE and Equipment.reduction.hasInt(tU.getHandleId()) then
 			if d<0. then
 				d=d*-1.
-			endif
+			end
 			d = d*I2R(Equipment.reduction.loadInt(tU.getHandleId()))/100.
 			SetWidgetLife(tU,GetWidgetLife(tU)+d)
-		endif
+		end
 		return false
 	end
 

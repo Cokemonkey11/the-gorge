@@ -17,7 +17,7 @@ scope SeaWitchColdArrows initializer i
 			UnitAddAbility(dummy,SLOW_ID)
 			IssueTargetOrder(dummy,"slow",tU)
 			UnitRemoveAbility(dummy,SLOW_ID)
-		endif
+		end
 		return false
 	end
 

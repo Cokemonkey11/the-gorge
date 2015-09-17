@@ -16,8 +16,8 @@ scope SelectCaptain initializer init
 				ClearSelection()
 				SelectUnit(Game.captains[id],true)
 				PanCameraToTimed(GetUnitX(Game.captains[id]),GetUnitY(Game.captains[id]),0.)
-			endif
-		endif
+			end
+		end
 	end
 
 	function init takes nothing returns nothing

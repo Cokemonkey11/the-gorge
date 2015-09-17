@@ -19,7 +19,7 @@ scope Creeps initializer i
 		else
 			x = Game.EASTX
 			face = 180.
-		endif
+		end
 		u = CreateUnit(Game.players[faction],class,x,0.,face)
 		IssuePointOrder(u,"attack",Game.OUTPOST1_X,Game.OUTPOST1_Y)
 		u = CreateUnit(Game.players[faction],class,x,0.,face)
@@ -45,9 +45,9 @@ scope Creeps initializer i
 				if extra then
 					spawn(0,HAWK_ID)
 					spawn(1,HAWK_ID)
-				endif
+				end
 			extra = not extra
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

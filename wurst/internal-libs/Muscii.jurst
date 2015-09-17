@@ -131,7 +131,7 @@ package Muscii
 				this.queued = next
 			else
 				this.queued = next.copy()
-			endif
+			end
 			this.queueCount = queueCount
 			return this.queued
 		end
@@ -183,7 +183,7 @@ package Muscii
 						next = m.queued
 						if next != null then
 							next.playCounted(m.queueCount)
-						endif
+						end
 						m.queued = null
 						if m.cbf != "" then
 							// TODO: Fix this up!
@@ -191,10 +191,10 @@ package Muscii
 							// http://peq.github.io/WurstScript/manual.html#lambda-expressions-and-closures
 							// ExecuteFunc(m.cbf)
 							m.cbf = ""
-						endif
-					endif
-				endif
-			endif
+						end
+					end
+				end
+			end
 		end
 
 		private static method onInit takes nothing returns nothing

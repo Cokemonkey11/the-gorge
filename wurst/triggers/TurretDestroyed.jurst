@@ -21,10 +21,10 @@ scope TurretDestroyed initializer i
 					SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
 					DisplayTimedTextToPlayer(Game.players[index],0.,0.,10.,SUCCESS)
 					Sound.playForPlayer(GOODJOB,1.,Game.players[index])
-				endif
+				end
 				index=index+1
 			endloop
-		endif
+		end
 		tU=null
 	end
 

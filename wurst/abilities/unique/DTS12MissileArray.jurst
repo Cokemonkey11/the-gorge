@@ -69,7 +69,7 @@ package DTS12MissileArray
 				temp = db[index]
 				if temp.target == u then
 					temp.target = null
-				endif
+				end
 				index=index+1
 			endloop
 		end
@@ -110,7 +110,7 @@ package DTS12MissileArray
 						if IsUnitEnemy(first,Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first,UNIT_TYPE_STRUCTURE)==false and not hit then
 							hit = true
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID],first,DAMAGE)
-						endif
+						end
 						GroupRemoveUnit(grp,first)
 					endloop
 					if temp.dist >= MAXIMUM_RANGE or hit then
@@ -122,8 +122,8 @@ package DTS12MissileArray
 						destroy temp
 						if dbIndex==-1 then
 							PauseTimer(clock)
-						endif
-					endif
+						end
+					end
 				else
 					ang = Atan2(GetUnitY(temp.target)-GetUnitY(temp.missile),GetUnitX(temp.target)-GetUnitX(temp.missile))
 					SetUnitFacing(temp.missile,ang*bj_RADTODEG)
@@ -141,7 +141,7 @@ package DTS12MissileArray
 					temp.dist = temp.dist + temp.vel
 					if not UnitAlive(temp.target) then
 						temp.target = null
-					endif
+					end
 					GroupEnumUnitsInRange(grp,newX,newY,COLLISION_RADIUS,null)
 					hit = false
 					loop
@@ -150,7 +150,7 @@ package DTS12MissileArray
 						if IsUnitEnemy(first,Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first,UNIT_TYPE_STRUCTURE)==false and not hit then
 							hit = true
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID],first,DAMAGE)
-						endif
+						end
 						GroupRemoveUnit(grp,first)
 					endloop
 					if temp.dist >= MAXIMUM_RANGE or hit then
@@ -162,9 +162,9 @@ package DTS12MissileArray
 						destroy temp
 						if dbIndex==-1 then
 							PauseTimer(clock)
-						endif
-					endif
-				endif
+						end
+					end
+				end
 				index = index+1
 			endloop
 		end
@@ -209,7 +209,7 @@ package DTS12MissileArray
 					db[dbIndex] = temp
 					if dbIndex==0 then
 						TimerStart(clock,CLOCK_PERIOD,true,function p)
-					endif
+					end
 					temp = new Missile
 					temp.target = targ
 					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
@@ -254,7 +254,7 @@ package DTS12MissileArray
 					db[dbIndex] = temp
 					if dbIndex==0 then
 						TimerStart(clock,CLOCK_PERIOD,true,function p)
-					endif
+					end
 					temp = new Missile
 					temp.target = null
 					temp.missile = CreateUnit(GetOwningPlayer(tU),DUMMY_ID,cX,cY,face*bj_RADTODEG)
@@ -273,18 +273,18 @@ package DTS12MissileArray
 					temp.ownerID = GetPlayerId(owner)
 					dbIndex = dbIndex+1
 					db[dbIndex] = temp
-				endif
+				end
 				if not ht.hasInt(tU.getHandleId()) then
 					ht.saveInt(tU.getHandleId(), 0)
-				endif
+				end
 				ht.saveInt(tU.getHandleId(), ht.loadInt(tU.getHandleId()) + 1)
 				if ht.loadInt(tU.getHandleId()) == 1 then
 					UnitRemoveAbility(tU,ARRAY_ID)
 					UnitAddAbility(tU,ARRAY_ID)
 				else
 					ht.saveInt(tU.getHandleId(), 0)
-				endif
-			endif
+				end
+			end
 		end
 	end
 

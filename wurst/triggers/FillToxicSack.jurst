@@ -19,7 +19,7 @@ scope FillToxicSack initializer i
 			UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST_FULL,GetUnitX(fU),GetUnitY(fU)))
 			DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
 			Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
-		endif
+		end
 		fU=null
 		return false
 	end
@@ -34,15 +34,15 @@ scope FillToxicSack initializer i
 					RemoveItem(UnitItemInSlot(fU,slt))
 					UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
 					Game.reward(fU,GOLD,TRADE)
-				endif
+				end
 			else
 				if not Game.playerIsWest(id) then
 					RemoveItem(UnitItemInSlot(fU,slt))
 					UnitAddItem(fU,CreateItem(Equipment.TOXIC_SUBST,GetUnitX(fU),GetUnitY(fU)))
 					Game.reward(fU,GOLD,TRADE)
-				endif
-			endif
-		endif
+				end
+			end
+		end
 		fU=null
 		return false
 	end

@@ -25,7 +25,7 @@ package Ships
 			integer id = GetUnitTypeId(u)
 			if tab.hasInt(id) then
 				return tab.loadInt(id)
-			endif
+			end
 			return CLASS_UNKNOWN
 		end
 
@@ -33,7 +33,7 @@ package Ships
 			integer id = GetUnitTypeId(u)
 			if sellVals.hasInt(id) then
 				return sellVals.loadInt(id)
-			endif
+			end
 			return -1
 		end
 
@@ -47,7 +47,7 @@ package Ships
 				exitwhen index>5
 				if GetItemTypeId(UnitItemInSlot(u,index))==t then
 					return true
-				endif
+				end
 				index=index+1
 			endloop
 			return false

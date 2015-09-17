@@ -70,9 +70,9 @@ scope InitializeScoreboard initializer i
 					Game.scoreboard.setValue(0,2+j,Game.colors[i]+Game.names[i]+"|r")
 					Game.scoreboard.setIcon(0,2+j,Game.HELICOPTER_ICON)
 					Game.scoreboardRows[i] = 2+j
-				endif
+				end
 				j = j+1
-			endif
+			end
             i = i + 1
         endloop
 

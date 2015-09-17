@@ -6,7 +6,7 @@ scope ItemPickup initializer i
 			Equipment.autoPawnItemForPlayer(id,it)
 		else
 			Equipment.resetUnitDamageReduction(GetTriggerUnit())
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

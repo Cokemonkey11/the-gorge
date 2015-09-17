@@ -9,6 +9,6 @@ library FloatText requires Game
         SetTextTagVelocity(t,0,.05)
 		if Game.localPlayer == Game.players[pID] then
 			SetTextTagVisibility(t,true)
-		endif
+		end
 	end
 endlibrary

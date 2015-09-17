@@ -42,7 +42,7 @@ package Sound
 				SetSoundVolume(s,127)
 			else
 				SetSoundVolume(s,0)
-			endif
+			end
 			SetSoundPitch(s,pitch)
 			StartSound(s)
 			KillSoundWhenDone(s)

@@ -25,11 +25,11 @@ scope ShipLocator initializer i
 				if IsUnitEnemy(first,owner) and id>1 then
 					if Game.localPlayer == owner then
 						PingMinimap(GetUnitX(first),GetUnitY(first),PING_DURATION)
-					endif
-				endif
+					end
+				end
 				GroupRemoveUnit(grp,first)
 			endloop
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

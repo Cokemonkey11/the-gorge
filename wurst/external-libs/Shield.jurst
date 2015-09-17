@@ -66,7 +66,7 @@ library Shield
                     if tempDat.shieldLeft>damageLeft then
                         if tempDat.finiteShield then
                             tempDat.shieldLeft=tempDat.shieldLeft-damageLeft
-                        endif
+                        end
                         SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)+damageLeft)
                         damageLeft=0.
                     else
@@ -86,12 +86,12 @@ library Shield
                                 Shield.tab.saveInt(tempDat.u.getHandleId(), tempDat castTo int)
                             else
                                 noShieldsLeft=true
-                            endif
+                            end
                             destroyingDat.nextShield = null
-                        endif
-                    endif
+                        end
+                    end
                 endloop
-            endif
+            end
         endmethod
 
         //* This method runs every TIMER_PERIOD seconds as long as the stack
@@ -128,11 +128,11 @@ library Shield
                         otherDat.nextShield=tempDat.nextShield
                         otherDat=tempDat.nextShield
                         otherDat.prevShield=tempDat.prevShield
-                    endif
+                    end
                     //let's reset the unit's hp if he has extra
                     if tempDat.falseHP>0. then
                         SetWidgetLife(tempDat.u,GetWidgetLife(tempDat.u)-tempDat.falseHP)
-                    endif
+                    end
                     DestroyEffect(tempDat.fx)
                     destroy tempDat
                     Shield.allShields[index]=Shield.allShields[Shield.shieldIndex]
@@ -140,8 +140,8 @@ library Shield
                     index=index-1
                     if Shield.shieldIndex==-1 then
                         PauseTimer(Shield.time)
-                    endif
-                endif
+                    end
+                end
                 index=index+1
             endloop
         endmethod
@@ -159,11 +159,11 @@ library Shield
             tempDat.fx=AddSpecialEffectTarget(fx,u,fxpoint)
             if time==-1. then
                 tempDat.useDuration=false
-            endif
+            end
             if amount==-1. then
                 amount=100000.
                 tempDat.finiteShield=false
-            endif
+            end
             //figure out how to partition the damage
             if diff>=amount then
                 //the unit has plenty of missing HP, so:
@@ -175,14 +175,14 @@ library Shield
                 SetWidgetLife(u,maxLife)
                 tempDat.falseHP=diff
                 tempDat.shieldLeft=amount-diff
-            endif
+            end
             //Now let's figure out if the unit already has a shield - if he
             //does, we add this shield to the front:
             if Shield.tab.hasInt(u.getHandleId()) then
                 linkedDat=Shield.tab.loadInt(u.getHandleId()) castTo Shield
                 tempDat.nextShield=linkedDat
                 linkedDat.prevShield=tempDat
-            endif
+            end
             Shield.tab.saveInt(u.getHandleId(), tempDat castTo int)
             //now let's add this shield to the stack so it can be properly
             //deallocated when its time runs out:
@@ -191,7 +191,7 @@ library Shield
             //if allShields was previously empty we have to jumpstart the timer:
             if Shield.shieldIndex==0 then
                 TimerStart(Shield.time,Shield.TIMER_PERIOD,true,function Shield.timeout)
-            endif
+            end
         endmethod
 
         //* Auxillary method used to initialize the Table and

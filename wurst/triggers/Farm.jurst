@@ -1,10 +1,13 @@
 scope Farm initializer i
+	import Game
+	import RegisterPlayerUnitEvent
+
 	function c takes nothing returns nothing
 		player p = GetOwningPlayer(GetKillingUnit())
 		integer id = GetPlayerId(p)
 		if id>1 then
 			Game.farmIncrement(id)
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

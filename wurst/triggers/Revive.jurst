@@ -47,28 +47,28 @@ scope Revive initializer i
 					PanCameraToTimed(tempDat.teamX,0.,0.)
 					ClearSelection()
 					SelectUnit(Ships.ships[tempDat.ownerID],true)
-				endif
+				end
 				if tempDat.ownerID<7 then
 					westDeadCount = westDeadCount - 1
 					if westDeadCount == 0 then
 						SetUnitX(westDummy,Game.SAFE_X)
 						SetUnitY(westDummy,Game.SAFE_Y)
-					endif
+					end
 				else
 					eastDeadCount = eastDeadCount - 1
 					if eastDeadCount == 0 then
 						SetUnitX(eastDummy,Game.SAFE_X)
 						SetUnitY(eastDummy,Game.SAFE_Y)
-					endif
-				endif
+					end
+				end
                 destroy tempDat
                 deathDB[index]=deathDB[dbIndex]
                 dbIndex=dbIndex-1
 				index = index-1
                 if dbIndex==-1 then
                     PauseTimer(time)
-                endif
-            endif
+                end
+            end
             index=index+1
         endloop
     end
@@ -84,7 +84,7 @@ scope Revive initializer i
 			if Game.seconds - Game.assistTimestamps[pID][index] <= Game.ASSIST_TIME then
 				Game.assists[index] = Game.assists[index] +1
 				Game.scoreboard.setValue(3,Game.scoreboardRows[index],I2S(Game.assists[index]))
-			endif
+			end
 			index = index+1
 		endloop
 	end
@@ -118,14 +118,14 @@ scope Revive initializer i
 					DisplayTimedTextToPlayer(Game.localPlayer,0.,0.,10.,"You destroyed "+Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r for |cffffcc00"+I2S(bounty)+" gold.")
 				else
 					DisplayTimedTextToPlayer(Game.localPlayer,0.,0.,10.,Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r was destroyed by "+Game.colors[id]+Game.names[id]+"|r for |cffffcc00"+I2S(bounty)+"|r gold.")
-				endif
+				end
 			else
 				if Game.localPlayer == Game.players[tempDat.ownerID] then
 					DisplayTimedTextToPlayer(Game.localPlayer,0.,0.,10.,"Your ship was destroyed. It will be rebuilt in |cffffcc00"+I2S(tempDat.timeL)+"|r seconds.")
 				else
 					DisplayTimedTextToPlayer(Game.localPlayer,0.,0.,10.,Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r was destroyed.")
-				endif
-			endif
+				end
+			end
 			Game.addDeath(tU)
 
 			ti = UnitItemInSlot(tU,0)
@@ -158,22 +158,22 @@ scope Revive initializer i
 				if westDeadCount==1 then
 					SetUnitX(westDummy,Game.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy,0.)
-				endif
+				end
 			else
 				tempDat.teamX=Game.EASTX-REVIVE_OFFSET
 				eastDeadCount=eastDeadCount+1
 				if eastDeadCount==1 then
 					SetUnitX(eastDummy,Game.EASTX-REVIVE_OFFSET)
 					SetUnitY(eastDummy,0.)
-				endif
-			endif
+				end
+			end
 			dbIndex=dbIndex+1
 			deathDB[dbIndex]=tempDat
 			if dbIndex==0 then
 				TimerStart(time,CLOCK_PERIOD,true,function p)
-			endif
+			end
 			kU=null
-		endif
+		end
 		tU=null
     end
 

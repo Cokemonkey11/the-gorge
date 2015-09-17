@@ -77,7 +77,7 @@ package Crewmembers
 				exitwhen index > slotIndices[id]
 				if inventories[id].slots[index] == cre then
 					return index
-				endif
+				end
 				index=index+1
 			endloop
 			return -1
@@ -106,16 +106,16 @@ package Crewmembers
 					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
 					if slotIndices[temp.ownerID] != -1 then
 						updatePosition(inventories[temp.ownerID].slots[index], index)
-					endif
+					end
 					RemoveUnit(temp.dummy)
 					RemoveUnit(temp.phoenix)
 					destroy temp
 				else
 					debug BJDebugMsg("Error: tried to release a unit that had no index :(")
-				endif
+				end
 			else
 				debug BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
-			endif
+			end
 		end
 
 		static function p takes nothing returns nothing
@@ -130,7 +130,7 @@ package Crewmembers
 				else
 					SetUnitX(temp.phoenix,Game.SAFE_X)
 					SetUnitY(temp.phoenix,Game.SAFE_Y)
-				endif
+				end
 				index=index+1
 			endloop
 		end
@@ -160,13 +160,13 @@ package Crewmembers
 					fromDummy.saveInt(temp.dummy.getHandleId(), temp castTo int)
 					if dbIndex == 0 then
 						TimerStart(time,CLOCK_PERIOD,true,function p)
-					endif
+					end
 				else
 					simError(GetOwningPlayer(bU),ERROR_MESSAGE)
 					SetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyer,PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
 					RemoveUnit(sU)
-				endif
-			endif
+				end
+			end
 		end
 	end
 

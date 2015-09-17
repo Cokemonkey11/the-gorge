@@ -12,7 +12,7 @@ scope GoldIncome initializer i
 				SetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[index],PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
 				index=index+1
 			endloop
-		endif
+		end
     end
 
     function i takes nothing returns nothing

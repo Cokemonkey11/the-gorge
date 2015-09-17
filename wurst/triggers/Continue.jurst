@@ -17,7 +17,7 @@ scope Continue initializer i
 			IssuePointOrder(fU,"attack",Game.EASTX,0.)
 		elseif owner==Game.players[1] and (id=='owyv' or id=='hgry' or id=='hdhw') then
 			IssuePointOrder(fU,"attack",Game.WESTX,0.)
-		endif
+		end
 		return false
 	end
 

@@ -32,7 +32,7 @@ library DummyUnitStack
                 DummyUnitStack.dummyStack[DummyUnitStack.stackIndex]=u
             else
                 return u
-            endif
+            end
             return null
         endmethod
 
@@ -41,7 +41,7 @@ library DummyUnitStack
             DummyUnitStack.add(true)
             if DummyUnitStack.deferredTodoCount<1 then
                 PauseTimer(DummyUnitStack.clock)
-            endif
+            end
         endmethod
 
         static method get takes nothing returns unit
@@ -51,13 +51,13 @@ library DummyUnitStack
                 result=DummyUnitStack.dummyStack[DummyUnitStack.stackIndex+1]
             else
                 result=DummyUnitStack.add(false)
-            endif
+            end
             static if DO_DDPC then
                 if DummyUnitStack.stackIndex<(DummyUnitStack.DYNAMIC_DEFERRED_PRELOAD_COUNT-1) and DummyUnitStack.deferredTodoCount<1 then
                     DummyUnitStack.deferredTodoCount=DummyUnitStack.MIN_PRELOAD_BLOCK_SIZE
                     TimerStart(DummyUnitStack.clock,DummyUnitStack.CLOCK_PERIOD,true,function DummyUnitStack.deferredPreloader)
-                endif
-            endif
+                end
+            end
             return result
         endmethod
 
@@ -66,8 +66,8 @@ library DummyUnitStack
                 if DummyUnitStack.stackIndex>=DummyUnitStack.MAX_PRELOADED_UNITS then
                     RemoveUnit(u)
                     return
-                endif
-            endif
+                end
+            end
             SetUnitFlyHeight(u,0.,0.)
             SetUnitScale(u,1.,1.,1.)
             SetUnitOwner(u,Player(PLAYER_NEUTRAL_PASSIVE),true)
@@ -85,11 +85,11 @@ library DummyUnitStack
                     DummyUnitStack.add(true)
                     index=index+1
                 endloop
-            endif
+            end
             static if DO_IDPC then
                 DummyUnitStack.deferredTodoCount=DummyUnitStack.INITIAL_DEFERRED_PRELOAD_COUNT
                 TimerStart(DummyUnitStack.clock,DummyUnitStack.CLOCK_PERIOD,true,function DummyUnitStack.deferredPreloader)
-            endif
+            end
         endmethod
     endstruct
 endlibrary

@@ -60,14 +60,14 @@ package Equipment
 			if val>1 then
 				DisplayTextToPlayer(Game.players[pID],0.,0.,"Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
 				SetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Game.players[pID],PLAYER_STATE_RESOURCE_GOLD)+val)
-			endif
+			end
 			RemoveItem(it)
 		end
 
 		static function getItemClassId takes integer id returns integer
 			if classes.hasInt(id) then
 				return classes.loadInt(id)
-			endif
+			end
 			return CLASS_UNKNOWN
 		end
 
@@ -93,8 +93,8 @@ package Equipment
 					count++
 					if count > 1 then
 						return true
-					endif
-				endif
+					end
+				end
 
 				index++
 			end
@@ -112,7 +112,7 @@ package Equipment
 				it = UnitItemInSlot(u, index)
 				if getItemClass(it) == cls then
 					return it
-				endif
+				end
 
 				index++
 			end
@@ -126,7 +126,7 @@ package Equipment
 				exitwhen index>5
 				if GetItemTypeId(UnitItemInSlot(u,index))==id then
 					return index
-				endif
+				end
 				index = index + 1
 			end
 			return -1
@@ -145,8 +145,8 @@ package Equipment
 					count = count +1
 					if count>1 then
 						return true
-					endif
-				endif
+					end
+				end
 				index=index+1
 			end
 			return false
@@ -168,7 +168,7 @@ package Equipment
 				return false
 			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
 				return false
-			endif
+			end
 			return true
 		end
 
@@ -187,7 +187,7 @@ package Equipment
 				return false
 			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass==CLASS_TELEPORT or itemClass==CLASS_CONTRACT or id==SHIP_LOCATOR) then
 				return false
-			endif
+			end
 			return true
 		end
 
@@ -209,29 +209,29 @@ package Equipment
 			else
 				temp = CreateItem(id,0.,0.)
 				autoPawnItemForPlayer(pID, temp)
-			endif
+			end
 			return false
 		end
 
 		static function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
 			if i0>0 then
 				playerAddItemFromIdConditional(pID,i0)
-			endif
+			end
 			if i1>0 then
 				playerAddItemFromIdConditional(pID,i1)
-			endif
+			end
 			if i2>0 then
 				playerAddItemFromIdConditional(pID,i2)
-			endif
+			end
 			if i3>0 then
 				playerAddItemFromIdConditional(pID,i3)
-			endif
+			end
 			if i4>0 then
 				playerAddItemFromIdConditional(pID,i4)
-			endif
+			end
 			if i5>0 then
 				playerAddItemFromIdConditional(pID,i5)
-			endif
+			end
 		end
 
 		function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
@@ -239,22 +239,22 @@ package Equipment
 			real y = GetUnitY(Ships.ships[pID])
 			if i0>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i0,x,y))
-			endif
+			end
 			if i1>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i1,x,y))
-			endif
+			end
 			if i2>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i2,x,y))
-			endif
+			end
 			if i3>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i3,x,y))
-			endif
+			end
 			if i4>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i4,x,y))
-			endif
+			end
 			if i5>0 then
 				UnitAddItem(Ships.ships[pID],CreateItem(i5,x,y))
-			endif
+			end
 		end
 
 		static function tradeExperience takes player who returns integer
@@ -267,7 +267,7 @@ package Equipment
 				return 0
 			elseif typ == TOXIC_SUBST then
 				return 1
-			endif
+			end
 			return -1
 		end
 
@@ -285,64 +285,64 @@ package Equipment
 					toSelect = Game.westUtility[1]
 				else
 					toSelect = Game.eastUtility[1]
-				endif
+				end
 			elseif id==PAGE_2_1 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[0]
 				else
 					toSelect = Game.eastUtility[0]
-				endif
+				end
 			elseif id==PAGE_2_3 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
-				endif
+				end
 			elseif id==PAGE_3_2 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[1]
 				else
 					toSelect=Game.eastUtility[1]
-				endif
+				end
 			elseif id==PAGE_3_4 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[3]
 				else
 					toSelect = Game.eastUtility[3]
-				endif
+				end
 			elseif id==PAGE_4_3 then
 				was = true
 				if seller == Game.westUtility[3] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
-				endif
+				end
 			elseif id==KPAGE_1_2 then
 				was = true
 				if seller == Game.westKeep[0] then
 					toSelect = Game.westKeep[1]
 				else
 					toSelect = Game.eastKeep[1]
-				endif
+				end
 			elseif id==KPAGE_2_1 then
 				was = true
 				if seller == Game.westKeep[1] then
 					toSelect = Game.westKeep[0]
 				else
 					toSelect = Game.eastKeep[0]
-				endif
-			endif
+				end
+			end
 			if was then
 				RemoveItem(sI)
 				if Game.localPlayer == owner then
 					SelectUnit(seller,false)
 					SelectUnit(toSelect,true)
-				endif
-			endif
+				end
+			end
 
 			return false
 		end
@@ -354,7 +354,7 @@ package Equipment
 				if GetItemTypeId(UnitItemInSlot(u,index)) == STONE_HULL then
 					reduction.saveInt(u.getHandleId(), REDUCTION1)
 					return
-				endif
+				end
 				index = index +1
 			end
 
@@ -375,7 +375,7 @@ package Equipment
 				val = GetWidgetLife(sI)
 				if val>1. then
 					SetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(buyerP,PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-				endif
+				end
 				RemoveItem(sI)
 			elseif not unitCanAcquireItem(buyer,sI) then
 				val = GetWidgetLife(sI)
@@ -391,8 +391,8 @@ package Equipment
 				elseif class==CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
 					RemoveItem(sI)
 					simError(buyerP,INSUFFICIENT_EXPERIENCE)
-				endif
-			endif
+				end
+			end
 
 			resetUnitDamageReduction(buyer)
 			return false

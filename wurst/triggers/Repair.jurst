@@ -24,7 +24,7 @@ scope Repair initializer i
 			if Game.localPlayer==p then
 				SelectUnit(tU,false)
 				SelectUnit(Ships.ships[id],true)
-			endif
+			end
 			if IsUnitAlly(tU,p) then
 				if IsUnitInRange(tU,Ships.ships[id],MAX_DISTANCE) then
 					life = GetWidgetLife(Ships.ships[id])
@@ -36,17 +36,17 @@ scope Repair initializer i
 							DestroyEffect(AddSpecialEffectTarget(HEAL_MODEL,Ships.ships[id],"origin"))
 						else
 							simError(p,TOO_OFTEN_ERROR)
-						endif
+						end
 					else
 						simError(p,MAX_HEALTH_ERROR)
-					endif
+					end
 				else
 					simError(p,DISTANCE_ERROR)
-				endif
+				end
 			else
 				simError(p,ALLIANCE_ERROR)
-			endif
-		endif
+			end
+		end
 		tU=null
 	end
 

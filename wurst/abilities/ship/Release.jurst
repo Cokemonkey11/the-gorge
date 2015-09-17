@@ -13,7 +13,7 @@ scope Release initializer i
 			tU=GetSpellTargetUnit()
 			Crewmembers.release(tU)
 			DestroyEffect(AddSpecialEffect(TRANSMUTE,GetUnitX(tU),GetUnitY(tU)))
-		endif
+		end
 	end
 
 	function i takes nothing returns nothing

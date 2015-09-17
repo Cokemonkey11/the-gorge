@@ -27,8 +27,8 @@ scope ProbeContractAbility initializer i
 				UnitAddItem(tU,CreateItem(Equipment.DATA_ID,GetUnitX(tU),GetUnitY(tU)))
 				DisplayTextToPlayer(owner,0.,0.,SUCCESS_MESSAGE)
 				Sound.playForPlayer(Game.TRADE_SUCCESS_SOUND,1.,owner)
-			endif
-		endif
+			end
+		end
 	end
 
 	function i takes nothing returns nothing

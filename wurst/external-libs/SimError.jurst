@@ -23,7 +23,7 @@ package SimError
 			ClearTextMessages()
 			DisplayTimedTextToPlayer(forPlayer, 0.52, 0.96, 2.00, msg)
 			StartSound(error)
-		endif
+		end
 	end
 
 	init

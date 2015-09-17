@@ -14,8 +14,8 @@ scope Damage initializer i
 			sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 then
 				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
-			endif
-		endif
+			end
+		end
 		return false
 	end
 

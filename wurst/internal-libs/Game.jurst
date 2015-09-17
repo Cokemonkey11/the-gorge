@@ -114,10 +114,10 @@ package Game
 		string array colors[12]
 		string array names[12]
 		static AssistTimestamps array assistTimestamps
-		integer array kills[12]
-		integer array deaths[12]
-		integer array assists[12]
-		integer array farm[12]
+		static integer array kills
+		static integer array deaths
+		static integer array assists
+		static integer array farm
 
 		static MyBoard scoreboard
 
@@ -129,9 +129,9 @@ package Game
 		static integer minutesFSM = 0
 		static group grp = CreateGroup()
 
-		constant string REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
+		static constant string REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
 
-		function reward takes unit u, integer gold, integer bonus_experience returns nothing
+		static function reward takes unit u, integer gold, integer bonus_experience returns nothing
 			player owner = GetOwningPlayer(u)
 			integer id = GetPlayerId(owner)
 			tradeExp[id] += bonus_experience
@@ -140,38 +140,38 @@ package Game
 			DisplayTextToPlayer(owner,0.,0.,"You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonus_experience)+"|r trading experience.")
 		end
 
-		function playerIsWest takes integer id returns boolean
+		static function playerIsWest takes integer id returns boolean
 			return GetUnitX(Ships.ships[id])<0.
 		end
 
-		function getMinutes takes nothing returns integer
+		static function getMinutes takes nothing returns integer
 			return minutesFSM
 		end
 
-		function farmIncrement takes integer pID returns nothing
+		static function farmIncrement takes integer pID returns nothing
 			farm[pID] = farm[pID] + 1
 			scoreboard.setValue(4,scoreboardRows[pID],I2S(farm[pID]))
 		end
 
-		function parseKill takes integer pID returns nothing
+		static function parseKill takes integer pID returns nothing
 			kills[pID] = kills[pID] + 1
 			if pID<7 then
 				kills[0] = kills[0] + 1
 			else
 				kills[1] = kills[1] + 1
-			endif
+			end
 			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
 			scoreboard.setValue(1,scoreboardRows[pID],I2S(kills[pID]))
 		end
 
-		function addDeath takes unit u returns nothing
+		static function addDeath takes unit u returns nothing
 			integer id = GetPlayerId(GetOwningPlayer(u))
 			deaths[id] = deaths[id] + 1
 			if id<7 then
 				deaths[0] = deaths[0] + 1
 			else
 				deaths[1] = deaths[1] + 1
-			endif
+			end
 			scoreboard.setValue(2,scoreboardRows[id],I2S(deaths[id]))
 		end
 
@@ -185,7 +185,7 @@ package Game
 				scoreboard.setIcon(0,scoreboardRows[pID],ZEPPELIN_ICON)
 			elseif unitType==Ships.SKYBARGE_ID then
 				scoreboard.setIcon(0,scoreboardRows[pID],SKYBARGE_ICON)
-			endif
+			end
 		end
 
 		function addQuest takes string desc, string iconPath, boolean required, string title returns quest
@@ -224,14 +224,14 @@ package Game
 					westShieldsLeft = westShieldsLeft - 1
 					if westShieldsLeft < 1 then
 						SetUnitInvulnerable(westKeep[0],false)
-					endif
+					end
 				else
 					eastShieldsLeft = eastShieldsLeft - 1
 					if eastShieldsLeft < 1 then
 						SetUnitInvulnerable(eastKeep[0],false)
-					endif
-				endif
-			endif
+					end
+				end
+			end
 		end
 
 		static function fadeOut takes real duration returns nothing
@@ -307,7 +307,7 @@ package Game
 				Sound.playForPlayer(DEF_SOUND,1.,players[9])
 				Sound.playForPlayer(DEF_SOUND,1.,players[10])
 				Sound.playForPlayer(DEF_SOUND,1.,players[11])
-			endif
+			end
 		end
 
 		static function defeatAfter takes nothing returns nothing
@@ -346,7 +346,7 @@ package Game
 				Muscii.interrupt()
 				defeatTeam(1)
 				TimerStart(CreateTimer(),30.,false,function defeatAfter)
-			endif
+			end
 		end
 
 		static function second takes nothing returns nothing
@@ -355,10 +355,10 @@ package Game
 			if secondsFSM == 60 then
 				secondsFSM = 0
 				minutesFSM = minutesFSM+1
-			endif
+			end
 			debug if seconds < 0. or (seconds == (seconds + 1.)) then
 			debug	BJDebugMsg("Seconds overflow!")
-			debug endif
+			debug end
 		end
 
 		static function after takes nothing returns nothing
@@ -370,7 +370,7 @@ package Game
 			if localPlayer==GetOwningPlayer(Ships.ships[id]) then
 				ClearSelection()
 				SelectUnit(Ships.ships[id],true)
-			endif
+			end
 		end
 
 		method onInit takes nothing returns nothing
@@ -428,10 +428,10 @@ package Game
 					else
 						Ships.ships[index] = CreateUnit(players[index],Ships.HELICOPTER_ID,EASTX-SHIP_OFFSET+LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.),270.)
 						eastCount=eastCount+1
-					endif
+					end
 				else
 					playing[index] = false
-				endif
+				end
 				index=index+1
 			endloop
 
