@@ -1,4 +1,6 @@
 scope Leave initializer init
+	import Game
+
 	function c takes nothing returns boolean
 		player p = GetTriggerPlayer()
 		integer id = GetPlayerId(p)
@@ -15,6 +17,5 @@ scope Leave initializer init
 			index = index + 1
 		endloop
 		TriggerAddCondition(t, Condition(function c))
-		t = null
 	end
 endscope
