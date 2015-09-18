@@ -34,7 +34,7 @@ package DummyUnitStack
 				return u
 			end
 			return null
-		endmethod
+		end
 
 		static method deferredPreloader takes nothing returns nothing
 			DummyUnitStack.deferredTodoCount = DummyUnitStack.deferredTodoCount-1
@@ -42,7 +42,7 @@ package DummyUnitStack
 			if DummyUnitStack.deferredTodoCount<1 then
 				PauseTimer(DummyUnitStack.clock)
 			end
-		endmethod
+		end
 
 		static method get takes nothing returns unit
 			unit result
@@ -59,7 +59,7 @@ package DummyUnitStack
 				end
 			end
 			return result
-		endmethod
+		end
 
 		static method release takes unit u returns nothing
 			static if DO_MPU then
@@ -75,7 +75,7 @@ package DummyUnitStack
 			SetUnitY(u, DummyUnitStack.SAFE_LOC_Y)
 			DummyUnitStack.stackIndex = DummyUnitStack.stackIndex+1
 			DummyUnitStack.dummyStack[DummyUnitStack.stackIndex] = u
-		endmethod
+		end
 	end
 
 	init
@@ -86,7 +86,7 @@ package DummyUnitStack
 				exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
 				DummyUnitStack.add(true)
 				index = index+1
-			endloop
+			end
 		end
 
 		if DummyUnitStack.DO_IDPC then

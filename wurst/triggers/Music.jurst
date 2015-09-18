@@ -37,76 +37,86 @@ package Music
 	endglobals
 
 	function playIntro takes nothing returns nothing
+		BJDebugMsg("playIntro start")
 		Section verse1 = () -> playVerse1()
 
-		m..playCounted(3)
-		 ..callback(verse1)
+		m
+			..playCounted(3)
+			..callback(verse1)
+		BJDebugMsg("playIntro end")
 	end
 
 	function playVerse1 takes nothing returns nothing
 		Section chorus = () -> playChorus()
 
-		v1..playCounted(0)
-		  ..enqueue(v1p2, 1)
-		  ..enqueue(v1p3, 0)
-		  ..callback(chorus)
+		v1
+			..playCounted(0)
+			..enqueue(v1p2, 1)
+			..enqueue(v1p3, 0)
+			..callback(chorus)
 	end
 
 	function playChorus takes nothing returns nothing
 		Section verse2 = () -> playVerse2()
 
-		chorusP1..playCounted(0)
-		        ..enqueue(chorusP2, 0)
-		        ..enqueue(chorusP3, 0)
-		        ..enqueue(chorusP2, 0)
-		        ..callback(verse2)
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP2, 0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorusP2, 0)
+			..callback(verse2)
 	end
 
 	function playVerse2 takes nothing returns nothing
 		Section chorus2 = () -> playChorus2()
 
-		v1..playCounted(0)
-		  ..enqueue(v1p2, 1)
-		  ..enqueue(v1p3, 0)
-		  ..callback(chorus2)
+		v1
+			..playCounted(0)
+			..enqueue(v1p2, 1)
+			..enqueue(v1p3, 0)
+			..callback(chorus2)
 	end
 
 	function playChorus2 takes nothing returns nothing
 		Section verse3 = () -> playVerse3()
 
-		chorusP1..playCounted(0)
-		        ..enqueue(chorusP3, 1)
-		        ..enqueue(chorus2P4, 0)
-		        ..enqueue(chorus2P5, 1)
-		        ..enqueue(chorus2P7, 0)
-		        ..enqueue(chorus2P8, 0)
-		        ..callback(verse3)
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP3, 1)
+			..enqueue(chorus2P4, 0)
+			..enqueue(chorus2P5, 1)
+			..enqueue(chorus2P7, 0)
+			..enqueue(chorus2P8, 0)
+			..callback(verse3)
 	end
 
 	function playVerse3 takes nothing returns nothing
 		Section chorus3 = () -> playChorus3()
 
-		v1..playCounted(0)
-		  ..enqueue(verse3P2, 0)
-		  ..enqueue(v1p2, 2)
-		  ..enqueue(v1p3, 0)
-		  ..callback(chorus3)
+		v1
+			..playCounted(0)
+			..enqueue(verse3P2, 0)
+			..enqueue(v1p2, 2)
+			..enqueue(v1p3, 0)
+			..callback(chorus3)
 	end
 
 	function playChorus3 takes nothing returns nothing
 		Section verse1 = () -> playVerse1()
 
-		chorusP1..playCounted(0)
-		        ..enqueue(chorusP3, 0)
-		        ..enqueue(chorusP3, 0)
-		        ..enqueue(chorus2P4, 0)
-		        ..enqueue(chorus2P5, 1)
-		        ..enqueue(chorus3P7, 0)
-		        ..enqueue(chorus3P8, 0)
-		        ..callback(verse1)
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorus2P4, 0)
+			..enqueue(chorus2P5, 1)
+			..enqueue(chorus3P7, 0)
+			..enqueue(chorus3P8, 0)
+			..callback(verse1)
 	end
 
 	init
+		BJDebugMsg("Muscii init")
 		//		song3
 		Note hat = Note.create(HAT_PATH, 90, 1.)
 		Note snr = Note.create(SNR_PATH, 110, 1.)
@@ -467,4 +477,5 @@ package Music
 		Sounds.preload(TM5_PATH)
 		Sounds.preload(TM5DOUBLE_PATH)
 		Sounds.preload(HATPDL_PATH)
+		BJDebugMsg("Muscii init end")
 	end

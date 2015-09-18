@@ -11,7 +11,7 @@ scope SL15ShroudGenerator initializer i
 		unit dummy
 		real time = 0.
 		real genTime
-	endstruct
+	end
 
 	struct Gen
 		unit dummy
@@ -19,7 +19,7 @@ scope SL15ShroudGenerator initializer i
 		real dX
 		real dY
 		real duration
-	endstruct
+	end
 
 	globals
 		constant integer SHROUD_ID = 'A00Y'
@@ -61,7 +61,7 @@ scope SL15ShroudGenerator initializer i
 				end
 			end
 			index = index+1
-		endloop
+		end
 	end
 
 	function p takes nothing returns nothing
@@ -94,7 +94,7 @@ scope SL15ShroudGenerator initializer i
 						TimerStart(clock2, CLOCK_PERIOD, true, function p2)
 					end
 					j = j + 1
-				endloop
+				end
 			end
 			if IsUnitInRangeXY(s.caster, s.cX, s.cY, SHROUD_RADIUS) then
 				if GetUnitAbilityLevel(s.caster, BUF_ID)<1 then
@@ -107,7 +107,7 @@ scope SL15ShroudGenerator initializer i
 			else
 				UnitRemoveAbility(s.caster, BUF_ID)
 			end
-			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)== 0 or s.time>DURATION then
+			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster) == 0 or s.time>DURATION then
 				DummyUnitStack.release(s.dummy)
 				destroy s
 				shrouds[index] = shrouds[shroudsIndex]
@@ -118,12 +118,12 @@ scope SL15ShroudGenerator initializer i
 				end
 			end
 			index = index +1
-		endloop
+		end
 	end
 
 	function c takes nothing returns nothing
 		Shroud s
-		if GetSpellAbilityId()== SHROUD_ID then
+		if GetSpellAbilityId() == SHROUD_ID then
 			s = new Shroud
 			s.caster = GetTriggerUnit()
 			s.cX = GetUnitX(s.caster)

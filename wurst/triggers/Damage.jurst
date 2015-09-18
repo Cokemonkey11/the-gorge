@@ -12,7 +12,7 @@ scope Damage initializer i
 			id = GetPlayerId(GetOwningPlayer(targ))
 			src = GetEventDamageSource()
 			sID = GetPlayerId(GetOwningPlayer(src))
-			if sID > 1 then
+			if sID > 1 and sID < 12 and id > 1 and id < 12 then
 				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
 			end
 		end

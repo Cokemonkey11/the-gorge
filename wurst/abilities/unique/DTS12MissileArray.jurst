@@ -16,7 +16,6 @@ package DTS12MissileArray
 	import DamageType
 	import Ships
 	import Sounds
-	import ClosureTimers
 
 	native UnitAlive takes unit u returns boolean
 
@@ -72,7 +71,7 @@ package DTS12MissileArray
 					temp.target = null
 				end
 				index = index+1
-			endloop
+			end
 		end
 
 		static function p takes nothing returns nothing
@@ -86,9 +85,9 @@ package DTS12MissileArray
 			real oldX
 			real oldY
 			loop
-				exitwhen index>dbIndex
+				exitwhen index > dbIndex
 				temp = db[index]
-				if temp.target== null then
+				if temp.target == null then
 					temp.dX = temp.dX + temp.ddX
 					temp.dY = temp.dY + temp.ddY
 					temp.dX = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dX
@@ -107,13 +106,13 @@ package DTS12MissileArray
 					hit = false
 					loop
 						first = FirstOfGroup(grp)
-						exitwhen first== null
-						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit then
+						exitwhen first == null
+						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE) == false and not hit then
 							hit = true
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
 						GroupRemoveUnit(grp, first)
-					endloop
+					end
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
 						DestroyEffect(temp.fx)
@@ -121,7 +120,7 @@ package DTS12MissileArray
 						dbIndex = dbIndex - 1
 						index = index -1
 						destroy temp
-						if dbIndex== -1 then
+						if dbIndex == -1 then
 							PauseTimer(clock)
 						end
 					end
@@ -147,13 +146,13 @@ package DTS12MissileArray
 					hit = false
 					loop
 						first = FirstOfGroup(grp)
-						exitwhen first== null
-						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit then
+						exitwhen first == null
+						if IsUnitEnemy(first, Game.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE) == false and not hit then
 							hit = true
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
 						GroupRemoveUnit(grp, first)
-					endloop
+					end
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
 						DestroyEffect(temp.fx)
@@ -161,13 +160,13 @@ package DTS12MissileArray
 						dbIndex = dbIndex - 1
 						index = index -1
 						destroy temp
-						if dbIndex== -1 then
+						if dbIndex == -1 then
 							PauseTimer(clock)
 						end
 					end
 				end
 				index = index+1
-			endloop
+			end
 		end
 
 		static function c takes nothing returns nothing
@@ -180,7 +179,7 @@ package DTS12MissileArray
 			real tX
 			real tY
 			player owner
-			if GetSpellAbilityId()== ARRAY_ID then
+			if GetSpellAbilityId() == ARRAY_ID then
 				targ = GetSpellTargetUnit()
 				tU = GetTriggerUnit()
 				cX = GetUnitX(tU)
@@ -195,6 +194,7 @@ package DTS12MissileArray
 					temp = new Missile
 					temp.target = targ
 					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					BJDebugMsg(temp.missile.getName())
 					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
 					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
 					UnitAddAbility(temp.missile, 'Arav')
@@ -208,7 +208,7 @@ package DTS12MissileArray
 					temp.ownerID = GetPlayerId(owner)
 					dbIndex = dbIndex + 1
 					db[dbIndex] = temp
-					if dbIndex== 0 then
+					if dbIndex == 0 then
 						TimerStart(clock, CLOCK_PERIOD, true, function p)
 					end
 					temp = new Missile
@@ -253,7 +253,7 @@ package DTS12MissileArray
 					temp.ownerID = GetPlayerId(owner)
 					dbIndex = dbIndex + 1
 					db[dbIndex] = temp
-					if dbIndex== 0 then
+					if dbIndex == 0 then
 						TimerStart(clock, CLOCK_PERIOD, true, function p)
 					end
 					temp = new Missile
@@ -292,5 +292,5 @@ package DTS12MissileArray
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function DTS12MissileArray.c)
 		DTS12MissileArray.ht = new Table
-		doAfter(1.0, () -> Sounds.preload(DTS12MissileArray.SOUND))
+		Sounds.preload(DTS12MissileArray.SOUND)
 	end

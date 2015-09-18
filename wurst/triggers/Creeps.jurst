@@ -13,7 +13,7 @@ scope Creeps initializer i
 		real x
 		real face
 		unit u
-		if faction== 0 then
+		if faction == 0 then
 			x = Game.WESTX
 			face = 0.
 		else

@@ -15,7 +15,7 @@ scope Leave initializer init
 			exitwhen index>11
 			TriggerRegisterPlayerEvent(t, Player(index), EVENT_PLAYER_LEAVE)
 			index = index + 1
-		endloop
+		end
 		TriggerAddCondition(t, Condition(function c))
 	end
 endscope

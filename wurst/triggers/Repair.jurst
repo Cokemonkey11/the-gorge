@@ -25,7 +25,7 @@ scope Repair initializer i
 		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
 			p = GetTriggerPlayer()
 			id = GetPlayerId(p)
-			if Game.localPlayer== p then
+			if Game.localPlayer == p then
 				SelectUnit(tU, false)
 				SelectUnit(Ships.ships[id], true)
 			end
@@ -59,7 +59,7 @@ scope Repair initializer i
 			exitwhen index>11
 			lastRepair[index] = -1.*REPAIR_TIMEOUT
 			index = index+1
-		endloop
+		end
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
 	end
 endscope

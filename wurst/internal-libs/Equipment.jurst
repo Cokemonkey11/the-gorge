@@ -124,7 +124,7 @@ package Equipment
 			integer index = 0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u, index))== id then
+				if GetItemTypeId(UnitItemInSlot(u, index)) == id then
 					return index
 				end
 				index = index + 1
@@ -160,13 +160,13 @@ package Equipment
 				return false
 			elseif unitHasTypePair(u, id) then
 				return false
-			elseif shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass == CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass == CLASS_HULL or itemClass == CLASS_SHIELDGEN or id == SHIP_LOCATOR) then
 				return false
-			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass == CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass == CLASS_TELEPORT or itemClass == CLASS_CONTRACT or id == SHIP_LOCATOR) then
 				return false
 			end
 			return true
@@ -179,13 +179,13 @@ package Equipment
 				return false
 			elseif unitHasItemOfType(u, id) then
 				return false
-			elseif shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_FRIGATE and itemClass == CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_SMUGGLER and (itemClass == CLASS_HULL or itemClass == CLASS_SHIELDGEN or id == SHIP_LOCATOR) then
 				return false
-			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT then
+			elseif shipClass == Ships.CLASS_INTERCEPTOR and itemClass == CLASS_CONTRACT then
 				return false
-			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR) then
+			elseif shipClass == Ships.CLASS_BATTLESHIP and (itemClass == CLASS_TELEPORT or itemClass == CLASS_CONTRACT or id == SHIP_LOCATOR) then
 				return false
 			end
 			return true
@@ -286,49 +286,49 @@ package Equipment
 				else
 					toSelect = Game.eastUtility[1]
 				end
-			elseif id== PAGE_2_1 then
+			elseif id == PAGE_2_1 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[0]
 				else
 					toSelect = Game.eastUtility[0]
 				end
-			elseif id== PAGE_2_3 then
+			elseif id == PAGE_2_3 then
 				was = true
 				if seller == Game.westUtility[1] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 				end
-			elseif id== PAGE_3_2 then
+			elseif id == PAGE_3_2 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[1]
 				else
 					toSelect = Game.eastUtility[1]
 				end
-			elseif id== PAGE_3_4 then
+			elseif id == PAGE_3_4 then
 				was = true
 				if seller == Game.westUtility[2] then
 					toSelect = Game.westUtility[3]
 				else
 					toSelect = Game.eastUtility[3]
 				end
-			elseif id== PAGE_4_3 then
+			elseif id == PAGE_4_3 then
 				was = true
 				if seller == Game.westUtility[3] then
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 				end
-			elseif id== KPAGE_1_2 then
+			elseif id == KPAGE_1_2 then
 				was = true
 				if seller == Game.westKeep[0] then
 					toSelect = Game.westKeep[1]
 				else
 					toSelect = Game.eastKeep[1]
 				end
-			elseif id== KPAGE_2_1 then
+			elseif id == KPAGE_2_1 then
 				was = true
 				if seller == Game.westKeep[1] then
 					toSelect = Game.westKeep[0]
@@ -388,7 +388,7 @@ package Equipment
 					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
 					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(it)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
 					RemoveItem(it)
-				elseif class== CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
+				elseif class == CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP) then
 					RemoveItem(sI)
 					simError(buyerP, INSUFFICIENT_EXPERIENCE)
 				end

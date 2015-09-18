@@ -16,7 +16,7 @@ scope Revive initializer i
 		integer item3Id = -1
 		integer item4Id = -1
 		integer item5Id = -1
-	endstruct
+	end
 
 	globals
 		constant real CLOCK_PERIOD = 1.
@@ -71,12 +71,12 @@ scope Revive initializer i
 				deathDB[index] = deathDB[dbIndex]
 				dbIndex = dbIndex-1
 				index = index-1
-				if dbIndex== -1 then
+				if dbIndex == -1 then
 					PauseTimer(time)
 				end
 			end
 			index = index+1
-		endloop
+		end
 	end
 
 	function getBounty takes nothing returns integer
@@ -92,7 +92,7 @@ scope Revive initializer i
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 			end
 			index = index+1
-		endloop
+		end
 	end
 
 	function c takes nothing returns nothing
@@ -159,21 +159,21 @@ scope Revive initializer i
 			if tempDat.ownerID<7 then
 				tempDat.teamX = Game.WESTX+REVIVE_OFFSET
 				westDeadCount = westDeadCount+1
-				if westDeadCount== 1 then
+				if westDeadCount == 1 then
 					SetUnitX(westDummy, Game.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy, 0.)
 				end
 			else
 				tempDat.teamX = Game.EASTX-REVIVE_OFFSET
 				eastDeadCount = eastDeadCount+1
-				if eastDeadCount== 1 then
+				if eastDeadCount == 1 then
 					SetUnitX(eastDummy, Game.EASTX-REVIVE_OFFSET)
 					SetUnitY(eastDummy, 0.)
 				end
 			end
 			dbIndex = dbIndex+1
 			deathDB[dbIndex] = tempDat
-			if dbIndex== 0 then
+			if dbIndex == 0 then
 				TimerStart(time, CLOCK_PERIOD, true, function p)
 			end
 		end

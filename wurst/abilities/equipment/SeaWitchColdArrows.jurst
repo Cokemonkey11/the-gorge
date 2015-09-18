@@ -11,7 +11,7 @@ scope SeaWitchColdArrows initializer i
 
 	function h takes nothing returns boolean
 		unit tU = GetTriggerUnit()
-		if DamageType.get()== DamageType.SPELL and GetUnitTypeId(GetEventDamageSource())== SEAWITCH_ID then
+		if DamageType.get() == DamageType.SPELL and GetUnitTypeId(GetEventDamageSource()) == SEAWITCH_ID then
 			SetUnitX(dummy, GetUnitX(tU))
 			SetUnitY(dummy, GetUnitY(tU))
 			UnitAddAbility(dummy, SLOW_ID)

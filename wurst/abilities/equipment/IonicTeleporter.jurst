@@ -7,7 +7,7 @@ scope IonicTeleporter initializer i
 	endglobals
 
 	function effectC takes nothing returns nothing
-		if GetSpellAbilityId()== TELE_ID then
+		if GetSpellAbilityId() == TELE_ID then
 			DTS12MissileArray.disjoint(GetTriggerUnit())
 		end
 	end

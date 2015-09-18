@@ -79,7 +79,7 @@ package Crewmembers
 					return index
 				end
 				index = index+1
-			endloop
+			end
 			return -1
 		end
 
@@ -132,7 +132,7 @@ package Crewmembers
 					SetUnitY(temp.phoenix, Game.SAFE_Y)
 				end
 				index = index+1
-			endloop
+			end
 		end
 
 		static function c takes nothing returns nothing
@@ -144,7 +144,7 @@ package Crewmembers
 			real y
 			real face
 			player buyer = GetOwningPlayer(sU)
-			if Ships.getClass(sU)== Ships.CLASS_UNKNOWN then
+			if Ships.getClass(sU) == Ships.CLASS_UNKNOWN then
 				if IsUnitAlly(bU, GetOwningPlayer(selU)) then
 					temp = new CrewMember
 					temp.ownerID = GetPlayerId(buyer)
@@ -196,7 +196,7 @@ package Crewmembers
 			exitwhen index>11
 			Crewmembers.slotIndices[index] = -1
 			index = index+1
-		endloop
+		end
 
 		// Initialize CrewInventories
 		index = 0

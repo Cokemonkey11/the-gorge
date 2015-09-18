@@ -17,7 +17,7 @@ scope ProbeContractAbility initializer i
 	function effectC takes nothing returns nothing
 		unit tU
 		player owner
-		if GetSpellAbilityId()== PROBE_ID then
+		if GetSpellAbilityId() == PROBE_ID then
 			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 			if GetUnitTypeId(GetSpellTargetUnit()) != ROCK_FORMATION_ID then

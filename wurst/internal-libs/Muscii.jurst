@@ -25,7 +25,7 @@ package Muscii
 			n.next = null
 			return n
 		end
-	endstruct
+	end
 
 	public class Chord
 		Note first
@@ -40,7 +40,7 @@ package Muscii
 				iterator = iterator.next
 				exitwhen iterator == null
 				new.addNote(iterator)
-			endloop
+			end
 			return new
 		end
 
@@ -50,7 +50,7 @@ package Muscii
 				exitwhen iterator == null
 				iterator.play()
 				iterator = iterator.next
-			endloop
+			end
 		end
 
 		method addNote takes Note n returns Chord
@@ -70,7 +70,7 @@ package Muscii
 			c.last = q
 			return c
 		end
-	endstruct
+	end
 
 	public interface Section
 		function do()
@@ -99,7 +99,7 @@ package Muscii
 				temp = db[index]
 				PauseTimer(temp.clock)
 				index = index + 1
-			endloop
+			end
 		end
 
 		method callback takes Section callback returns Muscii
@@ -114,7 +114,7 @@ package Muscii
 				iterator = iterator.next
 				exitwhen iterator == null
 				new.addChord(iterator.copy())
-			endloop
+			end
 			return new
 		end
 
@@ -182,7 +182,7 @@ package Muscii
 				m.iterator = now.next
 			else
 				m.iterator = m.first
-				if m.count>-1 then
+				if m.count > -1 then
 					m.count = m.count-1
 					if m.count == -1 then
 						m.stop()

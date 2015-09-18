@@ -14,13 +14,13 @@ scope ShipLocator initializer i
 		unit first
 		integer id
 		player owner
-		if GetSpellAbilityId()== SHIP_LOC_ID then
+		if GetSpellAbilityId() == SHIP_LOC_ID then
 			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 			GroupEnumUnitsInRange(grp, GetUnitX(tU), GetUnitY(tU), RANGE, null)
 			loop
 				first = FirstOfGroup(grp)
-				exitwhen first== null
+				exitwhen first == null
 				id = GetPlayerId(GetOwningPlayer(first))
 				if IsUnitEnemy(first, owner) and id>1 then
 					if Game.localPlayer == owner then
@@ -28,7 +28,7 @@ scope ShipLocator initializer i
 					end
 				end
 				GroupRemoveUnit(grp, first)
-			endloop
+			end
 		end
 	end
 

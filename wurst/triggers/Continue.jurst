@@ -13,9 +13,9 @@ scope Continue initializer i
 		unit fU = GetFilterUnit()
 		integer id = GetUnitTypeId(fU)
 		player owner = GetOwningPlayer(fU)
-		if owner== Game.players[0] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+		if owner == Game.players[0] and (id == 'owyv' or id == 'hgry' or id == 'hdhw') then
 			IssuePointOrder(fU, "attack", Game.EASTX, 0.)
-		elseif owner== Game.players[1] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+		elseif owner == Game.players[1] and (id == 'owyv' or id == 'hgry' or id == 'hdhw') then
 			IssuePointOrder(fU, "attack", Game.WESTX, 0.)
 		end
 		return false

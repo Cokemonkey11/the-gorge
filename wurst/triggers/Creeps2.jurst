@@ -18,11 +18,11 @@ scope Creeps2 initializer i
 			GroupEnumUnitsInRect(g, TerrainData.centralArea, null)
 			loop
 				first = FirstOfGroup(g)
-				exitwhen first== null
+				exitwhen first == null
 				if GetUnitTypeId(first) == Game.OUTPOST_ID and UnitAlive(first) then
 					owner = GetOwningPlayer(first)
 					u = CreateUnit(owner, 'ufro', GetUnitX(first), GetUnitY(first), 270.)
-					if owner== Game.players[0] then
+					if owner == Game.players[0] then
 						IssuePointOrder(u, "attack", Game.EASTX, 0.)
 					else
 						IssuePointOrder(u, "attack", Game.WESTX, 0.)
