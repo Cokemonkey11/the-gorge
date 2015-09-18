@@ -18,7 +18,7 @@ scope Repair initializer i
 
 	function c takes nothing returns nothing
 		player p
-		unit tU= GetTriggerUnit()
+		unit tU = GetTriggerUnit()
 		integer id
 		real max
 		real life
@@ -54,11 +54,11 @@ scope Repair initializer i
 	end
 
 	function i takes nothing returns nothing
-		integer index= 0
+		integer index = 0
 		loop
 			exitwhen index>11
 			lastRepair[index] = -1.*REPAIR_TIMEOUT
-			index= index+1
+			index = index+1
 		endloop
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
 	end

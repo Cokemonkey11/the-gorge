@@ -6,7 +6,7 @@ scope ShipLocator initializer i
 		constant integer SHIP_LOC_ID = 'A00I'
 		constant real RANGE = 4000.
 		constant real PING_DURATION = 5.
-		group grp= CreateGroup()
+		group grp = CreateGroup()
 	endglobals
 
 	function c takes nothing returns nothing
@@ -15,11 +15,11 @@ scope ShipLocator initializer i
 		integer id
 		player owner
 		if GetSpellAbilityId()== SHIP_LOC_ID then
-			tU= GetTriggerUnit()
+			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 			GroupEnumUnitsInRange(grp, GetUnitX(tU), GetUnitY(tU), RANGE, null)
 			loop
-				first= FirstOfGroup(grp)
+				first = FirstOfGroup(grp)
 				exitwhen first== null
 				id = GetPlayerId(GetOwningPlayer(first))
 				if IsUnitEnemy(first, owner) and id>1 then

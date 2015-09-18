@@ -10,7 +10,7 @@ scope Release initializer i
 	function c takes nothing returns nothing
 		unit tU
 		if GetSpellAbilityId() == RELEASE_ID then
-			tU= GetSpellTargetUnit()
+			tU = GetSpellTargetUnit()
 			Crewmembers.release(tU)
 			DestroyEffect(AddSpecialEffect(TRANSMUTE, GetUnitX(tU), GetUnitY(tU)))
 		end

@@ -18,7 +18,7 @@ package SimError
 	sound error
 
 	public function simError takes player forPlayer, string msg returns nothing
-		msg= "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n|cffffcc00"+msg+"|r"
+		msg = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n|cffffcc00"+msg+"|r"
 		if (GetLocalPlayer() == forPlayer) then
 			ClearTextMessages()
 			DisplayTimedTextToPlayer(forPlayer, 0.52, 0.96, 2.00, msg)
@@ -27,5 +27,5 @@ package SimError
 	end
 
 	init
-		 error= CreateSoundFromLabel("InterfaceError", false, false, false, 10, 10)
+		 error = CreateSoundFromLabel("InterfaceError", false, false, false, 10, 10)
 	end

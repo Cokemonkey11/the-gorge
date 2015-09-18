@@ -9,9 +9,9 @@ package Sounds
 		static Table preloadDB
 
 		private static method preloadAfter takes nothing returns nothing
-			timer time= GetExpiredTimer()
+			timer time = GetExpiredTimer()
 			Slop s = preloadDB.loadInt(time.getHandleId()) castTo Slop
-			sound sd= CreateSound(s.snd, false, false, false, 12700, 12700, "")
+			sound sd = CreateSound(s.snd, false, false, false, 12700, 12700, "")
 			SetSoundVolume(sd, 1)
 			StartSound(sd)
 			KillSoundWhenDone(sd)
@@ -20,12 +20,10 @@ package Sounds
 		end
 
 		static method preload takes string str returns nothing
-			timer time= CreateTimer()
-			Slop s= new Slop
-			s.snd= str
-			BJDebugMsg("preloading " + str)
+			timer time = CreateTimer()
+			Slop s = new Slop
+			s.snd = str
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
-			BJDebugMsg("preloaded")
 			TimerStart(time, .01, false, function Sounds.preloadAfter)
 		end
 

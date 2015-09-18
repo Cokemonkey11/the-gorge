@@ -3,7 +3,7 @@ library FloatText
 
 	public class FloatText
 		static function reviveNumbers takes real x, real y, string s, integer pID returns nothing
-			texttag t= CreateTextTag()
+			texttag t = CreateTextTag()
 			SetTextTagFadepoint(t, 3)
 			SetTextTagLifespan(t, 4)
 			SetTextTagPermanent(t, false)

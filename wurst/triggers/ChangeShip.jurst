@@ -15,15 +15,15 @@ scope ChangeShip initializer i
 
 	function c takes nothing returns nothing
 		unit selU = GetSellingUnit()
-		unit bU= GetBuyingUnit()
-		unit sU= GetSoldUnit()
+		unit bU = GetBuyingUnit()
+		unit sU = GetSoldUnit()
 		player buyer = GetOwningPlayer(sU)
 		integer class = Ships.getClass(sU)
 		integer id
 		integer val
-		integer index= 0
+		integer index = 0
 
-		if class!= Ships.CLASS_UNKNOWN then
+		if class != Ships.CLASS_UNKNOWN then
 			if IsUnitAlly(bU, GetOwningPlayer(selU)) then
 				if GetUnitTypeId(sU) != GetUnitTypeId(bU) then
 					if GetUnitFoodMade(sU) >= GetPlayerState(buyer, PLAYER_STATE_RESOURCE_FOOD_USED) then
@@ -38,7 +38,7 @@ scope ChangeShip initializer i
 						loop
 							exitwhen index>5
 							tempIds[index] = GetItemTypeId(UnitItemInSlot(bU, index))
-							index= index+1
+							index = index+1
 						endloop
 						RemoveUnit(Ships.ships[id])
 						Ships.ships[id] = sU

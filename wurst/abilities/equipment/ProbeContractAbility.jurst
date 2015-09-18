@@ -7,7 +7,7 @@ scope ProbeContractAbility initializer i
 	import Sounds
 
 	globals
-		constant integer PROBE_ID= 'A00J'
+		constant integer PROBE_ID = 'A00J'
 		constant integer ROCK_FORMATION_ID = 'u001'
 		constant string ERROR_MESSAGE = "This probe can only be used on unusual rock formations."
 		constant string ALREADY_MESSAGE = "You already have data on this rock formation."
@@ -18,9 +18,9 @@ scope ProbeContractAbility initializer i
 		unit tU
 		player owner
 		if GetSpellAbilityId()== PROBE_ID then
-			tU= GetTriggerUnit()
+			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
-			if GetUnitTypeId(GetSpellTargetUnit())!= ROCK_FORMATION_ID then
+			if GetUnitTypeId(GetSpellTargetUnit()) != ROCK_FORMATION_ID then
 				simError(owner, ERROR_MESSAGE)
 			elseif Ships.hasItemOfType(tU, Equipment.DATA_ID) then
 				simError(owner, ALREADY_MESSAGE)

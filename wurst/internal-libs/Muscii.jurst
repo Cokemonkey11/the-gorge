@@ -72,6 +72,11 @@ package Muscii
 		end
 	endstruct
 
+	public interface Section
+		function do()
+		end
+	end
+
 	public class Muscii
 		static Table fromClock
 		private static Muscii array db
@@ -83,7 +88,7 @@ package Muscii
 		timer clock
 		integer count
 		integer queueCount
-		string cbf
+		Section cbf
 		Muscii queued
 
 		static method interrupt takes nothing returns nothing
@@ -97,8 +102,8 @@ package Muscii
 			endloop
 		end
 
-		method callback takes string func returns Muscii
-			this.cbf = func
+		method callback takes Section callback returns Muscii
+			this.cbf = callback
 			return this
 		end
 
@@ -160,7 +165,7 @@ package Muscii
 			m.tempo = tempo
 			m.clock = CreateTimer()
 			m.queued = null
-			m.cbf = ""
+			m.cbf    = null
 			fromClock.saveInt(m.clock.getHandleId(), m castTo int)
 			dbIndex = dbIndex + 1
 			db[dbIndex] = m
@@ -171,13 +176,14 @@ package Muscii
 			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
 			Muscii next
 			Chord now = m.iterator
+			Section cbf
 			now.play()
 			if now.next != null then
 				m.iterator = now.next
 			else
 				m.iterator = m.first
 				if m.count>-1 then
-					m.count= m.count-1
+					m.count = m.count-1
 					if m.count == -1 then
 						m.stop()
 						next = m.queued
@@ -185,12 +191,11 @@ package Muscii
 							next.playCounted(m.queueCount)
 						end
 						m.queued = null
-						if m.cbf != "" then
-							// TODO: Fix this up!
-							// https://github.com/peq/WurstScript/issues/154#issuecomment-140669137
-							// http://peq.github.io/WurstScript/manual.html#lambda-expressions-and-closures
-							// ExecuteFunc(m.cbf)
-							m.cbf = ""
+						if m.cbf != null then
+							m.cbf.do()
+							cbf = m.cbf
+							destroy cbf
+							m.cbf = null
 						end
 					end
 				end

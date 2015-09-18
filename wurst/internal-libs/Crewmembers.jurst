@@ -64,21 +64,21 @@ package Crewmembers
 		private static constant real SELL_RATE = .5
 
 		private static CrewMember array db
-		private static integer dbIndex= -1
-		private static timer time= CreateTimer()
+		private static integer dbIndex = -1
+		private static timer time = CreateTimer()
 		static Table fromDummy
 		static Table links
 		static CrewInventory array inventories
 		static integer array slotIndices
 
 		static function getMemberIndex takes integer id, CrewMember cre returns integer
-			integer index= 0
+			integer index = 0
 			loop
 				exitwhen index > slotIndices[id]
 				if inventories[id].slots[index] == cre then
 					return index
 				end
-				index= index+1
+				index = index+1
 			endloop
 			return -1
 		end
@@ -101,7 +101,7 @@ package Crewmembers
 				SetPlayerState(Game.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD)+val)
 				DisplayTextToPlayer(Game.players[temp.ownerID], 0., 0., "You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
 				index = getMemberIndex(temp.ownerID, temp)
-				if index!= -1 then
+				if index != -1 then
 					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
 					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
 					if slotIndices[temp.ownerID] != -1 then
@@ -120,10 +120,10 @@ package Crewmembers
 
 		static function p takes nothing returns nothing
 			CrewMember temp
-			integer index= 0
+			integer index = 0
 			loop
 				exitwhen index>dbIndex
-				temp= db[index]
+				temp = db[index]
 				if UnitAlive(Ships.ships[temp.ownerID]) and not Game.ended then
 					SetUnitX(temp.phoenix, GetUnitX(Ships.ships[temp.ownerID]))
 					SetUnitY(temp.phoenix, GetUnitY(Ships.ships[temp.ownerID]))
@@ -131,15 +131,15 @@ package Crewmembers
 					SetUnitX(temp.phoenix, Game.SAFE_X)
 					SetUnitY(temp.phoenix, Game.SAFE_Y)
 				end
-				index= index+1
+				index = index+1
 			endloop
 		end
 
 		static function c takes nothing returns nothing
 			CrewMember temp
 			unit selU = GetSellingUnit()
-			unit bU= GetBuyingUnit()
-			unit sU= GetSoldUnit()
+			unit bU = GetBuyingUnit()
+			unit sU = GetSoldUnit()
 			real x
 			real y
 			real face
@@ -147,7 +147,7 @@ package Crewmembers
 			if Ships.getClass(sU)== Ships.CLASS_UNKNOWN then
 				if IsUnitAlly(bU, GetOwningPlayer(selU)) then
 					temp = new CrewMember
-					temp.ownerID= GetPlayerId(buyer)
+					temp.ownerID = GetPlayerId(buyer)
 					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] + 1
 					inventories[temp.ownerID].slots[slotIndices[temp.ownerID]] = temp
 					face = I2R(slotIndices[temp.ownerID]) * 2. * bj_PI / I2R(MAX_SLOTS)
@@ -195,7 +195,7 @@ package Crewmembers
 		loop
 			exitwhen index>11
 			Crewmembers.slotIndices[index] = -1
-			index= index+1
+			index = index+1
 		endloop
 
 		// Initialize CrewInventories

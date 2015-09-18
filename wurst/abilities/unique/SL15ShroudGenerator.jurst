@@ -41,7 +41,7 @@ scope SL15ShroudGenerator initializer i
 	endglobals
 
 	function p2 takes nothing returns nothing
-		integer index= 0
+		integer index = 0
 		Gen g
 		loop
 			exitwhen index>gensIndex
@@ -60,7 +60,7 @@ scope SL15ShroudGenerator initializer i
 					PauseTimer(clock2)
 				end
 			end
-			index= index+1
+			index = index+1
 		endloop
 	end
 

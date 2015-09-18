@@ -1,8 +1,9 @@
-scope Music initializer i
+package Music
 	import Muscii
 	import Sounds
 
-	// Back Against the Wall by Cage the Elephant ( http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm )
+	// Back Against the Wall by Cage the Elephant
+	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
 	globals
 		constant string HAT_PATH       = "musRad-khatClosed.mp3"
 		constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
@@ -36,34 +37,76 @@ scope Music initializer i
 	endglobals
 
 	function playIntro takes nothing returns nothing
-		m.playCounted(3)//.callback(SCOPE_PRIVATE+"playVerse1")
+		Section verse1 = () -> playVerse1()
+
+		m..playCounted(3)
+		 ..callback(verse1)
 	end
 
 	function playVerse1 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorus")
+		Section chorus = () -> playChorus()
+
+		v1..playCounted(0)
+		  ..enqueue(v1p2, 1)
+		  ..enqueue(v1p3, 0)
+		  ..callback(chorus)
 	end
 
 	function playChorus takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP2, 0).enqueue(chorusP3, 0).enqueue(chorusP2, 0)//.callback(SCOPE_PRIVATE+"playVerse2")
+		Section verse2 = () -> playVerse2()
+
+		chorusP1..playCounted(0)
+		        ..enqueue(chorusP2, 0)
+		        ..enqueue(chorusP3, 0)
+		        ..enqueue(chorusP2, 0)
+		        ..callback(verse2)
 	end
 
 	function playVerse2 takes nothing returns nothing
-		v1.playCounted(0).enqueue(v1p2, 1).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorus2")
+		Section chorus2 = () -> playChorus2()
+
+		v1..playCounted(0)
+		  ..enqueue(v1p2, 1)
+		  ..enqueue(v1p3, 0)
+		  ..callback(chorus2)
 	end
 
 	function playChorus2 takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3, 1).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus2P7, 0).enqueue(chorus2P8, 0)//.callback(SCOPE_PRIVATE+"playVerse3")
+		Section verse3 = () -> playVerse3()
+
+		chorusP1..playCounted(0)
+		        ..enqueue(chorusP3, 1)
+		        ..enqueue(chorus2P4, 0)
+		        ..enqueue(chorus2P5, 1)
+		        ..enqueue(chorus2P7, 0)
+		        ..enqueue(chorus2P8, 0)
+		        ..callback(verse3)
 	end
 
 	function playVerse3 takes nothing returns nothing
-		v1.playCounted(0).enqueue(verse3P2, 0).enqueue(v1p2, 2).enqueue(v1p3, 0)//.callback(SCOPE_PRIVATE+"playChorusRepeat")
+		Section chorus3 = () -> playChorus3()
+
+		v1..playCounted(0)
+		  ..enqueue(verse3P2, 0)
+		  ..enqueue(v1p2, 2)
+		  ..enqueue(v1p3, 0)
+		  ..callback(chorus3)
 	end
 
-	function playChorus3Repeat takes nothing returns nothing
-		chorusP1.playCounted(0).enqueue(chorusP3, 0).enqueue(chorusP3, 0).enqueue(chorus2P4, 0).enqueue(chorus2P5, 1).enqueue(chorus3P7, 0).enqueue(chorus3P8, 0)//.callback(SCOPE_PRIVATE+"playVerse1")
+	function playChorus3 takes nothing returns nothing
+		Section verse1 = () -> playVerse1()
+
+		chorusP1..playCounted(0)
+		        ..enqueue(chorusP3, 0)
+		        ..enqueue(chorusP3, 0)
+		        ..enqueue(chorus2P4, 0)
+		        ..enqueue(chorus2P5, 1)
+		        ..enqueue(chorus3P7, 0)
+		        ..enqueue(chorus3P8, 0)
+		        ..callback(verse1)
 	end
 
-	function i takes nothing returns nothing
+	init
 		//		song3
 		Note hat = Note.create(HAT_PATH, 90, 1.)
 		Note snr = Note.create(SNR_PATH, 110, 1.)
@@ -81,10 +124,10 @@ scope Music initializer i
 		Note crs = Note.create(CRS_PATH, 55, 1.)
 		Note hop = Note.create(HATOPEN_PATH, 90, 1.)
 		Note tm1 = Note.create(TM1_PATH, 110, 1.)
-		Note tm1d= Note.create(TM1DOUBLE_PATH, 110, 1.)
+		Note tm1d = Note.create(TM1DOUBLE_PATH, 110, 1.)
 		Note tm4 = Note.create(TM4_PATH, 110, 1.)
 		Note tm5 = Note.create(TM5_PATH, 110, 1.)
-		//Note tm5d= Note.create(TM5DOUBLE_PATH, 110, 1.)
+		//Note tm5d = Note.create(TM5DOUBLE_PATH, 110, 1.)
 		Note hft = Note.create(HATPDL_PATH, 75, 1.)
 
 		Chord rb
@@ -425,4 +468,3 @@ scope Music initializer i
 		Sounds.preload(TM5DOUBLE_PATH)
 		Sounds.preload(HATPDL_PATH)
 	end
-endscope

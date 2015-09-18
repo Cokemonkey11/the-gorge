@@ -7,12 +7,12 @@ scope GoldIncome initializer i
 	endglobals
 
 	function c takes nothing returns nothing
-		integer index= 0
+		integer index = 0
 		if not Game.ended then
 			loop
 				exitwhen index>11
 				SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
-				index= index+1
+				index = index+1
 			endloop
 		end
 	end

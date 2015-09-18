@@ -10,8 +10,8 @@ scope Continue initializer i
 	end
 
 	function f takes nothing returns boolean
-		unit fU= GetFilterUnit()
-		integer id= GetUnitTypeId(fU)
+		unit fU = GetFilterUnit()
+		integer id = GetUnitTypeId(fU)
 		player owner = GetOwningPlayer(fU)
 		if owner== Game.players[0] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
 			IssuePointOrder(fU, "attack", Game.EASTX, 0.)
@@ -22,11 +22,11 @@ scope Continue initializer i
 	end
 
 	function i takes nothing returns nothing
-		region regA= CreateRegion()
-		rect recA= rectFromXY(Game.OUTPOST1_X, Game.OUTPOST1_Y, RECT_SIZE)
-		region regB= CreateRegion()
-		rect recB= rectFromXY(Game.OUTPOST2_X, Game.OUTPOST2_Y, RECT_SIZE)
-		trigger t= CreateTrigger()
+		region regA = CreateRegion()
+		rect recA = rectFromXY(Game.OUTPOST1_X, Game.OUTPOST1_Y, RECT_SIZE)
+		region regB = CreateRegion()
+		rect recB = rectFromXY(Game.OUTPOST2_X, Game.OUTPOST2_Y, RECT_SIZE)
+		trigger t = CreateTrigger()
 		RegionAddRect(regA, recA)
 		RegionAddRect(regB, recB)
 		TriggerRegisterEnterRegion(t, regA, Filter(function f))
