@@ -18,12 +18,19 @@ package TerrainData
 		static constant real UTILITY_EAST_MAXX = 4326.
 		static constant real UTILITY_EAST_MAXY = -270.
 
+		private static location loc = Location(0., 0.)
+
 		// Used by Creeps2 (Trigger)
 		static rect centralArea
 
 		// Used by FillToxicSack (Trigger)
 		static rect utilityWest
 		static rect utilityEast
+
+		static method getZ takes real x, real y returns real
+			MoveLocation(loc, x, y)
+			return GetLocationZ(loc)
+		end
 	end
 
 	init

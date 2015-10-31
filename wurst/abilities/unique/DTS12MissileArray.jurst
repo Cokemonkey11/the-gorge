@@ -179,12 +179,15 @@ package DTS12MissileArray
 			real tX
 			real tY
 			player owner
+			BJDebugMsg("Ability")
 			if GetSpellAbilityId() == ARRAY_ID then
+				BJDebugMsg("DTS12")
 				targ = GetSpellTargetUnit()
 				tU = GetTriggerUnit()
 				cX = GetUnitX(tU)
 				cY = GetUnitY(tU)
 				Sounds.play3D(SOUND, 1., cX, cY, 100.)
+				BJDebugMsg("DTS12: Played sound.")
 				if targ != null then
 					tU = GetTriggerUnit()
 					owner = GetOwningPlayer(tU)
@@ -228,6 +231,7 @@ package DTS12MissileArray
 					dbIndex = dbIndex+1
 					db[dbIndex] = temp
 				else
+					BJDebugMsg("DTS12: Non-target.")
 					tU = GetTriggerUnit()
 					owner = GetOwningPlayer(tU)
 					cX = GetUnitX(tU)
@@ -286,6 +290,8 @@ package DTS12MissileArray
 					ht.saveInt(tU.getHandleId(), 0)
 				end
 			end
+
+			BJDebugMsg("DTS12: Done.")
 		end
 	end
 
