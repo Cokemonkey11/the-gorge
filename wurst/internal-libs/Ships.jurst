@@ -42,14 +42,14 @@ package Ships
 		end
 
 		static function hasItemOfType takes unit u, integer t returns boolean
-			integer index = 0
+			integer index= 0
 			loop
 				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u, index)) == t then
+				if GetItemTypeId(UnitItemInSlot(u, index))== t then
 					return true
 				end
-				index = index+1
-			end
+				index= index+1
+			endloop
 			return false
 		end
 	end

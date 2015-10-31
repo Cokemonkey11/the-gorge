@@ -18,14 +18,14 @@ scope Repair initializer i
 
 	function c takes nothing returns nothing
 		player p
-		unit tU = GetTriggerUnit()
+		unit tU= GetTriggerUnit()
 		integer id
 		real max
 		real life
 		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
 			p = GetTriggerPlayer()
 			id = GetPlayerId(p)
-			if Game.localPlayer == p then
+			if Game.localPlayer== p then
 				SelectUnit(tU, false)
 				SelectUnit(Ships.ships[id], true)
 			end
@@ -54,12 +54,12 @@ scope Repair initializer i
 	end
 
 	function i takes nothing returns nothing
-		integer index = 0
+		integer index= 0
 		loop
 			exitwhen index>11
 			lastRepair[index] = -1.*REPAIR_TIMEOUT
-			index = index+1
-		end
+			index= index+1
+		endloop
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
 	end
 endscope

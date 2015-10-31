@@ -53,7 +53,7 @@ scope FillToxicSack initializer i
 	function i takes nothing returns nothing
 
 		// Initialize triggers for shop and utility ports
-		trigger shopTrigger = CreateTrigger()
+		trigger shopTrigger= CreateTrigger()
 		trigger utilityTrigger = CreateTrigger()
 
 		// Initialize rect near shop

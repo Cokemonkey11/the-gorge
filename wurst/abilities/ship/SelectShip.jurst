@@ -17,7 +17,7 @@ scope SelectShip initializer i
 		if GetSpellAbilityId() == SELECT_SHIP_ID then
 			owner = GetOwningPlayer(GetTriggerUnit())
 			id = GetPlayerId(owner)
-			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0 then
+			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id])!= 0 then
 				if Game.localPlayer == owner then
 					ClearSelection()
 					SelectUnit(Ships.ships[id], true)

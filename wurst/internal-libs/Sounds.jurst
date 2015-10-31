@@ -1,37 +1,36 @@
-library Sounds
-	import TerrainData
+package Sounds
+	import Table
 
 	struct Slop
 		string snd
 	end
 
-	public struct Sounds
-		private static method preloadAfter takes nothing returns nothing
-			timer time = GetExpiredTimer()
-			Slop s = time.getData() castTo Slop
-			sound sd = CreateSound(s.snd, false, false, false, 12700, 12700, "")
+	public class Sounds
+		static Table preloadDB
 
+		private static method preloadAfter takes nothing returns nothing
+			timer time= GetExpiredTimer()
+			Slop s = preloadDB.loadInt(time.getHandleId()) castTo Slop
+			sound sd= CreateSound(s.snd, false, false, false, 12700, 12700, "")
 			SetSoundVolume(sd, 1)
 			StartSound(sd)
 			KillSoundWhenDone(sd)
-
 			destroy s
-
 			DestroyTimer(time)
 		end
 
 		static method preload takes string str returns nothing
-			timer time = CreateTimer()
-
-			Slop s = new Slop()
-			s.snd = str
-			time.setData(s castTo int)
-			TimerStart(time, .01, false, function preloadAfter)
+			timer time= CreateTimer()
+			Slop s= new Slop
+			s.snd= str
+			BJDebugMsg("preloading " + str)
+			preloadDB.saveInt(time.getHandleId(), s castTo int)
+			BJDebugMsg("preloaded")
+			TimerStart(time, .01, false, function Sounds.preloadAfter)
 		end
 
 		static method play3D takes string str, real pitch, real x, real y, real z returns nothing
 			sound s = CreateSound(str, false, true, true, 12700, 12700, "")
-
 			SetSoundPosition(s, x, y, z)
 			SetSoundVolume(s, 127)
 			SetSoundPitch(s, pitch)
@@ -39,19 +38,13 @@ library Sounds
 			KillSoundWhenDone(s)
 		end
 
-		static method play2D takes string str, real pitch, real x, real y returns nothing
-			play3D(str, pitch, x, y, TerrainData.getZ(x, y))
-		end
-
 		static method playForPlayer takes string str, real pitch, player who returns nothing
 			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
-
-			if GetLocalPlayer() == who then
+			if GetLocalPlayer()== who then
 				SetSoundVolume(s, 127)
 			else
 				SetSoundVolume(s, 0)
 			end
-
 			SetSoundPitch(s, pitch)
 			StartSound(s)
 			KillSoundWhenDone(s)
@@ -59,11 +52,13 @@ library Sounds
 
 		static method play takes string str, real pitch, integer vol returns nothing
 			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
-
 			SetSoundVolume(s, vol)
 			SetSoundPitch(s, pitch)
 			StartSound(s)
 			KillSoundWhenDone(s)
 		end
 	end
-endlibrary
+
+	init
+		Sounds.preloadDB = new Table
+	end

@@ -3,11 +3,11 @@ scope OutpostTaken initializer i
 	import RegisterPlayerUnitEvent
 
 	function c takes nothing returns nothing
-		unit tU = GetTriggerUnit()
+		unit tU= GetTriggerUnit()
 		integer id
-		if GetUnitTypeId(tU) == Game.OUTPOST_ID then
+		if GetUnitTypeId(tU)== Game.OUTPOST_ID then
 			id = GetPlayerId(GetOwningPlayer(tU))
-			if id == 0 then
+			if id== 0 then
 				CreateUnit(Game.players[1], Game.OUTPOST_ID, GetUnitX(tU), GetUnitY(tU), 270.)
 			else
 				CreateUnit(Game.players[0], Game.OUTPOST_ID, GetUnitX(tU), GetUnitY(tU), 270.)

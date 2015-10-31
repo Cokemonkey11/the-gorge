@@ -5,7 +5,7 @@ package Game
 	import Sounds
 	import Muscii
 
-	public class AssistTimestamps
+	struct AssistTimestamps
 		integer array vals[12]
 	end
 
@@ -13,8 +13,8 @@ package Game
 		static constant integer OUTPOST_ID         = 'h002'
 		static constant integer DUMMY_ID           = 'u000'
 		static constant integer ASSIST_TIME        = 15
-		static constant real WESTX	 	 = -4100.
-		static constant real EASTX 		 =  4100.
+		static constant real WESTX	 	= -4100.
+		static constant real EASTX 		=  4100.
 		static constant real OUTPOST1_X =  380.
 		static constant real OUTPOST1_Y =  1030.
 		static constant real OUTPOST2_X = -140.
@@ -93,9 +93,9 @@ package Game
 		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
 
 		static boolean ended = false
-		static integer playerCount = 0
-		static integer westCount = 0
-		static integer eastCount = 0
+		static integer playerCount= 0
+		static integer westCount= 0
+		static integer eastCount= 0
 		static integer array shipClass
 		static int array tradeExp
 		static integer array scoreboardRows
@@ -177,13 +177,13 @@ package Game
 
 		static function updateIcon takes integer pID returns nothing
 			integer unitType = shipClass[pID]
-			if unitType == Ships.HELICOPTER_ID then
+			if unitType== Ships.HELICOPTER_ID then
 				scoreboard.setIcon(0, scoreboardRows[pID], HELICOPTER_ICON)
-			elseif unitType == Ships.PARACOPTER_ID then
+			elseif unitType== Ships.PARACOPTER_ID then
 				scoreboard.setIcon(0, scoreboardRows[pID], PARACOPTER_ICON)
-			elseif unitType == Ships.ZEPPELIN_ID then
+			elseif unitType== Ships.ZEPPELIN_ID then
 				scoreboard.setIcon(0, scoreboardRows[pID], ZEPPELIN_ICON)
-			elseif unitType == Ships.SKYBARGE_ID then
+			elseif unitType== Ships.SKYBARGE_ID then
 				scoreboard.setIcon(0, scoreboardRows[pID], SKYBARGE_ICON)
 			end
 		end
@@ -218,7 +218,7 @@ package Game
 		end
 
 		static function c takes nothing returns nothing
-			unit tU = GetTriggerUnit()
+			unit tU= GetTriggerUnit()
 			if GetUnitTypeId(tU) == SHIELD_ID then
 				if GetOwningPlayer(tU) == Player(0) then
 					westShieldsLeft = westShieldsLeft - 1
@@ -319,18 +319,18 @@ package Game
 
 			GroupEnumUnitsInRect(grp, bj_mapInitialPlayableArea, null)
 			loop
-				first = FirstOfGroup(grp)
-				exitwhen first == null
+				first= FirstOfGroup(grp)
+				exitwhen first== null
 				PauseUnit(first, true)
 				SetUnitTimeScale(first, 0.)
 				UnitAddAbility(first, 'Aloc')
 				GroupRemoveUnit(grp, first)
-			end
+			endloop
 		end
 
 		static function defeatC takes nothing returns nothing
-			unit tU = GetTriggerUnit()
-			if tU == westKeep[0] then
+			unit tU= GetTriggerUnit()
+			if tU== westKeep[0] then
 				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
@@ -338,7 +338,7 @@ package Game
 				defeatTeam(0)
 				Muscii.interrupt()
 				TimerStart(CreateTimer(), 30., false, function defeatAfter)
-			elseif tU == eastKeep[0] then
+			elseif tU== eastKeep[0] then
 				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
@@ -367,7 +367,7 @@ package Game
 			Sounds.play(START_SOUND, .75, 127)
 			fadeIn(1.)
 			PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
-			if localPlayer == GetOwningPlayer(Ships.ships[id]) then
+			if localPlayer== GetOwningPlayer(Ships.ships[id]) then
 				ClearSelection()
 				SelectUnit(Ships.ships[id], true)
 			end
@@ -375,7 +375,7 @@ package Game
 	end
 
 	init
-		integer index = 0
+		integer index= 0
 
 		// initialize assist stamps
 		integer i = 0
@@ -391,9 +391,9 @@ package Game
 				Game.assistTimestamps[i].vals[j] = -1 * Game.ASSIST_TIME
 
 				j = j +1
-			end
+			endloop
 			i = i +1
-		end
+		endloop
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
 		Game.localPlayer = GetLocalPlayer()
@@ -403,17 +403,17 @@ package Game
 		// Set Starting Gold and initialize player array
 		loop
 			exitwhen index>11
-			Game.players[index] = Player(index)
+			Game.players[index]= Player(index)
 			SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, Game.START_GOLD)
-			index = index+1
-		end
+			index= index+1
+		endloop
 
 		// Create starting ships for players
-		index = 2
+		index= 2
 		loop
 			exitwhen index>11
-			if GetPlayerSlotState(Game.players[index]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Game.players[index]) == MAP_CONTROL_USER then
-				Game.playerCount = Game.playerCount+1
+			if GetPlayerSlotState(Game.players[index])== PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Game.players[index])== MAP_CONTROL_USER then
+				Game.playerCount= Game.playerCount+1
 				Game.playing[index] = true
 				Game.shipClass[index] = Ships.HELICOPTER_ID
 				Game.captains[index] = CreateUnit(Game.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
@@ -425,16 +425,16 @@ package Game
 				Game.names[index] = GetPlayerName(Game.players[index])
 				if index<7 then
 					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, Game.WESTX+Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
-					Game.westCount = Game.westCount+1
+					Game.westCount= Game.westCount+1
 				else
 					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, Game.EASTX-Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
-					Game.eastCount = Game.eastCount+1
+					Game.eastCount= Game.eastCount+1
 				end
 			else
 				Game.playing[index] = false
 			end
-			index = index+1
-		end
+			index= index+1
+		endloop
 
 		// Make alliance units give bounty
 		SetPlayerState(Game.players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
@@ -449,18 +449,18 @@ package Game
 		Game.eastKeep[1] = CreateUnit(Game.players[1], Game.KEEP2_ID, Game.EASTX, 0., 270.)
 
 		// Create shields
-		index = 0
+		index= 0
 		loop
-			exitwhen index >= Game.SHIELD_COUNT
+			exitwhen index>= Game.SHIELD_COUNT
 			CreateUnit(Game.players[0], Game.SHIELD_ID, Game.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
-			index = index+1
-		end
-		index = 0
+			index= index+1
+		endloop
+		index= 0
 		loop
-			exitwhen index >= Game.SHIELD_COUNT
+			exitwhen index>= Game.SHIELD_COUNT
 			CreateUnit(Game.players[1], Game.SHIELD_ID, Game.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
-			index = index+1
-		end
+			index= index+1
+		endloop
 
 		// Create Outposts
 		CreateUnit(Game.players[0], Game.OUTPOST_ID, Game.OUTPOST2_X, Game.OUTPOST2_Y, 270.)

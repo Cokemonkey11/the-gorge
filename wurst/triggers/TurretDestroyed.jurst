@@ -13,9 +13,9 @@ scope TurretDestroyed initializer i
 	endglobals
 
 	function c takes nothing returns nothing
-		unit tU = GetTriggerUnit()
-		integer index = 2
-		if GetUnitTypeId(tU) == TURRET_ID then
+		unit tU= GetTriggerUnit()
+		integer index= 2
+		if GetUnitTypeId(tU)== TURRET_ID then
 			loop
 				exitwhen index>11
 				if IsUnitAlly(tU, Game.players[index]) then
@@ -26,8 +26,8 @@ scope TurretDestroyed initializer i
 					DisplayTimedTextToPlayer(Game.players[index], 0., 0., 10., SUCCESS)
 					Sounds.playForPlayer(GOODJOB, 1., Game.players[index])
 				end
-				index = index+1
-			end
+				index= index+1
+			endloop
 		end
 	end
 
