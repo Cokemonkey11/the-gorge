@@ -5,20 +5,20 @@ package Music
 	// Back Against the Wall by Cage the Elephant
 	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
 	globals
-		constant string HAT_PATH       = "Sound\\Interface\\MouseClick1.wav"
-		constant string HATOPEN_PATH   = "Sound\\Interface\\BigButtonClick.wav"
-		constant string SNR_PATH       = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
-		constant string BAS_PATH	   = "Abilities\\Spells\\Human\\ThunderClap\\ThunderClapCaster.wav"
-		constant string RID_PATH 	   = "Abilities\\Spells\\Human\\Defend\\DefendCaster.wav"
-		constant string FLM_PATH 	   = "Abilities\\Spells\\NightElf\\EatTree\\EatTreeTarget1.wav"
-		constant string RIM_PATH	   = "Sound\\Interface\\BattleNetTick.wav"
-		constant string CRS_PATH 	   = "Sound\\Interface\\GoodJob.wav"
-		constant string TM1_PATH	   = "Sounds\\Buildings\\Death\\OrcBuildingDeathSmall1.wav"
-		constant string TM1DOUBLE_PATH = "Sounds\\Buildings\\Death\\OrcBuildingDeathSmall1.wav"
-		constant string TM4_PATH       = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
-		constant string TM5DOUBLE_PATH = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
-		constant string TM5_PATH       = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
-		constant string HATPDL_PATH    = "Sound\\Interface\\MouseClick1.wav"
+		constant string HAT_PATH       = "musRad-khatClosed.mp3"
+		constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
+		constant string SNR_PATH       = "musRad-sonorSnr.mp3"
+		constant string BAS_PATH       = "musRad-bass.mp3"
+		constant string RID_PATH       = "zildj-ride.mp3"
+		constant string FLM_PATH       = "musRad-sonorFlam.mp3"
+		constant string RIM_PATH       = "musRad-sonorRim.mp3"
+		constant string CRS_PATH       = "zildj-crash.mp3"
+		constant string TM1_PATH       = "musRad-tom1.mp3"
+		constant string TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
+		constant string TM4_PATH       = "musRad-tom4.mp3"
+		constant string TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
+		constant string TM5_PATH       = "musRad-tom5.mp3"
+		constant string HATPDL_PATH    = "musRad-khatPdl.mp3"
 
 		Muscii m
 		Muscii v1
