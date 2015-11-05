@@ -23,9 +23,7 @@ package Sounds
 			timer time= CreateTimer()
 			Slop s= new Slop
 			s.snd= str
-			BJDebugMsg("preloading " + str)
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
-			BJDebugMsg("preloaded")
 			TimerStart(time, .01, false, function Sounds.preloadAfter)
 		end
 

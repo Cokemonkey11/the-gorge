@@ -5,20 +5,20 @@ package Music
 	// Back Against the Wall by Cage the Elephant
 	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
 	globals
-		constant string HAT_PATH       = "musRad-khatClosed.mp3"
-		constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
-		constant string SNR_PATH       = "musRad-sonorSnr.mp3"
-		constant string BAS_PATH	   = "musRad-bass.mp3"
-		constant string RID_PATH 	   = "zildj-ride.mp3"
-		constant string FLM_PATH 	   = "musRad-sonorFlam.mp3"
-		constant string RIM_PATH	   = "musRad-sonorRim.mp3"
-		constant string CRS_PATH 	   = "zildj-crash.mp3"
-		constant string TM1_PATH	   = "musRad-tom1.mp3"
-		constant string TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
-		constant string TM4_PATH       = "musRad-tom4.mp3"
-		constant string TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
-		constant string TM5_PATH       = "musRad-tom5.mp3"
-		constant string HATPDL_PATH    = "musRad-khatPdl.mp3"
+		constant string HAT_PATH       = "Sound\\Interface\\MouseClick1.wav"
+		constant string HATOPEN_PATH   = "Sound\\Interface\\BigButtonClick.wav"
+		constant string SNR_PATH       = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
+		constant string BAS_PATH	   = "Abilities\\Spells\\Human\\ThunderClap\\ThunderClapCaster.wav"
+		constant string RID_PATH 	   = "Abilities\\Spells\\Human\\Defend\\DefendCaster.wav"
+		constant string FLM_PATH 	   = "Abilities\\Spells\\NightElf\\EatTree\\EatTreeTarget1.wav"
+		constant string RIM_PATH	   = "Sound\\Interface\\BattleNetTick.wav"
+		constant string CRS_PATH 	   = "Sound\\Interface\\GoodJob.wav"
+		constant string TM1_PATH	   = "Sounds\\Buildings\\Death\\OrcBuildingDeathSmall1.wav"
+		constant string TM1DOUBLE_PATH = "Sounds\\Buildings\\Death\\OrcBuildingDeathSmall1.wav"
+		constant string TM4_PATH       = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
+		constant string TM5DOUBLE_PATH = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
+		constant string TM5_PATH       = "Sounds\\Buildings\\Shared\\BuildingPlacement.wav"
+		constant string HATPDL_PATH    = "Sound\\Interface\\MouseClick1.wav"
 
 		Muscii m
 		Muscii v1
@@ -37,37 +37,47 @@ package Music
 	endglobals
 
 	function playIntro takes nothing returns nothing
+		Section verse1 = () -> playVerse1()
+
 		m
 			..playCounted(3)
-			..callback(() -> playVerse1())
+			..callback(verse1)
 	end
 
 	function playVerse1 takes nothing returns nothing
+		Section chorus = () -> playChorus()
+
 		v1
 			..playCounted(0)
 			..enqueue(v1p2, 1)
 			..enqueue(v1p3, 0)
-			..callback(() -> playChorus())
+			..callback(chorus)
 	end
 
 	function playChorus takes nothing returns nothing
+		Section verse2 = () -> playVerse2()
+
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP2, 0)
 			..enqueue(chorusP3, 0)
 			..enqueue(chorusP2, 0)
-			..callback(() -> playVerse2())
+			..callback(verse2)
 	end
 
 	function playVerse2 takes nothing returns nothing
+		Section chorus2 = () -> playChorus2()
+
 		v1
 			..playCounted(0)
 			..enqueue(v1p2, 1)
 			..enqueue(v1p3, 0)
-			..callback(() -> playChorus2())
+			..callback(chorus2)
 	end
 
 	function playChorus2 takes nothing returns nothing
+		Section verse3 = () -> playVerse3()
+
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP3, 1)
@@ -75,19 +85,23 @@ package Music
 			..enqueue(chorus2P5, 1)
 			..enqueue(chorus2P7, 0)
 			..enqueue(chorus2P8, 0)
-			..callback(() -> playVerse3())
+			..callback(verse3)
 	end
 
 	function playVerse3 takes nothing returns nothing
+		Section chorus3 = () -> playChorus3()
+
 		v1
 			..playCounted(0)
 			..enqueue(verse3P2, 0)
 			..enqueue(v1p2, 2)
 			..enqueue(v1p3, 0)
-			..callback(() -> playChorus3())
+			..callback(chorus3)
 	end
 
 	function playChorus3 takes nothing returns nothing
+		Section verse1 = () -> playVerse1()
+
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP3, 0)
@@ -96,7 +110,7 @@ package Music
 			..enqueue(chorus2P5, 1)
 			..enqueue(chorus3P7, 0)
 			..enqueue(chorus3P8, 0)
-			..callback(() -> playVerse1())
+			..callback(verse1)
 	end
 
 	init

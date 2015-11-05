@@ -1,7 +1,7 @@
-library Muscii
+package Muscii
 	import Sounds
 
-	public struct Note
+	public class Note
 		string path
 		integer volume
 		real pitch
@@ -9,27 +9,25 @@ library Muscii
 		Note next
 
 		method copy takes nothing returns Note
-			return Note.create(this.path,this.volume,this.pitch)
+			return Note.create(this.path, this.volume, this.pitch)
 		end
 
 		method play takes nothing returns nothing
-			Sounds.play(this.path,this.pitch,this.volume)
+			Sounds.play(this.path, this.pitch, this.volume)
 		end
 
 		static method create takes string path, integer volume, real pitch returns Note
-			Note t = new Note()
-			t.path = path
-			t.volume = volume
-			t.pitch = pitch
-			t.previous = null
-			t.next = null
-			return t
+			Note n = new Note
+			n.path = path
+			n.volume = volume
+			n.pitch = pitch
+			n.previous = null
+			n.next = null
+			return n
 		end
 	end
 
-
-
-	public struct Chord
+	public class Chord
 		Note first
 		Note last
 		Chord previous
@@ -64,8 +62,8 @@ library Muscii
 		end
 
 		static method create takes Note n returns Chord
-			Note q = Note.create(n.path,n.volume,n.pitch)
-			Chord c = new Chord()
+			Note q = Note.create(n.path, n.volume, n.pitch)
+			Chord c = new Chord
 			c.previous = null
 			c.next = null
 			c.first = q
@@ -74,7 +72,13 @@ library Muscii
 		end
 	end
 
-	public struct Muscii
+	public interface Section
+		function do()
+		end
+	end
+
+	public class Muscii
+		static Table fromClock
 		private static Muscii array db
 		private static integer dbIndex = -1
 		Chord first
@@ -84,7 +88,7 @@ library Muscii
 		timer clock
 		integer count
 		integer queueCount
-		MyCallBackFunc cbf
+		Section cbf
 		Muscii queued
 
 		static method interrupt takes nothing returns nothing
@@ -98,14 +102,14 @@ library Muscii
 			end
 		end
 
-		method callback takes MyCallBackFunc func returns Muscii
-			this.cbf = func
+		method callback takes Section callback returns Muscii
+			this.cbf = callback
 			return this
 		end
 
 		method copy takes nothing returns Muscii
 			Chord iterator = this.first
-			Muscii new = Muscii.create(iterator,this.tempo)
+			Muscii new = Muscii.create(iterator, this.tempo)
 			loop
 				iterator = iterator.next
 				exitwhen iterator == null
@@ -121,7 +125,7 @@ library Muscii
 
 		method playCounted takes integer count returns Muscii
 			this.count = count
-			TimerStart(this.clock,1. / (this.tempo / 60.),true, function p)
+			TimerStart(this.clock, 1. / (this.tempo / 60.), true, function Muscii.p)
 			return this
 		end
 
@@ -153,7 +157,7 @@ library Muscii
 		end
 
 		static method create takes Chord c, real tempo returns Muscii
-			Muscii m = new Muscii()
+			Muscii m = new Muscii
 			Chord cop = c.copy()
 			m.first = cop
 			m.last = cop
@@ -161,25 +165,26 @@ library Muscii
 			m.tempo = tempo
 			m.clock = CreateTimer()
 			m.queued = null
-			m.cbf = null
-			m.clock.setData(m castTo int)
+			m.cbf    = null
+			fromClock.saveInt(m.clock.getHandleId(), m castTo int)
 			dbIndex = dbIndex + 1
 			db[dbIndex] = m
 			return m
 		end
 
 		private static method p takes nothing returns nothing
-			Muscii m = GetExpiredTimer().getData() castTo Muscii
+			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
 			Muscii next
 			Chord now = m.iterator
+			Section cbf
 			now.play()
 			if now.next != null then
 				m.iterator = now.next
 			else
 				m.iterator = m.first
-				if m.count>-1 then
-					m.count=m.count-1
-					if m.count==-1 then
+				if m.count > -1 then
+					m.count = m.count-1
+					if m.count == -1 then
 						m.stop()
 						next = m.queued
 						if next != null then
@@ -187,7 +192,9 @@ library Muscii
 						end
 						m.queued = null
 						if m.cbf != null then
-							m.cbf.doCallback()
+							m.cbf.do()
+							cbf = m.cbf
+							destroy cbf
 							m.cbf = null
 						end
 					end
@@ -196,15 +203,6 @@ library Muscii
 		end
 	end
 
-	interface MyCallBackFunc
-	   function doCallback() returns nothing
-	   end
+	init
+		Muscii.fromClock = new Table
 	end
-
-	// usage example
-	//init
-	//	Muscii m = new Muscii()
-	//	m.callback(() -> print("hello"))
-	//end
-
-endlibrary
