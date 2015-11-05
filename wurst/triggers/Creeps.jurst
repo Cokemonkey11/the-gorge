@@ -5,7 +5,7 @@ scope Creeps initializer i
 		constant integer GRYPH_ID  = 'hgry'
 		constant integer WYVERN_ID = 'owyv'
 		constant integer HAWK_ID   = 'hdhw'
-		constant real SPAWN_PERIOD = 30.
+		constant real SPAWN_PERIOD = 35.
 		boolean extra = false
 	endglobals
 
