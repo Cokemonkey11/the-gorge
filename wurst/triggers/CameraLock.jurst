@@ -1,0 +1,15 @@
+package CameraLock
+	import ClosureTimers
+
+	constant real PERIOD   =    1. / 30.
+	constant real FOV      =  100.
+	constant real DISTANCE = 1250.
+	constant real AOA      =  290.
+
+	init
+		doPeriodically(PERIOD, (CallbackPeriodic cb) -> begin
+			SetCameraField(CAMERA_FIELD_FIELD_OF_VIEW,   FOV,      0.)
+			SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, DISTANCE, 0.)
+			SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, AOA,      0.)
+		end)
+	end
