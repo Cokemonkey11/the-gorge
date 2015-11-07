@@ -1,5 +1,6 @@
 scope Creeps initializer i
 	import Game
+	import Players
 	import TerrainData
 
 	globals
@@ -21,9 +22,9 @@ scope Creeps initializer i
 			x = TerrainData.EASTX
 			face = 180.
 		end
-		u = CreateUnit(Game.players[faction], class, x, 0., face)
+		u = CreateUnit(Players.players[faction], class, x, 0., face)
 		IssuePointOrder(u, "attack", TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y)
-		u = CreateUnit(Game.players[faction], class, x, 0., face)
+		u = CreateUnit(Players.players[faction], class, x, 0., face)
 		IssuePointOrder(u, "attack", TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y)
 	end
 

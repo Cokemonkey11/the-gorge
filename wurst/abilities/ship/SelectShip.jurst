@@ -1,24 +1,21 @@
 scope SelectShip initializer i
-	import Game
+	import Players
 	import SimError
 	import Ships
 	import RegisterPlayerUnitEvent
 
 	native UnitAlive takes unit u returns boolean
 
-	globals
-		constant integer SELECT_SHIP_ID = 'A00K'
-		constant string DEAD_ERROR = "Your ship has been destroyed."
-	end
+	constant integer SELECT_SHIP_ID = 'A00K'
+	constant string  DEAD_ERROR     = "Your ship has been destroyed."
 
 	function c takes nothing returns nothing
-		player owner
-		integer id
 		if GetSpellAbilityId() == SELECT_SHIP_ID then
-			owner = GetOwningPlayer(GetTriggerUnit())
-			id = GetPlayerId(owner)
-			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id])!= 0 then
-				if Game.localPlayer == owner then
+			player  owner = GetOwningPlayer(GetTriggerUnit())
+			integer id    = GetPlayerId(owner)
+
+			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0 then
+				if Players.localPlayer == owner then
 					ClearSelection()
 					SelectUnit(Ships.ships[id], true)
 					PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)

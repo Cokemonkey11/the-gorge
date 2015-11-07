@@ -1,5 +1,6 @@
 scope Repair initializer i
 	import Game
+	import Players
 	import Ships
 	import SimError
 	import RegisterPlayerUnitEvent
@@ -25,7 +26,7 @@ scope Repair initializer i
 		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
 			p = GetTriggerPlayer()
 			id = GetPlayerId(p)
-			if Game.localPlayer== p then
+			if Players.localPlayer== p then
 				SelectUnit(tU, false)
 				SelectUnit(Ships.ships[id], true)
 			end

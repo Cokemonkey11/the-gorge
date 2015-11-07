@@ -11,6 +11,7 @@ package Equipment
 	import SimError
 	import Ships
 	import Game
+	import Players
 	import RegisterPlayerUnitEvent
 
 	public class Equipment
@@ -68,8 +69,8 @@ package Equipment
 		static function autoPawnItemForPlayer takes integer pID, item it returns nothing
 			integer val = R2I(GetWidgetLife(it))
 			if val>1 then
-				DisplayTextToPlayer(Game.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
-				SetPlayerState(Game.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
+				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
+				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
 			end
 			RemoveItem(it)
 		end
@@ -373,7 +374,7 @@ package Equipment
 			end
 			if was then
 				RemoveItem(sI)
-				if Game.localPlayer == owner then
+				if Players.localPlayer == owner then
 					SelectUnit(seller, false)
 					SelectUnit(toSelect, true)
 				end

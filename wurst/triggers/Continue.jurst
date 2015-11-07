@@ -1,5 +1,5 @@
 scope Continue initializer i
-	import Game
+	import Players
 	import TerrainData
 
 	globals
@@ -14,9 +14,9 @@ scope Continue initializer i
 		unit fU= GetFilterUnit()
 		integer id= GetUnitTypeId(fU)
 		player owner = GetOwningPlayer(fU)
-		if owner== Game.players[0] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+		if owner== Players.players[0] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
 			IssuePointOrder(fU, "attack", TerrainData.EASTX, 0.)
-		elseif owner== Game.players[1] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+		elseif owner== Players.players[1] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
 			IssuePointOrder(fU, "attack", TerrainData.WESTX, 0.)
 		end
 		return false

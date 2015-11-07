@@ -1,18 +1,16 @@
 scope SelectCaptain initializer init
 	import Game
+	import Players
 	import RegisterPlayerUnitEvent
 
-	globals
-		constant integer SELECT_CAPT_ID = 'A00Z'
-	end
+	constant integer SELECT_CAPT_ID = 'A00Z'
 
 	function c takes nothing returns nothing
-		player owner
-		integer id
 		if GetSpellAbilityId() == SELECT_CAPT_ID then
-			owner = GetOwningPlayer(GetTriggerUnit())
-			id = GetPlayerId(owner)
-			if Game.localPlayer == owner then
+			player  owner = GetOwningPlayer(GetTriggerUnit())
+			integer id    = GetPlayerId(owner)
+
+			if Players.localPlayer == owner then
 				ClearSelection()
 				SelectUnit(Game.captains[id], true)
 				PanCameraToTimed(GetUnitX(Game.captains[id]), GetUnitY(Game.captains[id]), 0.)

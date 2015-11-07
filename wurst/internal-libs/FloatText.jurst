@@ -1,18 +1,62 @@
-library FloatText
-	import Game
+// Thanks to Cohadar for a good reference for TextTag values.
+package FloatText
+	import Players
 
 	public class FloatText
-		static function reviveNumbers takes real x, real y, string s, integer pID returns nothing
-			texttag t= CreateTextTag()
-			SetTextTagFadepoint(t, 3)
-			SetTextTagLifespan(t, 4)
-			SetTextTagPermanent(t, false)
-			SetTextTagPos(t, x, y, 100)
-			SetTextTagText(t, s, .02)
-			SetTextTagVelocity(t, 0, .05)
-			if Game.localPlayer == Game.players[pID] then
-				SetTextTagVisibility(t, true)
-			end
+		static constant real KERNING          =  5.5
+		static constant real VERTICAL_KERNING = 48.
+		static constant real DEFAULT_SHIFT    = 16.
+
+		// The text size, as defined in GoldBounty by Cohadar (divide by .0023
+		// to revert the "smart" adjustment done in Wurst STL)
+		static constant real TEXT_SIZE        = .024 / .0023
+
+		static function themedTag takes real x, real y, string s returns texttag
+			texttag t = CreateTextTag()
+
+			t..setPos(x, y, 0.)
+			 ..setText(s, TEXT_SIZE)
+
+			return t
+		end
+
+		static function themedTemporaryTag takes real x, real y, string s returns texttag
+			texttag t = themedTag(x, y, s)
+
+			t..setFadepoint(2.)
+			 ..setLifespan(3.)
+			 ..setPermanent(false)
+			 ..setVelocity(0., .03)
+
+			return t
+		end
+
+		static function themedTemporaryTagPlayer takes real x, real y, string s, integer pId returns texttag
+			texttag t = themedTemporaryTag(x, y, s)
+
+			t.setVisibility(Players.localPlayer == Players.players[pId])
+
+			return t
+		end
+
+		static function reviveNumbers takes real x, real y, string s, integer pId returns texttag
+			let len = StringLength(s)
+			return themedTemporaryTagPlayer(x - (.5 * KERNING * len), y, s, pId)
+		end
+
+		static function goldBounty takes real x, real y, int bounty, integer pId returns texttag
+			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
+
+			t..setColor(255, 220, 0, 255)
+
+			return t
+		end
+
+		static function tradeExperienceBounty takes real x, real y, int bounty, integer pId returns texttag
+			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
+
+			t.setColor(220, 0, 255, 255)
+
+			return t
 		end
 	end
-endlibrary

@@ -1,6 +1,7 @@
 scope ChangeShip initializer i
 	import Ships
 	import Game
+	import Players
 	import Equipment
 	import SimError
 	import RegisterPlayerUnitEvent
@@ -44,7 +45,7 @@ scope ChangeShip initializer i
 						Ships.ships[id] = sU
 						Equipment.playerAddItemsFromIdConditional(id, tempIds[0], tempIds[1], tempIds[2], tempIds[3], tempIds[4], tempIds[5])
 						Equipment.resetUnitDamageReduction(Ships.ships[id])
-						if Game.localPlayer == buyer then
+						if Players.localPlayer == buyer then
 							SelectUnit(Ships.ships[id], true)
 							SelectUnit(selU, false)
 						end

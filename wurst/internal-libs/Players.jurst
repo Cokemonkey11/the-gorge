@@ -1,0 +1,6 @@
+package Players
+    public class Players
+        static player array players
+        static player localPlayer
+        static player playerPassive
+    end

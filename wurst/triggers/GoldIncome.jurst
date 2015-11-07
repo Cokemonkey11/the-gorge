@@ -1,5 +1,6 @@
 scope GoldIncome initializer i
 	import Game
+	import Players
 
 	globals
 		constant real CLOCK_PERIOD = 1.
@@ -11,7 +12,7 @@ scope GoldIncome initializer i
 		if not Game.ended then
 			loop
 				exitwhen index>11
-				SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
+				SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
 				index= index+1
 			end
 		end

@@ -1,10 +1,11 @@
 scope Leave initializer init
 	import Game
+	import Players
 
 	function c takes nothing returns boolean
 		player p = GetTriggerPlayer()
 		integer id = GetPlayerId(p)
-		DisplayTextToPlayer(Game.localPlayer, 0., 0., Game.colors[id]+Game.names[id]+"|r has left the game.")
+		DisplayTextToPlayer(Players.localPlayer, 0., 0., Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
 	end
 
