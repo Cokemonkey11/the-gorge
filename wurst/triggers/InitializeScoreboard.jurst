@@ -1,36 +1,44 @@
 scope InitializeScoreboard initializer i
 	import Game
 	import MyBoard
+	import Players
 
-	globals
-		string array colors
-		constant real MB_WIDTH = .25
-	end
+	string array colors
+	constant real MB_WIDTH = .25
 
 	function iconCol takes integer col, boolean show returns nothing
 		integer i = 0
+
 		loop
-			exitwhen i>Game.scoreboard.rows()
+			exitwhen i > Game.scoreboard.rows()
+
 			Game.scoreboard.displayIcon(col, i, show)
-			i = i +1
+
+			i++
 		end
 	end
 
 	function widthCol takes integer col, real width returns nothing
 		integer i = 0
+
 		loop
-			exitwhen i>Game.scoreboard.rows()
+			exitwhen i > Game.scoreboard.rows()
+
 			Game.scoreboard.setWidth(col, i, width)
-			i = i +1
+
+			i++
 		end
 	end
 
 	function valueCol takes integer col, string val returns nothing
 		integer i = 0
+
 		loop
-			exitwhen i>Game.scoreboard.rows()
+			exitwhen i > Game.scoreboard.rows()
+
 			Game.scoreboard.setValue(col, i, val)
-			i = i +1
+
+			i++
 		end
 	end
 
@@ -38,7 +46,7 @@ scope InitializeScoreboard initializer i
 		integer i = 2
 		integer j = 0
 
-		Game.scoreboard = MyBoard.create(5, 2+Game.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
+		Game.scoreboard = MyBoard.create(5, 2+Players.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
 		widthCol(0, MB_WIDTH*3./7.)
 		widthCol(1, MB_WIDTH*1./7.)
 		widthCol(2, MB_WIDTH*1.125/7.)
@@ -64,7 +72,7 @@ scope InitializeScoreboard initializer i
 		Game.scoreboard.setValue(4, 1+Game.westCount, "")
 		loop
 			exitwhen i > 11
-			if Game.playing[i] then
+			if Players.playing[i] then
 				if i<7 then
 					Game.scoreboard.setValue(0, 1+j, Game.colors[i]+Game.names[i]+"|r")
 					Game.scoreboard.setIcon(0, 1+j, Game.HELICOPTER_ICON)

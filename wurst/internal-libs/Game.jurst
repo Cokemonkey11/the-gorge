@@ -7,6 +7,7 @@ package Game
 	import TerrainData
 	import FloatText
 	import Players
+	import SinglePlayer
 
 	struct AssistTimestamps
 		integer array vals[12]
@@ -88,11 +89,9 @@ package Game
 		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
 
 		static boolean ended       = false
-		static integer playerCount = 0
 		static integer westCount   = 0
 		static integer eastCount   = 0
 		static integer array shipClass
-		static int array tradeExp
 		static integer array scoreboardRows
 		static real seconds = 0.
 		static unit westRepair
@@ -102,7 +101,6 @@ package Game
 		static unit array westUtility
 		static unit array eastUtility
 		static unit array captains
-		static boolean array playing
 		static string array colors
 		static string array names
 		static AssistTimestamps array assistTimestamps
@@ -137,7 +135,7 @@ package Game
 				FloatText.tradeExperienceBounty(uX, uY - FloatText.VERTICAL_KERNING/2., bonusExperience, id)
 			end
 
-			tradeExp[id] += bonusExperience
+			Players.tradeExp[id] += bonusExperience
 			SetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD)+gold)
 			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL, u, "origin"))
 			DisplayTextToPlayer(owner, 0., 0., "You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonusExperience)+"|r trading experience.")
@@ -405,7 +403,7 @@ package Game
 
 		// Set Starting Gold and initialize player array
 		loop
-			exitwhen index>11
+			exitwhen index > 11
 
 			Players.players[index] = Player(index)
 			SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, Game.START_GOLD)
@@ -418,30 +416,35 @@ package Game
 		loop
 			exitwhen index > 11
 
-			if GetPlayerSlotState(Players.players[index])== PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Players.players[index])== MAP_CONTROL_USER then
-				Game.playerCount= Game.playerCount+1
-				Game.playing[index] = true
-				Game.shipClass[index] = Ships.HELICOPTER_ID
-				Game.captains[index] = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
-				Game.tradeExp[index] = 0
-				Game.kills[index]    = 0
-				Game.deaths[index]   = 0
-				Game.assists[index]  = 0
-				Game.farm[index]     = 0
-				Game.names[index] = GetPlayerName(Players.players[index])
+			if GetPlayerSlotState(Players.players[index]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Players.players[index]) == MAP_CONTROL_USER then
+				Players.playerCount++
+				Players.playing[index] = true
+				Game.shipClass[index]  = Ships.HELICOPTER_ID
+				Game.captains[index]   = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
+				Players.tradeExp[index]   = 0
+				Game.kills[index]      = 0
+				Game.deaths[index]     = 0
+				Game.assists[index]    = 0
+				Game.farm[index]       = 0
+				Game.names[index]      = GetPlayerName(Players.players[index])
 
 				if index < 7 then
-					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.WESTX+Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
-					Game.westCount= Game.westCount+1
+					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Game.westCount++
 				else
-					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.EASTX-Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
-					Game.eastCount= Game.eastCount+1
+					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.EASTX - Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Game.eastCount++
 				end
 			else
-				Game.playing[index] = false
+				Players.playing[index] = false
 			end
 
 			index++
+		end
+
+		// Potentially turn on single-player mode.
+		if Players.playerCount < 2 then
+			SinglePlayer.enable()
 		end
 
 		// Make alliance units give bounty

@@ -291,7 +291,7 @@ package Equipment
 		end
 
 		static function tradeExperience takes player who returns integer
-			return Game.tradeExp[GetPlayerId(who)]
+			return Players.tradeExp[GetPlayerId(who)]
 		end
 
 		// Get the cost of a trade contract, in trade experience.

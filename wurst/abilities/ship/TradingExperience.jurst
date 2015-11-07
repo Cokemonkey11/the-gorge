@@ -3,15 +3,13 @@ scope TradingExperience initializer i
 	import Game
 	import Players
 
-	globals
-		constant integer SHOW_ID = 'A00N'
-	end
+	constant integer SHOW_ID = 'A00N'
 
 	function c takes nothing returns nothing
 		integer id
 		if GetSpellAbilityId() == SHOW_ID then
 			id = GetPlayerId(GetOwningPlayer(GetTriggerUnit()))
-			DisplayTextToPlayer(Players.players[id], 0., 0., "You have |cffffcc00"+I2S(Game.tradeExp[id])+"|r Trading Experience.")
+			DisplayTextToPlayer(Players.players[id], 0., 0., "You have |cffffcc00"+I2S(Players.tradeExp[id])+"|r Trading Experience.")
 		end
 	end
 
