@@ -86,7 +86,7 @@ package DummyUnitStack
 				exitwhen index>DummyUnitStack.PRELOAD_INIT_COUNT
 				DummyUnitStack.add(true)
 				index= index+1
-			endloop
+			end
 		end
 
 		if DummyUnitStack.DO_IDPC then

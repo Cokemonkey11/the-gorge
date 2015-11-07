@@ -9,7 +9,7 @@ scope SelectShip initializer i
 	globals
 		constant integer SELECT_SHIP_ID = 'A00K'
 		constant string DEAD_ERROR = "Your ship has been destroyed."
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		player owner

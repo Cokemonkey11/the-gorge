@@ -6,7 +6,7 @@ package MyBoard
 		constant integer    MAX_COLUMN_COUNT     = 30
 		constant integer    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
 		constant real       AVERAGE_LETTER_WIDTH = .01484375
-	endglobals
+	end
 
 	public class MyBoard
 		multiboard                    board        = null

@@ -9,7 +9,7 @@ scope ShieldAllLevels initializer i
 		constant integer SHIELD_1  = 'I005'
 		constant real AMOUNT_1 = 500.
 		constant real TIME_1 = 5.
-	endglobals
+	end
 
 	function getUnitShieldId takes unit u returns integer
 		integer index= 0
@@ -19,7 +19,7 @@ scope ShieldAllLevels initializer i
 				return SHIELD_1
 			end
 			index= index+1
-		endloop
+		end
 		return -1
 	end
 

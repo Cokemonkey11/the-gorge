@@ -90,7 +90,7 @@ package Shield
 							destroyingDat.nextShield = null
 						end
 					end
-				endloop
+				end
 			end
 		endmethod
 
@@ -143,7 +143,7 @@ package Shield
 					end
 				end
 				index= index+1
-			endloop
+			end
 		endmethod
 
 		//* This method adds a shield to a unit. You can use

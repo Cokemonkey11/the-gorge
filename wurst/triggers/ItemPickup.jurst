@@ -3,8 +3,9 @@ scope ItemPickup initializer i
 	import RegisterPlayerUnitEvent
 
 	function c takes nothing returns nothing
-		integer id= GetPlayerId(GetTriggerPlayer())
-		item it = GetManipulatedItem()
+		integer id = GetPlayerId(GetTriggerPlayer())
+		item it    = GetManipulatedItem()
+
 		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(), GetItemTypeId(it)) then
 			Equipment.autoPawnItemForPlayer(id, it)
 		else

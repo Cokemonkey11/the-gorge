@@ -6,6 +6,7 @@ package Crewmembers
 	import Game
 	import SimError
 	import RegisterPlayerUnitEvent
+	import TerrainData
 
 	native UnitAlive takes unit u returns boolean
 
@@ -79,7 +80,7 @@ package Crewmembers
 					return index
 				end
 				index= index+1
-			endloop
+			end
 			return -1
 		end
 
@@ -128,11 +129,11 @@ package Crewmembers
 					SetUnitX(temp.phoenix, GetUnitX(Ships.ships[temp.ownerID]))
 					SetUnitY(temp.phoenix, GetUnitY(Ships.ships[temp.ownerID]))
 				else
-					SetUnitX(temp.phoenix, Game.SAFE_X)
-					SetUnitY(temp.phoenix, Game.SAFE_Y)
+					SetUnitX(temp.phoenix, TerrainData.SAFE_X)
+					SetUnitY(temp.phoenix, TerrainData.SAFE_Y)
 				end
 				index= index+1
-			endloop
+			end
 		end
 
 		static function c takes nothing returns nothing
@@ -196,7 +197,7 @@ package Crewmembers
 			exitwhen index>11
 			Crewmembers.slotIndices[index] = -1
 			index= index+1
-		endloop
+		end
 
 		// Initialize CrewInventories
 		index = 0

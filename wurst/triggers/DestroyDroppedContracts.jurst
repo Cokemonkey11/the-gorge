@@ -1,15 +1,14 @@
-scope DestroyDroppedContracts initializer i
+scope DestroyDroppedContracts
 	import Equipment
 	import RegisterPlayerUnitEvent
 
-	globals
-		Table tradeItems
-	endglobals
+	Table tradeItems
 
 	function isTradingItem takes item it returns boolean
 		if tradeItems.hasInt(GetItemTypeId(it)) then
 			return true
 		end
+
 		return false
 	end
 
@@ -18,18 +17,20 @@ scope DestroyDroppedContracts initializer i
 		if Equipment.getItemClass(it) == Equipment.CLASS_CONTRACT then
 			RemoveItem(it)
 		end
+
 		// Remove trading items as well
 		if isTradingItem(it) then
 			RemoveItem(it)
 		end
 	end
 
-	function i takes nothing returns nothing
+	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
 
 		// Initialize Table
 		tradeItems = new Table
-		tradeItems.saveInt(Equipment.DATA_ID, 1)
+		tradeItems.saveInt(Equipment.DATA_ID,          1)
 		tradeItems.saveInt(Equipment.TOXIC_SUBST_FULL, 1)
+		tradeItems.saveInt(Equipment.VENOM_VIAL,       1)
 	end
 endscope

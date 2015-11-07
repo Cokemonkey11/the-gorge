@@ -4,6 +4,7 @@ scope Revive initializer i
 	import Ships
 	import Equipment
 	import RegisterPlayerUnitEvent
+	import TerrainData
 
 	struct DeathDat
 		unit u
@@ -35,7 +36,7 @@ scope Revive initializer i
 		integer eastDeadCount= 0
 		unit westDummy
 		unit eastDummy
-	endglobals
+	end
 
 	function p takes nothing returns nothing
 		DeathDat tempDat
@@ -57,14 +58,14 @@ scope Revive initializer i
 				if tempDat.ownerID<7 then
 					westDeadCount = westDeadCount - 1
 					if westDeadCount == 0 then
-						SetUnitX(westDummy, Game.SAFE_X)
-						SetUnitY(westDummy, Game.SAFE_Y)
+						SetUnitX(westDummy, TerrainData.SAFE_X)
+						SetUnitY(westDummy, TerrainData.SAFE_Y)
 					end
 				else
 					eastDeadCount = eastDeadCount - 1
 					if eastDeadCount == 0 then
-						SetUnitX(eastDummy, Game.SAFE_X)
-						SetUnitY(eastDummy, Game.SAFE_Y)
+						SetUnitX(eastDummy, TerrainData.SAFE_X)
+						SetUnitY(eastDummy, TerrainData.SAFE_Y)
 					end
 				end
 				destroy tempDat
@@ -76,7 +77,7 @@ scope Revive initializer i
 				end
 			end
 			index= index+1
-		endloop
+		end
 	end
 
 	function getBounty takes nothing returns integer
@@ -92,7 +93,7 @@ scope Revive initializer i
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 			end
 			index = index+1
-		endloop
+		end
 	end
 
 	function c takes nothing returns nothing
@@ -157,17 +158,17 @@ scope Revive initializer i
 			RemoveItem(ti)
 
 			if tempDat.ownerID<7 then
-				tempDat.teamX= Game.WESTX+REVIVE_OFFSET
+				tempDat.teamX= TerrainData.WESTX+REVIVE_OFFSET
 				westDeadCount= westDeadCount+1
 				if westDeadCount== 1 then
-					SetUnitX(westDummy, Game.WESTX+REVIVE_OFFSET)
+					SetUnitX(westDummy, TerrainData.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy, 0.)
 				end
 			else
-				tempDat.teamX= Game.EASTX-REVIVE_OFFSET
+				tempDat.teamX= TerrainData.EASTX-REVIVE_OFFSET
 				eastDeadCount= eastDeadCount+1
 				if eastDeadCount== 1 then
-					SetUnitX(eastDummy, Game.EASTX-REVIVE_OFFSET)
+					SetUnitX(eastDummy, TerrainData.EASTX-REVIVE_OFFSET)
 					SetUnitY(eastDummy, 0.)
 				end
 			end
@@ -183,7 +184,7 @@ scope Revive initializer i
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
 
 		// Initialize circle of power dummies
-		westDummy = CreateUnit(Game.playerPassive, COP_ID, Game.SAFE_X, Game.SAFE_Y, 270.)
-		eastDummy = CreateUnit(Game.playerPassive, COP_ID, Game.SAFE_X, Game.SAFE_Y, 270.)
+		westDummy = CreateUnit(Game.playerPassive, COP_ID, TerrainData.SAFE_X, TerrainData.SAFE_Y, 270.)
+		eastDummy = CreateUnit(Game.playerPassive, COP_ID, TerrainData.SAFE_X, TerrainData.SAFE_Y, 270.)
 	end
 endscope

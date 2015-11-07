@@ -14,7 +14,7 @@ scope Repair initializer i
 		constant string ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
 		constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 		real array lastRepair
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		player p
@@ -59,7 +59,7 @@ scope Repair initializer i
 			exitwhen index>11
 			lastRepair[index] = -1.*REPAIR_TIMEOUT
 			index= index+1
-		endloop
+		end
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
 	end
 endscope

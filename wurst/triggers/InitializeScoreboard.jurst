@@ -5,7 +5,7 @@ scope InitializeScoreboard initializer i
 	globals
 		string array colors
 		constant real MB_WIDTH = .25
-	endglobals
+	end
 
 	function iconCol takes integer col, boolean show returns nothing
 		integer i = 0
@@ -13,7 +13,7 @@ scope InitializeScoreboard initializer i
 			exitwhen i>Game.scoreboard.rows()
 			Game.scoreboard.displayIcon(col, i, show)
 			i = i +1
-		endloop
+		end
 	end
 
 	function widthCol takes integer col, real width returns nothing
@@ -22,7 +22,7 @@ scope InitializeScoreboard initializer i
 			exitwhen i>Game.scoreboard.rows()
 			Game.scoreboard.setWidth(col, i, width)
 			i = i +1
-		endloop
+		end
 	end
 
 	function valueCol takes integer col, string val returns nothing
@@ -31,7 +31,7 @@ scope InitializeScoreboard initializer i
 			exitwhen i>Game.scoreboard.rows()
 			Game.scoreboard.setValue(col, i, val)
 			i = i +1
-		endloop
+		end
 	end
 
 	function initialize takes nothing returns nothing
@@ -77,7 +77,7 @@ scope InitializeScoreboard initializer i
 				j = j+1
 			end
 			i = i + 1
-		endloop
+		end
 
 		Game.scoreboard.setShow(true)
 		Game.scoreboard.setSuppress(true)

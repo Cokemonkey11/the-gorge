@@ -1,3 +1,12 @@
+// Making a new trade route:
+//   * Create necessary items in object editor (contract and anything else)
+//   * Add all those new items to Equipment constants
+//   * Add contract cost to Equipment.getContractCost
+//   * Add the item to Equipment.classes (done in Equipment#init)
+//   * Add necessary items to DestroyDroppedContracts.tradeItems (done in DestroyDroppedContracts#init)
+//   * Fill in pawned items in TradeRewardsPawn#c as necessary
+//   * Fill in remaining triggers as necessary
+
 package Equipment
 	import SimError
 	import Ships
@@ -5,28 +14,27 @@ package Equipment
 	import RegisterPlayerUnitEvent
 
 	public class Equipment
-		static constant integer CLASS_UNKNOWN   = -1
-		static constant integer CLASS_ENGINE    =  0
-		static constant integer CLASS_MECHANIC  =  1
-		static constant integer CLASS_HULL      =  2
-		static constant integer CLASS_SHIELDGEN =  3
-		static constant integer CLASS_TELEPORT  =  4
-		static constant integer CLASS_SPECIAL   =  5
-
+		static constant integer CLASS_UNKNOWN    = -1
+		static constant integer CLASS_ENGINE     =  0
+		static constant integer CLASS_MECHANIC   =  1
+		static constant integer CLASS_HULL       =  2
+		static constant integer CLASS_SHIELDGEN  =  3
+		static constant integer CLASS_TELEPORT   =  4
+		static constant integer CLASS_SPECIAL    =  5
 		static constant integer CLASS_CONTRACT   =  6
 
-		static constant integer PAGE_1_2       = 'I003'
-		static constant integer PAGE_2_1		= 'I004'
-		static constant integer PAGE_2_3       = 'I006'
-		static constant integer PAGE_3_2       = 'I007'
-		static constant integer PAGE_3_4       = 'I00A'
-		static constant integer PAGE_4_3       = 'I00B'
+		static constant integer PAGE_1_2         = 'I003'
+		static constant integer PAGE_2_1         = 'I004'
+		static constant integer PAGE_2_3         = 'I006'
+		static constant integer PAGE_3_2         = 'I007'
+		static constant integer PAGE_3_4         = 'I00A'
+		static constant integer PAGE_4_3         = 'I00B'
+		static constant integer KPAGE_1_2        = 'I00E'
+		static constant integer KPAGE_2_1        = 'I00F'
 
-		static constant integer KPAGE_1_2      = 'I00E'
-		static constant integer KPAGE_2_1      = 'I00F'
-
-		static constant integer DATA_ID         = 'I00D'
-		static constant integer TOXIC_SUBST_FULL= 'I00H'
+		static constant integer DATA_ID          = 'I00D'
+		static constant integer TOXIC_SUBST_FULL = 'I00H'
+		static constant integer VENOM_VIAL       = 'I00J'
 
 		// Engines
 		static constant integer STEAM_CORE     = 'I000'
@@ -41,9 +49,11 @@ package Equipment
 		// Special
 		static constant integer SHIP_LOCATOR   = 'I009'
 		// Contracts
-		static constant integer DATA_ACQUISIT  = 'I00C'
-		static constant integer TOXIC_SUBST     = 'I00G'
+		static constant integer DATA_ACQUISIT         = 'I00C'
+		static constant integer TOXIC_SUBST           = 'I00G'
+		static constant integer SPIDER_VENOM_CONTRACT = 'I00I'
 
+		// Hull reduction levels
 		static constant integer REDUCTION1 = 10
 
 		static constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
@@ -121,19 +131,41 @@ package Equipment
 		end
 
 		static function unitHasItemOfTypeSlot takes unit u, integer id returns integer
-			integer index= 0
+			integer index = 0
+
 			loop
-				exitwhen index>5
-				if GetItemTypeId(UnitItemInSlot(u, index))== id then
+				exitwhen index > 5
+
+				if GetItemTypeId(UnitItemInSlot(u, index)) == id then
 					return index
 				end
-				index = index + 1
+
+				index++
 			end
+
 			return -1
 		end
 
+		// Returns true if the unit u has all inventory spaces used.
+		static function noItemSlot takes unit u returns boolean
+			let count = UnitInventorySize(u)
+			int index = 0
+
+			loop
+				exitwhen index >= count
+
+				if not GetItemTypeId(UnitItemInSlot(u, index)) > 0 then
+					return false
+				end
+
+				index++
+			end
+
+			return true
+		end
+
 		static function unitHasItemOfType takes unit u, integer id returns boolean
-			return unitHasItemOfTypeSlot(u, id)>-1
+			return unitHasItemOfTypeSlot(u, id) > -1
 		end
 
 		static function unitHasTypePair takes unit u, integer id returns boolean
@@ -261,12 +293,15 @@ package Equipment
 			return Game.tradeExp[GetPlayerId(who)]
 		end
 
+		// Get the cost of a trade contract, in trade experience.
 		static function getContractCost takes item it returns integer
 			integer typ = GetItemTypeId(it)
-			if typ == DATA_ACQUISIT then
+			if     typ == DATA_ACQUISIT then
 				return 0
 			elseif typ == TOXIC_SUBST then
 				return 1
+			elseif typ == SPIDER_VENOM_CONTRACT then
+				return 4
 			end
 			return -1
 		end
@@ -405,14 +440,15 @@ package Equipment
 
 		// Initialize class table
 		Equipment.classes = new Table
-		Equipment.classes.saveInt(Equipment.STEAM_CORE, Equipment.CLASS_ENGINE)
-		Equipment.classes.saveInt(Equipment.PROBLEM_SOLVER, Equipment.CLASS_MECHANIC)
-		Equipment.classes.saveInt(Equipment.STONE_HULL, Equipment.CLASS_HULL)
-		Equipment.classes.saveInt(Equipment.BRONZE_GEN, Equipment.CLASS_SHIELDGEN)
-		Equipment.classes.saveInt(Equipment.IONIC_TELEPORT, Equipment.CLASS_TELEPORT)
-		Equipment.classes.saveInt(Equipment.SHIP_LOCATOR, Equipment.CLASS_SPECIAL)
-		Equipment.classes.saveInt(Equipment.DATA_ACQUISIT, Equipment.CLASS_CONTRACT)
-		Equipment.classes.saveInt(Equipment.TOXIC_SUBST, Equipment.CLASS_CONTRACT)
+		Equipment.classes.saveInt(Equipment.STEAM_CORE,            Equipment.CLASS_ENGINE)
+		Equipment.classes.saveInt(Equipment.PROBLEM_SOLVER,        Equipment.CLASS_MECHANIC)
+		Equipment.classes.saveInt(Equipment.STONE_HULL,            Equipment.CLASS_HULL)
+		Equipment.classes.saveInt(Equipment.BRONZE_GEN,            Equipment.CLASS_SHIELDGEN)
+		Equipment.classes.saveInt(Equipment.IONIC_TELEPORT,        Equipment.CLASS_TELEPORT)
+		Equipment.classes.saveInt(Equipment.SHIP_LOCATOR,          Equipment.CLASS_SPECIAL)
+		Equipment.classes.saveInt(Equipment.DATA_ACQUISIT,         Equipment.CLASS_CONTRACT)
+		Equipment.classes.saveInt(Equipment.TOXIC_SUBST,           Equipment.CLASS_CONTRACT)
+		Equipment.classes.saveInt(Equipment.SPIDER_VENOM_CONTRACT, Equipment.CLASS_CONTRACT)
 
 		Equipment.reduction = new Table
 	end

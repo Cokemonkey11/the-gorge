@@ -10,7 +10,7 @@ scope TurretDestroyed initializer i
 		constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
 		constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
 		constant string WARNING         = "Sound\\Interface\\Warning.wav"
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		unit tU= GetTriggerUnit()
@@ -27,7 +27,7 @@ scope TurretDestroyed initializer i
 					Sounds.playForPlayer(GOODJOB, 1., Game.players[index])
 				end
 				index= index+1
-			endloop
+			end
 		end
 	end
 

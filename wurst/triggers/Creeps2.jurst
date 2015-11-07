@@ -8,7 +8,7 @@ scope Creeps2 initializer i
 		constant real BONUS_CREEPS_RATE = 35. * 3.
 		group g= CreateGroup()
 		rect rct
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		unit first
@@ -23,9 +23,9 @@ scope Creeps2 initializer i
 					owner= GetOwningPlayer(first)
 					u= CreateUnit(owner, 'ufro', GetUnitX(first), GetUnitY(first), 270.)
 					if owner== Game.players[0] then
-						IssuePointOrder(u, "attack", Game.EASTX, 0.)
+						IssuePointOrder(u, "attack", TerrainData.EASTX, 0.)
 					else
-						IssuePointOrder(u, "attack", Game.WESTX, 0.)
+						IssuePointOrder(u, "attack", TerrainData.WESTX, 0.)
 					end
 				end
 				GroupRemoveUnit(g, first)

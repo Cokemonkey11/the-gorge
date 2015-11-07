@@ -7,7 +7,7 @@ scope SeaWitchColdArrows initializer i
 		constant integer SEAWITCH_ID = 'o005'
 		constant integer SLOW_ID = 'A009'
 		unit dummy
-	endglobals
+	end
 
 	function h takes nothing returns boolean
 		unit tU= GetTriggerUnit()

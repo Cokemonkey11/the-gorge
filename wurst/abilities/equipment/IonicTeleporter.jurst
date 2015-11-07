@@ -4,7 +4,7 @@ scope IonicTeleporter initializer i
 
 	globals
 		constant integer TELE_ID= 'A00H'
-	endglobals
+	end
 
 	function effectC takes nothing returns nothing
 		if GetSpellAbilityId()== TELE_ID then

@@ -1,5 +1,6 @@
 scope Creeps initializer i
 	import Game
+	import TerrainData
 
 	globals
 		constant integer GRYPH_ID  = 'hgry'
@@ -7,23 +8,23 @@ scope Creeps initializer i
 		constant integer HAWK_ID   = 'hdhw'
 		constant real SPAWN_PERIOD = 35.
 		boolean extra = false
-	endglobals
+	end
 
 	function spawn takes integer faction, integer class returns nothing
 		real x
 		real face
 		unit u
 		if faction== 0 then
-			x = Game.WESTX
+			x = TerrainData.WESTX
 			face = 0.
 		else
-			x = Game.EASTX
+			x = TerrainData.EASTX
 			face = 180.
 		end
 		u = CreateUnit(Game.players[faction], class, x, 0., face)
-		IssuePointOrder(u, "attack", Game.OUTPOST1_X, Game.OUTPOST1_Y)
+		IssuePointOrder(u, "attack", TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y)
 		u = CreateUnit(Game.players[faction], class, x, 0., face)
-		IssuePointOrder(u, "attack", Game.OUTPOST2_X, Game.OUTPOST2_Y)
+		IssuePointOrder(u, "attack", TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y)
 	end
 
 	function c takes nothing returns nothing

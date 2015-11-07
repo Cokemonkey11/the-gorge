@@ -4,7 +4,7 @@ scope SelectCaptain initializer init
 
 	globals
 		constant integer SELECT_CAPT_ID = 'A00Z'
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		player owner

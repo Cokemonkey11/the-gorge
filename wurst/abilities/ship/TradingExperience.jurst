@@ -4,7 +4,7 @@ scope TradingExperience initializer i
 
 	globals
 		constant integer SHOW_ID = 'A00N'
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		integer id

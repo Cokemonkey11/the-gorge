@@ -13,18 +13,20 @@ scope FillToxicSack initializer i
 		constant string SUCCESS_MESSAGE = "You filled your container with |cffffcc00Toxic Waste|r; return to your Utility Port for a reward."
 		constant integer GOLD  = 30
 		constant integer TRADE =  1
-	endglobals
+	end
 
 	function f takes nothing returns boolean
-		unit fU = GetFilterUnit()
-		integer slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
-		player owner = GetOwningPlayer(fU)
-		if slt>-1 then
+		unit    fU    = GetFilterUnit()
+		integer slt   = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
+		player  owner = GetOwningPlayer(fU)
+
+		if slt > -1 then
 			RemoveItem(UnitItemInSlot(fU, slt))
 			UnitAddItem(fU, CreateItem(Equipment.TOXIC_SUBST_FULL, GetUnitX(fU), GetUnitY(fU)))
 			DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
 			Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 		end
+
 		return false
 	end
 
@@ -32,8 +34,9 @@ scope FillToxicSack initializer i
 		unit fU = GetFilterUnit()
 		integer id = GetPlayerId(GetOwningPlayer(fU))
 		integer slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST_FULL)
-		if slt>-1 then
-			if id<7 then
+
+		if slt > -1 then
+			if id < 7 then
 				if Game.playerIsWest(id) then
 					RemoveItem(UnitItemInSlot(fU, slt))
 					UnitAddItem(fU, CreateItem(Equipment.TOXIC_SUBST, GetUnitX(fU), GetUnitY(fU)))
@@ -47,11 +50,11 @@ scope FillToxicSack initializer i
 				end
 			end
 		end
+
 		return false
 	end
 
 	function i takes nothing returns nothing
-
 		// Initialize triggers for shop and utility ports
 		trigger shopTrigger= CreateTrigger()
 		trigger utilityTrigger = CreateTrigger()

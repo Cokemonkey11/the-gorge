@@ -30,7 +30,7 @@
 package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 	globals
 		trigger array t
-	endglobals
+	end
 
 	public function registerPlayerUnitEvent takes playerunitevent p, code c returns nothing
 		integer i = GetHandleId(p)
@@ -41,7 +41,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 				TriggerRegisterPlayerUnitEvent(t[i], Player(k), p, null)
 				exitwhen k == 0
 				k = k - 1
-			endloop
+			end
 		end
 		TriggerAddCondition(t[i], Filter(c))
 	end

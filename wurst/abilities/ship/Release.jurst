@@ -5,7 +5,7 @@ scope Release initializer i
 	globals
 		constant integer RELEASE_ID = 'A00M'
 		constant string TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		unit tU

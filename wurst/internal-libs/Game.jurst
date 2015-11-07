@@ -4,48 +4,41 @@ package Game
 	import RegisterPlayerUnitEvent
 	import Sounds
 	import Muscii
+	import TerrainData
 
 	struct AssistTimestamps
 		integer array vals[12]
 	end
 
 	public class Game
-		static constant integer OUTPOST_ID         = 'h002'
-		static constant integer DUMMY_ID           = 'u000'
-		static constant integer ASSIST_TIME        = 15
-		static constant real WESTX	 	= -4100.
-		static constant real EASTX 		=  4100.
-		static constant real OUTPOST1_X =  380.
-		static constant real OUTPOST1_Y =  1030.
-		static constant real OUTPOST2_X = -140.
-		static constant real OUTPOST2_Y = -1020.
-		static constant real SAFE_X = -8064.
-		static constant real SAFE_Y = 3970.
-		static constant string HELICOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
-		static constant string PARACOPTER_ICON = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
-		static constant string ZEPPELIN_ICON   = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
-		static constant string SKYBARGE_ICON   = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
+		static constant string HELICOPTER_ICON     = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
+		static constant string PARACOPTER_ICON     = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
+		static constant string ZEPPELIN_ICON       = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
+		static constant string SKYBARGE_ICON       = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
+		static constant string TRADE_SUCCESS_SOUND = "Sound\\Interface\\QuestLog.wav"
 
-		static constant string TRADE_SUCCESS_SOUND   = "Sound\\Interface\\QuestLog.wav"
-
-		static constant integer KEEP_ID     = 'h001'
-		static constant integer KEEP2_ID    = 'h00F'
-		static constant integer SHIELD_ID   = 'h003'
-		static constant integer REPAIR_ID   = 'h004'
-		static constant integer HANGAR_ID   = 'h00A'
-		static constant integer UTILITY_ID  = 'h006'
-		static constant integer UTILITY2_ID = 'h007'
-		static constant integer UTILITY3_ID = 'h008'
-		static constant integer UTILITY4_ID = 'h009'
-		static constant integer CAPTAIN_ID  = 'H00C'
-		static constant integer START_GOLD   = 200
-		static constant integer SHIELD_COUNT = 10
-		static constant real SHIELDOFFS       = 200.
-		static constant real FADEOUT_DURATION = 10.
-		static constant real START_TIME       = 5.
-		static constant real SHIP_OFFSET      = 328.
-		static constant real LATER_OFFSET     = 128.
-		static constant real UTILITY_Y        = -512.
+		static constant integer KEEP_ID             = 'h001'
+		static constant integer KEEP2_ID            = 'h00F'
+		static constant integer SHIELD_ID           = 'h003'
+		static constant integer REPAIR_ID           = 'h004'
+		static constant integer HANGAR_ID           = 'h00A'
+		static constant integer UTILITY_ID          = 'h006'
+		static constant integer UTILITY2_ID         = 'h007'
+		static constant integer UTILITY3_ID         = 'h008'
+		static constant integer UTILITY4_ID         = 'h009'
+		static constant integer CAPTAIN_ID          = 'H00C'
+		static constant integer OUTPOST_ID          = 'h002'
+		static constant integer DUMMY_ID            = 'u000'
+		static constant integer STONE_SPIDER_ID     = 'n000'
+		static constant integer ASSIST_TIME         =    15
+		static constant integer START_GOLD          =   200
+		static constant integer SHIELD_COUNT        =    10
+		static constant real    SHIELDOFFS          =   200.
+		static constant real    FADEOUT_DURATION    =    10.
+		static constant real    START_TIME          =     3.
+		static constant real    SHIP_OFFSET         =   328.
+		static constant real    LATER_OFFSET        =   128.
+		static constant real    STONE_SPIDER_FACING =   204.
 
 		static constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
 			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
@@ -325,7 +318,7 @@ package Game
 				SetUnitTimeScale(first, 0.)
 				UnitAddAbility(first, 'Aloc')
 				GroupRemoveUnit(grp, first)
-			endloop
+			end
 		end
 
 		static function defeatC takes nothing returns nothing
@@ -391,9 +384,9 @@ package Game
 				Game.assistTimestamps[i].vals[j] = -1 * Game.ASSIST_TIME
 
 				j = j +1
-			endloop
+			end
 			i = i +1
-		endloop
+		end
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
 		Game.localPlayer = GetLocalPlayer()
@@ -406,7 +399,7 @@ package Game
 			Game.players[index]= Player(index)
 			SetPlayerState(Game.players[index], PLAYER_STATE_RESOURCE_GOLD, Game.START_GOLD)
 			index= index+1
-		endloop
+		end
 
 		// Create starting ships for players
 		index= 2
@@ -424,68 +417,72 @@ package Game
 				Game.farm[index] = 0
 				Game.names[index] = GetPlayerName(Game.players[index])
 				if index<7 then
-					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, Game.WESTX+Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, TerrainData.WESTX+Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.westCount= Game.westCount+1
 				else
-					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, Game.EASTX-Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(Game.players[index], Ships.HELICOPTER_ID, TerrainData.EASTX-Game.SHIP_OFFSET+Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.eastCount= Game.eastCount+1
 				end
 			else
 				Game.playing[index] = false
 			end
 			index= index+1
-		endloop
+		end
 
 		// Make alliance units give bounty
 		SetPlayerState(Game.players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
 		SetPlayerState(Game.players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
 		// Create keeps
-		Game.westKeep[0] = CreateUnit(Game.players[0], Game.KEEP_ID, Game.WESTX, 0, 270)
-		Game.eastKeep[0] = CreateUnit(Game.players[1], Game.KEEP_ID, Game.EASTX, 0, 270)
+		Game.westKeep[0] = CreateUnit(Game.players[0], Game.KEEP_ID, TerrainData.WESTX, 0, 270)
+		Game.eastKeep[0] = CreateUnit(Game.players[1], Game.KEEP_ID, TerrainData.EASTX, 0, 270)
 		SetUnitInvulnerable(Game.westKeep[0], true)
 		SetUnitInvulnerable(Game.eastKeep[0], true)
-		Game.westKeep[1] = CreateUnit(Game.players[0], Game.KEEP2_ID, Game.WESTX, 0., 270.)
-		Game.eastKeep[1] = CreateUnit(Game.players[1], Game.KEEP2_ID, Game.EASTX, 0., 270.)
+		Game.westKeep[1] = CreateUnit(Game.players[0], Game.KEEP2_ID, TerrainData.WESTX, 0., 270.)
+		Game.eastKeep[1] = CreateUnit(Game.players[1], Game.KEEP2_ID, TerrainData.EASTX, 0., 270.)
 
 		// Create shields
 		index= 0
 		loop
 			exitwhen index>= Game.SHIELD_COUNT
-			CreateUnit(Game.players[0], Game.SHIELD_ID, Game.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
+			CreateUnit(Game.players[0], Game.SHIELD_ID, TerrainData.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
 			index= index+1
-		endloop
+		end
 		index= 0
 		loop
 			exitwhen index>= Game.SHIELD_COUNT
-			CreateUnit(Game.players[1], Game.SHIELD_ID, Game.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
+			CreateUnit(Game.players[1], Game.SHIELD_ID, TerrainData.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
 			index= index+1
-		endloop
+		end
 
 		// Create Outposts
-		CreateUnit(Game.players[0], Game.OUTPOST_ID, Game.OUTPOST2_X, Game.OUTPOST2_Y, 270.)
-		CreateUnit(Game.players[1], Game.OUTPOST_ID, Game.OUTPOST1_X, Game.OUTPOST1_Y, 270.)
+		CreateUnit(Game.players[0], Game.OUTPOST_ID, TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y, 270.)
+		CreateUnit(Game.players[1], Game.OUTPOST_ID, TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y, 270.)
 
 		// Stop Time of Day
 		SetTimeOfDayScale(0.)
 
 		// Create Repair Ports
-		Game.westRepair = CreateUnit(Game.players[0], Game.REPAIR_ID, Game.WESTX, 1024., 270.)
-		Game.eastRepair = CreateUnit(Game.players[1], Game.REPAIR_ID, Game.EASTX, 1024., 270.)
+		Game.westRepair = CreateUnit(Game.players[0], Game.REPAIR_ID, TerrainData.WESTX, 1024., 270.)
+		Game.eastRepair = CreateUnit(Game.players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
 
 		// Create Hangars
-		Game.westHangar = CreateUnit(Game.players[0], Game.HANGAR_ID, Game.WESTX-768., 0., 270.)
-		Game.eastHangar = CreateUnit(Game.players[1], Game.HANGAR_ID, Game.EASTX+768., 0., 270.)
+		Game.westHangar = CreateUnit(Game.players[0], Game.HANGAR_ID, TerrainData.WESTX-768., 0., 270.)
+		Game.eastHangar = CreateUnit(Game.players[1], Game.HANGAR_ID, TerrainData.EASTX+768., 0., 270.)
 
 		// Create Utility Ports
-		Game.westUtility[0] = CreateUnit(Game.players[0], Game.UTILITY_ID, Game.WESTX, Game.UTILITY_Y, 270.)
-		Game.westUtility[1] = CreateUnit(Game.players[0], Game.UTILITY2_ID, Game.WESTX, Game.UTILITY_Y, 270.)
-		Game.westUtility[2] = CreateUnit(Game.players[0], Game.UTILITY3_ID, Game.WESTX, Game.UTILITY_Y, 270.)
-		Game.westUtility[3] = CreateUnit(Game.players[0], Game.UTILITY4_ID, Game.WESTX, Game.UTILITY_Y, 270.)
-		Game.eastUtility[0] = CreateUnit(Game.players[1], Game.UTILITY_ID, Game.EASTX, Game.UTILITY_Y, 270.)
-		Game.eastUtility[1] = CreateUnit(Game.players[1], Game.UTILITY2_ID, Game.EASTX, Game.UTILITY_Y, 270.)
-		Game.eastUtility[2] = CreateUnit(Game.players[1], Game.UTILITY3_ID, Game.EASTX, Game.UTILITY_Y, 270.)
-		Game.eastUtility[3] = CreateUnit(Game.players[1], Game.UTILITY4_ID, Game.EASTX, Game.UTILITY_Y, 270.)
+		Game.westUtility[0] = CreateUnit(Game.players[0], Game.UTILITY_ID,  TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[1] = CreateUnit(Game.players[0], Game.UTILITY2_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[2] = CreateUnit(Game.players[0], Game.UTILITY3_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[3] = CreateUnit(Game.players[0], Game.UTILITY4_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[0] = CreateUnit(Game.players[1], Game.UTILITY_ID,  TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[1] = CreateUnit(Game.players[1], Game.UTILITY2_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[2] = CreateUnit(Game.players[1], Game.UTILITY3_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[3] = CreateUnit(Game.players[1], Game.UTILITY4_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+
+		// Create Stone Spider (Trade Related)
+		let s = CreateUnit(Game.playerPassive, Game.STONE_SPIDER_ID, TerrainData.STONE_SPIDER_X, TerrainData.STONE_SPIDER_Y, Game.STONE_SPIDER_FACING)
+		s..addAbility('Aloc')..setTimeScale(0.)
 
 		// Start game timer
 		TimerStart(CreateTimer(), 1., true, function Game.second)

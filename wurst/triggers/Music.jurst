@@ -34,7 +34,7 @@ package Music
 		Muscii verse3P2
 		Muscii chorus3P7
 		Muscii chorus3P8
-	endglobals
+	end
 
 	function playIntro takes nothing returns nothing
 		Section verse1 = () -> playVerse1()

@@ -11,7 +11,7 @@ scope ChangeShip initializer i
 		constant string FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
 
 		integer array tempIds
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		unit selU = GetSellingUnit()
@@ -39,7 +39,7 @@ scope ChangeShip initializer i
 							exitwhen index>5
 							tempIds[index] = GetItemTypeId(UnitItemInSlot(bU, index))
 							index= index+1
-						endloop
+						end
 						RemoveUnit(Ships.ships[id])
 						Ships.ships[id] = sU
 						Equipment.playerAddItemsFromIdConditional(id, tempIds[0], tempIds[1], tempIds[2], tempIds[3], tempIds[4], tempIds[5])

@@ -49,7 +49,7 @@ package Ships
 					return true
 				end
 				index= index+1
-			endloop
+			end
 			return false
 		end
 	end

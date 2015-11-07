@@ -7,7 +7,7 @@ scope ShipLocator initializer i
 		constant real RANGE = 4000.
 		constant real PING_DURATION = 5.
 		group grp= CreateGroup()
-	endglobals
+	end
 
 	function c takes nothing returns nothing
 		unit tU
@@ -28,7 +28,7 @@ scope ShipLocator initializer i
 					end
 				end
 				GroupRemoveUnit(grp, first)
-			endloop
+			end
 		end
 	end
 

@@ -72,7 +72,7 @@ package DTS12MissileArray
 					temp.target = null
 				end
 				index= index+1
-			endloop
+			end
 		end
 
 		static function p takes nothing returns nothing
@@ -113,7 +113,7 @@ package DTS12MissileArray
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
 						GroupRemoveUnit(grp, first)
-					endloop
+					end
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
 						DestroyEffect(temp.fx)
@@ -153,7 +153,7 @@ package DTS12MissileArray
 							DamageType.dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
 						end
 						GroupRemoveUnit(grp, first)
-					endloop
+					end
 					if temp.dist >= MAXIMUM_RANGE or hit then
 						KillUnit(temp.missile)
 						DestroyEffect(temp.fx)
@@ -167,7 +167,7 @@ package DTS12MissileArray
 					end
 				end
 				index = index+1
-			endloop
+			end
 		end
 
 		static function c takes nothing returns nothing
