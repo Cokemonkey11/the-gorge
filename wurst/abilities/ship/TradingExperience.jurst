@@ -1,6 +1,5 @@
 scope TradingExperience initializer i
 	import RegisterPlayerUnitEvent
-	import Game
 	import Players
 
 	constant integer SHOW_ID = 'A00N'
