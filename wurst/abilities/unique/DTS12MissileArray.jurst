@@ -16,7 +16,6 @@ package DTS12MissileArray
 	import DamageType
 	import Ships
 	import Sounds
-	import ClosureTimers
 
 	native UnitAlive takes unit u returns boolean
 
@@ -292,5 +291,5 @@ package DTS12MissileArray
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function DTS12MissileArray.c)
 		DTS12MissileArray.ht = new Table
-		doAfter(1.0, () -> Sounds.preload(DTS12MissileArray.SOUND))
+		Sounds.preload(DTS12MissileArray.SOUND)
 	end

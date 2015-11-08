@@ -1,5 +1,5 @@
 package CameraLock
-	import ClosureTimers
+	import TimerUtils
 
 	constant real PERIOD   =    1. / 30.
 	constant real FOV      =  100.
@@ -7,7 +7,7 @@ package CameraLock
 	constant real AOA      =  290.
 
 	init
-		doPeriodically(PERIOD, (CallbackPeriodic cb) -> begin
+		getTimer().startPeriodic(PERIOD, () -> begin
 			SetCameraField(CAMERA_FIELD_FIELD_OF_VIEW,   FOV,      0.)
 			SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, DISTANCE, 0.)
 			SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, AOA,      0.)
