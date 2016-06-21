@@ -6,7 +6,7 @@ scope Creeps2 initializer i
 	native UnitAlive takes unit u returns boolean
 
 	globals
-		constant real BONUS_CREEPS_RATE = 35. * 3.
+		constant real BONUS_CREEPS_RATE = 30. * 3.
 		group g= CreateGroup()
 		rect rct
 	end
