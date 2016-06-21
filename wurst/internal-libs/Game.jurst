@@ -16,23 +16,24 @@ package Game
 	public class Game
 		static constant string HELICOPTER_ICON     = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
 		static constant string PARACOPTER_ICON     = "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
-		static constant string ZEPPELIN_ICON       = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
-		static constant string SKYBARGE_ICON       = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
+		static constant string   ZEPPELIN_ICON     = "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
+		static constant string   SKYBARGE_ICON     = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 		static constant string TRADE_SUCCESS_SOUND = "Sound\\Interface\\QuestLog.wav"
 
-		static constant integer KEEP_ID             = 'h001'
-		static constant integer KEEP2_ID            = 'h00F'
-		static constant integer SHIELD_ID           = 'h003'
-		static constant integer REPAIR_ID           = 'h004'
-		static constant integer HANGAR_ID           = 'h00A'
-		static constant integer UTILITY_ID          = 'h006'
-		static constant integer UTILITY2_ID         = 'h007'
-		static constant integer UTILITY3_ID         = 'h008'
-		static constant integer UTILITY4_ID         = 'h009'
-		static constant integer CAPTAIN_ID          = 'H00C'
-		static constant integer OUTPOST_ID          = 'h002'
-		static constant integer DUMMY_ID            = 'u000'
+		static constant integer         KEEP_ID     = 'h001'
+		static constant integer        KEEP2_ID     = 'h00F'
+		static constant integer       SHIELD_ID     = 'h003'
+		static constant integer       REPAIR_ID     = 'h004'
+		static constant integer       HANGAR_ID     = 'h00A'
+		static constant integer      UTILITY_ID     = 'h006'
+		static constant integer     UTILITY2_ID     = 'h007'
+		static constant integer     UTILITY3_ID     = 'h008'
+		static constant integer     UTILITY4_ID     = 'h009'
+		static constant integer      CAPTAIN_ID     = 'H00C'
+		static constant integer        STONE_ID     = 'h002'
+		static constant integer        DUMMY_ID     = 'u000'
 		static constant integer STONE_SPIDER_ID     = 'n000'
+
 		static constant integer ASSIST_TIME         =    15
 		static constant integer START_GOLD          =   200
 		static constant integer SHIELD_COUNT        =    10
@@ -43,9 +44,9 @@ package Game
 		static constant real    LATER_OFFSET        =   128.
 		static constant real    STONE_SPIDER_FACING =   204.
 
-		static constant string MAP_DESCRIPTION       = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
+		static constant string MAP_DESCRIP           = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
 			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
-		static constant string DESCRIPTION_ICON_PATH = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
+		static constant string DESCRIPTION_ICON      = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
 		static constant string DESCRIPTION_TITLE     = "|cffffcc00Description|r"
 
 		static constant string WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
@@ -83,7 +84,7 @@ package Game
 		static constant string CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
 		static constant string CREDS_TITLE           = "|cff88dd66Credits|r"
 
-		static constant string WELCOME_MESSAGE	      = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
+		static constant string WELCOME_MESSAGE       = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
 		static constant string START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
 		static constant string WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
 		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
@@ -138,11 +139,11 @@ package Game
 			Players.tradeExp[id] += bonusExperience
 			SetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(owner, PLAYER_STATE_RESOURCE_GOLD)+gold)
 			DestroyEffect(AddSpecialEffectTarget(REWARD_MODEL, u, "origin"))
-			DisplayTextToPlayer(owner, 0., 0., "You received |cffffcc00"+I2S(gold)+"|r gold and |cffffcc00"+I2S(bonusExperience)+"|r trading experience.")
+			DisplayTextToPlayer(owner, 0., 0., "You received |cffffcc00" + I2S(gold) + "|r gold and |cffffcc00" + I2S(bonusExperience) + "|r trading experience.")
 		end
 
 		static function playerIsWest takes integer id returns boolean
-			return GetUnitX(Ships.ships[id])<0.
+			return GetUnitX(Ships.ships[id]) < 0.
 		end
 
 		static function getMinutes takes nothing returns integer
@@ -156,22 +157,22 @@ package Game
 
 		static function parseKill takes integer pID returns nothing
 			kills[pID] = kills[pID] + 1
-			if pID<7 then
+			if pID < 7 then
 				kills[0] = kills[0] + 1
 			else
 				kills[1] = kills[1] + 1
 			end
-			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff"+I2S(kills[0])+" - "+I2S(kills[1])+"|r]")
+			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff" + I2S(kills[0]) + " - " + I2S(kills[1]) + "|r]")
 			scoreboard.setValue(1, scoreboardRows[pID], I2S(kills[pID]))
 		end
 
 		static function addDeath takes unit u returns nothing
 			integer id = GetPlayerId(GetOwningPlayer(u))
 			deaths[id] = deaths[id] + 1
-			if id<7 then
-				deaths[0] = deaths[0] + 1
+			if id < 7 then
+				deaths[0]++
 			else
-				deaths[1] = deaths[1] + 1
+				deaths[1]++
 			end
 			scoreboard.setValue(2, scoreboardRows[id], I2S(deaths[id]))
 		end
@@ -191,43 +192,44 @@ package Game
 
 		static function addQuest takes string desc, string iconPath, boolean required, string title returns quest
 			quest q = CreateQuest()
-			QuestSetCompleted(q, false)
+			QuestSetCompleted(  q, false)
 			QuestSetDescription(q, desc)
-			QuestSetDiscovered(q, true)
-			QuestSetEnabled(q, true)
-			QuestSetIconPath(q, iconPath)
-			QuestSetRequired(q, required)
-			QuestSetTitle(q, title)
+			QuestSetDiscovered( q, true)
+			QuestSetEnabled(    q, true)
+			QuestSetIconPath(   q, iconPath)
+			QuestSetRequired(   q, required)
+			QuestSetTitle(      q, title)
 			return q
 		end
 
 		static function initializeQuests takes nothing returns nothing
-			// Primary Quests (Left)
-			// description
-			addQuest(MAP_DESCRIPTION, DESCRIPTION_ICON_PATH, true, DESCRIPTION_TITLE)
-			// weapons
-			addQuest(WEAPONS_DESCRIP, WEAPONS_ICON, true, WEAPONS_TITLE)
-			// equipment
-			addQuest(EQUIP_DESCRIP, EQUIP_ICON, true, EQUIP_TITLE)
-			// classes
-			addQuest(CLASS_DESCRIP, CLASS_ICON, true, CLASS_TITLE)
-			// Secondary Quests (Right)
-			// info
-			addQuest(INFO_DESCRIP, INFO_ICON, false, INFO_TITLE)
-			// credits
+			// Primary Quests (Left).
+			// description.
+			addQuest(    MAP_DESCRIP, DESCRIPTION_ICON, true, DESCRIPTION_TITLE)
+			// weapons.
+			addQuest(WEAPONS_DESCRIP,     WEAPONS_ICON, true,     WEAPONS_TITLE)
+			// equipment.
+			addQuest(  EQUIP_DESCRIP,       EQUIP_ICON, true,       EQUIP_TITLE)
+			// classes.
+			addQuest(  CLASS_DESCRIP,       CLASS_ICON, true,       CLASS_TITLE)
+
+			// Secondary Quests (Right).
+			// info.
+			addQuest( INFO_DESCRIP,  INFO_ICON, false,  INFO_TITLE)
+			// credits.
 			addQuest(CREDS_DESCRIP, CREDS_ICON, false, CREDS_TITLE)
 		end
 
 		static function c takes nothing returns nothing
-			unit tU= GetTriggerUnit()
+			unit tU = GetTriggerUnit()
 			if GetUnitTypeId(tU) == SHIELD_ID then
 				if GetOwningPlayer(tU) == Player(0) then
-					westShieldsLeft = westShieldsLeft - 1
+					westShieldsLeft--
 					if westShieldsLeft < 1 then
 						SetUnitInvulnerable(westKeep[0], false)
 					end
 				else
-					eastShieldsLeft = eastShieldsLeft - 1
+					eastShieldsLeft--
 					if eastShieldsLeft < 1 then
 						SetUnitInvulnerable(eastKeep[0], false)
 					end
@@ -322,9 +324,9 @@ package Game
 			loop
 				first = FirstOfGroup(grp)
 				exitwhen first == null
-				PauseUnit(first, true)
-				SetUnitTimeScale(first, 0.)
-				UnitAddAbility(first, 'Aloc')
+
+				first..pause()..setTimeScale(0.)..addAbility('Aloc')
+
 				GroupRemoveUnit(grp, first)
 			end
 		end
@@ -332,7 +334,7 @@ package Game
 		static function defeatC takes nothing returns nothing
 			unit tU = GetTriggerUnit()
 			if tU == westKeep[0] then
-				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(Players.localPlayer, 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
@@ -340,7 +342,7 @@ package Game
 				Muscii.interrupt()
 				TimerStart(CreateTimer(), 30., false, function defeatAfter)
 			elseif tU == eastKeep[0] then
-				DisplayTextToPlayer(GetLocalPlayer(), 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(Players.localPlayer, 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
@@ -351,12 +353,14 @@ package Game
 		end
 
 		static function second takes nothing returns nothing
-			seconds = seconds + 1.
-			secondsFSM = secondsFSM + 1
+			seconds++
+			secondsFSM++
+
 			if secondsFSM == 60 then
 				secondsFSM = 0
-				minutesFSM = minutesFSM+1
+				minutesFSM++
 			end
+
 			debug if seconds < 0. or (seconds == (seconds + 1.)) then
 			debug	BJDebugMsg("Seconds overflow!")
 			debug end
@@ -376,32 +380,34 @@ package Game
 	end
 
 	init
-		integer index= 0
+		integer index = 0
 
-		// initialize assist stamps
+		// Initialize assist stamps.
 		integer i = 0
 		integer j = 0
 		loop
-			exitwhen i>11
+			exitwhen i > 11
 
 			Game.assistTimestamps[i] = new AssistTimestamps()
 
 			loop
-				exitwhen j>11
+				exitwhen j > 11
 
 				Game.assistTimestamps[i].vals[j] = -1 * Game.ASSIST_TIME
 
-				j = j +1
+				j++
 			end
-			i = i +1
+
+			i++
 		end
+
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
-		Players.localPlayer = GetLocalPlayer()
+		Players.localPlayer   = GetLocalPlayer()
 		Players.playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
 		Game.initializeQuests()
 
-		// Set Starting Gold and initialize player array
+		// Set starting gold and initialize player array.
 		loop
 			exitwhen index > 11
 
@@ -411,7 +417,7 @@ package Game
 			index++
 		end
 
-		// Create starting ships for players
+		// Create starting ships for players.
 		index = 2
 		loop
 			exitwhen index > 11
@@ -447,11 +453,11 @@ package Game
 			SinglePlayer.enable()
 		end
 
-		// Make alliance units give bounty
+		// Make alliance units give bounty.
 		SetPlayerState(Players.players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
 		SetPlayerState(Players.players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
-		// Create keeps
+		// Create keeps.
 		Game.westKeep[0] = CreateUnit(Players.players[0], Game.KEEP_ID, TerrainData.WESTX, 0, 270)
 		Game.eastKeep[0] = CreateUnit(Players.players[1], Game.KEEP_ID, TerrainData.EASTX, 0, 270)
 		SetUnitInvulnerable(Game.westKeep[0], true)
@@ -459,7 +465,7 @@ package Game
 		Game.westKeep[1] = CreateUnit(Players.players[0], Game.KEEP2_ID, TerrainData.WESTX, 0., 270.)
 		Game.eastKeep[1] = CreateUnit(Players.players[1], Game.KEEP2_ID, TerrainData.EASTX, 0., 270.)
 
-		// Create shields
+		// Create shields.
 		index = 0
 		loop
 			exitwhen index >= Game.SHIELD_COUNT
@@ -478,22 +484,18 @@ package Game
 			index++
 		end
 
-		// Create Outposts
-		CreateUnit(Players.players[0], Game.OUTPOST_ID, TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y, 270.)
-		CreateUnit(Players.players[1], Game.OUTPOST_ID, TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y, 270.)
-
-		// Stop Time of Day
+		// Stop Time of Day.
 		SetTimeOfDayScale(0.)
 
-		// Create Repair Ports
+		// Create Repair Ports.
 		Game.westRepair = CreateUnit(Players.players[0], Game.REPAIR_ID, TerrainData.WESTX, 1024., 270.)
 		Game.eastRepair = CreateUnit(Players.players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
 
-		// Create Hangars
+		// Create Hangars.
 		Game.westHangar = CreateUnit(Players.players[0], Game.HANGAR_ID, TerrainData.WESTX-768., 0., 270.)
 		Game.eastHangar = CreateUnit(Players.players[1], Game.HANGAR_ID, TerrainData.EASTX+768., 0., 270.)
 
-		// Create Utility Ports
+		// Create Utility Ports.
 		Game.westUtility[0] = CreateUnit(Players.players[0], Game.UTILITY_ID,  TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
 		Game.westUtility[1] = CreateUnit(Players.players[0], Game.UTILITY2_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
 		Game.westUtility[2] = CreateUnit(Players.players[0], Game.UTILITY3_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
@@ -503,18 +505,18 @@ package Game
 		Game.eastUtility[2] = CreateUnit(Players.players[1], Game.UTILITY3_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
 		Game.eastUtility[3] = CreateUnit(Players.players[1], Game.UTILITY4_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
 
-		// Create Stone Spider (Trade Related)
+		// Create Stone Spider (Trade Related).
 		let s = CreateUnit(Players.playerPassive, Game.STONE_SPIDER_ID, TerrainData.STONE_SPIDER_X, TerrainData.STONE_SPIDER_Y, Game.STONE_SPIDER_FACING)
 		s..addAbility('Aloc')..setTimeScale(0.)
 
-		// Start game timer
+		// Start game timer.
 		TimerStart(CreateTimer(), 1., true, function Game.second)
 
-		// Do starting sound stuff
+		// Do starting sound stuff.
 		Sounds.preload(Game.START_SOUND)
 		TimerStart(CreateTimer(), Game.START_TIME, false, function Game.after)
 
-		// Initial blackness
+		// Initial blackness.
 		Game.fadeOut(0.)
 		DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.WELCOME_MESSAGE)
 
@@ -522,7 +524,7 @@ package Game
 		Sounds.preload(Game.DEF_SOUND)
 		Sounds.preload(Game.TRADE_SUCCESS_SOUND)
 
-		// colors
+		// Colors.
 		Game.colors[0] = "|cffff0303"
 		Game.colors[1] = "|cff0042ff"
 		Game.colors[2] = "|cff1ce6b9"

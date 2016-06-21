@@ -1,33 +1,32 @@
-scope Continue initializer i
+package Continue
 	import Players
 	import TerrainData
 
-	globals
-		constant real RECT_SIZE = 250.
-	end
+	constant real RECT_SIZE = 250.
 
 	function rectFromXY takes real x, real y, real size returns rect
 		return Rect(x-size/2., y-size/2., x+size/2., y+size/2.)
 	end
 
 	function f takes nothing returns boolean
-		unit fU= GetFilterUnit()
-		integer id= GetUnitTypeId(fU)
+		unit fU = GetFilterUnit()
 		player owner = GetOwningPlayer(fU)
-		if owner== Players.players[0] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+
+		if owner == Players.players[0] then
 			IssuePointOrder(fU, "attack", TerrainData.EASTX, 0.)
-		elseif owner== Players.players[1] and (id== 'owyv' or id== 'hgry' or id== 'hdhw') then
+		elseif owner == Players.players[1] then
 			IssuePointOrder(fU, "attack", TerrainData.WESTX, 0.)
 		end
+
 		return false
 	end
 
-	function i takes nothing returns nothing
-		region regA= CreateRegion()
-		rect recA= rectFromXY(TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y, RECT_SIZE)
-		region regB= CreateRegion()
-		rect recB= rectFromXY(TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y, RECT_SIZE)
-		trigger t= CreateTrigger()
+	init
+		region regA = CreateRegion()
+		rect recA = rectFromXY(TerrainData.STONE1_X, TerrainData.STONE1_Y, RECT_SIZE)
+		region regB = CreateRegion()
+		rect recB = rectFromXY(TerrainData.STONE2_X, TerrainData.STONE2_Y, RECT_SIZE)
+		trigger t = CreateTrigger()
 		RegionAddRect(regA, recA)
 		RegionAddRect(regB, recB)
 		TriggerRegisterEnterRegion(t, regA, Filter(function f))
@@ -35,4 +34,3 @@ scope Continue initializer i
 		RemoveRect(recA)
 		RemoveRect(recB)
 	end
-endscope

@@ -6,4 +6,12 @@ package Players
         static player        localPlayer
         static player        playerPassive
         static integer       playerCount = 0
+
+        static function isWest(int id) returns bool
+        	return (id >= 2 and id <= 6)
+        end
+
+        static function isEast(int id) returns bool
+        	return (id >= 7 and id <= 11)
+        end
     end

@@ -4,31 +4,37 @@ scope Creeps initializer i
 	import TerrainData
 
 	globals
-		constant integer GRYPH_ID  = 'hgry'
+		constant integer  GRYPH_ID = 'hgry'
 		constant integer WYVERN_ID = 'owyv'
-		constant integer HAWK_ID   = 'hdhw'
+		constant integer   HAWK_ID = 'hdhw'
+		constant integer   WYRM_ID = 'ufro'
+
 		constant real SPAWN_PERIOD = 30.
-		boolean extra = false
+		constant real  HAWK_PERIOD = 30. * 2.
+		constant real  WYRM_PERIOD = 30. * 3.
 	end
 
 	function spawn takes integer faction, integer cls returns nothing
 		real x
 		real face
 		unit u
-		if faction== 0 then
+
+		if faction == 0 then
 			x = TerrainData.WESTX
 			face = 0.
 		else
 			x = TerrainData.EASTX
 			face = 180.
 		end
+
 		u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.OUTPOST1_X, TerrainData.OUTPOST1_Y)
+		IssuePointOrder(u, "attack", TerrainData.STONE1_X, TerrainData.STONE1_Y)
+
 		u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.OUTPOST2_X, TerrainData.OUTPOST2_Y)
+		IssuePointOrder(u, "attack", TerrainData.STONE2_X, TerrainData.STONE2_Y)
 	end
 
-	function c takes nothing returns nothing
+	function base takes nothing returns nothing
 		if not Game.ended then
 				// West units
 				spawn(0, GRYPH_ID)
@@ -36,23 +42,31 @@ scope Creeps initializer i
 				spawn(0, GRYPH_ID)
 				spawn(0, WYVERN_ID)
 
-
 				// East units
 				spawn(1, GRYPH_ID)
 				spawn(1, WYVERN_ID)
 				spawn(1, GRYPH_ID)
 				spawn(1, WYVERN_ID)
+		end
+	end
 
-				// Extra
-				if extra then
-					spawn(0, HAWK_ID)
-					spawn(1, HAWK_ID)
-				end
-			extra = not extra
+	function hawk takes nothing returns nothing
+		if not Game.ended then
+			spawn(0, HAWK_ID)
+			spawn(1, HAWK_ID)
+		end
+	end
+
+	function wyrm takes nothing returns nothing
+		if not Game.ended then
+			spawn(0, WYRM_ID)
+			spawn(1, WYRM_ID)
 		end
 	end
 
 	function i takes nothing returns nothing
-		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function c)
+		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function base)
+		TimerStart(CreateTimer(),  HAWK_PERIOD, true, function hawk)
+		TimerStart(CreateTimer(),  WYRM_PERIOD, true, function wyrm)
 	end
 endscope
