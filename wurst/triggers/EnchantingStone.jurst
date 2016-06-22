@@ -19,7 +19,7 @@ package EnchantingStone
 	constant real CAPTURE_RADIUS       = 400.
 
 	constant integer CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / CLOCK_PERIOD)
-	constant integer LOCK_STEPS          = R2I(60. * 3.     / CLOCK_PERIOD)
+	constant integer LOCK_STEPS          = R2I(   LOCK_TIME / CLOCK_PERIOD)
 
 	constant string INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
 
@@ -63,15 +63,15 @@ package EnchantingStone
 
 	function onUnlockedNorth()
 		// Get capturing power.
-		real capPowerWest = 0.
-		real capPowerEast = 0.
-		real capPower     = 0.
+		int capPowerWest = 0
+		int capPowerEast = 0
+		int capPower     = 0
 
 		// vec2 stone1 = ((TerrainData.STONE1_X), (TerrainData.STONE1_Y))
 		vec2 stone1 = vec2(380.0, 1030.0)
 
 		forUnitsInRange(stone1, CAPTURE_RADIUS, (unit u) -> begin
-			int id = u.getPlayerId()
+			int id = u.getOwner().getId()
 
 			if Players.isWest(id)
 				capPowerWest++
@@ -80,7 +80,7 @@ package EnchantingStone
 			end
 		end)
 
-		if not (capPowerWest > 0. and capPowerEast > 0.)
+		if not (capPowerWest > 0 and capPowerEast > 0)
 			capPower += capPowerWest
 			capPower -= capPowerEast
 		end
@@ -104,15 +104,15 @@ package EnchantingStone
 
 	function onUnlockedSouth()
 		// Get capturing power.
-		real capPowerWest = 0.
-		real capPowerEast = 0.
-		real capPower     = 0.
+		int capPowerWest = 0
+		int capPowerEast = 0
+		int capPower     = 0
 
 		// vec2 stone2 = ((TerrainData.STONE2_X), (TerrainData.STONE2_Y))
 		vec2 stone2 = vec2(-140., -1020.)
 
 		forUnitsInRange(stone2, CAPTURE_RADIUS, (unit u) -> begin
-			integer id = u.getPlayerId()
+			integer id = u.getOwner().getId()
 
 			if Players.isWest(id)
 				capPowerWest++
@@ -121,7 +121,7 @@ package EnchantingStone
 			end
 		end)
 
-		if not (capPowerWest > 0. and capPowerEast > 0.)
+		if not (capPowerWest > 0 and capPowerEast > 0)
 			capPower += capPowerWest
 			capPower -= capPowerEast
 		end
@@ -196,7 +196,7 @@ package EnchantingStone
 			if lockedSouth
 				onLockedSouth()
 			else
-				onUnlokedSouth()
+				onUnlockedSouth()
 			end
 		end)
 	end
