@@ -3,8 +3,6 @@ package Repair
 	import ClosureTimers
 	import Game
 	import Players
-	import Ships
-	import SimError
 
 	constant real REPAIR_RADIUS = 400.
 	constant real CLOCK_PERIOD  =   1. / 30.
