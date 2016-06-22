@@ -5,14 +5,14 @@ scope ShieldAllLevels initializer i
 	globals
 		constant string SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
 		constant string SHIELD_FX_POINT = "origin"
-		constant integer SHIELD_ID = 'A00G'
-		constant integer SHIELD_1  = 'I005'
+		constant int SHIELD_ID = 'A00G'
+		constant int SHIELD_1  = 'I005'
 		constant real AMOUNT_1 = 500.
 		constant real TIME_1 = 5.
 	end
 
-	function getUnitShieldId takes unit u returns integer
-		integer index= 0
+	function getUnitShieldId takes unit u returns int
+		int index= 0
 		loop
 			exitwhen index>5
 			if GetItemTypeId(UnitItemInSlot(u, index))== SHIELD_1 then
@@ -24,7 +24,7 @@ scope ShieldAllLevels initializer i
 	end
 
 	function c takes nothing returns nothing
-		integer sId
+		int sId
 		unit tU
 		if GetSpellAbilityId()== SHIELD_ID then
 			tU= GetTriggerUnit()

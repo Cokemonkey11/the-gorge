@@ -6,8 +6,8 @@ scope InitializeScoreboard initializer i
 	string array colors
 	constant real MB_WIDTH = .25
 
-	function iconCol takes integer col, boolean show returns nothing
-		integer i = 0
+	function iconCol takes int col, bool show returns nothing
+		int i = 0
 
 		loop
 			exitwhen i > Game.scoreboard.rows()
@@ -18,8 +18,8 @@ scope InitializeScoreboard initializer i
 		end
 	end
 
-	function widthCol takes integer col, real width returns nothing
-		integer i = 0
+	function widthCol takes int col, real width returns nothing
+		int i = 0
 
 		loop
 			exitwhen i > Game.scoreboard.rows()
@@ -30,8 +30,8 @@ scope InitializeScoreboard initializer i
 		end
 	end
 
-	function valueCol takes integer col, string val returns nothing
-		integer i = 0
+	function valueCol takes int col, string val returns nothing
+		int i = 0
 
 		loop
 			exitwhen i > Game.scoreboard.rows()
@@ -43,8 +43,8 @@ scope InitializeScoreboard initializer i
 	end
 
 	function initialize takes nothing returns nothing
-		integer i = 2
-		integer j = 0
+		int i = 2
+		int j = 0
 
 		Game.scoreboard = MyBoard.create(5, 2+Players.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
 		widthCol(0, MB_WIDTH*3./7.)

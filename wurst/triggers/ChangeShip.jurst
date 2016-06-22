@@ -11,7 +11,7 @@ scope ChangeShip initializer i
 		constant string SAME_SHIP_ERROR = "You cannot purchase the same ship you already own."
 		constant string FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
 
-		integer array tempIds
+		int array tempIds
 	end
 
 	function c takes nothing returns nothing
@@ -19,10 +19,10 @@ scope ChangeShip initializer i
 		unit bU= GetBuyingUnit()
 		unit sU= GetSoldUnit()
 		player buyer = GetOwningPlayer(sU)
-		integer class = Ships.getClass(sU)
-		integer id
-		integer val
-		integer index= 0
+		int class = Ships.getClass(sU)
+		int id
+		int val
+		int index= 0
 
 		if class!= Ships.CLASS_UNKNOWN then
 			if IsUnitAlly(bU, GetOwningPlayer(selU)) then

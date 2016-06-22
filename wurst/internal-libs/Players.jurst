@@ -1,11 +1,11 @@
 package Players
     public class Players
         static player  array players
-        static boolean array playing
+        static bool array playing
         static int     array tradeExp
         static player        localPlayer
         static player        playerPassive
-        static integer       playerCount = 0
+        static int       playerCount = 0
 
         static function isWest(int id) returns bool
         	return (id >= 2 and id <= 6)

@@ -19,7 +19,7 @@ package Shield
 	//* We must declare the UnitAlive native because StructuredDD no longer
 	//* declares it for us :) UnitAlive is proven to have less computational
 	//* cost compared to IsUnitType(u, UNIT_TYPE_DEAD)
-	native UnitAlive takes unit u returns boolean
+	native UnitAlive takes unit u returns bool
 
 	//* This struct is just a shim for a pretty API. (You don't instanciate
 	//* Shield objects yourself)
@@ -35,12 +35,12 @@ package Shield
 		//> END CUSTOMIZABLE SECTION
 
 		private static Shield array allShields
-		private static integer shieldIndex= -1
+		private static int shieldIndex= -1
 		private static timer time= CreateTimer()
 		static Table tab
 
-		private boolean useDuration= true
-		private boolean finiteShield= true
+		private bool useDuration= true
+		private bool finiteShield= true
 		private unit u
 		private real shieldLeft
 		private real falseHP
@@ -56,7 +56,7 @@ package Shield
 			Shield destroyingDat
 			unit tU= GetTriggerUnit()
 			real damageLeft= GetEventDamage()
-			boolean noShieldsLeft= false
+			bool noShieldsLeft= false
 			if DamageType.get()!= DamageType.SPELL and UnitAlive(tU) and tab.hasInt(tU.getHandleId()) then
 				tempDat= Shield.tab.loadInt(tU.getHandleId()) castTo Shield
 				//we need to loop until either all the damage is mitigated
@@ -97,7 +97,7 @@ package Shield
 		//* This method runs every TIMER_PERIOD seconds as long as the stack
 		//* is not empty, and looks for members that need to be destroyed.
 		private static method timeout takes nothing returns nothing
-			integer index= 0
+			int index= 0
 			Shield tempDat
 			Shield otherDat
 			loop

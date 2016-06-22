@@ -4,12 +4,12 @@ scope SeaWitchColdArrows initializer i
 	import Game
 
 	globals
-		constant integer SEAWITCH_ID = 'o005'
-		constant integer SLOW_ID = 'A009'
+		constant int SEAWITCH_ID = 'o005'
+		constant int SLOW_ID = 'A009'
 		unit dummy
 	end
 
-	function h takes nothing returns boolean
+	function h takes nothing returns bool
 		unit tU= GetTriggerUnit()
 		if DamageType.get()== DamageType.SPELL and GetUnitTypeId(GetEventDamageSource())== SEAWITCH_ID then
 			SetUnitX(dummy, GetUnitX(tU))

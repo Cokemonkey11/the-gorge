@@ -9,9 +9,9 @@ scope GetSpiderVenom
 	constant string SUCCESS_MESSAGE  = "You acquired a vial of |cffffcc00Spider Venom|r; return to your Utility Port for a reward."
 	constant string NO_SPACE_MESSAGE = "You don't have inventory space for |cffffcc00Spider Venom|r."
 
-	function spiderAction takes nothing returns boolean
+	function spiderAction takes nothing returns bool
 		unit fU      = GetFilterUnit()
-		integer slt  = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
+		int slt  = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
 		player owner = GetOwningPlayer(fU)
 
 		if slt > -1 and (not Ships.hasItemOfType(fU, Equipment.VENOM_VIAL)) then

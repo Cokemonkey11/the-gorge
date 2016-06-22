@@ -20,7 +20,7 @@ scope Repair initializer i
 	function c takes nothing returns nothing
 		player p
 		unit tU= GetTriggerUnit()
-		integer id
+		int id
 		real max
 		real life
 		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
@@ -55,7 +55,7 @@ scope Repair initializer i
 	end
 
 	function i takes nothing returns nothing
-		integer index= 0
+		int index= 0
 		loop
 			exitwhen index>11
 			lastRepair[index] = -1.*REPAIR_TIMEOUT

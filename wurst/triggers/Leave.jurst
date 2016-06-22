@@ -2,16 +2,16 @@ scope Leave initializer init
 	import Game
 	import Players
 
-	function c takes nothing returns boolean
+	function c takes nothing returns bool
 		player p = GetTriggerPlayer()
-		integer id = GetPlayerId(p)
+		int id = GetPlayerId(p)
 		DisplayTextToPlayer(Players.localPlayer, 0., 0., Game.colors[id]+Game.names[id]+"|r has left the game.")
 		return false
 	end
 
 	function init takes nothing returns nothing
 		trigger t = CreateTrigger()
-		integer index = 2
+		int index = 2
 		loop
 			exitwhen index>11
 			TriggerRegisterPlayerEvent(t, Player(index), EVENT_PLAYER_LEAVE)

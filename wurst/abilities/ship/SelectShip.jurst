@@ -4,15 +4,15 @@ scope SelectShip initializer i
 	import Ships
 	import RegisterPlayerUnitEvent
 
-	native UnitAlive takes unit u returns boolean
+	native UnitAlive takes unit u returns bool
 
-	constant integer SELECT_SHIP_ID = 'A00K'
+	constant int SELECT_SHIP_ID = 'A00K'
 	constant string  DEAD_ERROR     = "Your ship has been destroyed."
 
 	function c takes nothing returns nothing
 		if GetSpellAbilityId() == SELECT_SHIP_ID then
 			player  owner = GetOwningPlayer(GetTriggerUnit())
-			integer id    = GetPlayerId(owner)
+			int id    = GetPlayerId(owner)
 
 			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0 then
 				if Players.localPlayer == owner then

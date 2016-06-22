@@ -17,7 +17,7 @@ package DTS12MissileArray
 	import Ships
 	import Sounds
 
-	native UnitAlive takes unit u returns boolean
+	native UnitAlive takes unit u returns bool
 
 	struct Missile
 		unit target
@@ -28,13 +28,13 @@ package DTS12MissileArray
 		real vel
 		real dist= 0.
 		unit missile
-		integer ownerID
+		int ownerID
 		effect fx
 	end
 
 	public class DTS12MissileArray
-		static constant integer DUMMY_ID = 'u000'
-		static constant integer ARRAY_ID = 'A00P'
+		static constant int DUMMY_ID = 'u000'
+		static constant int ARRAY_ID = 'A00P'
 		static constant real DAMAGE           = 55.
 		static constant real MAXIMUM_RANGE    = 1800.
 		static constant real INITIAL_VELOCITY = 600.
@@ -51,7 +51,7 @@ package DTS12MissileArray
 
 		static timer clock = CreateTimer()
 		static Missile array db
-		static integer dbIndex = -1
+		static int dbIndex = -1
 		static location loc = Location(0., 0.)
 		static group grp = CreateGroup()
 		static Table ht
@@ -62,7 +62,7 @@ package DTS12MissileArray
 		end
 
 		static function disjoint takes unit u returns nothing
-			integer index = 0
+			int index = 0
 			Missile temp
 			loop
 				exitwhen index>dbIndex
@@ -75,11 +75,11 @@ package DTS12MissileArray
 		end
 
 		static function p takes nothing returns nothing
-			integer index = 0
+			int index = 0
 			Missile temp
 			real ang
 			unit first
-			boolean hit
+			bool hit
 			real newX
 			real newY
 			real oldX

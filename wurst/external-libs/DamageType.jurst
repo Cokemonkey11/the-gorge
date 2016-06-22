@@ -41,18 +41,18 @@ library DamageType initializer ini
 		//* this can be a useful option. If USE_BONUS_CALCULATOR is true, units that
 		//* would take greater than 100% spell damage will properly exhibit such
 		//* properly. (Disable this feature to improve performance)
-		private static constant boolean USE_BONUS_CALCULATOR = false
+		private static constant bool USE_BONUS_CALCULATOR = false
 
 		//* Make sure this matches the rawcode/id of your version of the DamageTypeCheck
 		//* ability (you must copy/paste it from the editor to your map)
-		static constant integer DAMAGE_TYPE_CHECK_ID = 'A008'
+		static constant int DAMAGE_TYPE_CHECK_ID = 'A008'
 
 		///> END CUSTOMIZE SECTION
 
-		static constant integer NULLED = -1
-		static constant integer ATTACK =  0
-		static constant integer SPELL  =  1
-		static constant integer CODE   =  2
+		static constant int NULLED = -1
+		static constant int ATTACK =  0
+		static constant int SPELL  =  1
+		static constant int CODE   =  2
 
 		//ConvertAttackType(7) is a hidden attack type with some unique properties
 		//that make it very useful for us. For more information see goo.gl/9k8tn
@@ -62,10 +62,10 @@ library DamageType initializer ini
 		//Significant tests have shown that a delay of 0. will have no issues.
 		private static constant real DELAY_AMOUNT = 0.
 
-		private static integer lastDamageType = NULLED
+		private static int lastDamageType = NULLED
 
 		//* Use this to get damage type in a damage event handler.
-		static method get takes nothing returns integer
+		static method get takes nothing returns int
 			real sourceDamage = GetEventDamage()
 			if lastDamageType == CODE then
 				return CODE
@@ -80,7 +80,7 @@ library DamageType initializer ini
 		//* Use this to damage units by trigger in your map without causing an infinite
 		//* loop.
 		static method dealCodeDamage takes unit who, unit target, real damage returns nothing
-			integer prevType = lastDamageType
+			int prevType = lastDamageType
 			real hp = GetWidgetLife(target) - .405
 			real d = damage
 			lastDamageType = CODE
@@ -99,7 +99,7 @@ library DamageType initializer ini
 		end
 
 		//* Auxillary function for adding the dummy ability to all units.
-		static method c takes nothing returns boolean
+		static method c takes nothing returns bool
 			unit tU = GetTriggerUnit()
 			UnitAddAbility(tU, DAMAGE_TYPE_CHECK_ID)
 			UnitMakeAbilityPermanent(tU, true, DAMAGE_TYPE_CHECK_ID)
@@ -120,7 +120,7 @@ library DamageType initializer ini
 		end
 
 		private static method getUnitBonusSpellResistance takes unit u returns real
-			integer prevType = lastDamageType
+			int prevType = lastDamageType
 			real life = GetWidgetLife(u)
 			real scale = GetUnitState(u, UNIT_STATE_MAX_LIFE)
 			SetWidgetLife(u, scale)
@@ -135,7 +135,7 @@ library DamageType initializer ini
 		//* This is the method that will invert any negative spell damage. It MUST be
 		//* StructuredDD.conditions[0] to function properly; thus, any library using a
 		//* StructuredDD handler should 'requires DamageType' (!)
-		static method handler takes nothing returns boolean
+		static method handler takes nothing returns bool
 			timer time
 			DelayDat tempDat
 			real attemptedDamage= -GetEventDamage()

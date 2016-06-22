@@ -9,7 +9,7 @@
 //   supports player unit events.
 //
 //   Functions passed to RegisterPlayerUnitEvent must either
-//   return a boolean (false) or nothing. (Which is a Pro)
+//   return a bool (false) or nothing. (Which is a Pro)
 //
 //   Warning:
 //   --------
@@ -33,8 +33,8 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 	end
 
 	public function registerPlayerUnitEvent takes playerunitevent p, code c returns nothing
-		integer i = GetHandleId(p)
-		integer k = 15
+		int i = GetHandleId(p)
+		int k = 15
 		if t[i] == null then
 			t[i] = CreateTrigger()
 			loop
@@ -47,7 +47,7 @@ package RegisterPlayerUnitEvent // Special Thanks to Bribe and azlier
 	end
 
 	public function registerPlayerUnitEventForPlayer takes playerunitevent p, code c, player pl returns nothing
-		integer i = 16 * GetHandleId(p) + GetPlayerId(pl)
+		int i = 16 * GetHandleId(p) + GetPlayerId(pl)
 		if t[i] == null then
 			t[i] = CreateTrigger()
 			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)

@@ -4,17 +4,17 @@ scope Creeps initializer i
 	import TerrainData
 
 	globals
-		constant integer  GRYPH_ID = 'hgry'
-		constant integer WYVERN_ID = 'owyv'
-		constant integer   HAWK_ID = 'hdhw'
-		constant integer   WYRM_ID = 'ufro'
+		constant int  GRYPH_ID = 'hgry'
+		constant int WYVERN_ID = 'owyv'
+		constant int   HAWK_ID = 'hdhw'
+		constant int   WYRM_ID = 'ufro'
 
 		constant real SPAWN_PERIOD = 30.
 		constant real  HAWK_PERIOD = 30. * 2.
 		constant real  WYRM_PERIOD = 30. * 3.
 	end
 
-	function spawn takes integer faction, integer cls returns nothing
+	function spawn takes int faction, int cls returns nothing
 		real x
 		real face
 		unit u

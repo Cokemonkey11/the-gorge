@@ -3,16 +3,16 @@ package Ships
 	import Table
 
 	public class Ships
-		static constant integer CLASS_UNKNOWN     = -1
-		static constant integer CLASS_FRIGATE     =  0
-		static constant integer CLASS_SMUGGLER    =  1
-		static constant integer CLASS_INTERCEPTOR =  2
-		static constant integer CLASS_BATTLESHIP  =  3
+		static constant int CLASS_UNKNOWN     = -1
+		static constant int CLASS_FRIGATE     =  0
+		static constant int CLASS_SMUGGLER    =  1
+		static constant int CLASS_INTERCEPTOR =  2
+		static constant int CLASS_BATTLESHIP  =  3
 
-		static constant integer HELICOPTER_ID = 'h000'
-		static constant integer PARACOPTER_ID = 'h00B'
-		static constant integer ZEPPELIN_ID   = 'h00D'
-		static constant integer SKYBARGE_ID   = 'h00E'
+		static constant int HELICOPTER_ID = 'h000'
+		static constant int PARACOPTER_ID = 'h00B'
+		static constant int ZEPPELIN_ID   = 'h00D'
+		static constant int SKYBARGE_ID   = 'h00E'
 
 		static constant real SELL_RATIO     =  .5
 
@@ -21,28 +21,28 @@ package Ships
 		static Table tab
 		static Table sellVals
 
-		static function getClass takes unit u returns integer
-			integer id = GetUnitTypeId(u)
+		static function getClass takes unit u returns int
+			int id = GetUnitTypeId(u)
 			if tab.hasInt(id) then
 				return tab.loadInt(id)
 			end
 			return CLASS_UNKNOWN
 		end
 
-		static function getSellValue takes unit u returns integer
-			integer id = GetUnitTypeId(u)
+		static function getSellValue takes unit u returns int
+			int id = GetUnitTypeId(u)
 			if sellVals.hasInt(id) then
 				return sellVals.loadInt(id)
 			end
 			return -1
 		end
 
-		static function isPlayerShip takes unit u returns boolean
+		static function isPlayerShip takes unit u returns bool
 			return getClass(u) != CLASS_UNKNOWN
 		end
 
-		static function hasItemOfType takes unit u, integer t returns boolean
-			integer index= 0
+		static function hasItemOfType takes unit u, int t returns bool
+			int index= 0
 			loop
 				exitwhen index>5
 				if GetItemTypeId(UnitItemInSlot(u, index))== t then

@@ -3,7 +3,7 @@ scope Release initializer i
 	import Crewmembers
 
 	globals
-		constant integer RELEASE_ID = 'A00M'
+		constant int RELEASE_ID = 'A00M'
 		constant string TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
 	end
 

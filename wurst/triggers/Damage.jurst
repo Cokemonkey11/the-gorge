@@ -3,11 +3,11 @@ scope Damage initializer i
 	import Game
 	import StructuredDD
 
-	function h takes nothing returns boolean
-		integer id
+	function h takes nothing returns bool
+		int id
 		unit targ = GetTriggerUnit()
 		unit src
-		integer sID
+		int sID
 		if Ships.isPlayerShip(targ) then
 			id = GetPlayerId(GetOwningPlayer(targ))
 			src = GetEventDamageSource()

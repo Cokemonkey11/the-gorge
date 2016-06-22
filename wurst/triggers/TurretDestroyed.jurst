@@ -4,8 +4,8 @@ scope TurretDestroyed initializer i
 	import Players
 
 	globals
-		constant integer TURRET_ID = 'h005'
-		constant integer GOLD_BONUS = 200
+		constant int TURRET_ID = 'h005'
+		constant int GOLD_BONUS = 200
 		constant string WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
 		constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
 		constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
@@ -14,7 +14,7 @@ scope TurretDestroyed initializer i
 
 	function c takes nothing returns nothing
 		unit tU= GetTriggerUnit()
-		integer index= 2
+		int index= 2
 		if GetUnitTypeId(tU)== TURRET_ID then
 			loop
 				exitwhen index>11

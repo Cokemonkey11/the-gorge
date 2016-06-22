@@ -2,7 +2,7 @@ scope SL15ShroudGenerator initializer i
 	import DummyUnitStack
 	import RegisterPlayerUnitEvent
 
-	native UnitAlive takes unit u returns boolean
+	native UnitAlive takes unit u returns bool
 
 	struct Shroud
 		unit caster
@@ -22,10 +22,10 @@ scope SL15ShroudGenerator initializer i
 	endstruct
 
 	globals
-		constant integer SHROUD_ID = 'A00Y'
-		constant integer INVIS_ID  = 'A00L'
-		constant integer BUF_ID    = 'B004'
-		constant integer GEN_COUNT = 32
+		constant int SHROUD_ID = 'A00Y'
+		constant int INVIS_ID  = 'A00L'
+		constant int BUF_ID    = 'B004'
+		constant int GEN_COUNT = 32
 		constant real DURATION = 15.
 		constant real GEN_PERIOD = 1./2.
 		constant real CLOCK_PERIOD = 1./30.
@@ -33,15 +33,15 @@ scope SL15ShroudGenerator initializer i
 		constant real GEN_VELOCITY = 400.
 		constant string GEN_MODEL = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
 		Shroud array shrouds
-		integer shroudsIndex = -1
+		int shroudsIndex = -1
 		Gen array gens
-		integer gensIndex = -1
+		int gensIndex = -1
 		timer clock =  CreateTimer()
 		timer clock2 = CreateTimer()
 	end
 
 	function p2 takes nothing returns nothing
-		integer index= 0
+		int index= 0
 		Gen g
 		loop
 			exitwhen index>gensIndex
@@ -65,8 +65,8 @@ scope SL15ShroudGenerator initializer i
 	end
 
 	function p takes nothing returns nothing
-		integer index = 0
-		integer j
+		int index = 0
+		int j
 		Shroud s
 		Gen g
 		loop

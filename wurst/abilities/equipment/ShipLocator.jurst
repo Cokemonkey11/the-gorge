@@ -2,7 +2,7 @@ scope ShipLocator initializer i
 	import Players
 	import RegisterPlayerUnitEvent
 
-	constant integer SHIP_LOC_ID   = 'A00I'
+	constant int SHIP_LOC_ID   = 'A00I'
 	constant real    RANGE         =  4000.
 	constant real    PING_DURATION =     5.
 
@@ -11,7 +11,7 @@ scope ShipLocator initializer i
 	function c takes nothing returns nothing
 		unit tU
 		unit first
-		integer id
+		int id
 		player owner
 
 		if GetSpellAbilityId() == SHIP_LOC_ID then

@@ -11,13 +11,13 @@ scope FillToxicSack initializer i
 		constant real MAX_Y = 3174.
 
 		constant string SUCCESS_MESSAGE = "You filled your container with |cffffcc00Toxic Waste|r; return to your Utility Port for a reward."
-		constant integer GOLD  = 30
-		constant integer TRADE =  1
+		constant int GOLD  = 30
+		constant int TRADE =  1
 	end
 
-	function f takes nothing returns boolean
+	function f takes nothing returns bool
 		unit    fU    = GetFilterUnit()
-		integer slt   = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
+		int slt   = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
 		player  owner = GetOwningPlayer(fU)
 
 		if slt > -1 then
@@ -30,10 +30,10 @@ scope FillToxicSack initializer i
 		return false
 	end
 
-	function f2 takes nothing returns boolean
+	function f2 takes nothing returns bool
 		unit fU = GetFilterUnit()
-		integer id = GetPlayerId(GetOwningPlayer(fU))
-		integer slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST_FULL)
+		int id = GetPlayerId(GetOwningPlayer(fU))
+		int slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST_FULL)
 
 		if slt > -1 then
 			if id < 7 then

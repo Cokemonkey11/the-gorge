@@ -15,47 +15,47 @@ package Equipment
 	import RegisterPlayerUnitEvent
 
 	public class Equipment
-		static constant integer CLASS_UNKNOWN    = -1
-		static constant integer CLASS_ENGINE     =  0
-		static constant integer CLASS_MECHANIC   =  1
-		static constant integer CLASS_HULL       =  2
-		static constant integer CLASS_SHIELDGEN  =  3
-		static constant integer CLASS_TELEPORT   =  4
-		static constant integer CLASS_SPECIAL    =  5
-		static constant integer CLASS_CONTRACT   =  6
+		static constant int CLASS_UNKNOWN    = -1
+		static constant int CLASS_ENGINE     =  0
+		static constant int CLASS_MECHANIC   =  1
+		static constant int CLASS_HULL       =  2
+		static constant int CLASS_SHIELDGEN  =  3
+		static constant int CLASS_TELEPORT   =  4
+		static constant int CLASS_SPECIAL    =  5
+		static constant int CLASS_CONTRACT   =  6
 
-		static constant integer PAGE_1_2         = 'I003'
-		static constant integer PAGE_2_1         = 'I004'
-		static constant integer PAGE_2_3         = 'I006'
-		static constant integer PAGE_3_2         = 'I007'
-		static constant integer PAGE_3_4         = 'I00A'
-		static constant integer PAGE_4_3         = 'I00B'
-		static constant integer KPAGE_1_2        = 'I00E'
-		static constant integer KPAGE_2_1        = 'I00F'
+		static constant int PAGE_1_2         = 'I003'
+		static constant int PAGE_2_1         = 'I004'
+		static constant int PAGE_2_3         = 'I006'
+		static constant int PAGE_3_2         = 'I007'
+		static constant int PAGE_3_4         = 'I00A'
+		static constant int PAGE_4_3         = 'I00B'
+		static constant int KPAGE_1_2        = 'I00E'
+		static constant int KPAGE_2_1        = 'I00F'
 
-		static constant integer DATA_ID          = 'I00D'
-		static constant integer TOXIC_SUBST_FULL = 'I00H'
-		static constant integer VENOM_VIAL       = 'I00J'
+		static constant int DATA_ID          = 'I00D'
+		static constant int TOXIC_SUBST_FULL = 'I00H'
+		static constant int VENOM_VIAL       = 'I00J'
 
 		// Engines
-		static constant integer STEAM_CORE     = 'I000'
+		static constant int STEAM_CORE     = 'I000'
 		// Mechanics
-		static constant integer PROBLEM_SOLVER = 'I001'
+		static constant int PROBLEM_SOLVER = 'I001'
 		// Hulls
-		static constant integer STONE_HULL     = 'I002'
+		static constant int STONE_HULL     = 'I002'
 		// Shield Generators
-		static constant integer BRONZE_GEN     = 'I005'
+		static constant int BRONZE_GEN     = 'I005'
 		// Teleporters
-		static constant integer IONIC_TELEPORT = 'I008'
+		static constant int IONIC_TELEPORT = 'I008'
 		// Special
-		static constant integer SHIP_LOCATOR   = 'I009'
+		static constant int SHIP_LOCATOR   = 'I009'
 		// Contracts
-		static constant integer DATA_ACQUISIT         = 'I00C'
-		static constant integer TOXIC_SUBST           = 'I00G'
-		static constant integer SPIDER_VENOM_CONTRACT = 'I00I'
+		static constant int DATA_ACQUISIT         = 'I00C'
+		static constant int TOXIC_SUBST           = 'I00G'
+		static constant int SPIDER_VENOM_CONTRACT = 'I00I'
 
 		// Hull reduction levels
-		static constant integer REDUCTION1 = 10
+		static constant int REDUCTION1 = 10
 
 		static constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
 		static constant string INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
@@ -66,8 +66,8 @@ package Equipment
 
 		static Table reduction
 
-		static function autoPawnItemForPlayer takes integer pID, item it returns nothing
-			integer val = R2I(GetWidgetLife(it))
+		static function autoPawnItemForPlayer takes int pID, item it returns nothing
+			int val = R2I(GetWidgetLife(it))
 			if val>1 then
 				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(it)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
 				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
@@ -75,14 +75,14 @@ package Equipment
 			RemoveItem(it)
 		end
 
-		static function getItemClassId takes integer id returns integer
+		static function getItemClassId takes int id returns int
 			if classes.hasInt(id) then
 				return classes.loadInt(id)
 			end
 			return CLASS_UNKNOWN
 		end
 
-		static function getItemClass takes item it returns integer
+		static function getItemClass takes item it returns int
 			return getItemClassId(GetItemTypeId(it))
 		end
 
@@ -90,12 +90,12 @@ package Equipment
 		//
 		// Parameters:
 		//   unit u:      the unit in question
-		//   integer cls: the item class for validation
+		//   int cls: the item class for validation
 		//
 		// Returns true if `u` has two items of class `cls`
-		static function unitHasClassPair takes unit u, integer cls returns boolean
-			integer index = 0
-			integer count = 0
+		static function unitHasClassPair takes unit u, int cls returns bool
+			int index = 0
+			int count = 0
 
 			loop
 				exitwhen index > 5
@@ -113,8 +113,8 @@ package Equipment
 			return false
 		end
 
-		static function unitHasItemOfClass takes unit u, integer cls returns item
-			integer index = 0
+		static function unitHasItemOfClass takes unit u, int cls returns item
+			int index = 0
 			item it = null
 
 			loop
@@ -131,8 +131,8 @@ package Equipment
 			return it
 		end
 
-		static function unitHasItemOfTypeSlot takes unit u, integer id returns integer
-			integer index = 0
+		static function unitHasItemOfTypeSlot takes unit u, int id returns int
+			int index = 0
 
 			loop
 				exitwhen index > 5
@@ -148,7 +148,7 @@ package Equipment
 		end
 
 		// Returns true if the unit u has all inventory spaces used.
-		static function noItemSlot takes unit u returns boolean
+		static function noItemSlot takes unit u returns bool
 			let count = UnitInventorySize(u)
 			int index = 0
 
@@ -165,13 +165,13 @@ package Equipment
 			return true
 		end
 
-		static function unitHasItemOfType takes unit u, integer id returns boolean
+		static function unitHasItemOfType takes unit u, int id returns bool
 			return unitHasItemOfTypeSlot(u, id) > -1
 		end
 
-		static function unitHasTypePair takes unit u, integer id returns boolean
-			integer index = 0
-			integer count = 0
+		static function unitHasTypePair takes unit u, int id returns bool
+			int index = 0
+			int count = 0
 			loop
 				exitwhen index>5
 				if GetItemTypeId(UnitItemInSlot(u, index)) == id then
@@ -185,9 +185,9 @@ package Equipment
 			return false
 		end
 
-		static function unitCanAcquireItemIdPost takes unit u, integer id returns boolean
-			integer shipClass = Ships.getClass(u)
-			integer itemClass = getItemClassId(id)
+		static function unitCanAcquireItemIdPost takes unit u, int id returns bool
+			int shipClass = Ships.getClass(u)
+			int itemClass = getItemClassId(id)
 
 			if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
 				return false
@@ -205,9 +205,9 @@ package Equipment
 			return true
 		end
 
-		static function unitCanAcquireItemId takes unit u, integer id returns boolean
-			integer shipClass = Ships.getClass(u)
-			integer itemClass = getItemClassId(id)
+		static function unitCanAcquireItemId takes unit u, int id returns bool
+			int shipClass = Ships.getClass(u)
+			int itemClass = getItemClassId(id)
 			if unitHasItemOfClass(u, itemClass)!= null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL then
 				return false
 			elseif unitHasItemOfType(u, id) then
@@ -224,15 +224,15 @@ package Equipment
 			return true
 		end
 
-		static function playerCanAcquireItem takes integer pID, item it returns boolean
+		static function playerCanAcquireItem takes int pID, item it returns bool
 			return unitCanAcquireItemId(Ships.ships[pID], GetItemTypeId(it))
 		end
 
-		static function unitCanAcquireItem takes unit u, item it returns boolean
+		static function unitCanAcquireItem takes unit u, item it returns bool
 			return unitCanAcquireItemId(u, GetItemTypeId(it))
 		end
 
-		static function playerAddItemFromIdConditional takes integer pID, integer id returns boolean
+		static function playerAddItemFromIdConditional takes int pID, int id returns bool
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			item temp
@@ -246,7 +246,7 @@ package Equipment
 			return false
 		end
 
-		static function playerAddItemsFromIdConditional takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+		static function playerAddItemsFromIdConditional takes int pID, int i0, int i1, int i2, int i3, int i4, int i5 returns nothing
 			if i0>0 then
 				playerAddItemFromIdConditional(pID, i0)
 			end
@@ -267,7 +267,7 @@ package Equipment
 			end
 		end
 
-		static function playerAddItemsFromId takes integer pID, integer i0, integer i1, integer i2, integer i3, integer i4, integer i5 returns nothing
+		static function playerAddItemsFromId takes int pID, int i0, int i1, int i2, int i3, int i4, int i5 returns nothing
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
 			if i0>0 then
@@ -290,13 +290,13 @@ package Equipment
 			end
 		end
 
-		static function tradeExperience takes player who returns integer
+		static function tradeExperience takes player who returns int
 			return Players.tradeExp[GetPlayerId(who)]
 		end
 
 		// Get the cost of a trade contract, in trade experience.
-		static function getContractCost takes item it returns integer
-			integer typ = GetItemTypeId(it)
+		static function getContractCost takes item it returns int
+			int typ = GetItemTypeId(it)
 			if     typ == DATA_ACQUISIT then
 				return 0
 			elseif typ == TOXIC_SUBST then
@@ -307,14 +307,14 @@ package Equipment
 			return -1
 		end
 
-		static function pageC takes nothing returns boolean
+		static function pageC takes nothing returns bool
 			item sI= GetSoldItem()
 			unit seller = GetTriggerUnit()
 			unit buyer = GetBuyingUnit()
 			unit toSelect = null
-			integer id = GetItemTypeId(sI)
+			int id = GetItemTypeId(sI)
 			player owner = GetOwningPlayer(buyer)
-			boolean was = false
+			bool was = false
 			if id == PAGE_1_2 then
 				was = true
 				if seller == Game.westUtility[0] then
@@ -384,7 +384,7 @@ package Equipment
 		end
 
 		static function resetUnitDamageReduction takes unit u returns nothing
-			integer index = 0
+			int index = 0
 			loop
 				exitwhen index>5
 				if GetItemTypeId(UnitItemInSlot(u, index)) == STONE_HULL then
@@ -397,13 +397,13 @@ package Equipment
 			reduction.saveInt(u.getHandleId(), 0)
 		end
 
-		static function c takes nothing returns boolean
+		static function c takes nothing returns bool
 			unit buyer = GetBuyingUnit()
 			item sI= GetSoldItem()
 			player buyerP = GetOwningPlayer(buyer)
 			real val
-			integer class = getItemClass(sI)
-			boolean has = unitHasItemOfType(buyer, GetItemTypeId(sI))
+			int class = getItemClass(sI)
+			bool has = unitHasItemOfType(buyer, GetItemTypeId(sI))
 			item it = unitHasItemOfClass(buyer, class)
 
 			if has or GetItemTypeId(sI) == GetItemTypeId(it) then

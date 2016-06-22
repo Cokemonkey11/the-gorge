@@ -3,12 +3,12 @@ scope SelectCaptain initializer init
 	import Players
 	import RegisterPlayerUnitEvent
 
-	constant integer SELECT_CAPT_ID = 'A00Z'
+	constant int SELECT_CAPT_ID = 'A00Z'
 
 	function c takes nothing returns nothing
 		if GetSpellAbilityId() == SELECT_CAPT_ID then
 			player  owner = GetOwningPlayer(GetTriggerUnit())
-			integer id    = GetPlayerId(owner)
+			int id    = GetPlayerId(owner)
 
 			if Players.localPlayer == owner then
 				ClearSelection()

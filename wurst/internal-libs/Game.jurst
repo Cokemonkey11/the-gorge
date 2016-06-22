@@ -10,7 +10,7 @@ package Game
 	import SinglePlayer
 
 	struct AssistTimestamps
-		integer array vals[12]
+		int array vals[12]
 	end
 
 	public class Game
@@ -20,23 +20,23 @@ package Game
 		static constant string   SKYBARGE_ICON     = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 		static constant string TRADE_SUCCESS_SOUND = "Sound\\Interface\\QuestLog.wav"
 
-		static constant integer         KEEP_ID     = 'h001'
-		static constant integer        KEEP2_ID     = 'h00F'
-		static constant integer       SHIELD_ID     = 'h003'
-		static constant integer       REPAIR_ID     = 'h004'
-		static constant integer       HANGAR_ID     = 'h00A'
-		static constant integer      UTILITY_ID     = 'h006'
-		static constant integer     UTILITY2_ID     = 'h007'
-		static constant integer     UTILITY3_ID     = 'h008'
-		static constant integer     UTILITY4_ID     = 'h009'
-		static constant integer      CAPTAIN_ID     = 'H00C'
-		static constant integer        STONE_ID     = 'h002'
-		static constant integer        DUMMY_ID     = 'u000'
-		static constant integer STONE_SPIDER_ID     = 'n000'
+		static constant int         KEEP_ID     = 'h001'
+		static constant int        KEEP2_ID     = 'h00F'
+		static constant int       SHIELD_ID     = 'h003'
+		static constant int       REPAIR_ID     = 'h004'
+		static constant int       HANGAR_ID     = 'h00A'
+		static constant int      UTILITY_ID     = 'h006'
+		static constant int     UTILITY2_ID     = 'h007'
+		static constant int     UTILITY3_ID     = 'h008'
+		static constant int     UTILITY4_ID     = 'h009'
+		static constant int      CAPTAIN_ID     = 'H00C'
+		static constant int        STONE_ID     = 'h002'
+		static constant int        DUMMY_ID     = 'u000'
+		static constant int STONE_SPIDER_ID     = 'n000'
 
-		static constant integer ASSIST_TIME         =    15
-		static constant integer START_GOLD          =   200
-		static constant integer SHIELD_COUNT        =    10
+		static constant int ASSIST_TIME         =    15
+		static constant int START_GOLD          =   200
+		static constant int SHIELD_COUNT        =    10
 		static constant real    SHIELDOFFS          =   200.
 		static constant real    FADEOUT_DURATION    =    10.
 		static constant real    START_TIME          =     3.
@@ -89,11 +89,11 @@ package Game
 		static constant string WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
 		static constant string DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
 
-		static boolean ended       = false
-		static integer westCount   = 0
-		static integer eastCount   = 0
-		static integer array shipClass
-		static integer array scoreboardRows
+		static bool ended       = false
+		static int westCount   = 0
+		static int eastCount   = 0
+		static int array shipClass
+		static int array scoreboardRows
 		static real seconds = 0.
 		static unit westRepair
 		static unit eastRepair
@@ -105,26 +105,26 @@ package Game
 		static string array colors
 		static string array names
 		static AssistTimestamps array assistTimestamps
-		static integer array kills
-		static integer array deaths
-		static integer array assists
-		static integer array farm
+		static int array kills
+		static int array deaths
+		static int array assists
+		static int array farm
 
 		static MyBoard scoreboard
 
 		static unit array westKeep
 		static unit array eastKeep
-		static integer westShieldsLeft = 10
-		static integer eastShieldsLeft = 10
-		static integer secondsFSM = 0
-		static integer minutesFSM = 0
+		static int westShieldsLeft = 10
+		static int eastShieldsLeft = 10
+		static int secondsFSM = 0
+		static int minutesFSM = 0
 		static group grp = CreateGroup()
 
 		static constant string REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
 
-		static function reward takes unit u, integer gold, integer bonusExperience returns nothing
+		static function reward takes unit u, int gold, int bonusExperience returns nothing
 			player  owner = GetOwningPlayer(u)
-			integer id    = GetPlayerId(owner)
+			int id    = GetPlayerId(owner)
 			let     uX    = GetUnitX(u)
 			let     uY    = GetUnitY(u)
 
@@ -142,20 +142,20 @@ package Game
 			DisplayTextToPlayer(owner, 0., 0., "You received |cffffcc00" + I2S(gold) + "|r gold and |cffffcc00" + I2S(bonusExperience) + "|r trading experience.")
 		end
 
-		static function playerIsWest takes integer id returns boolean
+		static function playerIsWest takes int id returns bool
 			return GetUnitX(Ships.ships[id]) < 0.
 		end
 
-		static function getMinutes takes nothing returns integer
+		static function getMinutes takes nothing returns int
 			return minutesFSM
 		end
 
-		static function farmIncrement takes integer pID returns nothing
+		static function farmIncrement takes int pID returns nothing
 			farm[pID] = farm[pID] + 1
 			scoreboard.setValue(4, scoreboardRows[pID], I2S(farm[pID]))
 		end
 
-		static function parseKill takes integer pID returns nothing
+		static function parseKill takes int pID returns nothing
 			kills[pID] = kills[pID] + 1
 			if pID < 7 then
 				kills[0] = kills[0] + 1
@@ -167,7 +167,7 @@ package Game
 		end
 
 		static function addDeath takes unit u returns nothing
-			integer id = GetPlayerId(GetOwningPlayer(u))
+			int id = GetPlayerId(GetOwningPlayer(u))
 			deaths[id] = deaths[id] + 1
 			if id < 7 then
 				deaths[0]++
@@ -177,8 +177,8 @@ package Game
 			scoreboard.setValue(2, scoreboardRows[id], I2S(deaths[id]))
 		end
 
-		static function updateIcon takes integer pID returns nothing
-			integer unitType = shipClass[pID]
+		static function updateIcon takes int pID returns nothing
+			int unitType = shipClass[pID]
 			if unitType== Ships.HELICOPTER_ID then
 				scoreboard.setIcon(0, scoreboardRows[pID], HELICOPTER_ICON)
 			elseif unitType== Ships.PARACOPTER_ID then
@@ -190,7 +190,7 @@ package Game
 			end
 		end
 
-		static function addQuest takes string desc, string iconPath, boolean required, string title returns quest
+		static function addQuest takes string desc, string iconPath, bool required, string title returns quest
 			quest q = CreateQuest()
 			QuestSetCompleted(  q, false)
 			QuestSetDescription(q, desc)
@@ -263,7 +263,7 @@ package Game
 			DisplayCineFilter(true)
 		end
 
-		static function defeatTeam takes integer team returns nothing
+		static function defeatTeam takes int team returns nothing
 			if team == 0 then
 				RemovePlayer(Players.players[1], PLAYER_GAME_RESULT_VICTORY)
 				RemovePlayer(Players.players[7], PLAYER_GAME_RESULT_VICTORY)
@@ -367,7 +367,7 @@ package Game
 		end
 
 		static function after takes nothing returns nothing
-			integer id = GetPlayerId(Players.localPlayer)
+			int id = GetPlayerId(Players.localPlayer)
 			DestroyTimer(GetExpiredTimer())
 			Sounds.play(START_SOUND, .75, 127)
 			fadeIn(1.)
@@ -377,14 +377,22 @@ package Game
 				SelectUnit(Ships.ships[id], true)
 			end
 		end
+
+		static function fastMove takes nothing returns bool
+			if SinglePlayer.fastEnabled
+				GetTriggerUnit()..setX(GetOrderPointX())..setY(GetOrderPointY())
+			end
+
+			return false
+		end
 	end
 
 	init
-		integer index = 0
+		int index = 0
 
 		// Initialize assist stamps.
-		integer i = 0
-		integer j = 0
+		int i = 0
+		int j = 0
 		loop
 			exitwhen i > 11
 
@@ -424,15 +432,15 @@ package Game
 
 			if GetPlayerSlotState(Players.players[index]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Players.players[index]) == MAP_CONTROL_USER then
 				Players.playerCount++
-				Players.playing[index] = true
-				Game.shipClass[index]  = Ships.HELICOPTER_ID
-				Game.captains[index]   = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
-				Players.tradeExp[index]   = 0
-				Game.kills[index]      = 0
-				Game.deaths[index]     = 0
-				Game.assists[index]    = 0
-				Game.farm[index]       = 0
-				Game.names[index]      = GetPlayerName(Players.players[index])
+				Players.playing[index]  = true
+				Game.shipClass[index]   = Ships.HELICOPTER_ID
+				Game.captains[index]    = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
+				Players.tradeExp[index] = 0
+				Game.kills[index]       = 0
+				Game.deaths[index]      = 0
+				Game.assists[index]     = 0
+				Game.farm[index]        = 0
+				Game.names[index]       = GetPlayerName(Players.players[index])
 
 				if index < 7 then
 					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
@@ -451,6 +459,11 @@ package Game
 		// Potentially turn on single-player mode.
 		if Players.playerCount < 2 then
 			SinglePlayer.enable()
+
+			// Fast movement trigger.
+			trigger f = CreateTrigger()
+			TriggerRegisterUnitEvent(f, Ships.ships[SinglePlayer.thePlayer.getId()], EVENT_UNIT_ISSUED_POINT_ORDER)
+			TriggerAddCondition(f, Condition(function Game.fastMove))
 		end
 
 		// Make alliance units give bounty.

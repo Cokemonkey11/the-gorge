@@ -1,61 +1,61 @@
 package MyBoard
 	globals
-		boolean             DEBUG_MODE           = false
+		bool             DEBUG_MODE           = false
 
-		constant integer    MAX_ROW_COUNT        = 100
-		constant integer    MAX_COLUMN_COUNT     = 30
-		constant integer    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
+		constant int    MAX_ROW_COUNT        = 100
+		constant int    MAX_COLUMN_COUNT     = 30
+		constant int    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
 		constant real       AVERAGE_LETTER_WIDTH = .01484375
 	end
 
 	public class MyBoard
 		multiboard                    board        = null
-		private  integer              colCount     = 0
-		private  integer              rowCount     = 0
-		private  boolean              isMinimized  = false
-		private  boolean              isShown      = false
+		private  int              colCount     = 0
+		private  int              rowCount     = 0
+		private  bool              isMinimized  = false
+		private  bool              isShown      = false
 		private  string               titleText    = ""
-		private  integer        array charCnt [MAX_ARRAY_SIZE]
+		private  int        array charCnt [MAX_ARRAY_SIZE]
 		private  real           array width   [MAX_ARRAY_SIZE]
-		private  boolean        array showVal [MAX_ARRAY_SIZE]
-		private  boolean        array showIcon[MAX_ARRAY_SIZE]
+		private  bool        array showVal [MAX_ARRAY_SIZE]
+		private  bool        array showIcon[MAX_ARRAY_SIZE]
 		private  string         array curIcon [MAX_ARRAY_SIZE]
 		private  string         array curValue[MAX_ARRAY_SIZE]
 		private  multiboarditem array brdItem [MAX_ARRAY_SIZE]
 
 		// Getting the correct values from arrays.
 
-		method getCharCount takes integer col, integer row returns integer
+		method getCharCount takes int col, int row returns int
 			return this.charCnt[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method getWidth takes integer col, integer row returns real
+		method getWidth takes int col, int row returns real
 			return this.width[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method getIconPath takes integer col, integer row returns string
+		method getIconPath takes int col, int row returns string
 			return this.curIcon[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method getValue takes integer col, integer row returns string
+		method getValue takes int col, int row returns string
 			return this.curValue[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method getItem takes integer col, integer row returns multiboarditem
+		method getItem takes int col, int row returns multiboarditem
 			return this.brdItem[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method isValueShown takes integer col, integer row returns boolean
+		method isValueShown takes int col, int row returns bool
 			return showVal[MAX_COLUMN_COUNT*col + row]
 		end
 
-		method isIconShown takes integer col, integer row returns boolean
+		method isIconShown takes int col, int row returns bool
 			return showIcon[MAX_COLUMN_COUNT*col + row]
 		end
 
 		// Local parameter changes.
-		method displayLocalIcon takes player whichPlayer, integer col, integer row, boolean doDisplay returns nothing
-			integer arrIndex = MAX_COLUMN_COUNT*col + row
+		method displayLocalIcon takes player whichPlayer, int col, int row, bool doDisplay returns nothing
+			int arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
 				this.showIcon[arrIndex] = doDisplay
@@ -64,8 +64,8 @@ package MyBoard
 			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], this.showIcon[arrIndex])
 		end
 
-		method displayLocalValue takes player whichPlayer, integer col, integer row, boolean doDisplay returns nothing
-			integer arrIndex = MAX_COLUMN_COUNT*col + row
+		method displayLocalValue takes player whichPlayer, int col, int row, bool doDisplay returns nothing
+			int arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
 				this.showVal[arrIndex] = doDisplay
@@ -74,8 +74,8 @@ package MyBoard
 			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], .showIcon[arrIndex])
 		end
 
-		method setLocalIcon takes player whichPlayer, integer col, integer row, string newIcon returns nothing
-			integer arrIndex = MAX_COLUMN_COUNT*col + row
+		method setLocalIcon takes player whichPlayer, int col, int row, string newIcon returns nothing
+			int arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
 				this.curIcon[arrIndex] = newIcon
@@ -84,8 +84,8 @@ package MyBoard
 			MultiboardSetItemIcon(this.brdItem[arrIndex], this.curIcon[arrIndex])
 		end
 
-		method setLocalValue takes player whichPlayer, integer col, integer row, string newValue returns nothing
-			integer arrIndex = MAX_COLUMN_COUNT*col + row
+		method setLocalValue takes player whichPlayer, int col, int row, string newValue returns nothing
+			int arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
 				this.curValue[arrIndex] = newValue
@@ -94,8 +94,8 @@ package MyBoard
 			MultiboardSetItemValue(this.brdItem[arrIndex], this.curValue[arrIndex])
 		end
 
-		method setLocalWidth takes player whichPlayer, integer col, integer row, real width returns nothing
-			integer arrIndex = MAX_COLUMN_COUNT*col + row
+		method setLocalWidth takes player whichPlayer, int col, int row, real width returns nothing
+			int arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer then
 				this.width[arrIndex] = width
@@ -115,36 +115,36 @@ package MyBoard
 
 		// Global parameter changes.
 
-		method displayIcon takes integer col, integer row, boolean doDisplay returns nothing
+		method displayIcon takes int col, int row, bool doDisplay returns nothing
 			this.displayLocalIcon(GetLocalPlayer(), col, row, doDisplay)
 		end
 
-		method displayValue takes integer col, integer row, boolean doDisplay returns nothing
+		method displayValue takes int col, int row, bool doDisplay returns nothing
 			this.displayLocalValue(GetLocalPlayer(), col, row, doDisplay)
 		end
 
-		method setIcon takes integer col, integer row, string newIcon returns nothing
+		method setIcon takes int col, int row, string newIcon returns nothing
 			this.setLocalIcon(GetLocalPlayer(), col, row, newIcon)
 		end
 
-		method setValue takes integer col, integer row, string newValue returns nothing
+		method setValue takes int col, int row, string newValue returns nothing
 			this.setLocalValue(GetLocalPlayer(), col, row, newValue)
 		end
 
-		method setWidth takes integer col, integer row, real width returns nothing
+		method setWidth takes int col, int row, real width returns nothing
 			this.setLocalWidth(GetLocalPlayer(), col, row, width)
 		end
 
 		// General stuff.
 
-		method minimize takes boolean doMinimize returns nothing
+		method minimize takes bool doMinimize returns nothing
 			if this.isShown then
 				MultiboardMinimize(.board, doMinimize)
 			end
 			this.isMinimized = doMinimize
 		end
 
-		method display takes boolean doDisplay returns nothing
+		method display takes bool doDisplay returns nothing
 			this.isShown = doDisplay
 			MultiboardDisplay(.board, doDisplay)
 			if doDisplay then
@@ -156,10 +156,10 @@ package MyBoard
 			end
 		end
 
-		method setRowCount takes integer rows returns nothing
-			integer colLoop
-			integer rowLoop
-			integer arrIndex
+		method setRowCount takes int rows returns nothing
+			int colLoop
+			int rowLoop
+			int arrIndex
 			// No actions if it's same.
 			if rows != this.rowCount then
 				// Here's the anti-lag snippet: remove unneeded multiboard items from memory.
@@ -203,10 +203,10 @@ package MyBoard
 			end
 		end
 
-		method setColCount takes integer cols returns nothing
-			integer colLoop
-			integer rowLoop
-			integer arrIndex
+		method setColCount takes int cols returns nothing
+			int colLoop
+			int rowLoop
+			int arrIndex
 
 			// No actions if it's same.
 			if cols != this.colCount then
@@ -266,45 +266,45 @@ package MyBoard
 			this.setTitleText(newTitle)
 		end
 
-		method columns takes nothing returns integer
+		method columns takes nothing returns int
 			return this.colCount
 		end
 
-		method setColumns takes integer cols returns nothing
+		method setColumns takes int cols returns nothing
 			this.setColCount(cols)
 		end
 
-		method rows takes nothing returns integer
+		method rows takes nothing returns int
 			return this.rowCount
 		end
 
-		method setRows takes integer cols returns nothing
+		method setRows takes int cols returns nothing
 			this.setRowCount(cols)
 		end
 
-		method show takes nothing returns boolean
+		method show takes nothing returns bool
 			return this.isShown
 		end
 
-		method setShow takes boolean doDisplay returns nothing
+		method setShow takes bool doDisplay returns nothing
 			this.display(doDisplay)
 		end
 
-		method suppress takes nothing returns boolean
+		method suppress takes nothing returns bool
 			return this.isMinimized
 		end
 
-		method setSuppress takes boolean doMinimize returns nothing
+		method setSuppress takes bool doMinimize returns nothing
 			this.minimize(doMinimize)
 		end
 
 		// Initializer.
 
-		static method create takes integer cols, integer rows, string title returns MyBoard
+		static method create takes int cols, int rows, string title returns MyBoard
 			MyBoard  board    = new MyBoard
-			integer  colLoop  = 0
-			integer  rowLoop
-			integer  arrIndex
+			int  colLoop  = 0
+			int  rowLoop
+			int  arrIndex
 
 			board.board         = CreateMultiboard()
 			board.colCount      = cols

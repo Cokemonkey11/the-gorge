@@ -9,39 +9,39 @@ scope Revive initializer i
 
 	struct DeathDat
 		unit u
-		integer timeL
+		int timeL
 		real teamX
-		integer ownerID= -1
-		integer item0Id= -1
-		integer item1Id= -1
-		integer item2Id= -1
-		integer item3Id= -1
-		integer item4Id= -1
-		integer item5Id= -1
+		int ownerID= -1
+		int item0Id= -1
+		int item1Id= -1
+		int item2Id= -1
+		int item3Id= -1
+		int item4Id= -1
+		int item5Id= -1
 	endstruct
 
 	globals
 		constant real CLOCK_PERIOD = 1.
 		constant real REVIVE_OFFSET = 328.
-		constant integer REVIVE_DELAY_FLAT = 15
-		constant integer REVIVE_DELAY_PERMINUTE = 1
-		constant integer FLAT_BOUNTY = 100
-		constant integer BOUNTY_PER_MINUTE = 2
-		constant integer COP_ID = 'u003'
+		constant int REVIVE_DELAY_FLAT = 15
+		constant int REVIVE_DELAY_PERMINUTE = 1
+		constant int FLAT_BOUNTY = 100
+		constant int BOUNTY_PER_MINUTE = 2
+		constant int COP_ID = 'u003'
 		constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
 		constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
 		DeathDat array deathDB
-		integer dbIndex= -1
+		int dbIndex= -1
 		timer time= CreateTimer()
-		integer westDeadCount= 0
-		integer eastDeadCount= 0
+		int westDeadCount= 0
+		int eastDeadCount= 0
 		unit westDummy
 		unit eastDummy
 	end
 
 	function p takes nothing returns nothing
 		DeathDat tempDat
-		integer index = 0
+		int index = 0
 
 		loop
 			exitwhen index > dbIndex
@@ -84,12 +84,12 @@ scope Revive initializer i
 		end
 	end
 
-	function getBounty takes nothing returns integer
+	function getBounty takes nothing returns int
 		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
 	end
 
-	function parseAssists takes integer pID returns nothing
-		integer index = 2
+	function parseAssists takes int pID returns nothing
+		int index = 2
 		loop
 			exitwhen index>11
 			if Game.seconds - Game.assistTimestamps[pID].vals[index] <= Game.ASSIST_TIME then
@@ -104,8 +104,8 @@ scope Revive initializer i
 		DeathDat tempDat
 		unit tU= GetTriggerUnit()
 		unit kU
-		integer id
-		integer bounty
+		int id
+		int bounty
 		player kO
 		item ti
 		if Ships.isPlayerShip(tU)then

@@ -4,7 +4,7 @@ scope Farm initializer i
 
 	function c takes nothing returns nothing
 		player p = GetOwningPlayer(GetKillingUnit())
-		integer id = GetPlayerId(p)
+		int id = GetPlayerId(p)
 		if id>1 then
 			Game.farmIncrement(id)
 		end

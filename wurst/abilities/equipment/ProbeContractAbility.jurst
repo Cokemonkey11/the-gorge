@@ -10,8 +10,8 @@ scope ProbeContractAbility
 	constant string  ALREADY_MESSAGE   = "You already have data on this rock formation."
 	constant string  NO_SPACE_MESSAGE  = "You don't have inventory space for |cffffcc00Rock Data|r."
 	constant string  SUCCESS_MESSAGE   = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
-	constant integer PROBE_ID          = 'A00J'
-	constant integer ROCK_FORMATION_ID = 'u001'
+	constant int PROBE_ID          = 'A00J'
+	constant int ROCK_FORMATION_ID = 'u001'
 
 	function effectC takes nothing returns nothing
 		unit tU

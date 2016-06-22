@@ -3,7 +3,7 @@ package Muscii
 
 	public class Note
 		string path
-		integer volume
+		int volume
 		real pitch
 		Note previous
 		Note next
@@ -16,7 +16,7 @@ package Muscii
 			Sounds.play(this.path, this.pitch, this.volume)
 		end
 
-		static method create takes string path, integer volume, real pitch returns Note
+		static method create takes string path, int volume, real pitch returns Note
 			Note n = new Note
 			n.path = path
 			n.volume = volume
@@ -80,19 +80,19 @@ package Muscii
 	public class Muscii
 		static Table fromClock
 		private static Muscii array db
-		private static integer dbIndex = -1
+		private static int dbIndex = -1
 		Chord first
 		Chord last
 		Chord iterator
 		real tempo //in whole notes per minute
 		timer clock
-		integer count
-		integer queueCount
+		int count
+		int queueCount
 		Section cbf
 		Muscii queued
 
 		static method interrupt takes nothing returns nothing
-			integer index = 0
+			int index = 0
 			Muscii temp
 			loop
 				exitwhen index>dbIndex
@@ -123,13 +123,13 @@ package Muscii
 			return this // for chaining
 		end
 
-		method playCounted takes integer count returns Muscii
+		method playCounted takes int count returns Muscii
 			this.count = count
 			TimerStart(this.clock, 1. / (this.tempo / 60.), true, function Muscii.p)
 			return this
 		end
 
-		method enqueue takes Muscii next, integer queueCount returns Muscii
+		method enqueue takes Muscii next, int queueCount returns Muscii
 			// if the target Muscii is already queuing something, it is in use - we
 			// therefore copy it.
 			if next.queued == null then

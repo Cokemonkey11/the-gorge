@@ -1,29 +1,29 @@
 package DummyUnitStack
 	public class DummyUnitStack
-		static constant integer DUMMY_UNIT_ID= 'u000'
-		static constant integer MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
+		static constant int DUMMY_UNIT_ID= 'u000'
+		static constant int MIN_PRELOAD_BLOCK_SIZE= 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
 
-		static constant integer PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
-		static constant boolean DO_PIC= true
+		static constant int PRELOAD_INIT_COUNT= 200 //How many units to preload during initialization
+		static constant bool DO_PIC= true
 
-		static constant integer DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
-		static constant boolean DO_DDPC= true
+		static constant int DYNAMIC_DEFERRED_PRELOAD_COUNT= 20 //How many units should DummyUnitStack keep preloaded at a minimum?
+		static constant bool DO_DDPC= true
 
-		static constant integer INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
-		static constant boolean DO_IDPC= true
+		static constant int INITIAL_DEFERRED_PRELOAD_COUNT= 20 //How many units should be queued on the preloader on map start?
+		static constant bool DO_IDPC= true
 
-		static constant integer MAX_PRELOADED_UNITS= 5000
-		static constant boolean DO_MPU= true
+		static constant int MAX_PRELOADED_UNITS= 5000
+		static constant bool DO_MPU= true
 
 		static constant real SAFE_LOC_X= -3820.
 		static constant real SAFE_LOC_Y= 3700.
 		static constant real CLOCK_PERIOD= 1./60.
 		static unit array dummyStack
-		static integer stackIndex= -1
-		static integer deferredTodoCount= 0
+		static int stackIndex= -1
+		static int deferredTodoCount= 0
 		static timer clock= CreateTimer()
 
-		static method add takes boolean preloading returns unit
+		static method add takes bool preloading returns unit
 			unit u= CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), DummyUnitStack.DUMMY_UNIT_ID, DummyUnitStack.SAFE_LOC_X, DummyUnitStack.SAFE_LOC_Y, 0.)
 			UnitAddAbility(u, 'Aloc')
 			UnitAddAbility(u, 'Arav')
@@ -79,7 +79,7 @@ package DummyUnitStack
 	end
 
 	init
-		integer index= 1
+		int index= 1
 
 		if DummyUnitStack.DO_PIC then
 			loop

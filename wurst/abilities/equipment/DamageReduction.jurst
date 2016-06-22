@@ -3,7 +3,7 @@ scope DamageReduction initializer i
 	import Equipment
 	import StructuredDD
 
-	function h takes nothing returns boolean
+	function h takes nothing returns bool
 		real d= GetEventDamage()
 		unit tU= GetTriggerUnit()
 		if DamageType.get() != DamageType.CODE and Equipment.reduction.hasInt(tU.getHandleId()) then

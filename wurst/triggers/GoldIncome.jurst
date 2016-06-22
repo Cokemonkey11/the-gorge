@@ -4,11 +4,11 @@ scope GoldIncome initializer i
 
 	globals
 		constant real CLOCK_PERIOD = 1.
-		constant integer GOLD_PER_SECOND = 1
+		constant int GOLD_PER_SECOND = 1
 	end
 
 	function c takes nothing returns nothing
-		integer index= 0
+		int index= 0
 		if not Game.ended then
 			loop
 				exitwhen index>11

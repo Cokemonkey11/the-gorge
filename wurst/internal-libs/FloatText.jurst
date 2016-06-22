@@ -31,7 +31,7 @@ package FloatText
 			return t
 		end
 
-		static function themedTemporaryTagPlayer takes real x, real y, string s, integer pId returns texttag
+		static function themedTemporaryTagPlayer takes real x, real y, string s, int pId returns texttag
 			texttag t = themedTemporaryTag(x, y, s)
 
 			t.setVisibility(Players.localPlayer == Players.players[pId])
@@ -39,12 +39,12 @@ package FloatText
 			return t
 		end
 
-		static function reviveNumbers takes real x, real y, string s, integer pId returns texttag
+		static function reviveNumbers takes real x, real y, string s, int pId returns texttag
 			let len = StringLength(s)
 			return themedTemporaryTagPlayer(x - (.5 * KERNING * len), y, s, pId)
 		end
 
-		static function goldBounty takes real x, real y, int bounty, integer pId returns texttag
+		static function goldBounty takes real x, real y, int bounty, int pId returns texttag
 			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
 
 			t..setColor(255, 220, 0, 255)
@@ -52,7 +52,7 @@ package FloatText
 			return t
 		end
 
-		static function tradeExperienceBounty takes real x, real y, int bounty, integer pId returns texttag
+		static function tradeExperienceBounty takes real x, real y, int bounty, int pId returns texttag
 			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
 
 			t.setColor(220, 0, 255, 255)

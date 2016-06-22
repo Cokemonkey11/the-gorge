@@ -8,7 +8,7 @@ package Continue
 		return Rect(x-size/2., y-size/2., x+size/2., y+size/2.)
 	end
 
-	function f takes nothing returns boolean
+	function f takes nothing returns bool
 		unit fU = GetFilterUnit()
 		player owner = GetOwningPlayer(fU)
 
