@@ -92,7 +92,7 @@ package Shield
 					end
 				end
 			end
-		endmethod
+		end
 
 		//* This method runs every TIMER_PERIOD seconds as long as the stack
 		//* is not empty, and looks for members that need to be destroyed.
@@ -144,7 +144,7 @@ package Shield
 				end
 				index= index+1
 			end
-		endmethod
+		end
 
 		//* This method adds a shield to a unit. You can use
 		//* Shield.DEFAULT_EFFECT in the fx argument.
@@ -192,7 +192,7 @@ package Shield
 			if Shield.shieldIndex== 0 then
 				TimerStart(Shield.time, Shield.TIMER_PERIOD, true, function Shield.timeout)
 			end
-		endmethod
+		end
 	end
 
 	init

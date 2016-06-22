@@ -1,66 +1,43 @@
-scope Repair initializer i
+package Repair
+	import ClosureForGroups
+	import ClosureTimers
 	import Game
 	import Players
 	import Ships
 	import SimError
-	import RegisterPlayerUnitEvent
 
-	globals
-		constant real MAX_DISTANCE = 400.
-		constant real REPAIR_TIMEOUT = 30.
-		constant real FRAC = 1./2.
-		constant string TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
-		constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
-		constant string DISTANCE_ERROR = "Your ship is too far away!"
-		constant string ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
-		constant string HEAL_MODEL = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
-		real array lastRepair
+	constant real REPAIR_RADIUS = 400.
+	constant real CLOCK_PERIOD  =   1. / 30.
+
+	constant string  TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
+	constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
+	constant string   DISTANCE_ERROR = "Your ship is too far away!"
+	constant string   ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
+	constant string HEAL_MODEL       = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+
+	function doHeal(unit u)
+		real fracMissing = 1. - (u.getState(UNIT_STATE_LIFE) / u.getState(UNIT_STATE_MAX_LIFE))
+		real exponent    = (fracMissing - .5) * 2.
+
+		// Get a rate between 0. and 1.
+		real healRate    = 10..pow(exponent) * 2. / 100.
+
+		real delHp       = u.getState(UNIT_STATE_MAX_LIFE) * healRate * CLOCK_PERIOD
+		u.setState(UNIT_STATE_LIFE, u.getState(UNIT_STATE_LIFE) + delHp)
 	end
 
-	function c takes nothing returns nothing
-		player p
-		unit tU= GetTriggerUnit()
-		int id
-		real max
-		real life
-		if not Game.ended and (tU == Game.westRepair or tU == Game.eastRepair) then
-			p = GetTriggerPlayer()
-			id = GetPlayerId(p)
-			if Players.localPlayer== p then
-				SelectUnit(tU, false)
-				SelectUnit(Ships.ships[id], true)
-			end
-			if IsUnitAlly(tU, p) then
-				if IsUnitInRange(tU, Ships.ships[id], MAX_DISTANCE) then
-					life = GetWidgetLife(Ships.ships[id])
-					max = GetUnitState(Ships.ships[id], UNIT_STATE_MAX_LIFE)
-					if life<max then
-						if Game.seconds - lastRepair[id] > REPAIR_TIMEOUT then
-							lastRepair[id] = Game.seconds
-							SetWidgetLife(Ships.ships[id], life + (max-life)*FRAC)
-							DestroyEffect(AddSpecialEffectTarget(HEAL_MODEL, Ships.ships[id], "origin"))
-						else
-							simError(p, TOO_OFTEN_ERROR)
-						end
-					else
-						simError(p, MAX_HEALTH_ERROR)
-					end
-				else
-					simError(p, DISTANCE_ERROR)
+	init
+		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
+			forUnitsInRange(vec2(Game.westRepair.getX(), Game.westRepair.getY()), REPAIR_RADIUS, (unit u) -> begin
+				if Players.isWest(u.getOwner().getId())
+					doHeal(u)
 				end
-			else
-				simError(p, ALLIANCE_ERROR)
-			end
-		end
-	end
+			end)
 
-	function i takes nothing returns nothing
-		int index= 0
-		loop
-			exitwhen index>11
-			lastRepair[index] = -1.*REPAIR_TIMEOUT
-			index= index+1
-		end
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function c)
+			forUnitsInRange(vec2(Game.eastRepair.getX(), Game.eastRepair.getY()), REPAIR_RADIUS, (unit u) -> begin
+				if Players.isEast(u.getOwner().getId())
+					doHeal(u)
+				end
+			end)
+		end)
 	end
-endscope
