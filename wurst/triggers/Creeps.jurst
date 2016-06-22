@@ -1,23 +1,32 @@
-scope Creeps initializer i
+package Creeps
 	import Game
 	import Players
 	import TerrainData
+	import EnchantingStone
 
-	globals
-		constant int  GRYPH_ID = 'hgry'
-		constant int WYVERN_ID = 'owyv'
-		constant int   HAWK_ID = 'hdhw'
-		constant int   WYRM_ID = 'ufro'
+	constant int     GRYPH_ID = 'hgry'
+	constant int    WYVERN_ID = 'owyv'
+	constant int      HAWK_ID = 'hdhw'
+	constant int      WYRM_ID = 'ufro'
+	constant int ENCHANTED_ID = 'u006'
 
-		constant real SPAWN_PERIOD = 30.
-		constant real  HAWK_PERIOD = 30. * 2.
-		constant real  WYRM_PERIOD = 30. * 3.
+	constant real SPAWN_PERIOD = 30.
+	constant real  HAWK_PERIOD = 30. * 2.
+	constant real  WYRM_PERIOD = 30. * 3.
+
+	function spawnUpper takes int faction, int cls, real x, real face returns nothing
+		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		IssuePointOrder(u, "attack", TerrainData.STONE1_X, TerrainData.STONE1_Y)
+	end
+
+	function spawnLower takes int faction, int cls, real x, real face returns nothing
+		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		IssuePointOrder(u, "attack", TerrainData.STONE2_X, TerrainData.STONE2_Y)
 	end
 
 	function spawn takes int faction, int cls returns nothing
 		real x
 		real face
-		unit u
 
 		if faction == 0 then
 			x = TerrainData.WESTX
@@ -27,11 +36,9 @@ scope Creeps initializer i
 			face = 180.
 		end
 
-		u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.STONE1_X, TerrainData.STONE1_Y)
+		spawnUpper(faction, cls, x, face)
 
-		u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.STONE2_X, TerrainData.STONE2_Y)
+		spawnLower(faction, cls, x, face)
 	end
 
 	function base takes nothing returns nothing
@@ -59,14 +66,32 @@ scope Creeps initializer i
 
 	function wyrm takes nothing returns nothing
 		if not Game.ended then
-			spawn(0, WYRM_ID)
-			spawn(1, WYRM_ID)
+			if EnchantingStone.ownerNorth == Players.players[0]
+				spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
+				spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180.)
+			elseif EnchantingStone.ownerNorth == Players.players[1]
+				spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0.)
+				spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
+			else
+				spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0.)
+				spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180.)
+			end
+
+			if EnchantingStone.ownerSouth == Players.players[0]
+				spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
+				spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180.)
+			elseif EnchantingStone.ownerSouth == Players.players[1]
+				spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0.)
+				spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
+			else
+				spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0.)
+				spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180.)
+			end
 		end
 	end
 
-	function i takes nothing returns nothing
+	init
 		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function base)
 		TimerStart(CreateTimer(),  HAWK_PERIOD, true, function hawk)
 		TimerStart(CreateTimer(),  WYRM_PERIOD, true, function wyrm)
 	end
-endscope

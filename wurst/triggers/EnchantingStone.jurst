@@ -33,8 +33,10 @@ package EnchantingStone
 	bool lockedNorth = true
 	bool lockedSouth = true
 
-	player ownerNorth = null
-	player ownerSouth = null
+	public class EnchantingStone
+		static player ownerNorth = null
+		static player ownerSouth = null
+	end
 
 	unit stoneNorth
 	unit stoneSouth
@@ -106,18 +108,18 @@ package EnchantingStone
 		captureStatusNorth = min(captureStatusNorth, CAPTURE_STATUS_CEIL)
 		captureStatusNorth = max(captureStatusNorth, 0)
 
-		if captureStatusNorth == CAPTURE_STATUS_CEIL and ownerNorth != Players.players[0]
+		if captureStatusNorth == CAPTURE_STATUS_CEIL and EnchantingStone.ownerNorth != Players.players[0]
 			lockedNorth = true
 			lockIndicatorNorth..setX(TerrainData.STONE1_X)..setY(TerrainData.STONE1_Y)..setFlyHeight(LOCK_HEIGHT, 0.)
 			lockStepsNorth = LOCK_STEPS
-			ownerNorth = Players.players[0]
+			EnchantingStone.ownerNorth = Players.players[0]
 			ownerIndicatorNorth.setColor(PLAYER_COLOR_RED)
 			progressIndicatorNorth..setX(TerrainData.SAFE_X)..setY(TerrainData.SAFE_Y)
-		elseif captureStatusNorth == 0 and ownerNorth != Players.players[1]
+		elseif captureStatusNorth == 0 and EnchantingStone.ownerNorth != Players.players[1]
 			lockedNorth = true
 			lockIndicatorNorth..setX(TerrainData.STONE1_X)..setY(TerrainData.STONE1_Y)..setFlyHeight(LOCK_HEIGHT, 0.)
 			lockStepsNorth = LOCK_STEPS
-			ownerNorth = Players.players[1]
+			EnchantingStone.ownerNorth = Players.players[1]
 			ownerIndicatorSouth.setColor(PLAYER_COLOR_BLUE)
 			progressIndicatorNorth..setX(TerrainData.SAFE_X)..setY(TerrainData.SAFE_Y)
 		end
@@ -164,18 +166,18 @@ package EnchantingStone
 		captureStatusSouth = min(captureStatusSouth, CAPTURE_STATUS_CEIL)
 		captureStatusSouth = max(captureStatusSouth, 0)
 
-		if captureStatusSouth == CAPTURE_STATUS_CEIL and ownerSouth != Players.players[0]
+		if captureStatusSouth == CAPTURE_STATUS_CEIL and EnchantingStone.ownerSouth != Players.players[0]
 			lockedSouth = true
 			lockIndicatorSouth..setX(TerrainData.STONE2_X)..setY(TerrainData.STONE2_Y)..setFlyHeight(LOCK_HEIGHT, 0.)
 			lockStepsSouth = LOCK_STEPS
-			ownerSouth = Players.players[0]
+			EnchantingStone.ownerSouth = Players.players[0]
 			ownerIndicatorSouth.setColor(PLAYER_COLOR_RED)
 			progressIndicatorSouth..setX(TerrainData.SAFE_X)..setY(TerrainData.SAFE_Y)
-		elseif captureStatusSouth == 0 and ownerSouth != Players.players[1]
+		elseif captureStatusSouth == 0 and EnchantingStone.ownerSouth != Players.players[1]
 			lockedSouth = true
 			lockIndicatorSouth..setX(TerrainData.STONE2_X)..setY(TerrainData.STONE2_Y)..setFlyHeight(LOCK_HEIGHT, 0.)
 			lockStepsSouth = LOCK_STEPS
-			ownerSouth = Players.players[1]
+			EnchantingStone.ownerSouth = Players.players[1]
 			ownerIndicatorSouth.setColor(PLAYER_COLOR_BLUE)
 			progressIndicatorSouth..setX(TerrainData.SAFE_X)..setY(TerrainData.SAFE_Y)
 		end
