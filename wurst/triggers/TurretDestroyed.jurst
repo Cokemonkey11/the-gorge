@@ -4,12 +4,12 @@ scope TurretDestroyed initializer i
 	import Players
 
 	globals
-		constant int TURRET_ID = 'h005'
-		constant int GOLD_BONUS = 200
-		constant string WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
-		constant string SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
-		constant string GOODJOB         = "Sound\\Interface\\GoodJob.wav"
-		constant string WARNING         = "Sound\\Interface\\Warning.wav"
+		constant TURRET_ID = 'h005'
+		constant GOLD_BONUS = 200
+		constant WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
+		constant SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
+		constant GOODJOB         = "Sound\\Interface\\GoodJob.wav"
+		constant WARNING         = "Sound\\Interface\\Warning.wav"
 	end
 
 	function c takes nothing returns nothing

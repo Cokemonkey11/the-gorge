@@ -19,19 +19,19 @@ library StructuredDD initializer ini
 	//* Set this to true if you want all units in your map to be
 	//* automatically added to StructuredDD. Otherwise you will have to
 	//* manually add them with StructuredDD.add(u).
-	public constant bool ADD_ALL_UNITS = true
+	public constant ADD_ALL_UNITS = true
 
 	//* This is the amount of units that exist in each trigger bucket.
 	//* This number should be something between 5 and 30. A good starting
 	//* value will be an estimate of your map's average count of units,
 	//* divided by 10. When in doubt, just use 20.
-	constant int BUCKET_SIZE = 5
+	constant BUCKET_SIZE = 5
 
 	//* This is how often StructuredDD will search for empty buckets. If
 	//* your map has units being created and dying often, a lower value
 	//* is better. Anything between 10 and 180 is good. When in doubt,
 	//* just use 60.
-	constant real PER_CLEANUP_TIMEOUT = 60.
+	constant PER_CLEANUP_TIMEOUT = 60.
 
 	//>> END SETTINGS SECTION
 

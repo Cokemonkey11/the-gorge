@@ -1,10 +1,8 @@
 package CameraLock
-	import TimerUtils
-
-	constant real PERIOD   =    1. / 30.
-	constant real FOV      =  100.
-	constant real DISTANCE = 1250.
-	constant real AOA      =  290.
+	constant PERIOD   =    1. / 30.
+	constant FOV      =  100.
+	constant DISTANCE = 1250.
+	constant AOA      =  290.
 
 	init
 		getTimer().startPeriodic(PERIOD, () -> begin

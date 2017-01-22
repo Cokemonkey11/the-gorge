@@ -3,7 +3,7 @@ scope SelectCaptain initializer init
 	import Players
 	import RegisterPlayerUnitEvent
 
-	constant int SELECT_CAPT_ID = 'A00Z'
+	constant SELECT_CAPT_ID = 'A00Z'
 
 	function c takes nothing returns nothing
 		if GetSpellAbilityId() == SELECT_CAPT_ID then

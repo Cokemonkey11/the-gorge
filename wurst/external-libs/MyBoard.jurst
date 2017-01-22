@@ -2,10 +2,10 @@ package MyBoard
 	globals
 		bool             DEBUG_MODE           = false
 
-		constant int    MAX_ROW_COUNT        = 100
-		constant int    MAX_COLUMN_COUNT     = 30
-		constant int    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
-		constant real       AVERAGE_LETTER_WIDTH = .01484375
+		constant    MAX_ROW_COUNT        = 100
+		constant    MAX_COLUMN_COUNT     = 30
+		constant    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
+		constant       AVERAGE_LETTER_WIDTH = .01484375
 	end
 
 	public class MyBoard

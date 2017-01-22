@@ -11,7 +11,7 @@ package Crewmembers
 
 	native UnitAlive takes unit u returns bool
 
-	constant int MAX_SLOTS = 10
+	constant MAX_SLOTS = 10
 
 	class CrewMember
 		int ownerID
@@ -24,46 +24,46 @@ package Crewmembers
 	end
 
 	public class Crewmembers
-		static constant int HEADHUNTER_ID    = 'o000'
-		static constant int HEADHUNTER_D_ID  = 'o009'
+		static constant HEADHUNTER_ID    = 'o000'
+		static constant HEADHUNTER_D_ID  = 'o009'
 
-		static constant int WITCHDOCTOR_ID   = 'o001'
-		static constant int WITCHDOCTOR_D_ID = 'o00F'
+		static constant WITCHDOCTOR_ID   = 'o001'
+		static constant WITCHDOCTOR_D_ID = 'o00F'
 
-		static constant int SPEARMAN_ID      = 'o002'
-		static constant int SPEARMAN_D_ID    = 'o00D'
+		static constant SPEARMAN_ID      = 'o002'
+		static constant SPEARMAN_D_ID    = 'o00D'
 
-		static constant int UNBROKEN_ID      = 'o003'
-		static constant int UNBROKEN_D_ID    = 'o00E'
+		static constant UNBROKEN_ID      = 'o003'
+		static constant UNBROKEN_D_ID    = 'o00E'
 
-		static constant int SHAMAN_ID        = 'o004'
-		static constant int SHAMAN_D_ID      = 'o00C'
+		static constant SHAMAN_ID        = 'o004'
+		static constant SHAMAN_D_ID      = 'o00C'
 
-		static constant int SEAWITCH_ID      = 'o005'
-		static constant int SEAWITCH_D_ID    = 'o00B'
+		static constant SEAWITCH_ID      = 'o005'
+		static constant SEAWITCH_D_ID    = 'o00B'
 
-		static constant int GRENADIER_ID     = 'o006'
-		static constant int GRENADIER_D_ID   = 'o008'
+		static constant GRENADIER_ID     = 'o006'
+		static constant GRENADIER_D_ID   = 'o008'
 
-		static constant int LASERRIFLE_ID    = 'o007'
-		static constant int LASERRIFLE_D_ID  = 'o00A'
+		static constant LASERRIFLE_ID    = 'o007'
+		static constant LASERRIFLE_D_ID  = 'o00A'
 
-		static constant int GRYPHON_ID       = 'o00G'
-		static constant int GRYPHON_D_ID     = 'o00H'
+		static constant GRYPHON_ID       = 'o00G'
+		static constant GRYPHON_D_ID     = 'o00H'
 
-		static constant int AMASTER_ID       = 'o00I'
-		static constant int AMASTER_D_ID     = 'o00J'
+		static constant AMASTER_ID       = 'o00I'
+		static constant AMASTER_D_ID     = 'o00J'
 
-		static constant int ODRAKE_ID        = 'o00K'
-		static constant int ODRAKE_D_ID      = 'o00L'
+		static constant ODRAKE_ID        = 'o00K'
+		static constant ODRAKE_D_ID      = 'o00L'
 
-		static constant int VTEMPT_ID        = 'o00M'
-		static constant int VTEMPT_D_ID      = 'o00N'
+		static constant VTEMPT_ID        = 'o00M'
+		static constant VTEMPT_D_ID      = 'o00N'
 
-		private static constant string ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
-		private static constant real CLOCK_PERIOD = 1./30.
-		private static constant real OFFSET = 256.+64.
-		private static constant real SELL_RATE = .5
+		private static constant ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
+		private static constant CLOCK_PERIOD = 1./30.
+		private static constant OFFSET = 256.+64.
+		private static constant SELL_RATE = .5
 
 		private static CrewMember array db
 		private static int dbIndex= -1

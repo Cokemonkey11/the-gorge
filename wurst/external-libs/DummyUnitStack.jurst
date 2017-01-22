@@ -1,23 +1,23 @@
 package DummyUnitStack
 	public class DummyUnitStack
-		static constant int DUMMY_UNIT_ID = 'u000'
-		static constant int MIN_PRELOAD_BLOCK_SIZE = 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
+		static constant DUMMY_UNIT_ID = 'u000'
+		static constant MIN_PRELOAD_BLOCK_SIZE = 10 //How many units to preload when the preloading algorithm turns on, at a minimum?
 
-		static constant int PRELOAD_INIT_COUNT = 200 //How many units to preload during initialization
-		static constant bool DO_PIC = true
+		static constant PRELOAD_INIT_COUNT = 200 //How many units to preload during initialization
+		static constant DO_PIC = true
 
-		static constant int DYNAMIC_DEFERRED_PRELOAD_COUNT = 20 //How many units should DummyUnitStack keep preloaded at a minimum?
-		static constant bool DO_DDPC = true
+		static constant DYNAMIC_DEFERRED_PRELOAD_COUNT = 20 //How many units should DummyUnitStack keep preloaded at a minimum?
+		static constant DO_DDPC = true
 
-		static constant int INITIAL_DEFERRED_PRELOAD_COUNT = 20 //How many units should be queued on the preloader on map start?
-		static constant bool DO_IDPC = true
+		static constant INITIAL_DEFERRED_PRELOAD_COUNT = 20 //How many units should be queued on the preloader on map start?
+		static constant DO_IDPC = true
 
-		static constant int MAX_PRELOADED_UNITS = 5000
-		static constant bool DO_MPU = true
+		static constant MAX_PRELOADED_UNITS = 5000
+		static constant DO_MPU = true
 
-		static constant real SAFE_LOC_X = -3820.
-		static constant real SAFE_LOC_Y = 3700.
-		static constant real CLOCK_PERIOD = 1./60.
+		static constant SAFE_LOC_X = -3820.
+		static constant SAFE_LOC_Y = 3700.
+		static constant CLOCK_PERIOD = 1./60.
 		static unit array dummyStack
 		static int stackIndex = -1
 		static int deferredTodoCount = 0

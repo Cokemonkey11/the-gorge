@@ -22,16 +22,16 @@ scope SL15ShroudGenerator initializer i
 	endstruct
 
 	globals
-		constant int SHROUD_ID = 'A00Y'
-		constant int INVIS_ID  = 'A00L'
-		constant int BUF_ID    = 'B004'
-		constant int GEN_COUNT = 32
-		constant real DURATION = 15.
-		constant real GEN_PERIOD = 1./2.
-		constant real CLOCK_PERIOD = 1./30.
-		constant real SHROUD_RADIUS = 500.
-		constant real GEN_VELOCITY = 400.
-		constant string GEN_MODEL = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
+		constant SHROUD_ID = 'A00Y'
+		constant INVIS_ID  = 'A00L'
+		constant BUF_ID    = 'B004'
+		constant GEN_COUNT = 32
+		constant DURATION = 15.
+		constant GEN_PERIOD = 1./2.
+		constant CLOCK_PERIOD = 1./30.
+		constant SHROUD_RADIUS = 500.
+		constant GEN_VELOCITY = 400.
+		constant GEN_MODEL = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
 		Shroud array shrouds
 		int shroudsIndex = -1
 		Gen array gens

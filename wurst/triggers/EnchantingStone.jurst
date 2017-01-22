@@ -3,25 +3,23 @@ package EnchantingStone
 	import ClosureTimers
 	import DummyUnitStack
 	import Game
-	import Maths
 	import Players
 	import TerrainData
-	import Vectors
 
-	constant real CLOCK_PERIOD         =   1. / 30.
-	constant real LOCK_HEIGHT          = 560.
-	constant real OWNR_HEIGHT          = 160.
-	constant real INDICATOR_SCALE      =    .5
-	constant real INDICATOR_TIME_SCALE =    .1
-	constant real CAPTURE_TIME         =  10.
-	constant real    LOCK_TIME         =  60. * 3.
-	constant real CAPTURE_RADIUS       = 150. + 16.
-	constant real PROGRESS_OFFSET      = 75.
+	constant CLOCK_PERIOD         =   1. / 30.
+	constant LOCK_HEIGHT          = 560.
+	constant OWNR_HEIGHT          = 160.
+	constant INDICATOR_SCALE      =    .5
+	constant INDICATOR_TIME_SCALE =    .1
+	constant CAPTURE_TIME         =  10.
+	constant    LOCK_TIME         =  60. * 3.
+	constant CAPTURE_RADIUS       = 150. + 16.
+	constant PROGRESS_OFFSET      = 75.
 
-	constant int CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / CLOCK_PERIOD)
-	constant int LOCK_STEPS          = R2I(   LOCK_TIME / CLOCK_PERIOD)
+	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / CLOCK_PERIOD)
+	constant LOCK_STEPS          = R2I(   LOCK_TIME / CLOCK_PERIOD)
 
-	constant string INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
+	constant INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
 
 	int lockStepsNorth     = LOCK_STEPS
 	int lockStepsSouth     = LOCK_STEPS
@@ -46,6 +44,26 @@ package EnchantingStone
 	unit ownerIndicatorSouth
 	unit progressIndicatorSouth
 	unit progressIndicatorNorth
+
+	ForGroupCallback unlock_south_closure = (unit u) -> begin
+		int id = u.getOwner().getId()
+
+		if Players.isWest(id)
+			capPowerWest++
+		elseif Players.isEast(id)
+			capPowerEast++
+		end
+	end
+
+	ForGroupCallback unlock_north_closure = (unit u) -> begin
+		int id = u.getOwner().getId()
+
+		if Players.isWest(id)
+			capPowerWest++
+		elseif Players.isEast(id)
+			capPowerEast++
+		end
+	end
 
 	function onLockedNorth()
 		lockStepsNorth--
@@ -75,15 +93,7 @@ package EnchantingStone
 
 		vec2 stone1 = vec2(TerrainData.STONE1_X, TerrainData.STONE1_Y)
 
-		forUnitsInRange(stone1, CAPTURE_RADIUS, (unit u) -> begin
-			int id = u.getOwner().getId()
-
-			if Players.isWest(id)
-				capPowerWest++
-			elseif Players.isEast(id)
-				capPowerEast++
-			end
-		end)
+		forUnitsInRange(stone1, CAPTURE_RADIUS, unlock_north_closure)
 
 		if not (capPowerWest > 0 and capPowerEast > 0)
 			capPower += capPowerWest
@@ -133,15 +143,7 @@ package EnchantingStone
 
 		vec2 stone2 = vec2(TerrainData.STONE2_X, TerrainData.STONE2_Y)
 
-		forUnitsInRange(stone2, CAPTURE_RADIUS, (unit u) -> begin
-			int id = u.getOwner().getId()
-
-			if Players.isWest(id)
-				capPowerWest++
-			elseif Players.isEast(id)
-				capPowerEast++
-			end
-		end)
+		forUnitsInRange(stone2, CAPTURE_RADIUS, unlock_south_closure)
 
 		if not (capPowerWest > 0 and capPowerEast > 0)
 			capPower += capPowerWest

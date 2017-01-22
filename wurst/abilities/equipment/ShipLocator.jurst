@@ -2,9 +2,9 @@ scope ShipLocator initializer i
 	import Players
 	import RegisterPlayerUnitEvent
 
-	constant int SHIP_LOC_ID   = 'A00I'
-	constant real    RANGE         =  4000.
-	constant real    PING_DURATION =     5.
+	constant SHIP_LOC_ID   = 'A00I'
+	constant    RANGE         =  4000.
+	constant    PING_DURATION =     5.
 
 	group grp = CreateGroup()
 

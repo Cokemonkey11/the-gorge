@@ -2,7 +2,7 @@ package Continue
 	import Players
 	import TerrainData
 
-	constant real RECT_SIZE = 250.
+	constant RECT_SIZE = 250.
 
 	function rectFromXY takes real x, real y, real size returns rect
 		return Rect(x-size/2., y-size/2., x+size/2., y+size/2.)

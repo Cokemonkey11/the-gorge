@@ -3,7 +3,7 @@ scope IonicTeleporter initializer i
 	import RegisterPlayerUnitEvent
 
 	globals
-		constant int TELE_ID= 'A00H'
+		constant TELE_ID= 'A00H'
 	end
 
 	function effectC takes nothing returns nothing

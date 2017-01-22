@@ -7,9 +7,9 @@ scope ChangeShip initializer i
 	import RegisterPlayerUnitEvent
 
 	globals
-		constant string ERROR_MESSAGE   = "You cannot purchase ships from your opponent."
-		constant string SAME_SHIP_ERROR = "You cannot purchase the same ship you already own."
-		constant string FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
+		constant ERROR_MESSAGE   = "You cannot purchase ships from your opponent."
+		constant SAME_SHIP_ERROR = "You cannot purchase the same ship you already own."
+		constant FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
 
 		int array tempIds
 	end

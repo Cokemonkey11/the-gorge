@@ -21,15 +21,15 @@ scope Revive initializer i
 	endstruct
 
 	globals
-		constant real CLOCK_PERIOD = 1.
-		constant real REVIVE_OFFSET = 328.
-		constant int REVIVE_DELAY_FLAT = 15
-		constant int REVIVE_DELAY_PERMINUTE = 1
-		constant int FLAT_BOUNTY = 100
-		constant int BOUNTY_PER_MINUTE = 2
-		constant int COP_ID = 'u003'
-		constant string REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
-		constant string COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
+		constant CLOCK_PERIOD = 1.
+		constant REVIVE_OFFSET = 328.
+		constant REVIVE_DELAY_FLAT = 15
+		constant REVIVE_DELAY_PERMINUTE = 1
+		constant FLAT_BOUNTY = 100
+		constant BOUNTY_PER_MINUTE = 2
+		constant COP_ID = 'u003'
+		constant REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
+		constant COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
 		DeathDat array deathDB
 		int dbIndex= -1
 		timer time= CreateTimer()

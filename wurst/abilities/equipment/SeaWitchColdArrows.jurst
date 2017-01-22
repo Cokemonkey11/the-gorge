@@ -4,8 +4,8 @@ scope SeaWitchColdArrows initializer i
 	import Game
 
 	globals
-		constant int SEAWITCH_ID = 'o005'
-		constant int SLOW_ID = 'A009'
+		constant SEAWITCH_ID = 'o005'
+		constant SLOW_ID = 'A009'
 		unit dummy
 	end
 

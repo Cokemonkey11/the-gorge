@@ -6,12 +6,12 @@ scope ProbeContractAbility
 	import Game
 	import Sounds
 
-	constant string  ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."
-	constant string  ALREADY_MESSAGE   = "You already have data on this rock formation."
-	constant string  NO_SPACE_MESSAGE  = "You don't have inventory space for |cffffcc00Rock Data|r."
-	constant string  SUCCESS_MESSAGE   = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
-	constant int PROBE_ID          = 'A00J'
-	constant int ROCK_FORMATION_ID = 'u001'
+	constant  ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."
+	constant  ALREADY_MESSAGE   = "You already have data on this rock formation."
+	constant  NO_SPACE_MESSAGE  = "You don't have inventory space for |cffffcc00Rock Data|r."
+	constant  SUCCESS_MESSAGE   = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
+	constant PROBE_ID          = 'A00J'
+	constant ROCK_FORMATION_ID = 'u001'
 
 	function effectC takes nothing returns nothing
 		unit tU

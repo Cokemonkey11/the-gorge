@@ -6,8 +6,8 @@ scope GetSpiderVenom
 	import Ships
 	import SimError
 
-	constant string SUCCESS_MESSAGE  = "You acquired a vial of |cffffcc00Spider Venom|r; return to your Utility Port for a reward."
-	constant string NO_SPACE_MESSAGE = "You don't have inventory space for |cffffcc00Spider Venom|r."
+	constant SUCCESS_MESSAGE  = "You acquired a vial of |cffffcc00Spider Venom|r; return to your Utility Port for a reward."
+	constant NO_SPACE_MESSAGE = "You don't have inventory space for |cffffcc00Spider Venom|r."
 
 	function spiderAction takes nothing returns bool
 		unit fU      = GetFilterUnit()

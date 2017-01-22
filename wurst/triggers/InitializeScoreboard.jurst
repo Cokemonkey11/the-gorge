@@ -4,7 +4,7 @@ scope InitializeScoreboard initializer i
 	import Players
 
 	string array colors
-	constant real MB_WIDTH = .25
+	constant MB_WIDTH = .25
 
 	function iconCol takes int col, bool show returns nothing
 		int i = 0

@@ -30,7 +30,7 @@ package Shield
 		//* smaller value will reduce the likelihood of a unit blocking damage
 		//* with a shield that would otherwise be expired, at the cost of
 		//* performance. A good value is between 1./30. and 1./2.
-		private static constant real TIMER_PERIOD= 1./10.
+		private static constant TIMER_PERIOD= 1./10.
 
 		//> END CUSTOMIZABLE SECTION
 

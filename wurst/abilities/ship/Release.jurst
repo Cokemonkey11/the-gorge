@@ -3,8 +3,8 @@ scope Release initializer i
 	import Crewmembers
 
 	globals
-		constant int RELEASE_ID = 'A00M'
-		constant string TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
+		constant RELEASE_ID = 'A00M'
+		constant TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
 	end
 
 	function c takes nothing returns nothing

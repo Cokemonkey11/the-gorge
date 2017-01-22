@@ -1,20 +1,18 @@
 
 package Ships
-	import Table
-
 	public class Ships
-		static constant int CLASS_UNKNOWN     = -1
-		static constant int CLASS_FRIGATE     =  0
-		static constant int CLASS_SMUGGLER    =  1
-		static constant int CLASS_INTERCEPTOR =  2
-		static constant int CLASS_BATTLESHIP  =  3
+		static constant CLASS_UNKNOWN     = -1
+		static constant CLASS_FRIGATE     =  0
+		static constant CLASS_SMUGGLER    =  1
+		static constant CLASS_INTERCEPTOR =  2
+		static constant CLASS_BATTLESHIP  =  3
 
-		static constant int HELICOPTER_ID = 'h000'
-		static constant int PARACOPTER_ID = 'h00B'
-		static constant int ZEPPELIN_ID   = 'h00D'
-		static constant int SKYBARGE_ID   = 'h00E'
+		static constant HELICOPTER_ID = 'h000'
+		static constant PARACOPTER_ID = 'h00B'
+		static constant ZEPPELIN_ID   = 'h00D'
+		static constant SKYBARGE_ID   = 'h00E'
 
-		static constant real SELL_RATIO     =  .5
+		static constant SELL_RATIO     =  .5
 
 		static unit array ships
 

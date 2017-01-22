@@ -4,15 +4,15 @@ package Creeps
 	import TerrainData
 	import EnchantingStone
 
-	constant int     GRYPH_ID = 'hgry'
-	constant int    WYVERN_ID = 'owyv'
-	constant int      HAWK_ID = 'hdhw'
-	constant int      WYRM_ID = 'ufro'
-	constant int ENCHANTED_ID = 'u006'
+	constant     GRYPH_ID = 'hgry'
+	constant    WYVERN_ID = 'owyv'
+	constant      HAWK_ID = 'hdhw'
+	constant      WYRM_ID = 'ufro'
+	constant ENCHANTED_ID = 'u006'
 
-	constant real SPAWN_PERIOD = 30.
-	constant real  HAWK_PERIOD = 30. * 2.
-	constant real  WYRM_PERIOD = 30. * 3.
+	constant SPAWN_PERIOD = 30.
+	constant  HAWK_PERIOD = 30. * 2.
+	constant  WYRM_PERIOD = 30. * 3.
 
 	function spawnUpper takes int faction, int cls, real x, real face returns nothing
 		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)

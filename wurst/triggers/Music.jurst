@@ -5,20 +5,20 @@ package Music
 	// Back Against the Wall by Cage the Elephant
 	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
 	globals
-		constant string HAT_PATH       = "musRad-khatClosed.mp3"
-		constant string HATOPEN_PATH   = "musRad-khatOpen.mp3"
-		constant string SNR_PATH       = "musRad-sonorSnr.mp3"
-		constant string BAS_PATH       = "musRad-bass.mp3"
-		constant string RID_PATH       = "zildj-ride.mp3"
-		constant string FLM_PATH       = "musRad-sonorFlam.mp3"
-		constant string RIM_PATH       = "musRad-sonorRim.mp3"
-		constant string CRS_PATH       = "zildj-crash.mp3"
-		constant string TM1_PATH       = "musRad-tom1.mp3"
-		constant string TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
-		constant string TM4_PATH       = "musRad-tom4.mp3"
-		constant string TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
-		constant string TM5_PATH       = "musRad-tom5.mp3"
-		constant string HATPDL_PATH    = "musRad-khatPdl.mp3"
+		constant HAT_PATH       = "musRad-khatClosed.mp3"
+		constant HATOPEN_PATH   = "musRad-khatOpen.mp3"
+		constant SNR_PATH       = "musRad-sonorSnr.mp3"
+		constant BAS_PATH       = "musRad-bass.mp3"
+		constant RID_PATH       = "zildj-ride.mp3"
+		constant FLM_PATH       = "musRad-sonorFlam.mp3"
+		constant RIM_PATH       = "musRad-sonorRim.mp3"
+		constant CRS_PATH       = "zildj-crash.mp3"
+		constant TM1_PATH       = "musRad-tom1.mp3"
+		constant TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
+		constant TM4_PATH       = "musRad-tom4.mp3"
+		constant TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
+		constant TM5_PATH       = "musRad-tom5.mp3"
+		constant HATPDL_PATH    = "musRad-khatPdl.mp3"
 
 		Muscii m
 		Muscii v1

@@ -5,14 +5,14 @@ scope FillToxicSack initializer i
 	import Sounds
 
 	globals
-		constant real MIN_X =  722.
-		constant real MIN_Y = 2865.
-		constant real MAX_X = 1017.
-		constant real MAX_Y = 3174.
+		constant MIN_X =  722.
+		constant MIN_Y = 2865.
+		constant MAX_X = 1017.
+		constant MAX_Y = 3174.
 
-		constant string SUCCESS_MESSAGE = "You filled your container with |cffffcc00Toxic Waste|r; return to your Utility Port for a reward."
-		constant int GOLD  = 30
-		constant int TRADE =  1
+		constant SUCCESS_MESSAGE = "You filled your container with |cffffcc00Toxic Waste|r; return to your Utility Port for a reward."
+		constant GOLD  = 30
+		constant TRADE =  1
 	end
 
 	function f takes nothing returns bool

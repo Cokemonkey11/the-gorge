@@ -15,52 +15,52 @@ package Equipment
 	import RegisterPlayerUnitEvent
 
 	public class Equipment
-		static constant int CLASS_UNKNOWN    = -1
-		static constant int CLASS_ENGINE     =  0
-		static constant int CLASS_MECHANIC   =  1
-		static constant int CLASS_HULL       =  2
-		static constant int CLASS_SHIELDGEN  =  3
-		static constant int CLASS_TELEPORT   =  4
-		static constant int CLASS_SPECIAL    =  5
-		static constant int CLASS_CONTRACT   =  6
+		static constant CLASS_UNKNOWN    = -1
+		static constant CLASS_ENGINE     =  0
+		static constant CLASS_MECHANIC   =  1
+		static constant CLASS_HULL       =  2
+		static constant CLASS_SHIELDGEN  =  3
+		static constant CLASS_TELEPORT   =  4
+		static constant CLASS_SPECIAL    =  5
+		static constant CLASS_CONTRACT   =  6
 
-		static constant int PAGE_1_2         = 'I003'
-		static constant int PAGE_2_1         = 'I004'
-		static constant int PAGE_2_3         = 'I006'
-		static constant int PAGE_3_2         = 'I007'
-		static constant int PAGE_3_4         = 'I00A'
-		static constant int PAGE_4_3         = 'I00B'
-		static constant int KPAGE_1_2        = 'I00E'
-		static constant int KPAGE_2_1        = 'I00F'
+		static constant PAGE_1_2         = 'I003'
+		static constant PAGE_2_1         = 'I004'
+		static constant PAGE_2_3         = 'I006'
+		static constant PAGE_3_2         = 'I007'
+		static constant PAGE_3_4         = 'I00A'
+		static constant PAGE_4_3         = 'I00B'
+		static constant KPAGE_1_2        = 'I00E'
+		static constant KPAGE_2_1        = 'I00F'
 
-		static constant int DATA_ID          = 'I00D'
-		static constant int TOXIC_SUBST_FULL = 'I00H'
-		static constant int VENOM_VIAL       = 'I00J'
+		static constant DATA_ID          = 'I00D'
+		static constant TOXIC_SUBST_FULL = 'I00H'
+		static constant VENOM_VIAL       = 'I00J'
 
 		// Engines
-		static constant int STEAM_CORE     = 'I000'
+		static constant STEAM_CORE     = 'I000'
 		// Mechanics
-		static constant int PROBLEM_SOLVER = 'I001'
+		static constant PROBLEM_SOLVER = 'I001'
 		// Hulls
-		static constant int STONE_HULL     = 'I002'
+		static constant STONE_HULL     = 'I002'
 		// Shield Generators
-		static constant int BRONZE_GEN     = 'I005'
+		static constant BRONZE_GEN     = 'I005'
 		// Teleporters
-		static constant int IONIC_TELEPORT = 'I008'
+		static constant IONIC_TELEPORT = 'I008'
 		// Special
-		static constant int SHIP_LOCATOR   = 'I009'
+		static constant SHIP_LOCATOR   = 'I009'
 		// Contracts
-		static constant int DATA_ACQUISIT         = 'I00C'
-		static constant int TOXIC_SUBST           = 'I00G'
-		static constant int SPIDER_VENOM_CONTRACT = 'I00I'
+		static constant DATA_ACQUISIT         = 'I00C'
+		static constant TOXIC_SUBST           = 'I00G'
+		static constant SPIDER_VENOM_CONTRACT = 'I00I'
 
 		// Hull reduction levels
-		static constant int REDUCTION1 = 10
+		static constant REDUCTION1 = 10
 
-		static constant string WRONG_CLASS             = "Your ship class cannot use that type of equipment."
-		static constant string INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
+		static constant WRONG_CLASS             = "Your ship class cannot use that type of equipment."
+		static constant INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
 
-		static constant real EQUIPMENT_SELL_VALUE = 1.
+		static constant EQUIPMENT_SELL_VALUE = 1.
 
 		static Table classes
 

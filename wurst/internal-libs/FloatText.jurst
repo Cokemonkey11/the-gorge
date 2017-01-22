@@ -3,13 +3,13 @@ package FloatText
 	import Players
 
 	public class FloatText
-		static constant real KERNING          =  5.5
-		static constant real VERTICAL_KERNING = 48.
-		static constant real DEFAULT_SHIFT    = 16.
+		static constant KERNING          =  5.5
+		static constant VERTICAL_KERNING = 48.
+		static constant DEFAULT_SHIFT    = 16.
 
 		// The text size, as defined in GoldBounty by Cohadar (divide by .0023
 		// to revert the "smart" adjustment done in Wurst STL)
-		static constant real TEXT_SIZE        = .024 / .0023
+		static constant TEXT_SIZE        = .024 / .0023
 
 		static function themedTag takes real x, real y, string s returns texttag
 			texttag t = CreateTextTag()

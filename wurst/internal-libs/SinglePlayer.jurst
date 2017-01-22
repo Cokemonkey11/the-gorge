@@ -2,8 +2,8 @@ package SinglePlayer
     import Players
 
     public class SinglePlayer
-        static constant string SP_PREFIX = "[|cffffcc00Single Player|r] "
-        static constant string TAB       = "    "
+        static constant SP_PREFIX = "[|cffffcc00Single Player|r] "
+        static constant TAB       = "    "
 
         static          player thePlayer
         static          bool   fastEnabled = false

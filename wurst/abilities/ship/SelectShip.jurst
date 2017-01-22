@@ -6,8 +6,8 @@ scope SelectShip initializer i
 
 	native UnitAlive takes unit u returns bool
 
-	constant int SELECT_SHIP_ID = 'A00K'
-	constant string  DEAD_ERROR     = "Your ship has been destroyed."
+	constant SELECT_SHIP_ID = 'A00K'
+	constant  DEAD_ERROR     = "Your ship has been destroyed."
 
 	function c takes nothing returns nothing
 		if GetSpellAbilityId() == SELECT_SHIP_ID then

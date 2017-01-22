@@ -33,21 +33,21 @@ package DTS12MissileArray
 	end
 
 	public class DTS12MissileArray
-		static constant int DUMMY_ID = 'u000'
-		static constant int ARRAY_ID = 'A00P'
-		static constant real DAMAGE           = 55.
-		static constant real MAXIMUM_RANGE    = 1800.
-		static constant real INITIAL_VELOCITY = 600.
-		static constant real MAXIMUM_VELOCITY = 1200.
-		static constant real INITIAL_OFFSET   = 24.
-		static constant real ACCELERATION     = 100.
-		static constant real CLOCK_PERIOD     = 1./30.
-		static constant real COLLISION_RADIUS = 32.+64.
-		static constant real FLY_HEIGHT       = 120.
-		static constant real CHEAP_FRICTION   = MAXIMUM_VELOCITY / (MAXIMUM_VELOCITY + ACCELERATION)
-		static constant real SCALE = .75
-		static constant string MISSILE_MODEL = "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdl"
-		static constant string SOUND         = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
+		static constant DUMMY_ID = 'u000'
+		static constant ARRAY_ID = 'A00P'
+		static constant DAMAGE           = 55.
+		static constant MAXIMUM_RANGE    = 1800.
+		static constant INITIAL_VELOCITY = 600.
+		static constant MAXIMUM_VELOCITY = 1200.
+		static constant INITIAL_OFFSET   = 24.
+		static constant ACCELERATION     = 100.
+		static constant CLOCK_PERIOD     = 1./30.
+		static constant COLLISION_RADIUS = 32.+64.
+		static constant FLY_HEIGHT       = 120.
+		static constant CHEAP_FRICTION   = MAXIMUM_VELOCITY / (MAXIMUM_VELOCITY + ACCELERATION)
+		static constant SCALE = .75
+		static constant MISSILE_MODEL = "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdl"
+		static constant SOUND         = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
 
 		static timer clock = CreateTimer()
 		static Missile array db

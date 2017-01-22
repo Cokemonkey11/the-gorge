@@ -3,12 +3,12 @@ scope ShieldAllLevels initializer i
 	import RegisterPlayerUnitEvent
 
 	globals
-		constant string SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
-		constant string SHIELD_FX_POINT = "origin"
-		constant int SHIELD_ID = 'A00G'
-		constant int SHIELD_1  = 'I005'
-		constant real AMOUNT_1 = 500.
-		constant real TIME_1 = 5.
+		constant SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
+		constant SHIELD_FX_POINT = "origin"
+		constant SHIELD_ID = 'A00G'
+		constant SHIELD_1  = 'I005'
+		constant AMOUNT_1 = 500.
+		constant TIME_1 = 5.
 	end
 
 	function getUnitShieldId takes unit u returns int

@@ -1,24 +1,24 @@
 package TerrainData
 	public class TerrainData
-		static constant real UTILITY_Y           =  -512.
-		static constant real UTILITY_RADIUS      =   256.
-		static constant real WESTX               = -4600.
-		static constant real EASTX               =    -1. * WESTX
-		static constant real STONE1_X            =   380.
-		static constant real STONE1_Y            =  1030.
-		static constant real STONE2_X            =  -140.
-		static constant real STONE2_Y            = -1020.
-		static constant real SAFE_X              = -8064.
-		static constant real SAFE_Y              =  3970.
-		static constant real STONE_SPIDER_X      =   -50.
-		static constant real STONE_SPIDER_Y      = -4480.
-		static constant real STONE_SPIDER_RADIUS =   128.
+		static constant UTILITY_Y           =  -512.
+		static constant UTILITY_RADIUS      =   256.
+		static constant WESTX               = -4600.
+		static constant EASTX               =    -1. * WESTX
+		static constant STONE1_X            =   380.
+		static constant STONE1_Y            =  1030.
+		static constant STONE2_X            =  -140.
+		static constant STONE2_Y            = -1020.
+		static constant SAFE_X              = -8064.
+		static constant SAFE_Y              =  3970.
+		static constant STONE_SPIDER_X      =   -50.
+		static constant STONE_SPIDER_Y      = -4480.
+		static constant STONE_SPIDER_RADIUS =   128.
 
 		// Corners of a region that contains the central island, plus towers.
-		static constant real CENTRAL_MINX     =  -770.
-		static constant real CENTRAL_MINY     = -1950.
-		static constant real CENTRAL_MAXX     =  1060.
-		static constant real CENTRAL_MAXY     =  1870.
+		static constant CENTRAL_MINX     =  -770.
+		static constant CENTRAL_MINY     = -1950.
+		static constant CENTRAL_MAXX     =  1060.
+		static constant CENTRAL_MAXY     =  1870.
 
 		// Used by FillToxicSack (Trigger).
 		static rect utilityWest

@@ -2,7 +2,7 @@ scope TradingExperience initializer i
 	import RegisterPlayerUnitEvent
 	import Players
 
-	constant int SHOW_ID = 'A00N'
+	constant SHOW_ID = 'A00N'
 
 	function c takes nothing returns nothing
 		int id

@@ -4,38 +4,37 @@ package Repair
 	import Game
 	import Players
 
-	constant real REPAIR_RADIUS = 400.
-	constant real CLOCK_PERIOD  =   1. / 30.
+	constant REPAIR_RADIUS = 400.
+	constant CLOCK_PERIOD  =   1. / 30.
 
-	constant string  TOO_OFTEN_ERROR = "You can't heal yourself again so soon!"
-	constant string MAX_HEALTH_ERROR = "Your ship is already at maximum health!"
-	constant string   DISTANCE_ERROR = "Your ship is too far away!"
-	constant string   ALLIANCE_ERROR = "You can't use the opposition's Repair Port!"
-	constant string HEAL_MODEL       = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
 
 	function doHeal(unit u)
-		real fracMissing = 1. - (u.getState(UNIT_STATE_LIFE) / u.getState(UNIT_STATE_MAX_LIFE))
+		real fracMissing = 1. - (u.getHP() / u.getMaxHP())
 		real exponent    = (fracMissing - .5) * 2.
 
 		// Get a rate between 0. and 1.
 		real healRate    = 10..pow(exponent) * 2. / 100.
 
-		real delHp       = u.getState(UNIT_STATE_MAX_LIFE) * healRate * CLOCK_PERIOD
-		u.setState(UNIT_STATE_LIFE, u.getState(UNIT_STATE_LIFE) + delHp)
+		real delHp       = u.getMaxHP() * healRate * CLOCK_PERIOD
+		u.setState(UNIT_STATE_LIFE, u.getHP() + delHp)
 	end
 
 	init
-		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
-			forUnitsInRange(vec2(Game.westRepair.getX(), Game.westRepair.getY()), REPAIR_RADIUS, (unit u) -> begin
-				if Players.isWest(u.getOwner().getId())
-					doHeal(u)
-				end
-			end)
+		ForGroupCallback west_closure = (unit u) -> begin
+			if Players.isWest(u.getOwner().getId())
+				doHeal(u)
+			end
+		end
 
-			forUnitsInRange(vec2(Game.eastRepair.getX(), Game.eastRepair.getY()), REPAIR_RADIUS, (unit u) -> begin
-				if Players.isEast(u.getOwner().getId())
-					doHeal(u)
-				end
-			end)
+		ForGroupCallback east_closure = (unit u) -> begin
+			if Players.isEast(u.getOwner().getId())
+				doHeal(u)
+			end
+		end
+
+		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
+			forUnitsInRange(vec2(Game.westRepair.getX(), Game.westRepair.getY()), REPAIR_RADIUS, west_closure)
+
+			forUnitsInRange(vec2(Game.eastRepair.getX(), Game.eastRepair.getY()), REPAIR_RADIUS, east_closure)
 		end)
 	end
