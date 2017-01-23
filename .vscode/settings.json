@@ -1,0 +1,6 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "editor.rulers": [80],
+    "wurst.wurstJar": "C:\\Users\\Blake\\workspace\\WurstScript\\Wurstpack\\wurstscript\\wurstscript.jar",
+    "wurst.wc3path": "C:\\Program Files (x86)\\Warcaft III\\wc3.exe"
+}

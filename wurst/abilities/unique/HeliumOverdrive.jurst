@@ -1,0 +1,292 @@
+scope HeliumOverdrive
+	import HashMap
+
+	import Assets
+	import Terrain
+
+	import RegisterPlayerUnitEvent
+
+	import DummyUnitStack
+
+	native UnitAlive takes unit u returns bool
+
+
+	class OverdriveDat
+		unit caster
+		real delX
+		real delY
+		real dashTargetX
+		real dashTargetY
+		trigger clickListener
+		timer clock
+		real duration
+	end
+
+	constant casterData = new HashMap<unit, OverdriveDat>()
+
+	struct CastFXDat
+
+		// duration of the initial effect on cast
+		private static constant INITIAL_FX_DURATION = .5
+
+		// duration of the orb floating upwards and exploding, when the ult finishes
+		private static constant DISAPPEAR_FX_DURATION = 1.
+
+		// max height of the heal effect that starts the ult
+		private static constant INITIAL_FX_TARGET_HEIGHT = 800.
+		private static constant CLOCK_PERIOD    = 1./30.
+
+		// orb acceleration and velocity (projectile motion)
+		private static constant ACCELERATION    = 320.
+		private static constant MAX_VELOCITY    = 900.
+
+		// the offset of the facing angle of the caster for the orb
+		private static constant TARGET_OFFSET   = 50.
+
+		// the target height offset
+		private static constant HEIGHT_OFFSET   = 50.
+
+		// calculated deceleration to apply max velocity
+		private static constant DECELERATION_RATE = MAX_VELOCITY / (MAX_VELOCITY + ACCELERATION)
+		private static constant string HEAL_FX_MDL = Other.avatarcaster
+		private static constant string ORB_MDL     = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
+
+		private static thistype array fxDB
+		private static integer dbIndex = -1
+		private static timer clock = CreateTimer()
+
+		// the algorithm is stateful. nomodes.com
+		integer state
+		real x
+		real y
+		real t
+		real delX
+		real delY
+		real delZ
+		real duration
+		unit orb
+		unit target
+		effect fx
+
+		// periodic function for the orb projectile motion
+		private static method p()
+			integer index = 0
+			thistype fx
+			real ang
+			real pitch
+			real targetX
+			real targetY
+			real facing
+			real ox
+			real oy
+			real oz
+			real tx
+			real ty
+			real dist
+			loop
+				exitwhen index > dbIndex
+				fx = fxDB[index]
+
+				// state 0: the flash of light flies up
+				if fx.state == 0 then
+					if fx.duration < INITIAL_FX_DURATION then
+						SetUnitFlyHeight(fx.orb,GetUnitFlyHeight(fx.orb) + fx.delZ, 0.)
+						fx.duration = fx.duration + CLOCK_PERIOD
+					else
+						fx.state = 1
+						fx.fx = AddSpecialEffectTarget(ORB_MDL,fx.orb,"origin")
+						fx.delZ = 0.
+					end
+
+				// state 1: an orb comes from above that follows the caster's "weapon"
+				elseif fx.state == 1 then
+					if casterData.has(fx.target) and UnitAlive(fx.target) then
+
+						// effect is on, follow him
+						ox = GetUnitX(fx.orb)
+						oy = GetUnitY(fx.orb)
+						oz = GetUnitFlyHeight(fx.orb)
+						tx = GetUnitX(fx.target)
+						ty = GetUnitY(fx.target)
+						facing = GetUnitFacing(fx.target) * bj_DEGTORAD
+						targetX = tx + TARGET_OFFSET * Cos(facing)
+						targetY = ty + TARGET_OFFSET * Sin(facing)
+						ang = Atan2(targetY - oy,targetX - ox)
+						dist = SquareRoot((targetX-ox)*(targetX-ox) + (targetY-oy)*(targetY-oy))
+						pitch = Atan2(getTerrainZ(tx,ty) + HEIGHT_OFFSET - getTerrainZ(ox,oy) - oz,dist)
+						fx.delX = (fx.delX + ACCELERATION * Cos(ang) * Cos(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
+						fx.delY = (fx.delY + ACCELERATION * Sin(ang) * Cos(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
+						fx.delZ = (fx.delZ + ACCELERATION * Sin(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
+
+						SetUnitX(fx.orb,ox + fx.delX)
+						SetUnitY(fx.orb,oy + fx.delY)
+						SetUnitFlyHeight(fx.orb,oz + fx.delZ + getTerrainZ(ox,oy) - getTerrainZ(ox+fx.delX,oy+fx.delY),0.)
+					else
+
+						// effect has ended, disappear animation
+						fx.state = 2
+						fx.duration = 0.
+					end
+
+				// state 2: the orb flies upwards and is destroyed
+				else
+					ox = GetUnitX(fx.orb)
+					oy = GetUnitY(fx.orb)
+					fx.duration = fx.duration + CLOCK_PERIOD
+					fx.delX = fx.delX * DECELERATION_RATE
+					fx.delY = fx.delY * DECELERATION_RATE
+					fx.delZ = (fx.delZ + ACCELERATION * CLOCK_PERIOD) * DECELERATION_RATE
+
+					SetUnitX(fx.orb,ox + fx.delX)
+					SetUnitY(fx.orb,oy + fx.delY)
+					SetUnitFlyHeight(fx.orb,GetUnitFlyHeight(fx.orb) + fx.delZ + getTerrainZ(ox,oy) - getTerrainZ(ox+fx.delX,oy+fx.delY),0.)
+
+					if fx.duration > (DISAPPEAR_FX_DURATION*3./4.) and fx.fx != null then
+						DestroyEffect(fx.fx)
+						fx.fx = null
+					elseif fx.duration > DISAPPEAR_FX_DURATION then
+						DummyUnitStack.release(fx.orb)
+						fxDB[index] = fxDB[dbIndex]
+						dbIndex--
+						index--
+						if dbIndex == -1 then
+							PauseTimer(clock)
+						end
+					end
+				end
+				index++
+			endloop
+		end
+
+		// initialize the orb for projectile motion
+		method initialize takes unit target returns thistype
+			this.x = GetUnitX(target)
+			this.y = GetUnitY(target)
+			this.t = 0.
+			this.orb = DummyUnitStack.get()
+			this.delX = 0.
+			this.delY = 0.
+			this.delZ = (INITIAL_FX_TARGET_HEIGHT / INITIAL_FX_DURATION) * CLOCK_PERIOD
+			SetUnitX(this.orb,this.x)
+			SetUnitY(this.orb,this.y)
+			SetUnitFlyHeight(this.orb,0.,0.)
+			this.fx = AddSpecialEffectTarget(HEAL_FX_MDL,this.orb,"origin")
+			DestroyEffect(this.fx)
+			this.target = target
+			this.duration = 0.
+			this.state = 0
+			dbIndex = dbIndex + 1
+			fxDB[dbIndex] = this
+			if dbIndex == 0 then
+				TimerStart(clock,CLOCK_PERIOD, true, function p)
+			end
+			return this
+		end
+	end
+
+	globals
+		constant SIGIL_DEX_ID = 'A012'
+		constant SIGIL_DEX_DURATION = 10.
+		constant CLOCK_PERIOD = 1./30.
+		constant DASH_SPEED = 900.
+		constant DASH_TOTAL = 1300.
+		constant DASH_RATE = DASH_SPEED * CLOCK_PERIOD
+		integer smartOrder
+		HashMap<timer, OverdriveDat> tab  = new HashMap<timer, OverdriveDat>()
+		HashMap<timer, OverdriveDat> tab2 = new HashMap<timer, OverdriveDat>()
+	end
+
+	function isTerrainFlyable(real x, real y) returns boolean
+		return not IsTerrainPathable(x, y, PATHING_TYPE_FLYABILITY)
+	end
+
+	// periodic function for handling the dash
+	function p()
+		timer tim = GetExpiredTimer()
+		OverdriveDat d = tab2.get(tim)
+		real nX = GetUnitX(d.caster) + d.delX
+		real nY = GetUnitY(d.caster) + d.delY
+		if isTerrainFlyable(nX,nY) then
+			SetUnitX(d.caster,nX)
+			SetUnitY(d.caster,nY)
+			d.duration = d.duration - DASH_RATE
+			if d.duration <= 0. then
+				PauseTimer(tim)
+				DisableTrigger(d.clickListener)
+			elseif IsUnitInRangeXY(d.caster,d.dashTargetX,d.dashTargetY,2.*DASH_RATE) then
+				PauseTimer(tim)
+			end
+		else
+			PauseTimer(tim)
+		end
+	end
+
+	// magic, aka dynamic triggering; listener for right clicks
+	function c takes nothing returns boolean
+		unit tU = GetTriggerUnit()
+		OverdriveDat d = casterData.get(tU)
+		real ang
+
+		// was the order a right-click?
+		if GetIssuedOrderId() == smartOrder then
+			d.dashTargetX = GetOrderPointX()
+			d.dashTargetY = GetOrderPointY()
+			ang = Atan2(d.dashTargetY - GetUnitY(tU), d.dashTargetX - GetUnitX(tU))
+			d.delX = DASH_SPEED * CLOCK_PERIOD * Cos(ang)
+			d.delY = DASH_SPEED * CLOCK_PERIOD * Sin(ang)
+			tab2.put(d.clock, d)
+			TimerStart(d.clock, CLOCK_PERIOD, true, function p)
+		end
+
+		return false
+	end
+
+	// after the static timer finishes, end the "avatar" effects
+	function after()
+		timer tim = GetExpiredTimer()
+		OverdriveDat d = tab.get(tim)
+
+		// destroy the listener
+	    d.clickListener.destr()
+		DestroyTimer(tim)
+		casterData.remove(d.caster)
+		tab.remove(tim)
+		destroy d
+	end
+
+	// listener for sigil of dexterity ability used
+	function a()
+		OverdriveDat data
+		unit tU
+		timer t
+		CastFXDat ced
+		if GetSpellAbilityId() == SIGIL_DEX_ID then
+			tU = GetTriggerUnit()
+			data = new OverdriveDat()
+			casterData.put(tU, data)
+			data.caster = tU
+			data.clickListener = CreateTrigger()
+			data.clock = CreateTimer()
+
+			// apply effect at position
+			ced = new CastFXDat()
+			ced.initialize(tU)
+
+			// setup listener
+			data.clickListener = CreateTrigger()
+			data.duration = DASH_TOTAL
+			TriggerRegisterUnitEvent(data.clickListener,tU,EVENT_UNIT_ISSUED_POINT_ORDER)
+			TriggerAddCondition(data.clickListener,Condition(function c))
+
+			// setup timeout
+			t = CreateTimer()
+			TimerStart(t,SIGIL_DEX_DURATION,false,function after)
+			tab.put(t, data)
+		end
+	end
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT,function a)
+		smartOrder = OrderId("smart")
+	end
+endscope
