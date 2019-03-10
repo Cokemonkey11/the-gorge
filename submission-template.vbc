@@ -1,0 +1,99 @@
+[CENTER]
+[TABLE]
+[CENTER]
+[H3][color=#60A600]The Gorge[/color][/H3]
+[color=#CCAA00][B]A map by Cokemonkey11[/B][/color]
+
+[BOX=Contents]* Introduction
+* Screenshots
+* Version Control
+* Changelog
+* Hosting
+* Contributing
+[/BOX]
+[/CENTER]
+
+[R][H3][color=#CCAA00]Introduction[/color][/H3][R]
+The Gorge is a battleships-style aos that focuses on simplicity. It uses
+automatically firing weapons and interesting systems to produce a design         that's
+nostalgic yet fun.
+
+The western nations and eatern faction have long been allies and shared         knowledge,
+as well as technology; but the recent discoery of numerous         rich resource deposits
+near an unnamed gorge has resulted in a bitter         standoff. Secure your team's
+victory in one final cacophony of         helicopters, explosives, and other armament.
+
+[R][H3][color=#CCAA00]Screenshots[/color][/H3][R]
+
+
+[hidden=Last-hit for bounty]
+[img]http://i.imgur.com/PE862R1.jpg[/img]
+[/hidden]
+
+[R][H3][color=#CCAA00]Version Control[/color][/H3][R]
+
+
+All iterations of this map are maintained in a public git repository at
+[url]https://bitbucket.org/Cokemonkey11/the-gorge/[/url]
+
+[R][H3][color=#CCAA00]Changelog[/color][/H3][R]
+
+
+[color=#ffcc00]0.9.1[/color] [color=#999999]24 Feb 2017[/color]:
+[list][*] This map is now written entirely in Jurst, the jass-friendly Wurst dialect!
+[*] Revamped the behavior and apperance of central outposts
+[*] Sky Barge new ability: Reactive Shields.
+[*] Zeppelin new ability: Helium Overdrive.
+[*] Improved the user-friendliness of repair ports.
+[*] Added a third trading route
+[*] Improved tooltip consistency.
+[*] General balance adjustments
+[*] General fixes and tidying.
+[/list]
+
+[color=#ffcc00]0.1.0c[/color] [color=#999999]16 May 2014[/color]:
+[list][*] Additional terrain improvements by Kino.
+[*] More bug fixes and improvements.
+[*] Some undocumented/unknown improvements.
+[/list]
+
+[color=#ffcc00]0.0.8c[/color] [color=#999999]01 Feb 2014[/color]:
+[list][*] The map has received a large terrain makeover thanks to Kino! Kino has done more work
+in two days on the terrain than I could do in two weeks. Do check it out!
+[*] Your farm of neutral monsters is now displayed in the multiboard
+[*] A second trade-related job has been added
+[*] Three new tier-3 cannons have been added
+[*] Paracopter now has a unique ability: SL-15 Shroud Generator
+[*] The music has been extended slightly
+[*] Various small bug fixes and improvements
+[/list]
+
+[color=#ffcc00]0.0.7?[/color] [color=#999999]21 Jan 2014[/color]:
+[list][*] Helicopter now has a unique ability
+[*] Created multiboard and some basic stat tracking
+[*] Added bounties for pvp
+[*] Dying no longer drops your items
+[*] Repair port should be fixed in multiplayer (?)
+[*] Can no longer drop and pick up items to abuse item sale trigger
+[*] Added two new ships: Skybarge (basic battleship with 10 crew slots) and Zeppelin
+(basic interceptor)
+[*] Extended music slightly
+[*] Marginal terrain improvements
+[*] Made third tier of weapons (mostly structural change)
+[*] Many more small changes and improvements
+[/list]
+
+[color=#ffcc00]0.0.6?[/color] [color=#999999]16 Jan 2014?[/color]:
+[list][*] Initial release.
+[/list]
+
+[R][H3][color=#CCAA00]Automatic Hosting[/color][/H3][R]
+Release versions of this map are uploaded to both [url=http://makemehost.com/]MMH[/url]
+and [url=http://entgaming.net/]ENT[/url].
+
+[R][H3][color=#CCAA00]Contributing[/color][/H3][R]
+I will merge atomic, well-formed pull-requests if they are consistent with my design
+policies and issue tracker.
+
+[/TABLE]
+[/CENTER]
