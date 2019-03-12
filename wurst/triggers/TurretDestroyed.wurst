@@ -1,0 +1,31 @@
+package TurretDestroyed
+	import Sounds
+	import RegisterEvents
+	import Players
+
+	constant TURRET_ID = 'h005'
+	constant GOLD_BONUS = 200
+	constant WARNING_MESSAGE = "|cffffcc00Warning|r: Your turret has been destroyed!"
+	constant SUCCESS         = "|cffffcc00Note|r: You received |cffffcc00200|r bonus gold for the destruction of an enemy turret."
+	constant GOODJOB         = "Sound\\Interface\\GoodJob.wav"
+	constant WARNING         = "Sound\\Interface\\Warning.wav"
+
+	function c()
+		unit tU= GetTriggerUnit()
+		int index= 2
+		if GetUnitTypeId(tU)== TURRET_ID
+			while index <= 11
+				if IsUnitAlly(tU, Players.players[index])
+					DisplayTimedTextToPlayer(Players.players[index], 0., 0., 10., WARNING_MESSAGE)
+					Sounds.playForPlayer(WARNING, 1., Players.players[index])
+				else
+					SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
+					DisplayTimedTextToPlayer(Players.players[index], 0., 0., 10., SUCCESS)
+					Sounds.playForPlayer(GOODJOB, 1., Players.players[index])
+
+				index += 1
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+		Sounds.preload(GOODJOB)
+		Sounds.preload(WARNING)

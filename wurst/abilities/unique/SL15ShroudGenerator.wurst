@@ -1,0 +1,129 @@
+package SL15ShroudGenerator
+	import DummyUnitStack
+	import RegisterEvents
+
+	native UnitAlive(unit u) returns bool
+
+	class Shroud
+		unit caster
+		real cX
+		real cY
+		unit dummy
+		real time = 0.
+		real genTime
+
+	class Gen
+		unit dummy
+		effect mdl
+		real dX
+		real dY
+		real duration
+
+	constant SHROUD_ID = 'A00Y'
+	constant INVIS_ID  = 'A00L'
+	constant BUF_ID    = 'B004'
+	constant GEN_COUNT = 32
+	constant DURATION = 15.
+	constant GEN_PERIOD = 1./2.
+	constant CLOCK_PERIOD = 1./30.
+	constant SHROUD_RADIUS = 500.
+	constant GEN_VELOCITY = 400.
+	constant GEN_MODEL = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
+	Shroud array shrouds
+	int shroudsIndex = -1
+	Gen array gens
+	int gensIndex = -1
+	timer clock =  CreateTimer()
+	timer clock2 = CreateTimer()
+
+
+	function p2()
+		int index= 0
+		Gen g
+		while index <= gensIndex
+			g = gens[index]
+			g.duration = g.duration - CLOCK_PERIOD
+			SetUnitX(g.dummy, GetUnitX(g.dummy)+g.dX)
+			SetUnitY(g.dummy, GetUnitY(g.dummy)+g.dY)
+			if g.duration <= 0.
+				DestroyEffect(g.mdl)
+				DummyUnitStack.release(g.dummy)
+				destroy g
+				gens[index] = gens[gensIndex]
+				gensIndex = gensIndex - 1
+				index = index - 1
+				if gensIndex == -1
+					PauseTimer(clock2)
+
+			index += 1
+
+	function p()
+		int index = 0
+		int j
+		Shroud s
+		Gen g
+		while index <= shroudsIndex
+			s = shrouds[index]
+			s.time = s.time + CLOCK_PERIOD
+			s.genTime = s.genTime + CLOCK_PERIOD
+			if s.genTime > GEN_PERIOD
+				s.genTime = 0.
+				j = 0
+				while j < GEN_COUNT
+					g = new Gen
+					g.dummy = DummyUnitStack.get()
+					g.mdl = AddSpecialEffectTarget(GEN_MODEL, g.dummy, "origin")
+					g.dX = GEN_VELOCITY * Cos(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					g.dY = GEN_VELOCITY * Sin(2.*bj_PI*I2R(j)/I2R(GEN_COUNT)) * CLOCK_PERIOD
+					g.duration = SHROUD_RADIUS / GEN_VELOCITY
+					SetUnitFlyHeight(g.dummy, 100., 0.)
+					SetUnitX(g.dummy, s.cX)
+					SetUnitY(g.dummy, s.cY)
+					gensIndex = gensIndex + 1
+					gens[gensIndex] = g
+					if gensIndex == 0
+						TimerStart(clock2, CLOCK_PERIOD, true, function p2)
+
+					j += 1
+
+
+			if IsUnitInRangeXY(s.caster, s.cX, s.cY, SHROUD_RADIUS)
+				if GetUnitAbilityLevel(s.caster, BUF_ID)<1
+					SetUnitX(s.dummy, GetUnitX(s.caster))
+					SetUnitY(s.dummy, GetUnitY(s.caster))
+					UnitAddAbility(s.dummy, INVIS_ID)
+					IssueTargetOrder(s.dummy, "invisibility", s.caster)
+					UnitRemoveAbility(s.dummy, INVIS_ID)
+
+			else
+				UnitRemoveAbility(s.caster, BUF_ID)
+
+			if not UnitAlive(s.caster) or GetUnitTypeId(s.caster)== 0 or s.time>DURATION
+				DummyUnitStack.release(s.dummy)
+				destroy s
+				shrouds[index] = shrouds[shroudsIndex]
+				shroudsIndex = shroudsIndex - 1
+				index = index - 1
+				if shroudsIndex == -1
+					PauseTimer(clock)
+
+			index += 1
+
+	function c()
+		Shroud s
+		if GetSpellAbilityId()== SHROUD_ID
+			s = new Shroud
+			s.caster = GetTriggerUnit()
+			s.cX = GetUnitX(s.caster)
+			s.cY = GetUnitY(s.caster)
+			s.dummy = DummyUnitStack.get()
+			s.genTime = GEN_PERIOD
+			SetUnitX(s.dummy, s.cX)
+			SetUnitY(s.dummy, s.cY)
+			shroudsIndex = shroudsIndex + 1
+			shrouds[shroudsIndex] = s
+			if shroudsIndex == 0
+				TimerStart(clock, CLOCK_PERIOD, true, function p)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)

@@ -1,0 +1,20 @@
+package SelectCaptain
+	import Game
+	import Players
+	import RegisterEvents
+
+	constant SELECT_CAPT_ID = 'A00Z'
+
+	function c()
+		if GetSpellAbilityId() == SELECT_CAPT_ID
+			player owner = GetOwningPlayer(GetTriggerUnit())
+			int id = GetPlayerId(owner)
+
+			if Players.localPlayer == owner
+				ClearSelection()
+				SelectUnit(Game.captains[id], true)
+				PanCameraToTimed(GetUnitX(Game.captains[id]), GetUnitY(Game.captains[id]), 0.)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+

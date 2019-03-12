@@ -1,0 +1,15 @@
+package ItemPickup
+	import Equipment
+	import RegisterEvents
+
+	function c()
+		int id = GetPlayerId(GetTriggerPlayer())
+		item itm = GetManipulatedItem()
+
+		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(), GetItemTypeId(itm))
+			Equipment.autoPawnItemForPlayer(id, itm)
+		else
+			Equipment.resetUnitDamageReduction(GetTriggerUnit())
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function c)

@@ -1,0 +1,28 @@
+package SelectShip
+	import Players
+	import SimError
+	import Ships
+	import RegisterEvents
+
+	native UnitAlive(unit u) returns bool
+
+	constant SELECT_SHIP_ID = 'A00K'
+	constant DEAD_ERROR     = "Your ship has been destroyed."
+
+	function c()
+		if GetSpellAbilityId() == SELECT_SHIP_ID
+			player owner = GetOwningPlayer(GetTriggerUnit())
+			int id = GetPlayerId(owner)
+
+			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0
+				if Players.localPlayer == owner
+					ClearSelection()
+					SelectUnit(Ships.ships[id], true)
+					PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
+
+			else
+				simError(owner, DEAD_ERROR)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
+

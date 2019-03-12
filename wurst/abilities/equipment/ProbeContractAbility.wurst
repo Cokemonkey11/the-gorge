@@ -1,0 +1,36 @@
+package ProbeContractAbility
+	import RegisterEvents
+	import SimError
+	import Ships
+	import Equipment
+	import Game
+	import Sounds
+
+	constant ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."
+	constant ALREADY_MESSAGE   = "You already have data on this rock formation."
+	constant NO_SPACE_MESSAGE  = "You don't have inventory space for |cffffcc00Rock Data|r."
+	constant SUCCESS_MESSAGE   = "You received |cffffcc00Rock Data|r; return it to the utility port for your reward."
+	constant PROBE_ID          = 'A00J'
+	constant ROCK_FORMATION_ID = 'u001'
+
+	function effectC()
+		unit tU
+		player owner
+
+		if GetSpellAbilityId() == PROBE_ID
+			tU = GetTriggerUnit()
+			owner = GetOwningPlayer(tU)
+
+			if GetUnitTypeId(GetSpellTargetUnit()) != ROCK_FORMATION_ID
+				simError(owner, ERROR_MESSAGE)
+			else if Ships.hasItemOfType(tU, Equipment.DATA_ID)
+				simError(owner, ALREADY_MESSAGE)
+			else if Equipment.noItemSlot(tU)
+				simError(owner, NO_SPACE_MESSAGE)
+			else
+				UnitAddItem(tU, CreateItem(Equipment.DATA_ID, GetUnitX(tU), GetUnitY(tU)))
+				DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
+				Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)

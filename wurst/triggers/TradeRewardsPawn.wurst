@@ -1,0 +1,13 @@
+package TradeRewardsPawn
+    import Game
+    import RegisterEvents
+    import Equipment
+
+    function c()
+        if     GetItemTypeId(GetSoldItem()) == Equipment.DATA_ID
+            Game.reward(GetTriggerUnit(),  15, 1)
+        else if GetItemTypeId(GetSoldItem()) == Equipment.VENOM_VIAL
+            Game.reward(GetTriggerUnit(), 150, 1)
+
+    init
+        registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PAWN_ITEM, function c)

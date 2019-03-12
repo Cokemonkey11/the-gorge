@@ -1,0 +1,87 @@
+package SinglePlayer
+    import Players
+
+    public class SinglePlayer
+        static constant SP_PREFIX = "[|cffffcc00Single Player|r] "
+        static constant TAB       = "    "
+
+        static          player thePlayer
+        static          bool   fastEnabled = false
+
+        static function help() returns bool
+            BJDebugMsg(SP_PREFIX + "Available commands:")
+            BJDebugMsg(TAB + "\\h, \\help: Display this help menu.")
+            BJDebugMsg(TAB + "\\c, \\clear: Clear the on-screen text messages.")
+            BJDebugMsg(TAB + "\\e, \\experience, \\tradeExperience: Gives 500 trading experience.")
+            BJDebugMsg(TAB + "\\v, \\visibility: Disables Fog of War and Black Mask.")
+            BJDebugMsg(TAB + "\\f, \\fast: Enables instant ship movement.")
+
+            return false
+
+
+        static function experience() returns bool
+            BJDebugMsg(SP_PREFIX + "500 trading experience added.")
+            Players.tradeExp[thePlayer.getId()] += 500
+
+            return false
+
+
+        static function visibility() returns bool
+            BJDebugMsg(SP_PREFIX + "Full visibility enabled.")
+            FogMaskEnable(false)
+            FogEnable(false)
+
+            return false
+
+
+        static function fast() returns bool
+            BJDebugMsg(SP_PREFIX + "Fast movement enabled.")
+            fastEnabled = true
+
+            return false
+
+
+        static function clear() returns bool
+            // Debug message redacted to avoid waste.
+            ClearTextMessages()
+
+            return false
+
+
+        static function enable()
+            BJDebugMsg(SP_PREFIX + "Single player mode enabled.  Enter \\help for a list of commands.")
+
+            int i = 2
+            while i <= 11
+
+                if Players.playing[i]
+                    thePlayer = Players.players[i]
+                    break
+
+                i++
+
+            trigger help = CreateTrigger()
+            help..registerPlayerChatEvent(thePlayer, "\\h",    true)
+                ..registerPlayerChatEvent(thePlayer, "\\help", true)
+                ..addCondition(Condition(function help))
+
+            trigger experience = CreateTrigger()
+            experience..registerPlayerChatEvent(thePlayer, "\\e",               true)
+                      ..registerPlayerChatEvent(thePlayer, "\\experience",      true)
+                      ..registerPlayerChatEvent(thePlayer, "\\tradeExperience", true)
+                      ..addCondition(Condition(function experience))
+
+            trigger visibility = CreateTrigger()
+            visibility..registerPlayerChatEvent(thePlayer, "\\v",          true)
+                      ..registerPlayerChatEvent(thePlayer, "\\visibility", true)
+                      ..addCondition(Condition(function visibility))
+
+            trigger clear = CreateTrigger()
+            clear..registerPlayerChatEvent(thePlayer, "\\c",     true)
+                 ..registerPlayerChatEvent(thePlayer, "\\clear", true)
+                 ..addCondition(Condition(function clear))
+
+            trigger fast = CreateTrigger()
+            fast..registerPlayerChatEvent(thePlayer, "\\f",      true)
+                ..registerPlayerChatEvent(thePlayer, "\\fast",   true)
+                ..addCondition(Condition(function fast))

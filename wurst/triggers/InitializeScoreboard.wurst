@@ -1,0 +1,83 @@
+package InitializeScoreboard
+	import Game
+	import MyBoard
+	import Players
+
+	string array colors
+	constant MB_WIDTH = .25
+
+	function iconCol(int col, bool show)
+		int i = 0
+
+		while i <= Game.scoreboard.rows()
+			Game.scoreboard.displayIcon(col, i, show)
+			i++
+
+	function widthCol(int col, real width)
+		int i = 0
+
+		while i <= Game.scoreboard.rows()
+			Game.scoreboard.setWidth(col, i, width)
+			i++
+
+	function valueCol(int col, string val)
+		int i = 0
+
+		while i <= Game.scoreboard.rows()
+			Game.scoreboard.setValue(col, i, val)
+			i++
+
+	function initialize()
+		int i = 2
+		int j = 0
+
+		Game.scoreboard = MyBoard.create(5, 2+Players.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
+		widthCol(0, MB_WIDTH*3./7.)
+		widthCol(1, MB_WIDTH*1./7.)
+		widthCol(2, MB_WIDTH*1.125/7.)
+		widthCol(3, MB_WIDTH*1.125/7.)
+		widthCol(4, MB_WIDTH*0.75/7.)
+		iconCol(1, false)
+		iconCol(2, false)
+		iconCol(3, false)
+		iconCol(4, false)
+		Game.scoreboard.displayIcon(0, 0, false)
+		Game.scoreboard.displayIcon(0, 1+Game.westCount, false)
+		valueCol(1, "0")
+		valueCol(2, "0")
+		valueCol(3, "0")
+		valueCol(4, "0")
+		Game.scoreboard.setValue(1, 0, "|cffffcc00Kills|r")
+		Game.scoreboard.setValue(2, 0, "|cffffcc00Deaths|r")
+		Game.scoreboard.setValue(3, 0, "|cffffcc00Assists|r")
+		Game.scoreboard.setValue(4, 0, "|cffffcc00Farm|r")
+		Game.scoreboard.setValue(1, 1+Game.westCount, "")
+		Game.scoreboard.setValue(2, 1+Game.westCount, "")
+		Game.scoreboard.setValue(3, 1+Game.westCount, "")
+		Game.scoreboard.setValue(4, 1+Game.westCount, "")
+		while i <= 11
+			if Players.playing[i]
+				if i<7
+					Game.scoreboard.setValue(0, 1+j, Game.colors[i]+Game.names[i]+"|r")
+					Game.scoreboard.setIcon(0, 1+j, Game.HELICOPTER_ICON)
+					Game.scoreboardRows[i] = 1+j
+				else
+					Game.scoreboard.setValue(0, 2+j, Game.colors[i]+Game.names[i]+"|r")
+					Game.scoreboard.setIcon(0, 2+j, Game.HELICOPTER_ICON)
+					Game.scoreboardRows[i] = 2+j
+
+				j += 1
+
+			i += 1
+
+
+		Game.scoreboard.setShow(true)
+		Game.scoreboard.setSuppress(true)
+
+		DestroyTimer(GetExpiredTimer())
+
+
+	init
+		TimerStart(CreateTimer(), 0., false, function initialize)
+
+

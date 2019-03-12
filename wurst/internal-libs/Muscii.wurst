@@ -1,0 +1,198 @@
+package Muscii
+	import Sounds
+
+	public class Note
+		string path
+		int volume
+		real pitch
+		Note previous
+		Note next
+
+		function copy() returns Note
+			return Note.create(this.path, this.volume, this.pitch)
+
+
+		function play()
+			Sounds.play(this.path, this.pitch, this.volume)
+
+
+		static function create(string path, int volume, real pitch) returns Note
+			Note n = new Note
+			n.path = path
+			n.volume = volume
+			n.pitch = pitch
+			n.previous = null
+			n.next = null
+			return n
+
+
+
+	public class Chord
+		Note first
+		Note last
+		Chord previous
+		Chord next
+
+		function copy() returns Chord
+			Note iterator = this.first
+			Chord nw = Chord.create(iterator)
+			while iterator.next != null
+				iterator = iterator.next
+				nw.addNote(iterator)
+
+			return nw
+
+
+		function play()
+			Note iterator = this.first
+			while iterator != null
+				iterator.play()
+				iterator = iterator.next
+
+
+
+		function addNote(Note n) returns Chord
+			Note copy = n.copy()
+			Note temp = this.last
+			temp.next = copy
+			copy.previous = temp
+			return this
+
+
+		static function create(Note n) returns Chord
+			Note q = Note.create(n.path, n.volume, n.pitch)
+			Chord c = new Chord
+			c.previous = null
+			c.next = null
+			c.first = q
+			c.last = q
+			return c
+
+
+
+	public interface Section
+		function do()
+
+
+
+	public class Muscii
+		static Table fromClock
+		private static Muscii array db
+		private static int dbIndex = -1
+		Chord first
+		Chord last
+		Chord iterator
+		real tempo //in whole notes per minute
+		timer clock
+		int count
+		int queueCount
+		Section cbf
+		Muscii queued
+
+		static function interrupt()
+			int index = 0
+			Muscii temp
+			while index <= dbIndex
+				temp = db[index]
+				PauseTimer(temp.clock)
+				index = index + 1
+
+
+
+		function callback(Section callback) returns Muscii
+			this.cbf = callback
+			return this
+
+
+		function copy() returns Muscii
+			Chord iterator = this.first
+			Muscii nw = Muscii.create(iterator, this.tempo)
+			while iterator.next != null
+				iterator = iterator.next
+				nw.addChord(iterator.copy())
+
+			return nw
+
+
+		function play() returns Muscii
+			playCounted(-1)
+			return this // for chaining
+
+
+		function playCounted(int count) returns Muscii
+			this.count = count
+			TimerStart(this.clock, 1. / (this.tempo / 60.), true, function Muscii.p)
+			return this
+
+
+		function enqueue(Muscii next, int queueCount) returns Muscii
+			// if the target Muscii is already queuing something, it is in use - we
+			// therefore copy it.
+			if next.queued == null
+				this.queued = next
+			else
+				this.queued = next.copy()
+
+			this.queueCount = queueCount
+			return this.queued
+
+
+		function stop() returns Muscii
+			PauseTimer(this.clock)
+			this.iterator = this.first
+			return this
+
+
+		function addChord(Chord c) returns Muscii
+			Chord q = this.last
+			Chord copy = c.copy()
+			q.next = copy
+			this.last = copy
+			copy.previous = q
+			return this
+
+
+		static function create(Chord c, real tempo) returns Muscii
+			Muscii m = new Muscii
+			Chord cop = c.copy()
+			m.first = cop
+			m.last = cop
+			m.iterator = cop
+			m.tempo = tempo
+			m.clock = CreateTimer()
+			m.queued = null
+			m.cbf    = null
+			fromClock.saveInt(m.clock.getHandleId(), m castTo int)
+			dbIndex = dbIndex + 1
+			db[dbIndex] = m
+			return m
+
+
+		private static function p()
+			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
+			Muscii next
+			Chord now = m.iterator
+			Section cbf
+			now.play()
+			if now.next != null
+				m.iterator = now.next
+			else
+				m.iterator = m.first
+				if m.count > -1
+					m.count = m.count-1
+					if m.count == -1
+						m.stop()
+						next = m.queued
+						if next != null
+							next.playCounted(m.queueCount)
+
+						m.queued = null
+						if m.cbf != null
+							m.cbf.do()
+							cbf = m.cbf
+							destroy cbf
+							m.cbf = null
+
+
+	init
+		Muscii.fromClock = new Table

@@ -1,0 +1,428 @@
+package Equipment
+	// Making a new trade route:
+	//   * Create necessary items in object editor (contract and anything else)
+	//   * Add all those new items to Equipment constants
+	//   * Add contract cost to Equipment.getContractCost
+	//   * Add the item to Equipment.classes (done in Equipment#init)
+	//   * Add necessary items to DestroyDroppedContracts.tradeItems (done in DestroyDroppedContracts#init)
+	//   * Fill in pawned items in TradeRewardsPawn#c as necessary
+	//   * Fill in remaining triggers as necessary
+	import SimError
+	import Ships
+	import Game
+	import HashMap
+	import Players
+	import RegisterEvents
+
+	public class Equipment
+		static constant CLASS_UNKNOWN    = -1
+		static constant CLASS_ENGINE     =  0
+		static constant CLASS_MECHANIC   =  1
+		static constant CLASS_HULL       =  2
+		static constant CLASS_SHIELDGEN  =  3
+		static constant CLASS_TELEPORT   =  4
+		static constant CLASS_SPECIAL    =  5
+		static constant CLASS_CONTRACT   =  6
+
+		static constant PAGE_1_2         = 'I003'
+		static constant PAGE_2_1         = 'I004'
+		static constant PAGE_2_3         = 'I006'
+		static constant PAGE_3_2         = 'I007'
+		static constant PAGE_3_4         = 'I00A'
+		static constant PAGE_4_3         = 'I00B'
+		static constant KPAGE_1_2        = 'I00E'
+		static constant KPAGE_2_1        = 'I00F'
+
+		static constant DATA_ID          = 'I00D'
+		static constant TOXIC_SUBST_FULL = 'I00H'
+		static constant VENOM_VIAL       = 'I00J'
+
+		// Engines
+		static constant STEAM_CORE     = 'I000'
+		// Mechanics
+		static constant PROBLEM_SOLVER = 'I001'
+		// Hulls
+		static constant STONE_HULL     = 'I002'
+		// Shield Generators
+		static constant BRONZE_GEN     = 'I005'
+		// Teleporters
+		static constant IONIC_TELEPORT = 'I008'
+		// Special
+		static constant SHIP_LOCATOR   = 'I009'
+		// Contracts
+		static constant DATA_ACQUISIT         = 'I00C'
+		static constant TOXIC_SUBST           = 'I00G'
+		static constant SPIDER_VENOM_CONTRACT = 'I00I'
+
+		// Hull reduction levels
+		static constant REDUCTION1 = 10
+
+		static constant WRONG_CLASS             = "Your ship class cannot use that type of equipment."
+		static constant INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
+
+		static constant EQUIPMENT_SELL_VALUE = 1.
+
+		static constant classes = new HashMap<int, int>()
+
+		static constant reduction = new HashMap<unit, int>()
+
+		static function autoPawnItemForPlayer(int pID, item itm)
+			int val = R2I(GetWidgetLife(itm))
+			if val>1
+				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(itm)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
+				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
+
+			RemoveItem(itm)
+
+
+		static function getItemClassId(int id) returns int
+			if classes.has(id)
+				return classes.get(id)
+
+			return CLASS_UNKNOWN
+
+		static function getItemClass(item itm) returns int
+			return getItemClassId(GetItemTypeId(itm))
+
+
+		// Checks if a unit has a pair of items with the same item class.
+		//
+		// Parameters:
+		//   unit u:      the unit in question
+		//   int cls: the item class for validation
+		//
+		// Returns true if `u` has two items of class `cls`
+		static function unitHasClassPair(unit u, int cls) returns bool
+			int index = 0
+			int count = 0
+
+			while index <= 5
+
+				if getItemClass(UnitItemInSlot(u, index)) == cls
+					count++
+					if count > 1
+						return true
+				index++
+
+
+			return false
+
+
+		static function unitHasItemOfClass(unit u, int cls) returns item
+			int index = 0
+			item itm = null
+
+			while index <= 5
+
+				itm = UnitItemInSlot(u, index)
+				if getItemClass(itm) == cls
+					return itm
+
+				index++
+
+
+			return itm
+
+
+		static function unitHasItemOfTypeSlot(unit u, int id) returns int
+			int index = 0
+
+			while index <= 5
+
+				if GetItemTypeId(UnitItemInSlot(u, index)) == id
+					return index
+
+				index++
+
+			return -1
+
+
+		// Returns true if the unit u has all inventory spaces used.
+		static function noItemSlot(unit u) returns bool
+			let count = UnitInventorySize(u)
+			int index = 0
+
+			while index < count
+				if not GetItemTypeId(UnitItemInSlot(u, index)) > 0
+					return false
+
+				index++
+
+			return true
+
+
+		static function unitHasItemOfType(unit u, int id) returns bool
+			return unitHasItemOfTypeSlot(u, id) > -1
+
+
+		static function unitHasTypePair(unit u, int id) returns bool
+			int index = 0
+			int count = 0
+
+			while index <= 5
+				if GetItemTypeId(UnitItemInSlot(u, index)) == id
+					count += 1
+					if count > 1
+						return true
+
+				index += 1
+			return false
+
+
+		static function unitCanAcquireItemIdPost(unit u, int id) returns bool
+			int shipClass = Ships.getClass(u)
+			int itemClass = getItemClassId(id)
+
+			if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL
+				return false
+			else if unitHasTypePair(u, id)
+				return false
+			else if shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT
+				return false
+			else if shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR)
+				return false
+			else if shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT
+				return false
+			else if shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR)
+				return false
+
+			return true
+
+
+		static function unitCanAcquireItemId(unit u, int id) returns bool
+			int shipClass = Ships.getClass(u)
+			int itemClass = getItemClassId(id)
+			if unitHasItemOfClass(u, itemClass)!= null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL
+				return false
+			else if unitHasItemOfType(u, id)
+				return false
+			else if shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT
+				return false
+			else if shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR)
+				return false
+			else if shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT
+				return false
+			else if shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR)
+				return false
+
+			return true
+
+
+		static function playerCanAcquireItem(int pID, item itm) returns bool
+			return unitCanAcquireItemId(Ships.ships[pID], GetItemTypeId(itm))
+
+
+		static function unitCanAcquireItem(unit u, item itm) returns bool
+			return unitCanAcquireItemId(u, GetItemTypeId(itm))
+
+
+		static function playerAddItemFromIdConditional(int pID, int id) returns bool
+			real x = GetUnitX(Ships.ships[pID])
+			real y = GetUnitY(Ships.ships[pID])
+			item temp
+			if unitCanAcquireItemId(Ships.ships[pID], id)
+				UnitAddItem(Ships.ships[pID], CreateItem(id, x, y))
+				return true
+			else
+				temp = CreateItem(id, 0., 0.)
+				autoPawnItemForPlayer(pID, temp)
+
+			return false
+
+
+		static function playerAddItemsFromIdConditional(int pID, int i0, int i1, int i2, int i3, int i4, int i5)
+			if i0>0
+				playerAddItemFromIdConditional(pID, i0)
+
+			if i1>0
+				playerAddItemFromIdConditional(pID, i1)
+
+			if i2>0
+				playerAddItemFromIdConditional(pID, i2)
+
+			if i3>0
+				playerAddItemFromIdConditional(pID, i3)
+
+			if i4>0
+				playerAddItemFromIdConditional(pID, i4)
+
+			if i5>0
+				playerAddItemFromIdConditional(pID, i5)
+
+		static function playerAddItemsFromId(int pID, int i0, int i1, int i2, int i3, int i4, int i5)
+			real x = GetUnitX(Ships.ships[pID])
+			real y = GetUnitY(Ships.ships[pID])
+			if i0>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i0, x, y))
+
+			if i1>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i1, x, y))
+
+			if i2>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i2, x, y))
+
+			if i3>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i3, x, y))
+
+			if i4>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i4, x, y))
+
+			if i5>0
+				UnitAddItem(Ships.ships[pID], CreateItem(i5, x, y))
+
+
+
+		static function tradeExperience(player who) returns int
+			return Players.tradeExp[GetPlayerId(who)]
+
+
+		// Get the cost of a trade contract, in trade experience.
+		static function getContractCost(item itm) returns int
+			int typ = GetItemTypeId(itm)
+			if     typ == DATA_ACQUISIT
+				return 0
+			else if typ == TOXIC_SUBST
+				return 1
+			else if typ == SPIDER_VENOM_CONTRACT
+				return 4
+
+			return -1
+
+
+		static function pageC() returns bool
+			item sI = GetSoldItem()
+			unit seller = GetSellingUnit()
+			unit buyer = GetBuyingUnit()
+			unit toSelect = null
+			int id = GetItemTypeId(sI)
+			player owner = GetOwningPlayer(buyer)
+			bool was = false
+
+			if id == PAGE_1_2
+				was = true
+				if seller == Game.westUtility[0]
+					toSelect = Game.westUtility[1]
+				else
+					toSelect = Game.eastUtility[1]
+
+			else if id== PAGE_2_1
+				was = true
+				if seller == Game.westUtility[1]
+					toSelect = Game.westUtility[0]
+				else
+					toSelect = Game.eastUtility[0]
+
+			else if id== PAGE_2_3
+				was = true
+				if seller == Game.westUtility[1]
+					toSelect = Game.westUtility[2]
+				else
+					toSelect = Game.eastUtility[2]
+
+			else if id== PAGE_3_2
+				was = true
+				if seller == Game.westUtility[2]
+					toSelect = Game.westUtility[1]
+				else
+					toSelect= Game.eastUtility[1]
+
+			else if id== PAGE_3_4
+				was = true
+				if seller == Game.westUtility[2]
+					toSelect = Game.westUtility[3]
+				else
+					toSelect = Game.eastUtility[3]
+
+			else if id== PAGE_4_3
+				was = true
+				if seller == Game.westUtility[3]
+					toSelect = Game.westUtility[2]
+				else
+					toSelect = Game.eastUtility[2]
+
+			else if id== KPAGE_1_2
+				was = true
+				if seller == Game.westKeep[0]
+					toSelect = Game.westKeep[1]
+				else
+					toSelect = Game.eastKeep[1]
+
+			else if id== KPAGE_2_1
+				was = true
+				if seller == Game.westKeep[1]
+					toSelect = Game.westKeep[0]
+				else
+					toSelect = Game.eastKeep[0]
+
+
+			if was
+				RemoveItem(sI)
+				if Players.localPlayer == owner
+					SelectUnit(seller, false)
+					SelectUnit(toSelect, true)
+
+			return false
+
+
+		static function resetUnitDamageReduction(unit u)
+			int index = 0
+			while index <= 5
+				if GetItemTypeId(UnitItemInSlot(u, index)) == STONE_HULL
+					reduction.put(u, REDUCTION1)
+					return
+
+				index += 1
+
+			reduction.put(u, 0)
+
+
+		static function c() returns bool
+			unit buyer = GetBuyingUnit()
+			item sI= GetSoldItem()
+			player buyerP = GetOwningPlayer(buyer)
+			real val
+			int cls = getItemClass(sI)
+			bool has = unitHasItemOfType(buyer, GetItemTypeId(sI))
+			item itm = unitHasItemOfClass(buyer, cls)
+
+			if has or GetItemTypeId(sI) == GetItemTypeId(itm)
+				simError(buyerP, "You can't carry two of the same equipment.")
+				val = GetWidgetLife(sI)
+				if val>1.
+					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+
+				RemoveItem(sI)
+			else if not unitCanAcquireItem(buyer, sI)
+				val = GetWidgetLife(sI)
+				RemoveItem(sI)
+				SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				simError(buyerP, WRONG_CLASS)
+			else
+				if itm!= null and cls != CLASS_UNKNOWN and cls != CLASS_SPECIAL and cls != CLASS_CONTRACT
+					val = GetWidgetLife(itm)
+					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(itm)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
+					RemoveItem(itm)
+				else if cls == CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP)
+					RemoveItem(sI)
+					simError(buyerP, INSUFFICIENT_EXPERIENCE)
+
+
+
+			resetUnitDamageReduction(buyer)
+			return false
+
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.c)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.pageC)
+
+		Equipment.classes.put(Equipment.STEAM_CORE,            Equipment.CLASS_ENGINE)
+		Equipment.classes.put(Equipment.PROBLEM_SOLVER,        Equipment.CLASS_MECHANIC)
+		Equipment.classes.put(Equipment.STONE_HULL,            Equipment.CLASS_HULL)
+		Equipment.classes.put(Equipment.BRONZE_GEN,            Equipment.CLASS_SHIELDGEN)
+		Equipment.classes.put(Equipment.IONIC_TELEPORT,        Equipment.CLASS_TELEPORT)
+		Equipment.classes.put(Equipment.SHIP_LOCATOR,          Equipment.CLASS_SPECIAL)
+		Equipment.classes.put(Equipment.DATA_ACQUISIT,         Equipment.CLASS_CONTRACT)
+		Equipment.classes.put(Equipment.TOXIC_SUBST,           Equipment.CLASS_CONTRACT)
+		Equipment.classes.put(Equipment.SPIDER_VENOM_CONTRACT, Equipment.CLASS_CONTRACT)

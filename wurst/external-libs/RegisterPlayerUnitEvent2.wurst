@@ -1,0 +1,56 @@
+
+//
+//   RegisterPlayerUnitEvent
+//   v5.1.0.1
+//   By Magtheridon96
+//
+//   I would like to give a special thanks to Bribe, azlier
+//   and BBQ for improving this library. For modularity, it only
+//   supports player unit events.
+//
+//   Functions passed to RegisterPlayerUnitEvent must either
+//   return a bool (false) or nothing. (Which is a Pro)
+//
+//   Warning:
+//   --------
+//
+//       - Don't use TriggerSleepAction inside registered code.
+//       - Don't destroy a trigger unless you really know what you're doing.
+//
+//   API:
+//   ----
+//
+//       - function RegisterPlayerUnitEvent takes playerunitevent whichEvent, code whichFunction
+//           - Registers code that will execute when an event fires.
+//       - function RegisterPlayerUnitEventForPlayer takes playerunitevent whichEvent, code whichFunction, player whichPlayer
+//           - Registers code that will execute when an event fires for a certain player.
+//       - function GetPlayerUnitEventTrigger takes playerunitevent whichEvent returns trigger
+//           - Returns the trigger corresponding to ALL functions of a playerunitevent.
+//
+package RegisterPlayerUnitEvent2 // Special Thanks to Bribe and azlier
+	trigger array t
+
+	public function registerPlayerUnitEvent(playerunitevent p, code c)
+		int i = GetHandleId(p)
+		int k = 15
+		if t[i] == null
+			t[i] = CreateTrigger()
+			while k != 0
+				TriggerRegisterPlayerUnitEvent(t[i], Player(k), p, null)
+				k -= 1
+
+
+		TriggerAddCondition(t[i], Filter(c))
+
+
+	public function registerPlayerUnitEventForPlayer(playerunitevent p, code c, player pl)
+		int i = 16 * GetHandleId(p) + GetPlayerId(pl)
+		if t[i] == null
+			t[i] = CreateTrigger()
+			TriggerRegisterPlayerUnitEvent(t[i], pl, p, null)
+
+		TriggerAddCondition(t[i], Filter(c))
+
+
+	public function getPlayerUnitEventTrigger(playerunitevent p) returns trigger
+		return t[GetHandleId(p)]

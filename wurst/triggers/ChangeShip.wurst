@@ -1,0 +1,66 @@
+package ChangeShip
+	import Ships
+	import Game
+	import Players
+	import Equipment
+	import SimError
+	import RegisterEvents
+
+	constant ERROR_MESSAGE   = "You cannot purchase ships from your opponent."
+	constant SAME_SHIP_ERROR = "You cannot purchase the same ship you already own."
+	constant FOOD_ERROR      = "You emply more crew members than that ship can accommodate."
+
+	int array tempIds
+
+
+	function c()
+		unit selU = GetSellingUnit()
+		unit bU= GetBuyingUnit()
+		unit sU= GetSoldUnit()
+		player buyer = GetOwningPlayer(sU)
+		int cls = Ships.getClass(sU)
+		int id
+		int val
+		int index= 0
+
+		if cls != Ships.CLASS_UNKNOWN
+			if IsUnitAlly(bU, GetOwningPlayer(selU))
+				if GetUnitTypeId(sU) != GetUnitTypeId(bU)
+					if GetUnitFoodMade(sU) >= GetPlayerState(buyer, PLAYER_STATE_RESOURCE_FOOD_USED)
+						id = GetPlayerId(buyer)
+						val = Ships.getSellValue(Ships.ships[id])
+						SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+val)
+						DisplayTextToPlayer(buyer, 0., 0., "You sold your |cffffcc00"+GetUnitName(bU)+"|r for |cffffcc00"+I2S(val)+"|r gold and acquired a |cffffcc00"+GetUnitName(sU)+"|r.")
+						Game.shipClass[id] = GetUnitTypeId(sU)
+						Game.updateIcon(id)
+						SetUnitX(sU, GetUnitX(Ships.ships[id]))
+						SetUnitY(sU, GetUnitY(Ships.ships[id]))
+						while index <= 5
+							tempIds[index] = GetItemTypeId(UnitItemInSlot(bU, index))
+							index += 1
+
+						RemoveUnit(Ships.ships[id])
+						Ships.ships[id] = sU
+						Equipment.playerAddItemsFromIdConditional(id, tempIds[0], tempIds[1], tempIds[2], tempIds[3], tempIds[4], tempIds[5])
+						Equipment.resetUnitDamageReduction(Ships.ships[id])
+						if Players.localPlayer == buyer
+							SelectUnit(Ships.ships[id], true)
+							SelectUnit(selU, false)
+
+					else
+						simError(GetOwningPlayer(bU), FOOD_ERROR)
+						SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
+						RemoveUnit(sU)
+
+				else
+					simError(GetOwningPlayer(bU), SAME_SHIP_ERROR)
+					SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
+					RemoveUnit(sU)
+
+			else
+				simError(GetOwningPlayer(bU), ERROR_MESSAGE)
+				SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+R2I(I2R(Ships.getSellValue(sU))/Ships.SELL_RATIO))
+				RemoveUnit(sU)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function c)

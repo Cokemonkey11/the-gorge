@@ -1,0 +1,16 @@
+package ReactiveShields
+	import Assets
+	import RegisterEvents
+
+	import Shield
+
+	constant SHIELD_ID       = 'A013'
+	constant SHIELD_AMOUNT   = 250.
+	constant SHIELD_DURATION = 5.
+	constant SHIELD_EFFECT   = Other.frostarmortarget
+
+	function onCast()
+		Shield.add(GetTriggerUnit(), SHIELD_AMOUNT, SHIELD_DURATION, SHIELD_EFFECT, "origin")
+
+	init
+		registerSpellEffectEvent(SHIELD_ID, function onCast)

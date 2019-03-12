@@ -1,0 +1,327 @@
+package MyBoard
+	bool DEBUG_MODE = false
+
+	constant    MAX_ROW_COUNT        = 100
+	constant    MAX_COLUMN_COUNT     = 30
+	constant    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
+	constant    AVERAGE_LETTER_WIDTH = .01484375
+
+	public class MyBoard
+		multiboard                    board        = null
+		private  int              colCount     = 0
+		private  int              rowCount     = 0
+		private  bool              isMinimized  = false
+		private  bool              isShown      = false
+		private  string               titleText    = ""
+		private int array[MAX_ARRAY_SIZE] charCnt
+		private real array[MAX_ARRAY_SIZE] width
+		private bool array[MAX_ARRAY_SIZE] showVal
+		private bool array[MAX_ARRAY_SIZE] showIcon
+		private string array[MAX_ARRAY_SIZE] curIcon
+		private string array[MAX_ARRAY_SIZE] curValue
+		private multiboarditem array[MAX_ARRAY_SIZE] brdItem
+
+		// Getting the correct values from arrays.
+
+		function getCharCount(int col, int row) returns int
+			return this.charCnt[MAX_COLUMN_COUNT*col + row]
+
+
+		function getWidth(int col, int row) returns real
+			return this.width[MAX_COLUMN_COUNT*col + row]
+
+
+		function getIconPath(int col, int row) returns string
+			return this.curIcon[MAX_COLUMN_COUNT*col + row]
+
+
+		function getValue(int col, int row) returns string
+			return this.curValue[MAX_COLUMN_COUNT*col + row]
+
+
+		function getItem(int col, int row) returns multiboarditem
+			return this.brdItem[MAX_COLUMN_COUNT*col + row]
+
+
+		function isValueShown(int col, int row) returns bool
+			return showVal[MAX_COLUMN_COUNT*col + row]
+
+
+		function isIconShown(int col, int row) returns bool
+			return showIcon[MAX_COLUMN_COUNT*col + row]
+
+
+		// Local parameter changes.
+		function displayLocalIcon(player whichPlayer, int col, int row, bool doDisplay)
+			int arrIndex = MAX_COLUMN_COUNT*col + row
+
+			if GetLocalPlayer() == whichPlayer
+				this.showIcon[arrIndex] = doDisplay
+
+
+			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], this.showIcon[arrIndex])
+
+
+		function displayLocalValue(player whichPlayer, int col, int row, bool doDisplay)
+			int arrIndex = MAX_COLUMN_COUNT*col + row
+
+			if GetLocalPlayer() == whichPlayer
+				this.showVal[arrIndex] = doDisplay
+
+
+			MultiboardSetItemStyle(this.brdItem[arrIndex], this.showVal[arrIndex], this.showIcon[arrIndex])
+
+
+		function setLocalIcon(player whichPlayer, int col, int row, string newIcon)
+			int arrIndex = MAX_COLUMN_COUNT*col + row
+
+			if GetLocalPlayer() == whichPlayer
+				this.curIcon[arrIndex] = newIcon
+
+
+			MultiboardSetItemIcon(this.brdItem[arrIndex], this.curIcon[arrIndex])
+
+
+		function setLocalValue(player whichPlayer, int col, int row, string newValue)
+			int arrIndex = MAX_COLUMN_COUNT*col + row
+
+			if GetLocalPlayer() == whichPlayer
+				this.curValue[arrIndex] = newValue
+
+
+			MultiboardSetItemValue(this.brdItem[arrIndex], this.curValue[arrIndex])
+
+
+		function setLocalWidth(player whichPlayer, int col, int row, real width)
+			int arrIndex = MAX_COLUMN_COUNT*col + row
+
+			if GetLocalPlayer() == whichPlayer
+				this.width[arrIndex] = width
+				this.charCnt[arrIndex] = R2I(width/AVERAGE_LETTER_WIDTH)
+
+
+			MultiboardSetItemWidth(this.brdItem[arrIndex], this.width[arrIndex])
+
+
+		function setLocalTitleText(player whichPlayer, string newTitle)
+			if GetLocalPlayer() == whichPlayer
+				this.titleText = newTitle
+
+
+			MultiboardSetTitleText(this.board, this.titleText)
+
+
+		// Global parameter changes.
+
+		function displayIcon(int col, int row, bool doDisplay)
+			this.displayLocalIcon(GetLocalPlayer(), col, row, doDisplay)
+
+
+		function displayValue(int col, int row, bool doDisplay)
+			this.displayLocalValue(GetLocalPlayer(), col, row, doDisplay)
+
+
+		function setIcon(int col, int row, string newIcon)
+			this.setLocalIcon(GetLocalPlayer(), col, row, newIcon)
+
+
+		function setValue(int col, int row, string newValue)
+			this.setLocalValue(GetLocalPlayer(), col, row, newValue)
+
+
+		function setWidth(int col, int row, real width)
+			this.setLocalWidth(GetLocalPlayer(), col, row, width)
+
+
+		// General stuff.
+
+		function minimize(bool doMinimize)
+			if this.isShown
+				MultiboardMinimize(this.board, doMinimize)
+
+			this.isMinimized = doMinimize
+
+
+		function display(bool doDisplay)
+			this.isShown = doDisplay
+			MultiboardDisplay(this.board, doDisplay)
+			if doDisplay
+				// Unbug the minimization - known issue.
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
+				this.minimize(not this.isMinimized)
+
+
+
+		function setRowCount(int rows)
+			int colLoop
+			int rowLoop
+			int arrIndex
+			// No actions if it's same.
+			if rows != this.rowCount
+				// Here's the anti-lag snippet: remove unneeded multiboard items from memory.
+				// (or add new!)
+				if rows < this.rowCount
+					rowLoop = rows
+					while rowLoop <= this.rowCount
+						colLoop = 0
+						while colLoop <= this.colCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							MultiboardReleaseItem(this.brdItem[arrIndex])
+							this.brdItem[arrIndex] = null
+							colLoop = colLoop + 1
+
+						rowLoop = rowLoop + 1
+
+				else
+					rowLoop = this.rowCount
+					while rowLoop <= rows
+						colLoop = 0
+						while colLoop <= this.colCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							brdItem [arrIndex] = MultiboardGetItem(this.board, rowLoop, colLoop)
+							width   [arrIndex] = .01
+							showVal [arrIndex] = true
+							showIcon[arrIndex] = true
+							curValue[arrIndex] = ""
+							curIcon [arrIndex] = ""
+							colLoop = colLoop + 1
+
+						rowLoop = rowLoop + 1
+
+
+
+				this.rowCount = rows
+				MultiboardSetRowCount(this.board, this.rowCount)
+
+
+
+		function setColCount(int cols)
+			int colLoop
+			int rowLoop
+			int arrIndex
+
+			// No actions if it's same.
+			if cols != this.colCount
+				// Here's the anti-lag snippet: remove unneeded multiboard items from memory.
+				// (or add new!)
+				if cols < this.colCount
+					colLoop = cols
+					while colLoop <= this.colCount
+						rowLoop = 0
+						while rowLoop <= this.rowCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							MultiboardReleaseItem(this.brdItem[arrIndex])
+							this.brdItem[arrIndex] = null
+							rowLoop = rowLoop + 1
+
+						colLoop = colLoop + 1
+
+				else
+					colLoop = this.colCount
+					while colLoop <= cols
+						rowLoop = 0
+						while rowLoop <= this.rowCount
+							arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+							brdItem [arrIndex] = MultiboardGetItem(this.board, rowLoop, colLoop)
+							width   [arrIndex] = .01
+							showVal [arrIndex] = true
+							showIcon[arrIndex] = true
+							curValue[arrIndex] = ""
+							curIcon [arrIndex] = ""
+							rowLoop = rowLoop + 1
+
+						colLoop = colLoop + 1
+
+
+
+				this.colCount = cols
+				MultiboardSetColumnCount(this.board, this.colCount)
+
+
+
+		function setTitleText(string newTitle)
+			this.titleText = newTitle
+			MultiboardSetTitleText(this.board, this.titleText)
+
+
+		// Operator API.
+
+		function title() returns string
+			return this.titleText
+
+
+		function setTitle(string newTitle)
+			this.setTitleText(newTitle)
+
+
+		function columns() returns int
+			return this.colCount
+
+
+		function setColumns(int cols)
+			this.setColCount(cols)
+
+
+		function rows() returns int
+			return this.rowCount
+
+
+		function setRows(int cols)
+			this.setRowCount(cols)
+
+
+		function show() returns bool
+			return this.isShown
+
+
+		function setShow(bool doDisplay)
+			this.display(doDisplay)
+
+
+		function suppress() returns bool
+			return this.isMinimized
+
+
+		function setSuppress(bool doMinimize)
+			this.minimize(doMinimize)
+
+
+		// Initializer.
+
+		static function create(int cols, int rows, string title) returns MyBoard
+			MyBoard  board    = new MyBoard
+			int  colLoop  = 0
+			int  rowLoop
+			int  arrIndex
+
+			board.board         = CreateMultiboard()
+			board.colCount      = cols
+			board.rowCount      = rows
+			board.isMinimized   = false
+			board.isShown       = false
+			board.titleText     = title
+
+			MultiboardSetColumnCount(board.board, cols)
+			MultiboardSetRowCount(board.board, rows)
+			MultiboardSetTitleText(board.board, title)
+
+			// Pre-initializing board items.
+			// This is needed to drastically reduce function calls afterwards.
+			while colLoop <= cols
+				rowLoop = 0
+				while rowLoop <= rows
+					arrIndex = MAX_COLUMN_COUNT*colLoop + rowLoop
+					board.brdItem [arrIndex] = MultiboardGetItem(board.board, rowLoop, colLoop)
+					board.width   [arrIndex] = .01
+					board.charCnt [arrIndex] = 4
+					board.showVal [arrIndex] = true
+					board.showIcon[arrIndex] = true
+					board.curValue[arrIndex] = ""
+					board.curIcon [arrIndex] = ""
+					rowLoop = rowLoop + 1
+
+				colLoop++
+
+			return board

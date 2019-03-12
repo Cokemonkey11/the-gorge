@@ -1,0 +1,32 @@
+package Repair
+	import ClosureTimers
+	import Game
+	import Players
+
+	constant REPAIR_RADIUS = 400.
+	constant CLOCK_PERIOD  =   1. / 30.
+
+
+	function doHeal(unit u)
+		real fracMissing = 1. - (u.getHP() / u.getMaxHP())
+		real exponent    = (fracMissing - .5) * 2.
+
+		// Get a rate between 0. and 1.
+		real healRate    = 10..pow(exponent) * 2. / 100.
+
+		real delHp       = u.getMaxHP() * healRate * CLOCK_PERIOD
+		u.setState(UNIT_STATE_LIFE, u.getHP() + delHp)
+
+	constant grp = CreateGroup()
+	init
+		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
+			grp.enumUnitsInRange(Game.westRepair.getPos(), REPAIR_RADIUS)
+			for u from grp
+				if Players.isWest(u.getOwner().getId())
+					doHeal(u)
+
+			grp.enumUnitsInRange(Game.eastRepair.getPos(), REPAIR_RADIUS)
+			for u from grp
+				if Players.isEast(u.getOwner().getId())
+					doHeal(u)
+		end)

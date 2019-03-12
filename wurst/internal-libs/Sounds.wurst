@@ -1,0 +1,56 @@
+package Sounds
+	class Slop
+		string snd
+
+	public class Sounds
+		static Table preloadDB
+
+		private static function preloadAfter()
+			timer time = GetExpiredTimer()
+			Slop s = preloadDB.loadInt(time.getHandleId()) castTo Slop
+			sound sd = CreateSound(s.snd, false, false, false, 12700, 12700, "")
+			SetSoundVolume(sd, 1)
+			StartSound(sd)
+			KillSoundWhenDone(sd)
+			destroy s
+			DestroyTimer(time)
+
+
+		static function preload(string str)
+			timer time= CreateTimer()
+			Slop s= new Slop
+			s.snd= str
+			preloadDB.saveInt(time.getHandleId(), s castTo int)
+			TimerStart(time, .01, false, function Sounds.preloadAfter)
+
+
+		static function play3D(string str, real pitch, real x, real y, real z)
+			sound s = CreateSound(str, false, true, true, 12700, 12700, "")
+			SetSoundPosition(s, x, y, z)
+			SetSoundVolume(s, 127)
+			SetSoundPitch(s, pitch)
+			StartSound(s)
+			KillSoundWhenDone(s)
+
+
+		static function playForPlayer(string str, real pitch, player who)
+			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
+			if GetLocalPlayer()== who
+				SetSoundVolume(s, 127)
+			else
+				SetSoundVolume(s, 0)
+
+			SetSoundPitch(s, pitch)
+			StartSound(s)
+			KillSoundWhenDone(s)
+
+
+		static function play(string str, real pitch, int vol)
+			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
+			SetSoundVolume(s, vol)
+			SetSoundPitch(s, pitch)
+			StartSound(s)
+			KillSoundWhenDone(s)
+
+	init
+		Sounds.preloadDB = new Table

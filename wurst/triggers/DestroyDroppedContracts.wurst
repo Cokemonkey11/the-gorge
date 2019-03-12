@@ -1,0 +1,29 @@
+scope DestroyDroppedContracts
+	import Equipment
+	import RegisterEvents
+
+	let tradeItems = new Table
+
+	function isTradingItem takes item it returns bool
+		if tradeItems.hasInt(GetItemTypeId(it))
+			return true
+
+		return false
+
+	function c()
+		item it = GetManipulatedItem()
+		if Equipment.getItemClass(it) == Equipment.CLASS_CONTRACT
+			RemoveItem(it)
+
+
+		// Remove trading items as well
+		if isTradingItem(it)
+			RemoveItem(it)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function c)
+
+		// Initialize Table
+		tradeItems.saveInt(Equipment.DATA_ID,          1)
+		tradeItems.saveInt(Equipment.TOXIC_SUBST_FULL, 1)
+		tradeItems.saveInt(Equipment.VENOM_VIAL,       1)

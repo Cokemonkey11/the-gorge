@@ -1,0 +1,183 @@
+package Revive
+	import FloatText
+	import Game
+	import Players
+	import Ships
+	import Equipment
+	import RegisterEvents
+	import TerrainData
+
+	class DeathDat
+		unit u
+		int timeL
+		real teamX
+		int ownerID= -1
+		int item0Id= -1
+		int item1Id= -1
+		int item2Id= -1
+		int item3Id= -1
+		int item4Id= -1
+		int item5Id= -1
+
+	constant CLOCK_PERIOD = 1.
+	constant REVIVE_OFFSET = 328.
+	constant REVIVE_DELAY_FLAT = 15
+	constant REVIVE_DELAY_PERMINUTE = 1
+	constant FLAT_BOUNTY = 100
+	constant BOUNTY_PER_MINUTE = 2
+	constant COP_ID = 'u003'
+	constant REVIVE_MODEL = "Abilities\\Spells\\Orc\\Reincarnation\\ReincarnationTarget.mdl"
+	constant COP          = "buildings\\other\\CircleOfPower\\CircleOfPower.mdl"
+	DeathDat array deathDB
+	int dbIndex= -1
+	timer time= CreateTimer()
+	int westDeadCount= 0
+	int eastDeadCount= 0
+	unit westDummy
+	unit eastDummy
+
+	function p()
+		DeathDat tempDat
+		int index = 0
+
+		while index <= dbIndex
+			tempDat = deathDB[index]
+
+			FloatText.reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
+			tempDat.timeL--
+
+			if tempDat.timeL<1 and not Game.ended
+				Ships.ships[tempDat.ownerID] = CreateUnit(Players.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
+				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
+				DestroyEffect(AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin"))
+				if Players.localPlayer == Players.players[tempDat.ownerID]
+					PanCameraToTimed(tempDat.teamX, 0., 0.)
+					ClearSelection()
+					SelectUnit(Ships.ships[tempDat.ownerID], true)
+
+				if tempDat.ownerID<7
+					westDeadCount = westDeadCount - 1
+					if westDeadCount == 0
+						SetUnitX(westDummy, TerrainData.SAFE_X)
+						SetUnitY(westDummy, TerrainData.SAFE_Y)
+
+				else
+					eastDeadCount = eastDeadCount - 1
+					if eastDeadCount == 0
+						SetUnitX(eastDummy, TerrainData.SAFE_X)
+						SetUnitY(eastDummy, TerrainData.SAFE_Y)
+
+
+				destroy tempDat
+				deathDB[index]= deathDB[dbIndex]
+				dbIndex= dbIndex-1
+				index = index-1
+				if dbIndex== -1
+					PauseTimer(time)
+
+
+			index += 1
+
+
+
+	function getBounty() returns int
+		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
+
+
+	function parseAssists(int pID)
+		int index = 2
+		while index <= 11
+			if Game.seconds - Game.assistTimestamps[pID].vals[index] <= Game.ASSIST_TIME
+				Game.assists[index] = Game.assists[index] +1
+				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
+
+			index += 1
+
+
+	function c()
+		DeathDat tempDat
+		unit tU= GetTriggerUnit()
+		unit kU
+		int id
+		int bounty
+		player kO
+		item ti
+		if Ships.isPlayerShip(tU)
+			kU= GetKillingUnit()
+			kO= GetOwningPlayer(kU)
+			id = GetPlayerId(kO)
+			tempDat= new DeathDat
+			tempDat.u= tU
+			tempDat.timeL= REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
+			tempDat.ownerID= GetPlayerId(GetOwningPlayer(tU))
+			if id>1
+				Game.parseKill(id)
+				parseAssists(tempDat.ownerID)
+				bounty = getBounty()
+				SetPlayerState(kO, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(kO, PLAYER_STATE_RESOURCE_GOLD)+bounty)
+				if Players.localPlayer == Players.players[tempDat.ownerID]
+					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "Your ship was destroyed by "+Game.colors[id]+Game.names[id]+"|r; you will be rebuilt in "+I2S(tempDat.timeL)+"|r seconds.")
+				else if Players.localPlayer == Players.players[id]
+					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "You destroyed "+Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r for |cffffcc00"+I2S(bounty)+" gold.")
+				else
+					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r was destroyed by "+Game.colors[id]+Game.names[id]+"|r for |cffffcc00"+I2S(bounty)+"|r gold.")
+
+			else
+				if Players.localPlayer == Players.players[tempDat.ownerID]
+					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "Your ship was destroyed. It will be rebuilt in |cffffcc00"+I2S(tempDat.timeL)+"|r seconds.")
+				else
+					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.colors[tempDat.ownerID]+Game.names[tempDat.ownerID]+"|r was destroyed.")
+
+
+			Game.addDeath(tU)
+
+			ti = UnitItemInSlot(tU, 0)
+			tempDat.item0Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			ti = UnitItemInSlot(tU, 1)
+			tempDat.item1Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			ti = UnitItemInSlot(tU, 2)
+			tempDat.item2Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			ti = UnitItemInSlot(tU, 3)
+			tempDat.item3Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			ti = UnitItemInSlot(tU, 4)
+			tempDat.item4Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			ti = UnitItemInSlot(tU, 5)
+			tempDat.item5Id= GetItemTypeId(ti)
+			RemoveItem(ti)
+
+			if tempDat.ownerID<7
+				tempDat.teamX= TerrainData.WESTX+REVIVE_OFFSET
+				westDeadCount= westDeadCount+1
+				if westDeadCount== 1
+					SetUnitX(westDummy, TerrainData.WESTX+REVIVE_OFFSET)
+					SetUnitY(westDummy, 0.)
+
+			else
+				tempDat.teamX= TerrainData.EASTX-REVIVE_OFFSET
+				eastDeadCount= eastDeadCount+1
+				if eastDeadCount== 1
+					SetUnitX(eastDummy, TerrainData.EASTX-REVIVE_OFFSET)
+					SetUnitY(eastDummy, 0.)
+
+
+			dbIndex= dbIndex+1
+			deathDB[dbIndex]= tempDat
+			if dbIndex == 0
+				TimerStart(time, CLOCK_PERIOD, true, function p)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+
+		// Initialize circle of power dummies
+		westDummy = CreateUnit(Players.playerPassive, COP_ID, TerrainData.SAFE_X, TerrainData.SAFE_Y, 270.)
+		eastDummy = CreateUnit(Players.playerPassive, COP_ID, TerrainData.SAFE_X, TerrainData.SAFE_Y, 270.)

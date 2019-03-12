@@ -1,0 +1,16 @@
+package GoldIncome
+	import Game
+	import Players
+
+	constant CLOCK_PERIOD = 1.
+	constant GOLD_PER_SECOND = 1
+
+	function c()
+		int index= 0
+		if not Game.ended
+			while index <= 11
+				SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
+				index += 1
+
+	init
+		TimerStart(CreateTimer(), CLOCK_PERIOD, true, function c)

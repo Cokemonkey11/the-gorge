@@ -1,0 +1,12 @@
+package IonicTeleporter
+	import DTS12MissileArray
+	import RegisterEvents
+
+	constant TELE_ID = 'A00H'
+
+	function effectC()
+		if GetSpellAbilityId() == TELE_ID
+			DTS12MissileArray.disjoint(GetTriggerUnit())
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)

@@ -1,0 +1,18 @@
+package Leave
+	import Game
+	import Players
+
+	function c() returns bool
+		player p = GetTriggerPlayer()
+		int id = GetPlayerId(p)
+		DisplayTextToPlayer(Players.localPlayer, 0., 0., Game.colors[id] + Game.names[id] + "|r has left the game.")
+		return false
+
+	init
+		trigger t = CreateTrigger()
+		int index = 2
+		while index <= 11
+			TriggerRegisterPlayerEvent(t, Player(index), EVENT_PLAYER_LEAVE)
+			index += 1
+
+		TriggerAddCondition(t, Condition(function c))

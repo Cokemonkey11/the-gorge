@@ -1,0 +1,16 @@
+package Release
+	import RegisterEvents
+	import Crewmembers
+
+	constant RELEASE_ID = 'A00M'
+	constant TRANSMUTE = "Abilities\\Spells\\Other\\Transmute\\GoldBottleMissile.mdl"
+
+	function c()
+		unit tU
+		if GetSpellAbilityId() == RELEASE_ID
+			tU= GetSpellTargetUnit()
+			Crewmembers.release(tU)
+			DestroyEffect(AddSpecialEffect(TRANSMUTE, GetUnitX(tU), GetUnitY(tU)))
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)

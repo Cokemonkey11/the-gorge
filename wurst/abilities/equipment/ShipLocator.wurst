@@ -1,0 +1,33 @@
+package ShipLocator
+	import Players
+	import RegisterEvents
+
+	constant SHIP_LOC_ID   = 'A00I'
+	constant RANGE         =  4000.
+	constant PING_DURATION =     5.
+
+	group grp = CreateGroup()
+
+	function c()
+		unit tU
+		unit first
+		int id
+		player owner
+
+		if GetSpellAbilityId() == SHIP_LOC_ID
+			tU = GetTriggerUnit()
+			owner = GetOwningPlayer(tU)
+			GroupEnumUnitsInRange(grp, GetUnitX(tU), GetUnitY(tU), RANGE, null)
+
+			while not FirstOfGroup(grp) == null
+				first = FirstOfGroup(grp)
+
+				id = GetPlayerId(GetOwningPlayer(first))
+				if IsUnitEnemy(first, owner) and id > 1
+					if Players.localPlayer == owner
+						PingMinimap(GetUnitX(first), GetUnitY(first), PING_DURATION)
+
+				GroupRemoveUnit(grp, first)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)

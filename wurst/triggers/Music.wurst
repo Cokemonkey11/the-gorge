@@ -1,0 +1,475 @@
+package Music
+	import Muscii
+	import Sounds
+
+	// Back Against the Wall by Cage the Elephant
+	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
+	constant HAT_PATH       = "musRad-khatClosed.mp3"
+	constant HATOPEN_PATH   = "musRad-khatOpen.mp3"
+	constant SNR_PATH       = "musRad-sonorSnr.mp3"
+	constant BAS_PATH       = "musRad-bass.mp3"
+	constant RID_PATH       = "zildj-ride.mp3"
+	constant FLM_PATH       = "musRad-sonorFlam.mp3"
+	constant RIM_PATH       = "musRad-sonorRim.mp3"
+	constant CRS_PATH       = "zildj-crash.mp3"
+	constant TM1_PATH       = "musRad-tom1.mp3"
+	constant TM1DOUBLE_PATH = "musRad-tom1-double.mp3"
+	constant TM4_PATH       = "musRad-tom4.mp3"
+	constant TM5DOUBLE_PATH = "musRad-tom5-double.mp3"
+	constant TM5_PATH       = "musRad-tom5.mp3"
+	constant HATPDL_PATH    = "musRad-khatPdl.mp3"
+
+	Muscii m
+	Muscii v1
+	Muscii v1p2
+	Muscii v1p3
+	Muscii chorusP1
+	Muscii chorusP2
+	Muscii chorusP3
+	Muscii chorus2P4
+	Muscii chorus2P5
+	Muscii chorus2P7
+	Muscii chorus2P8
+	Muscii verse3P2
+	Muscii chorus3P7
+	Muscii chorus3P8
+
+
+	function playIntro()
+		Section verse1 = () -> playVerse1()
+
+		m
+			..playCounted(3)
+			..callback(verse1)
+
+
+	function playVerse1()
+		Section chorus = () -> playChorus()
+
+		v1
+			..playCounted(0)
+			..enqueue(v1p2, 1)
+			..enqueue(v1p3, 0)
+			..callback(chorus)
+
+
+	function playChorus()
+		Section verse2 = () -> playVerse2()
+
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP2, 0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorusP2, 0)
+			..callback(verse2)
+
+
+	function playVerse2()
+		Section chorus2 = () -> playChorus2()
+
+		v1
+			..playCounted(0)
+			..enqueue(v1p2, 1)
+			..enqueue(v1p3, 0)
+			..callback(chorus2)
+
+
+	function playChorus2()
+		Section verse3 = () -> playVerse3()
+
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP3, 1)
+			..enqueue(chorus2P4, 0)
+			..enqueue(chorus2P5, 1)
+			..enqueue(chorus2P7, 0)
+			..enqueue(chorus2P8, 0)
+			..callback(verse3)
+
+
+	function playVerse3()
+		Section chorus3 = () -> playChorus3()
+
+		v1
+			..playCounted(0)
+			..enqueue(verse3P2, 0)
+			..enqueue(v1p2, 2)
+			..enqueue(v1p3, 0)
+			..callback(chorus3)
+
+
+	function playChorus3()
+		Section verse1 = () -> playVerse1()
+
+		chorusP1
+			..playCounted(0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorusP3, 0)
+			..enqueue(chorus2P4, 0)
+			..enqueue(chorus2P5, 1)
+			..enqueue(chorus3P7, 0)
+			..enqueue(chorus3P8, 0)
+			..callback(verse1)
+
+
+	init
+		//		song3
+		Note hat = Note.create(HAT_PATH, 90, 1.)
+		Note snr = Note.create(SNR_PATH, 110, 1.)
+		Note bas = Note.create(BAS_PATH, 127, 1.)
+		Note hatQuiet = Note.create(HAT_PATH, 75, 1.)
+		Note snrQuiet = Note.create(SNR_PATH, 97, 1.)
+		Note basQuiet = Note.create(BAS_PATH, 105, 1.)
+		Note hatVQuiet = Note.create(HAT_PATH, 60, 1.)
+		Note snrVQuiet = Note.create(SNR_PATH, 83, 1.)
+		Note basVQuiet = Note.create(BAS_PATH, 89, 1.)
+		Note rid = Note.create(RID_PATH, 75, 1.)
+		Note nul = Note.create(HAT_PATH, 0, 1.)
+		Note flm = Note.create(FLM_PATH, 110, 1.)
+		Note rim = Note.create(RIM_PATH, 100, 1.)
+		Note crs = Note.create(CRS_PATH, 55, 1.)
+		Note hop = Note.create(HATOPEN_PATH, 90, 1.)
+		Note tm1 = Note.create(TM1_PATH, 110, 1.)
+		Note tm1d = Note.create(TM1DOUBLE_PATH, 110, 1.)
+		Note tm4 = Note.create(TM4_PATH, 110, 1.)
+		Note tm5 = Note.create(TM5_PATH, 110, 1.)
+		//Note tm5d = Note.create(TM5DOUBLE_PATH, 110, 1.)
+		Note hft = Note.create(HATPDL_PATH, 75, 1.)
+
+		Chord rb
+		Chord rs
+		Chord rrim
+		Chord r
+		Chord z
+		Chord b
+		Chord f
+		Chord cb
+		Chord cs
+		Chord hs
+		Chord hb
+		Chord hopen
+		Chord hsb
+		Chord hsbQuiet
+		Chord hsbVQuiet
+		Chord s
+		Chord h
+		Chord t1
+		Chord t1d
+		Chord t4
+		Chord t5
+		Chord hf
+
+		hsb = Chord.create(hat)
+		hsb.addNote(snr)
+		hsb.addNote(bas)
+
+		hsbQuiet = Chord.create(hatQuiet)
+		hsbQuiet.addNote(snrQuiet)
+		hsbQuiet.addNote(basQuiet)
+
+		hsbVQuiet = Chord.create(hatVQuiet)
+		hsbVQuiet.addNote(snrVQuiet)
+		hsbVQuiet.addNote(basVQuiet)
+
+		rb = Chord.create(rid)
+		rb.addNote(bas)
+
+		rs = Chord.create(rid)
+		rs.addNote(snr)
+
+		rrim = Chord.create(rid)
+		rrim.addNote(rim)
+
+		cb = Chord.create(crs)
+		cb.addNote(bas)
+
+		cs = Chord.create(crs)
+		cs.addNote(snr)
+
+		hs = Chord.create(hat)
+		hs.addNote(snr)
+
+		hb = Chord.create(hat)
+		hb.addNote(bas)
+
+		hopen = Chord.create(hop)
+
+		hf = Chord.create(hft)
+
+		t1 = Chord.create(tm1)
+
+		t1d = Chord.create(tm1d)
+
+		t4 = Chord.create(tm4)
+
+		t5 = Chord.create(tm5)
+
+		r = Chord.create(rid)
+
+		z = Chord.create(nul)
+
+		b = Chord.create(bas)
+
+		f = Chord.create(flm)
+
+		s = Chord.create(snr)
+
+		h = Chord.create(hat)
+
+		m = Muscii.create(rb, 240.)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+		m.addChord(r)
+		m.addChord(z)
+
+		v1 = Muscii.create(rb, 240.)
+		v1.addChord(z)
+		v1.addChord(rrim)
+		v1.addChord(z)
+		v1.addChord(r)
+		v1.addChord(z)
+		v1.addChord(rrim)
+		v1.addChord(z)
+		v1.addChord(r)
+		v1.addChord(z)
+		v1.addChord(rrim)
+		v1.addChord(z)
+		v1.addChord(r)
+		v1.addChord(z)
+		v1.addChord(rrim)
+		v1.addChord(z)
+
+		v1p2 = Muscii.create(rb, 240.)
+		v1p2.addChord(z)
+		v1p2.addChord(rrim)
+		v1p2.addChord(z)
+		v1p2.addChord(r)
+		v1p2.addChord(z)
+		v1p2.addChord(rrim)
+		v1p2.addChord(z)
+		v1p2.addChord(r)
+		v1p2.addChord(z)
+		v1p2.addChord(rrim)
+		v1p2.addChord(z)
+		v1p2.addChord(r)
+		v1p2.addChord(z)
+		v1p2.addChord(rrim)
+		v1p2.addChord(b)
+
+		v1p3 = Muscii.create(rb, 240.)
+		v1p3.addChord(z)
+		v1p3.addChord(rrim)
+		v1p3.addChord(z)
+		v1p3.addChord(r)
+		v1p3.addChord(z)
+		v1p3.addChord(rrim)
+		v1p3.addChord(z)
+		v1p3.addChord(r)
+		v1p3.addChord(z)
+		v1p3.addChord(rrim)
+		v1p3.addChord(z)
+		v1p3.addChord(r)
+		v1p3.addChord(b)
+		v1p3.addChord(f)
+		v1p3.addChord(b)
+
+		chorusP1 = Muscii.create(cb, 240.)
+		chorusP1.addChord(b)
+		chorusP1.addChord(hs)
+		chorusP1.addChord(b)
+		chorusP1.addChord(hb)
+		chorusP1.addChord(s)
+		chorusP1.addChord(h)
+		chorusP1.addChord(hopen)
+		chorusP1.addChord(hb)
+		chorusP1.addChord(b)
+		chorusP1.addChord(hs)
+		chorusP1.addChord(b)
+		chorusP1.addChord(hb)
+		chorusP1.addChord(s)
+		chorusP1.addChord(h)
+		chorusP1.addChord(hopen)
+
+		chorusP2 = Muscii.create(hb, 240.)
+		chorusP2.addChord(b)
+		chorusP2.addChord(hs)
+		chorusP2.addChord(b)
+		chorusP2.addChord(hb)
+		chorusP2.addChord(s)
+		chorusP2.addChord(h)
+		chorusP2.addChord(hopen)
+		chorusP2.addChord(hb)
+		chorusP2.addChord(b)
+		chorusP2.addChord(hs)
+		chorusP2.addChord(b)
+		chorusP2.addChord(hb)
+		chorusP2.addChord(s)
+		chorusP2.addChord(t1d)
+		chorusP2.addChord(t4)
+
+		chorusP3 = Muscii.create(hb, 240.)
+		chorusP3.addChord(b)
+		chorusP3.addChord(hs)
+		chorusP3.addChord(b)
+		chorusP3.addChord(hb)
+		chorusP3.addChord(s)
+		chorusP3.addChord(h)
+		chorusP3.addChord(hopen)
+		chorusP3.addChord(hb)
+		chorusP3.addChord(b)
+		chorusP3.addChord(hs)
+		chorusP3.addChord(b)
+		chorusP3.addChord(hb)
+		chorusP3.addChord(s)
+		chorusP3.addChord(h)
+		chorusP3.addChord(hopen)
+
+		chorus2P4 = Muscii.create(hsbVQuiet, 240.)
+		chorus2P4.addChord(hsbVQuiet)
+		chorus2P4.addChord(hsbVQuiet)
+		chorus2P4.addChord(hsbVQuiet)
+		chorus2P4.addChord(hsbQuiet)
+		chorus2P4.addChord(hsbQuiet)
+		chorus2P4.addChord(hsbQuiet)
+		chorus2P4.addChord(hsbQuiet)
+		chorus2P4.addChord(hsb)
+		chorus2P4.addChord(hsb)
+		chorus2P4.addChord(hsb)
+		chorus2P4.addChord(f)
+		chorus2P4.addChord(f)
+		chorus2P4.addChord(cs)
+		chorus2P4.addChord(f)
+		chorus2P4.addChord(cs)
+
+		chorus2P5 = Muscii.create(cb, 240.)
+		chorus2P5.addChord(z)
+		chorus2P5.addChord(hs)
+		chorus2P5.addChord(b)
+		chorus2P5.addChord(hb)
+		chorus2P5.addChord(z)
+		chorus2P5.addChord(hs)
+		chorus2P5.addChord(b)
+		chorus2P5.addChord(h)
+		chorus2P5.addChord(b)
+		chorus2P5.addChord(hs)
+		chorus2P5.addChord(b)
+		chorus2P5.addChord(hb)
+		chorus2P5.addChord(b)
+		chorus2P5.addChord(hs)
+		chorus2P5.addChord(b)
+
+		chorus2P7 = Muscii.create(cb, 240.)
+		chorus2P7.addChord(z)
+		chorus2P7.addChord(hs)
+		chorus2P7.addChord(b)
+		chorus2P7.addChord(hb)
+		chorus2P7.addChord(z)
+		chorus2P7.addChord(hs)
+		chorus2P7.addChord(b)
+		chorus2P7.addChord(h)
+		chorus2P7.addChord(b)
+		chorus2P7.addChord(hs)
+		chorus2P7.addChord(b)
+		chorus2P7.addChord(hb)
+		chorus2P7.addChord(b)
+		chorus2P7.addChord(cs)
+		chorus2P7.addChord(b)
+
+		chorus2P8 = Muscii.create(cb, 240.)
+		chorus2P8.addChord(z)
+		chorus2P8.addChord(hs)
+		chorus2P8.addChord(b)
+		chorus2P8.addChord(hb)
+		chorus2P8.addChord(z)
+		chorus2P8.addChord(hs)
+		chorus2P8.addChord(b)
+		chorus2P8.addChord(h)
+		chorus2P8.addChord(b)
+		chorus2P8.addChord(hs)
+		chorus2P8.addChord(b)
+		chorus2P8.addChord(b)
+		chorus2P8.addChord(s)
+		chorus2P8.addChord(t1)
+		chorus2P8.addChord(t5)
+
+		verse3P2 = Muscii.create(rb, 240.)
+		verse3P2.addChord(z)
+		verse3P2.addChord(rrim)
+		verse3P2.addChord(z)
+		verse3P2.addChord(r)
+		verse3P2.addChord(z)
+		verse3P2.addChord(rrim)
+		verse3P2.addChord(z)
+		verse3P2.addChord(r)
+		verse3P2.addChord(z)
+		verse3P2.addChord(rrim)
+		verse3P2.addChord(z)
+		verse3P2.addChord(r)
+		verse3P2.addChord(z)
+		verse3P2.addChord(rrim)
+		verse3P2.addChord(hf)
+
+		chorus3P7 = Muscii.create(cb, 240.)
+		chorus3P7.addChord(z)
+		chorus3P7.addChord(hs)
+		chorus3P7.addChord(b)
+		chorus3P7.addChord(hb)
+		chorus3P7.addChord(z)
+		chorus3P7.addChord(hs)
+		chorus3P7.addChord(b)
+		chorus3P7.addChord(h)
+		chorus3P7.addChord(b)
+		chorus3P7.addChord(hs)
+		chorus3P7.addChord(b)
+		chorus3P7.addChord(hb)
+		chorus3P7.addChord(b)
+		chorus3P7.addChord(hs)
+		chorus3P7.addChord(b)
+
+		chorus3P8 = Muscii.create(cb, 240.)
+		chorus3P8.addChord(z)
+		chorus3P8.addChord(hs)
+		chorus3P8.addChord(b)
+		chorus3P8.addChord(hb)
+		chorus3P8.addChord(z)
+		chorus3P8.addChord(hs)
+		chorus3P8.addChord(b)
+		chorus3P8.addChord(h)
+		chorus3P8.addChord(b)
+		chorus3P8.addChord(hs)
+		chorus3P8.addChord(b)
+		chorus3P8.addChord(hb)
+		chorus3P8.addChord(b)
+		chorus3P8.addChord(hs)
+		chorus3P8.addChord(b)
+
+
+		playIntro()
+		//		end song3
+
+
+		Sounds.preload(HAT_PATH)
+		Sounds.preload(SNR_PATH)
+		Sounds.preload(BAS_PATH)
+		Sounds.preload(RID_PATH)
+		Sounds.preload(FLM_PATH)
+		Sounds.preload(RIM_PATH)
+		Sounds.preload(CRS_PATH)
+		Sounds.preload(HATOPEN_PATH)
+		Sounds.preload(TM1_PATH)
+		Sounds.preload(TM1DOUBLE_PATH)
+		Sounds.preload(TM4_PATH)
+		Sounds.preload(TM5_PATH)
+		Sounds.preload(TM5DOUBLE_PATH)
+		Sounds.preload(HATPDL_PATH)

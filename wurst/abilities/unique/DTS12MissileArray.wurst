@@ -1,0 +1,278 @@
+package DTS12MissileArray
+	// Helicopter (Frigate) Q Ability:
+	// Fires two missiles at a unit, which accelerate towards the target and deal
+	// damage upon contact. If the missiles do not hit they eventually disjoint.
+	// If a location is targeted, the missiles instead accelerate in one direction.
+	// This ability can be cast twice before it will enter cooldown.
+	// 		Damage (each):    55
+	//	    Cast Range:       700
+	//		Maximum Range:    1800
+	//	    Initial Velocity: 600
+	//		Maximum Velocity: 1200
+	//		Acceleration:     100
+
+	import Players
+	import RegisterEvents
+	import DamageType
+	import Ships
+	import Sounds
+
+	native UnitAlive(unit u) returns bool
+
+	class Missile
+		unit target
+		real dX
+		real dY
+		real ddX = 0.
+		real ddY = 0.
+		real vel
+		real dist= 0.
+		unit missile
+		int ownerID
+		effect fx
+
+	public class DTS12MissileArray
+		static constant DUMMY_ID = 'u000'
+		static constant ARRAY_ID = 'A00P'
+		static constant DAMAGE           = 55.
+		static constant MAXIMUM_RANGE    = 1800.
+		static constant INITIAL_VELOCITY = 600.
+		static constant MAXIMUM_VELOCITY = 1200.
+		static constant INITIAL_OFFSET   = 24.
+		static constant ACCELERATION     = 100.
+		static constant CLOCK_PERIOD     = 1./30.
+		static constant COLLISION_RADIUS = 32.+64.
+		static constant FLY_HEIGHT       = 120.
+		static constant CHEAP_FRICTION   = MAXIMUM_VELOCITY / (MAXIMUM_VELOCITY + ACCELERATION)
+		static constant SCALE = .75
+		static constant MISSILE_MODEL = "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdl"
+		static constant SOUND         = "Abilities\\Spells\\Human\\FlakCannons\\FlakCannon.wav"
+
+		static timer clock = CreateTimer()
+		static Missile array db
+		static int dbIndex = -1
+		static location loc = Location(0., 0.)
+		static group grp = CreateGroup()
+		static Table ht
+
+		static function getZ(real x, real y) returns real
+			MoveLocation(loc, x, y)
+			return GetLocationZ(loc)
+
+		static function disjoint(unit u)
+			int index = 0
+			Missile temp
+			while index <= dbIndex
+				temp = db[index]
+				if temp.target == u
+					temp.target = null
+				index += 1
+
+		static function p()
+			int index = 0
+			Missile temp
+			real ang
+			unit first
+			bool hit
+			real newX
+			real newY
+			real oldX
+			real oldY
+			while index <= dbIndex
+				temp = db[index]
+				if temp.target== null
+					temp.dX = temp.dX + temp.ddX
+					temp.dY = temp.dY + temp.ddY
+					temp.dX = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dX
+					temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
+					oldX = GetUnitX(temp.missile)
+					oldY = GetUnitY(temp.missile)
+					newX = oldX+temp.dX
+					newY = oldY+temp.dY
+					SetUnitX(temp.missile, newX)
+					SetUnitY(temp.missile, newY)
+					SetUnitFlyHeight(temp.missile, GetUnitFlyHeight(temp.missile)-(getZ(newX, newY)-getZ(oldX, oldY)), 0.)
+					temp.vel = temp.vel + ACCELERATION * CLOCK_PERIOD
+					temp.vel = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.vel
+					temp.dist = temp.dist + temp.vel
+					GroupEnumUnitsInRange(grp, newX, newY, COLLISION_RADIUS, null)
+					hit = false
+					while FirstOfGroup(grp) != null
+						first = FirstOfGroup(grp)
+						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
+							hit = true
+							dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
+
+						GroupRemoveUnit(grp, first)
+
+					if temp.dist >= MAXIMUM_RANGE or hit
+						KillUnit(temp.missile)
+						DestroyEffect(temp.fx)
+						db[index] = db[dbIndex]
+						dbIndex = dbIndex - 1
+						index = index -1
+						destroy temp
+						if dbIndex== -1
+							PauseTimer(clock)
+
+				else
+					ang = Atan2(GetUnitY(temp.target)-GetUnitY(temp.missile), GetUnitX(temp.target)-GetUnitX(temp.missile))
+					SetUnitFacing(temp.missile, ang*bj_RADTODEG)
+					temp.ddX = ACCELERATION * CLOCK_PERIOD * Cos(ang)
+					temp.ddY = ACCELERATION * CLOCK_PERIOD * Sin(ang)
+					temp.dX = temp.dX + temp.ddX
+					temp.dY = temp.dY + temp.ddY
+					temp.dX = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dX
+					temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
+					newX = GetUnitX(temp.missile)+temp.dX
+					newY = GetUnitY(temp.missile)+temp.dY
+					SetUnitX(temp.missile, newX)
+					SetUnitY(temp.missile, newY)
+					temp.vel = SquareRoot(temp.dX*temp.dX + temp.dY*temp.dY)
+					temp.dist = temp.dist + temp.vel
+					if not UnitAlive(temp.target)
+						temp.target = null
+
+					GroupEnumUnitsInRange(grp, newX, newY, COLLISION_RADIUS, null)
+					hit = false
+					while FirstOfGroup(grp) != null
+						first = FirstOfGroup(grp)
+						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
+							hit = true
+							dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
+
+						GroupRemoveUnit(grp, first)
+
+					if temp.dist >= MAXIMUM_RANGE or hit
+						KillUnit(temp.missile)
+						DestroyEffect(temp.fx)
+						db[index] = db[dbIndex]
+						dbIndex = dbIndex - 1
+						index = index -1
+						destroy temp
+						if dbIndex== -1
+							PauseTimer(clock)
+
+				index += 1
+
+
+
+		static function c()
+			unit targ
+			unit tU
+			Missile temp
+			real face
+			real cX
+			real cY
+			real tX
+			real tY
+			player owner
+			if GetSpellAbilityId()== ARRAY_ID
+				targ = GetSpellTargetUnit()
+				tU = GetTriggerUnit()
+				cX= GetUnitX(tU)
+				cY= GetUnitY(tU)
+				Sounds.play3D(SOUND, 1., cX, cY, 100.)
+				if targ!= null
+					tU= GetTriggerUnit()
+					owner = GetOwningPlayer(tU)
+					cX= GetUnitX(tU)
+					cY= GetUnitY(tU)
+					face = Atan2(GetUnitY(targ)-cY, GetUnitX(targ)-cX)
+					temp = new Missile
+					temp.target = targ
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
+					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+					temp.ownerID = GetPlayerId(owner)
+					dbIndex = dbIndex + 1
+					db[dbIndex] = temp
+					if dbIndex == 0
+						TimerStart(clock, CLOCK_PERIOD, true, function p)
+
+					temp = new Missile
+					temp.target = targ
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
+					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+					temp.ownerID = GetPlayerId(owner)
+					dbIndex = dbIndex+1
+					db[dbIndex] = temp
+				else
+					tU= GetTriggerUnit()
+					owner = GetOwningPlayer(tU)
+					cX= GetUnitX(tU)
+					cY= GetUnitY(tU)
+					tX= GetSpellTargetX()
+					tY= GetSpellTargetY()
+					face = Atan2(tY-cY, tX-cX)
+					temp = new Missile
+					temp.target = null
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face+bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face+bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
+					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+					temp.ddX = ACCELERATION * Cos(face) * CLOCK_PERIOD
+					temp.ddY = ACCELERATION * Sin(face) * CLOCK_PERIOD
+					temp.ownerID = GetPlayerId(owner)
+					dbIndex = dbIndex + 1
+					db[dbIndex] = temp
+					if dbIndex == 0
+						TimerStart(clock, CLOCK_PERIOD, true, function p)
+
+					temp = new Missile
+					temp.target = null
+					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
+					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
+					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+					UnitAddAbility(temp.missile, 'Arav')
+					UnitAddAbility(temp.missile, 'Aloc')
+					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
+					SetUnitScale(temp.missile, SCALE, SCALE, SCALE)
+					temp.fx = AddSpecialEffectTarget(MISSILE_MODEL, temp.missile, "origin")
+					temp.vel = INITIAL_VELOCITY * CLOCK_PERIOD
+					temp.dX = INITIAL_VELOCITY * Cos(face) * CLOCK_PERIOD
+					temp.dY = INITIAL_VELOCITY * Sin(face) * CLOCK_PERIOD
+					temp.ddX = ACCELERATION * Cos(face) * CLOCK_PERIOD
+					temp.ddY = ACCELERATION * Sin(face) * CLOCK_PERIOD
+					temp.ownerID = GetPlayerId(owner)
+					dbIndex = dbIndex+1
+					db[dbIndex] = temp
+
+				if not ht.hasInt(tU.getHandleId())
+					ht.saveInt(tU.getHandleId(), 0)
+
+				ht.saveInt(tU.getHandleId(), ht.loadInt(tU.getHandleId()) + 1)
+				if ht.loadInt(tU.getHandleId()) == 1
+					UnitRemoveAbility(tU, ARRAY_ID)
+					UnitAddAbility(tU, ARRAY_ID)
+				else
+					ht.saveInt(tU.getHandleId(), 0)
+
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function DTS12MissileArray.c)
+		DTS12MissileArray.ht = new Table
+		Sounds.preload(DTS12MissileArray.SOUND)

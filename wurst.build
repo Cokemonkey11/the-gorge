@@ -1,0 +1,9 @@
+---
+projectName: "The Gorge"
+dependencies:
+- "https://github.com/peq/wurstStdlib"
+buildMapData:
+  name: "The Gorge 0.9.1"
+  fileName: "(10)TheGorge0.9.1"
+  author: "Cokemonkey11"
+  playerCount: 10

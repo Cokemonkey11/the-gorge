@@ -1,0 +1,60 @@
+package Ships
+	public class Ships
+		static constant CLASS_UNKNOWN     = -1
+		static constant CLASS_FRIGATE     =  0
+		static constant CLASS_SMUGGLER    =  1
+		static constant CLASS_INTERCEPTOR =  2
+		static constant CLASS_BATTLESHIP  =  3
+
+		static constant HELICOPTER_ID = 'h000'
+		static constant PARACOPTER_ID = 'h00B'
+		static constant ZEPPELIN_ID   = 'h00D'
+		static constant SKYBARGE_ID   = 'h00E'
+
+		static constant SELL_RATIO     =  .5
+
+		static unit array ships
+
+		static let tab      = new Table
+		static let sellVals = new Table
+
+		static function getClass(unit u) returns int
+			int id = GetUnitTypeId(u)
+			if tab.hasInt(id)
+				return tab.loadInt(id)
+
+			return CLASS_UNKNOWN
+
+
+		static function getSellValue(unit u) returns int
+			int id = GetUnitTypeId(u)
+			if sellVals.hasInt(id)
+				return sellVals.loadInt(id)
+
+			return -1
+
+
+		static function isPlayerShip(unit u) returns bool
+			return getClass(u) != CLASS_UNKNOWN
+
+
+		static function hasItemOfType(unit u, int t) returns bool
+			int index= 0
+			while index <= 5
+				if GetItemTypeId(UnitItemInSlot(u, index))== t
+					return true
+
+				index += 1
+
+			return false
+
+	init
+		Ships.tab.saveInt(Ships.HELICOPTER_ID, Ships.CLASS_FRIGATE)
+		Ships.tab.saveInt(Ships.PARACOPTER_ID, Ships.CLASS_SMUGGLER)
+		Ships.tab.saveInt(Ships.ZEPPELIN_ID, Ships.CLASS_INTERCEPTOR)
+		Ships.tab.saveInt(Ships.SKYBARGE_ID, Ships.CLASS_BATTLESHIP)
+
+		Ships.sellVals.saveInt(Ships.HELICOPTER_ID, 15)
+		Ships.sellVals.saveInt(Ships.PARACOPTER_ID, 15)
+		Ships.sellVals.saveInt(Ships.ZEPPELIN_ID, 15)
+		Ships.sellVals.saveInt(Ships.SKYBARGE_ID, 15)
