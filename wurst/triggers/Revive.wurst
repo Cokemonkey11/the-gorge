@@ -1,5 +1,7 @@
 package Revive
 	import Ai
+	import Assets
+	import ClosureTimers
 	import FloatText
 	import Game
 	import Players
@@ -7,6 +9,10 @@ package Revive
 	import Equipment
 	import RegisterEvents
 	import TerrainData
+
+	constant INVULN_FX       = Other.divineshieldtarget
+	constant INVULN_DURATION = 6.
+
 
 	class DeathDat
 		unit u
@@ -48,8 +54,15 @@ package Revive
 			tempDat.timeL--
 
 			if tempDat.timeL < 1 and not Game.ended
+				// Revive the ship.
 				Ships.ships[tempDat.ownerID] = CreateUnit(Players.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
-				Ships.ships[tempDat.ownerID].aiOnRevive()
+				Ships.ships[tempDat.ownerID]..aiOnRevive()..setInvulnerable(true)
+
+				// Apply and async-clear the invulnerability status.
+				let fx = Ships.ships[tempDat.ownerID].addEffect(INVULN_FX, "origin")
+				doAfter(INVULN_DURATION) () ->
+					Ships.ships[tempDat.ownerID].setInvulnerable(false)
+					fx.destr()
 
 				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
 				AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin").destr()
