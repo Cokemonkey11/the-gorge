@@ -1,11 +1,25 @@
 package Leave
+	import Ai
 	import Game
+	import InitializeScoreboard
 	import Players
 
 	function c() returns bool
-		player p = GetTriggerPlayer()
-		int id = GetPlayerId(p)
+		let p = GetTriggerPlayer()
+		let id = GetPlayerId(p)
+
+		// Display a message.
 		DisplayTextToPlayer(Players.localPlayer, 0., 0., Game.colors[id] + Game.names[id] + "|r has left the game.")
+
+		// Mark the player as left.
+		Players.playing[id] = false
+
+		// Update the multiboard.
+		scoreboardLeave(p)
+
+		// Suspend ship.
+		p.intoAi()
+
 		return false
 
 	init

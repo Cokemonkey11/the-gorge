@@ -1,4 +1,5 @@
 package Revive
+	import Ai
 	import FloatText
 	import Game
 	import Players
@@ -46,16 +47,18 @@ package Revive
 			FloatText.reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
 			tempDat.timeL--
 
-			if tempDat.timeL<1 and not Game.ended
+			if tempDat.timeL < 1 and not Game.ended
 				Ships.ships[tempDat.ownerID] = CreateUnit(Players.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
+				Ships.ships[tempDat.ownerID].aiOnRevive()
+
 				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
-				DestroyEffect(AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin"))
+				AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin").destr()
 				if Players.localPlayer == Players.players[tempDat.ownerID]
 					PanCameraToTimed(tempDat.teamX, 0., 0.)
 					ClearSelection()
 					SelectUnit(Ships.ships[tempDat.ownerID], true)
 
-				if tempDat.ownerID<7
+				if tempDat.ownerID < 7
 					westDeadCount = westDeadCount - 1
 					if westDeadCount == 0
 						SetUnitX(westDummy, TerrainData.SAFE_X)
@@ -88,7 +91,7 @@ package Revive
 		int index = 2
 		while index <= 11
 			if Game.seconds - Game.assistTimestamps[pID].vals[index] <= Game.ASSIST_TIME
-				Game.assists[index] = Game.assists[index] +1
+				Game.assists[index] = Game.assists[index] + 1
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 
 			index += 1

@@ -47,6 +47,14 @@ REPOSITORY_URI     = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG          = (
     (
+        "next",
+        "2019",
+        (
+            "This map is now written entirely in wurst!",
+
+        )
+    ),
+    (
         "0.9.1",
         "24 Feb 2017",
         (

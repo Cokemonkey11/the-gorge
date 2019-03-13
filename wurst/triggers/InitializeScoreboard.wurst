@@ -1,4 +1,15 @@
 package InitializeScoreboard
+	//          Kills  Deaths  Assists  Farm
+	// player2  0      0       0        0
+	// left     0      0       0        0
+	// player4  0      0       0        0
+	//
+	// player7  0      0       0        0
+	// player8  0      0       0        0
+	// player9  0      0       0        0
+	// player10 0      0       0        0
+	// player11 0      0       0        0
+
 	import Game
 	import MyBoard
 	import Players
@@ -27,11 +38,19 @@ package InitializeScoreboard
 			Game.scoreboard.setValue(col, i, val)
 			i++
 
-	function initialize()
-		int i = 2
-		int j = 0
+	function grey(string s) returns string
+		return "|cff999999" + s + "|r"
 
-		Game.scoreboard = MyBoard.create(5, 2+Players.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
+	public function scoreboardLeave(player p)
+		Game.scoreboard.setValue(0, Game.scoreboardRows[p.getId()], grey("Left..."))
+		Game.scoreboard.setValue(1, Game.scoreboardRows[p.getId()], grey(I2S(Game.kills[p.getId()])))
+		Game.scoreboard.setValue(2, Game.scoreboardRows[p.getId()], grey(I2S(Game.deaths[p.getId()])))
+		Game.scoreboard.setValue(4, Game.scoreboardRows[p.getId()], grey(I2S(Game.farm[p.getId()])))
+		Game.scoreboard.setValue(3, Game.scoreboardRows[p.getId()], grey(I2S(Game.assists[p.getId()])))
+
+
+	function initialize()
+		Game.scoreboard = MyBoard.create(5, 2 + Players.playerCount, "|cffffcc00Scoreboard|r [|cffffffff0 - 0|r]")
 		widthCol(0, MB_WIDTH*3./7.)
 		widthCol(1, MB_WIDTH*1./7.)
 		widthCol(2, MB_WIDTH*1.125/7.)
@@ -42,42 +61,41 @@ package InitializeScoreboard
 		iconCol(3, false)
 		iconCol(4, false)
 		Game.scoreboard.displayIcon(0, 0, false)
-		Game.scoreboard.displayIcon(0, 1+Game.westCount, false)
+		Game.scoreboard.displayIcon(0, 1 + Game.westCount, false)
 		valueCol(1, "0")
 		valueCol(2, "0")
 		valueCol(3, "0")
 		valueCol(4, "0")
+
 		Game.scoreboard.setValue(1, 0, "|cffffcc00Kills|r")
 		Game.scoreboard.setValue(2, 0, "|cffffcc00Deaths|r")
 		Game.scoreboard.setValue(3, 0, "|cffffcc00Assists|r")
 		Game.scoreboard.setValue(4, 0, "|cffffcc00Farm|r")
-		Game.scoreboard.setValue(1, 1+Game.westCount, "")
-		Game.scoreboard.setValue(2, 1+Game.westCount, "")
-		Game.scoreboard.setValue(3, 1+Game.westCount, "")
-		Game.scoreboard.setValue(4, 1+Game.westCount, "")
+		Game.scoreboard.setValue(1, 1 + Game.westCount, "")
+		Game.scoreboard.setValue(2, 1 + Game.westCount, "")
+		Game.scoreboard.setValue(3, 1 + Game.westCount, "")
+		Game.scoreboard.setValue(4, 1 + Game.westCount, "")
+
+		var i = 2
+		var j = 0
 		while i <= 11
 			if Players.playing[i]
-				if i<7
-					Game.scoreboard.setValue(0, 1+j, Game.colors[i]+Game.names[i]+"|r")
-					Game.scoreboard.setIcon(0, 1+j, Game.HELICOPTER_ICON)
-					Game.scoreboardRows[i] = 1+j
+				if i < 7
+					Game.scoreboard.setValue(0, 1 + j, Game.colors[i] + Game.names[i] + "|r")
+					Game.scoreboard.setIcon( 0, 1 + j, Game.HELICOPTER_ICON)
+					Game.scoreboardRows[i] = 1 + j
 				else
-					Game.scoreboard.setValue(0, 2+j, Game.colors[i]+Game.names[i]+"|r")
-					Game.scoreboard.setIcon(0, 2+j, Game.HELICOPTER_ICON)
-					Game.scoreboardRows[i] = 2+j
+					Game.scoreboard.setValue(0, 2 + j, Game.colors[i] + Game.names[i] + "|r")
+					Game.scoreboard.setIcon( 0, 2 + j, Game.HELICOPTER_ICON)
+					Game.scoreboardRows[i] = 2 + j
 
 				j += 1
-
 			i += 1
-
 
 		Game.scoreboard.setShow(true)
 		Game.scoreboard.setSuppress(true)
 
 		DestroyTimer(GetExpiredTimer())
 
-
 	init
 		TimerStart(CreateTimer(), 0., false, function initialize)
-
-

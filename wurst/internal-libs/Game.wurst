@@ -75,7 +75,9 @@ package Game
 		static constant INFO_TITLE            = "|cff88dd66Information|r"
 
 		static constant CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
-			*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). |cffffcc00Vexorian, MindWorX, and Pitzermike|r (among others) who " + /*
+			*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). " + /*
+			*/ "|cffffcc00peq and Frotty|r for extensive work on the wurst language and tooling." + /*
+			*/ "|cffffcc00Vexorian, MindWorX, and Pitzermike|r (among others) who " + /*
 			*/ "developed many classic snippets and tools like JassHelper, JNGP, Table, SimError, and more. |cffffcc00looking_for_help|r for discovering a " + /*
 			*/ "new method in 2013 for recognizing spells and physical damage independantly in damage detectors. |cffffcc00kr0mat1k|r for the artwork used " + /*
 			*/ "in the map preview. |cffffcc00Cage the Elephant|r for writing the song played in the background. |cffffcc00Zwiebelchen|r for writing " + /*
@@ -187,7 +189,6 @@ package Game
 				scoreboard.setIcon(0, scoreboardRows[pID], ZEPPELIN_ICON)
 			else if unitType== Ships.SKYBARGE_ID
 				scoreboard.setIcon(0, scoreboardRows[pID], SKYBARGE_ICON)
-
 
 
 		static function addQuest(string desc, string iconPath, bool required, string title) returns quest

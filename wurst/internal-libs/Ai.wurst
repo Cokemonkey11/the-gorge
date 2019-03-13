@@ -1,0 +1,22 @@
+package Ai
+
+import Ships
+
+bool array ai_controlled
+
+function lockShip(unit u)
+    u..setPos(u.getOwner().getStartLocation())
+        ..setInvulnerable(true)
+        ..pause()
+
+public function unit.aiOnRevive()
+    if ai_controlled[this.getOwner().getId()]
+        lockShip(this)
+
+public function player.intoAi()
+    ai_controlled[this.getId()] = true
+
+    // Just lock the ship at the start location.
+    let u = Ships.ships[this.getId()]
+    if not u == null and u.isAlive()
+        lockShip(u)
