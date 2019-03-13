@@ -4,10 +4,8 @@ package TerrainData
 		static constant UTILITY_RADIUS      =   256.
 		static constant WESTX               = -4600.
 		static constant EASTX               =    -1. * WESTX
-		static constant STONE1_X            =   380.
-		static constant STONE1_Y            =  1030.
-		static constant STONE2_X            =  -140.
-		static constant STONE2_Y            = -1020.
+		static constant POS_STONE1          = vec2( 380.,  1030.)
+		static constant POS_STONE2          = vec2(-140., -1020.)
 		static constant SAFE_X              = -8064.
 		static constant SAFE_Y              =  3970.
 		static constant STONE_SPIDER_X      =   -50.

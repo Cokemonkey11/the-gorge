@@ -4,8 +4,8 @@ package Continue
 
 	constant RECT_SIZE = 250.
 
-	function rectFromXY(real x, real y, real size) returns rect
-		return Rect(x-size/2., y-size/2., x+size/2., y+size/2.)
+	function rectFromXY(vec2 pos, real size) returns rect
+		return Rect(pos.x - size/2., pos.y - size/2., pos.x + size/2., pos.y + size/2.)
 
 
 	function f() returns bool
@@ -17,15 +17,14 @@ package Continue
 		else if owner == Players.players[1]
 			IssuePointOrder(fU, "attack", TerrainData.WESTX, 0.)
 
-
 		return false
 
 
 	init
 		region regA = CreateRegion()
-		rect recA = rectFromXY(TerrainData.STONE1_X, TerrainData.STONE1_Y, RECT_SIZE)
+		rect recA = rectFromXY(TerrainData.POS_STONE1, RECT_SIZE)
 		region regB = CreateRegion()
-		rect recB = rectFromXY(TerrainData.STONE2_X, TerrainData.STONE2_Y, RECT_SIZE)
+		rect recB = rectFromXY(TerrainData.POS_STONE2, RECT_SIZE)
 		trigger t = CreateTrigger()
 		RegionAddRect(regA, recA)
 		RegionAddRect(regB, recB)

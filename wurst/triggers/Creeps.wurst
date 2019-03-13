@@ -16,12 +16,12 @@ package Creeps
 
 	function spawnUpper(int faction, int cls, real x, real face)
 		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.STONE1_X, TerrainData.STONE1_Y)
+		u.issuePointOrder("attack", TerrainData.POS_STONE1)
 
 
 	function spawnLower(int faction, int cls, real x, real face)
 		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		IssuePointOrder(u, "attack", TerrainData.STONE2_X, TerrainData.STONE2_Y)
+		u.issuePointOrder("attack", TerrainData.POS_STONE2)
 
 
 	function spawn(int faction, int cls)

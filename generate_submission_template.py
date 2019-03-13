@@ -51,7 +51,8 @@ CHANGELOG          = (
         "2019",
         (
             "This map is now written entirely in wurst!",
-
+            "Improved behavior when a player leaves the game.",
+            "Added further ownership indicators for the enchanting stones.",
         )
     ),
     (
