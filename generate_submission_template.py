@@ -51,7 +51,9 @@ CHANGELOG          = (
         "2019",
         (
             "This map is now written entirely in wurst!",
+            "Added 3 new movespeed items and 3 new hitpoint regen items.",
             "Improved behavior when a player leaves the game.",
+            "Ships are now invulnerable for 6 seconds on respawn.",
             "Added further ownership indicators for the enchanting stones.",
         )
     ),

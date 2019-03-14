@@ -7,6 +7,7 @@ package Equipment
 	//   * Add necessary items to DestroyDroppedContracts.tradeItems (done in DestroyDroppedContracts#init)
 	//   * Fill in pawned items in TradeRewardsPawn#c as necessary
 	//   * Fill in remaining triggers as necessary
+	import Items
 	import SimError
 	import Ships
 	import Game
@@ -15,14 +16,14 @@ package Equipment
 	import RegisterEvents
 
 	public class Equipment
-		static constant CLASS_UNKNOWN    = -1
-		static constant CLASS_ENGINE     =  0
-		static constant CLASS_MECHANIC   =  1
-		static constant CLASS_HULL       =  2
-		static constant CLASS_SHIELDGEN  =  3
-		static constant CLASS_TELEPORT   =  4
-		static constant CLASS_SPECIAL    =  5
-		static constant CLASS_CONTRACT   =  6
+		static constant CLASS_UNKNOWN    = 0
+		static constant CLASS_ENGINE     = 1
+		static constant CLASS_MECHANIC   = 2
+		static constant CLASS_HULL       = 3
+		static constant CLASS_SHIELDGEN  = 4
+		static constant CLASS_TELEPORT   = 5
+		static constant CLASS_SPECIAL    = 6
+		static constant CLASS_CONTRACT   = 7
 
 		static constant PAGE_1_2         = 'I003'
 		static constant PAGE_2_1         = 'I004'
@@ -37,10 +38,6 @@ package Equipment
 		static constant TOXIC_SUBST_FULL = 'I00H'
 		static constant VENOM_VIAL       = 'I00J'
 
-		// Engines
-		static constant STEAM_CORE     = 'I000'
-		// Mechanics
-		static constant PROBLEM_SOLVER = 'I001'
 		// Hulls
 		static constant STONE_HULL     = 'I002'
 		// Shield Generators
@@ -69,8 +66,8 @@ package Equipment
 		static function autoPawnItemForPlayer(int pID, item itm)
 			int val = R2I(GetWidgetLife(itm))
 			if val>1
-				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00"+GetUnitName(Ships.ships[pID])+"|r cannot acquire a |cffffcc00"+GetItemName(itm)+"|r; it was automatically pawned for |cffffcc00"+I2S(val)+"|r gold.")
-				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD)+val)
+				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00" + GetUnitName(Ships.ships[pID]) + "|r cannot acquire a |cffffcc00" + GetItemName(itm) + "|r; it was automatically pawned for |cffffcc00" + I2S(val) + "|r gold.")
+				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD) + val)
 
 			RemoveItem(itm)
 
@@ -119,7 +116,6 @@ package Equipment
 					return itm
 
 				index++
-
 
 			return itm
 
@@ -192,28 +188,18 @@ package Equipment
 		static function unitCanAcquireItemId(unit u, int id) returns bool
 			int shipClass = Ships.getClass(u)
 			int itemClass = getItemClassId(id)
-			if unitHasItemOfClass(u, itemClass)!= null and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL
+			if unitHasItemOfType(u, id)
 				return false
-			else if unitHasItemOfType(u, id)
+			else if shipClass == Ships.CLASS_FRIGATE and itemClass == CLASS_CONTRACT
 				return false
-			else if shipClass == Ships.CLASS_FRIGATE and itemClass== CLASS_CONTRACT
+			else if shipClass == Ships.CLASS_SMUGGLER and (itemClass == CLASS_HULL or itemClass == CLASS_SHIELDGEN or id == SHIP_LOCATOR)
 				return false
-			else if shipClass == Ships.CLASS_SMUGGLER and (itemClass== CLASS_HULL or itemClass== CLASS_SHIELDGEN or id== SHIP_LOCATOR)
+			else if shipClass == Ships.CLASS_INTERCEPTOR and itemClass == CLASS_CONTRACT
 				return false
-			else if shipClass == Ships.CLASS_INTERCEPTOR and itemClass== CLASS_CONTRACT
-				return false
-			else if shipClass == Ships.CLASS_BATTLESHIP and (itemClass== CLASS_TELEPORT or itemClass== CLASS_CONTRACT or id== SHIP_LOCATOR)
+			else if shipClass == Ships.CLASS_BATTLESHIP and (itemClass == CLASS_TELEPORT or itemClass == CLASS_CONTRACT or id == SHIP_LOCATOR)
 				return false
 
 			return true
-
-
-		static function playerCanAcquireItem(int pID, item itm) returns bool
-			return unitCanAcquireItemId(Ships.ships[pID], GetItemTypeId(itm))
-
-
-		static function unitCanAcquireItem(unit u, item itm) returns bool
-			return unitCanAcquireItemId(u, GetItemTypeId(itm))
 
 
 		static function playerAddItemFromIdConditional(int pID, int id) returns bool
@@ -231,43 +217,43 @@ package Equipment
 
 
 		static function playerAddItemsFromIdConditional(int pID, int i0, int i1, int i2, int i3, int i4, int i5)
-			if i0>0
+			if i0 > 0
 				playerAddItemFromIdConditional(pID, i0)
 
-			if i1>0
+			if i1 > 0
 				playerAddItemFromIdConditional(pID, i1)
 
-			if i2>0
+			if i2 > 0
 				playerAddItemFromIdConditional(pID, i2)
 
-			if i3>0
+			if i3 > 0
 				playerAddItemFromIdConditional(pID, i3)
 
-			if i4>0
+			if i4 > 0
 				playerAddItemFromIdConditional(pID, i4)
 
-			if i5>0
+			if i5 > 0
 				playerAddItemFromIdConditional(pID, i5)
 
 		static function playerAddItemsFromId(int pID, int i0, int i1, int i2, int i3, int i4, int i5)
 			real x = GetUnitX(Ships.ships[pID])
 			real y = GetUnitY(Ships.ships[pID])
-			if i0>0
+			if i0 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i0, x, y))
 
-			if i1>0
+			if i1 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i1, x, y))
 
-			if i2>0
+			if i2 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i2, x, y))
 
-			if i3>0
+			if i3 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i3, x, y))
 
-			if i4>0
+			if i4 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i4, x, y))
 
-			if i5>0
+			if i5 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i5, x, y))
 
 
@@ -305,49 +291,49 @@ package Equipment
 				else
 					toSelect = Game.eastUtility[1]
 
-			else if id== PAGE_2_1
+			else if id == PAGE_2_1
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[0]
 				else
 					toSelect = Game.eastUtility[0]
 
-			else if id== PAGE_2_3
+			else if id == PAGE_2_3
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 
-			else if id== PAGE_3_2
+			else if id == PAGE_3_2
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[1]
 				else
 					toSelect= Game.eastUtility[1]
 
-			else if id== PAGE_3_4
+			else if id == PAGE_3_4
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[3]
 				else
 					toSelect = Game.eastUtility[3]
 
-			else if id== PAGE_4_3
+			else if id == PAGE_4_3
 				was = true
 				if seller == Game.westUtility[3]
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 
-			else if id== KPAGE_1_2
+			else if id == KPAGE_1_2
 				was = true
 				if seller == Game.westKeep[0]
 					toSelect = Game.westKeep[1]
 				else
 					toSelect = Game.eastKeep[1]
 
-			else if id== KPAGE_2_1
+			else if id == KPAGE_2_1
 				was = true
 				if seller == Game.westKeep[1]
 					toSelect = Game.westKeep[0]
@@ -378,36 +364,33 @@ package Equipment
 
 		static function c() returns bool
 			unit buyer = GetBuyingUnit()
-			item sI= GetSoldItem()
+			item sI = GetSoldItem()
 			player buyerP = GetOwningPlayer(buyer)
-			real val
 			int cls = getItemClass(sI)
 			bool has = unitHasItemOfType(buyer, GetItemTypeId(sI))
 			item itm = unitHasItemOfClass(buyer, cls)
 
 			if has or GetItemTypeId(sI) == GetItemTypeId(itm)
 				simError(buyerP, "You can't carry two of the same equipment.")
-				val = GetWidgetLife(sI)
-				if val>1.
-					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				let val = GetWidgetLife(sI)
+				if val > 1.
+					buyerP.addGold(val.toInt())
 
 				RemoveItem(sI)
-			else if not unitCanAcquireItem(buyer, sI)
-				val = GetWidgetLife(sI)
+			else if not unitCanAcquireItemId(buyer, sI.getTypeId())
+				let val = GetWidgetLife(sI)
 				RemoveItem(sI)
-				SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
+				buyerP.addGold(val.toInt())
 				simError(buyerP, WRONG_CLASS)
 			else
-				if itm!= null and cls != CLASS_UNKNOWN and cls != CLASS_SPECIAL and cls != CLASS_CONTRACT
-					val = GetWidgetLife(itm)
-					SetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyerP, PLAYER_STATE_RESOURCE_GOLD) + R2I(val))
-					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00"+GetItemName(itm)+"|r was automatically sold for |cffffcc00"+I2S(R2I(val))+"|r gold to accomodate your new |cffffcc00"+GetItemName(sI)+"|r.")
+				if itm != null and cls != CLASS_UNKNOWN and cls != CLASS_SPECIAL and cls != CLASS_CONTRACT
+					let val = GetWidgetLife(itm)
+					buyerP.addGold(val.toInt())
+					DisplayTextToPlayer(buyerP, 0., 0., "|cffffcc00Note:|r Your item of type |cffffcc00" + GetItemName(itm) + "|r was automatically sold for |cffffcc00" + I2S(R2I(val)) + "|r gold to accomodate your new |cffffcc00" + GetItemName(sI) + "|r.")
 					RemoveItem(itm)
-				else if cls == CLASS_CONTRACT and getContractCost(sI)>tradeExperience(buyerP)
+				else if cls == CLASS_CONTRACT and getContractCost(sI) > tradeExperience(buyerP)
 					RemoveItem(sI)
 					simError(buyerP, INSUFFICIENT_EXPERIENCE)
-
-
 
 			resetUnitDamageReduction(buyer)
 			return false
@@ -417,8 +400,14 @@ package Equipment
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.c)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.pageC)
 
-		Equipment.classes.put(Equipment.STEAM_CORE,            Equipment.CLASS_ENGINE)
-		Equipment.classes.put(Equipment.PROBLEM_SOLVER,        Equipment.CLASS_MECHANIC)
+		Equipment.classes.put(ID_ENGINE_1,                     Equipment.CLASS_ENGINE)
+		Equipment.classes.put(ID_ENGINE_2,                     Equipment.CLASS_ENGINE)
+		Equipment.classes.put(ID_ENGINE_3,                     Equipment.CLASS_ENGINE)
+		Equipment.classes.put(ID_ENGINE_4,                     Equipment.CLASS_ENGINE)
+		Equipment.classes.put(ID_REPAIRCREW_1,                 Equipment.CLASS_MECHANIC)
+		Equipment.classes.put(ID_REPAIRCREW_2,                 Equipment.CLASS_MECHANIC)
+		Equipment.classes.put(ID_REPAIRCREW_3,                 Equipment.CLASS_MECHANIC)
+		Equipment.classes.put(ID_REPAIRCREW_4,                 Equipment.CLASS_MECHANIC)
 		Equipment.classes.put(Equipment.STONE_HULL,            Equipment.CLASS_HULL)
 		Equipment.classes.put(Equipment.BRONZE_GEN,            Equipment.CLASS_SHIELDGEN)
 		Equipment.classes.put(Equipment.IONIC_TELEPORT,        Equipment.CLASS_TELEPORT)

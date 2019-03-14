@@ -229,27 +229,11 @@ import ObjEditingNatives
 	..setLvlDataInt("amho", 0, 0, 0)
 
 
-@compiletime function create_w3a_A00C()
-	let def = createObjectDefinition("w3a", 'A00C', 'AIms')
-	..setLvlDataString("aart", 0, 0, "")
-	..setLvlDataInt("Imvb", 1, 1, 50)
-	..setLvlDataString("anam", 0, 0, "+50 MS (Engine Upgrade)")
-	..setLvlDataString("arac", 0, 0, "orc")
-
-
 @compiletime function create_w3a_A00D()
 	let def = createObjectDefinition("w3a", 'A00D', 'AInv')
 	..setLvlDataInt("inv1", 1, 1, 4)
 	..setLvlDataString("ansf", 0, 0, "(Unit, 4, Usable)")
 	..setLvlDataString("arac", 0, 0, "undead")
-
-
-@compiletime function create_w3a_A00E()
-	let def = createObjectDefinition("w3a", 'A00E', 'Arel')
-	..setLvlDataString("aart", 0, 0, "")
-	..setLvlDataInt("Ihpr", 1, 1, 8)
-	..setLvlDataString("arac", 0, 0, "orc")
-	..setLvlDataString("anam", 0, 0, "+8HP/s (Mechanic Upgrade)")
 
 
 @compiletime function create_w3a_A00F()
@@ -751,6 +735,54 @@ import ObjEditingNatives
 	..setLvlDataString("ansf", 0, 0, "(DamageType)")
 	..setLvlDataInt("aite", 0, 0, 0)
 	..setLvlDataUnreal("isr2", 1, 2, 2.0)
+
+
+@compiletime function create_w3a_A00C()
+	let def = createObjectDefinition("w3a", 'A00C', 'AIms')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Imvb", 1, 1, 50)
+
+
+@compiletime function create_w3a_A!00()
+	let def = createObjectDefinition("w3a", 'A!00', 'AIms')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Imvb", 1, 1, 75)
+
+
+@compiletime function create_w3a_A!01()
+	let def = createObjectDefinition("w3a", 'A!01', 'AIms')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Imvb", 1, 1, 100)
+
+
+@compiletime function create_w3a_A!02()
+	let def = createObjectDefinition("w3a", 'A!02', 'AIms')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Imvb", 1, 1, 125)
+
+
+@compiletime function create_w3a_A00E()
+	let def = createObjectDefinition("w3a", 'A00E', 'Arel')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Ihpr", 1, 1, 8)
+
+
+@compiletime function create_w3a_A!03()
+	let def = createObjectDefinition("w3a", 'A!03', 'Arel')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Ihpr", 1, 1, 12)
+
+
+@compiletime function create_w3a_A!04()
+	let def = createObjectDefinition("w3a", 'A!04', 'Arel')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Ihpr", 1, 1, 16)
+
+
+@compiletime function create_w3a_A!05()
+	let def = createObjectDefinition("w3a", 'A!05', 'Arel')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Ihpr", 1, 1, 20)
 
 
 // Original Table (contains all modified default objects)

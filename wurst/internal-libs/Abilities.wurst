@@ -1,0 +1,53 @@
+package Abilities
+
+import AbilityObjEditing
+
+constant        ID_SPEED_BONUS_1     = 'A00C'
+public constant ID_SPEED_BONUS_1_STR = "A00C"
+constant        ID_SPEED_BONUS_2     = 'A!00'
+public constant ID_SPEED_BONUS_2_STR = "A!00"
+constant        ID_SPEED_BONUS_3     = 'A!01'
+public constant ID_SPEED_BONUS_3_STR = "A!01"
+constant        ID_SPEED_BONUS_4     = 'A!02'
+public constant ID_SPEED_BONUS_4_STR = "A!02"
+
+public constant SPEED_BONUS_1 =  50
+public constant SPEED_BONUS_2 =  75
+public constant SPEED_BONUS_3 = 100
+public constant SPEED_BONUS_4 = 125
+
+constant        ID_HEALTH_REGEN_BONUS_1     = 'A00E'
+public constant ID_HEALTH_REGEN_BONUS_1_STR = "A00E"
+constant        ID_HEALTH_REGEN_BONUS_2     = 'A!03'
+public constant ID_HEALTH_REGEN_BONUS_2_STR = "A!03"
+constant        ID_HEALTH_REGEN_BONUS_3     = 'A!04'
+public constant ID_HEALTH_REGEN_BONUS_3_STR = "A!04"
+constant        ID_HEALTH_REGEN_BONUS_4     = 'A!05'
+public constant ID_HEALTH_REGEN_BONUS_4_STR = "A!05"
+
+public constant HEALTH_REGEN_BONUS_1 =  8
+public constant HEALTH_REGEN_BONUS_2 = 12
+public constant HEALTH_REGEN_BONUS_3 = 16
+public constant HEALTH_REGEN_BONUS_4 = 20
+
+class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
+    construct(int id, int speed_bonus)
+        super(id)
+        setMovementSpeedBonus(1, speed_bonus)
+
+@compiletime function initItemMovespeedAbilities()
+    new MovespeedBonuses(ID_SPEED_BONUS_1, SPEED_BONUS_1)
+    new MovespeedBonuses(ID_SPEED_BONUS_2, SPEED_BONUS_2)
+    new MovespeedBonuses(ID_SPEED_BONUS_3, SPEED_BONUS_3)
+    new MovespeedBonuses(ID_SPEED_BONUS_4, SPEED_BONUS_4)
+
+class HealthregenBonuses extends AbilityDefinitionRegenLife
+    construct(int id, int hpps_bonus)
+        super(id)
+        setHitPointsRegeneratedPerSecond(1, hpps_bonus)
+
+@compiletime function initItemHealthregenAbilities()
+    new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_1, HEALTH_REGEN_BONUS_1)
+    new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_2, HEALTH_REGEN_BONUS_2)
+    new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_3, HEALTH_REGEN_BONUS_3)
+    new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_4, HEALTH_REGEN_BONUS_4)
