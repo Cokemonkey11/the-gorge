@@ -1,32 +1,45 @@
 package Repair
+	import Assets
 	import ClosureTimers
 	import Game
 	import Players
 
 	constant REPAIR_RADIUS = 400.
-	constant CLOCK_PERIOD  =   1. / 30.
+	constant ANIMATION_PERIOD_INV = (1. / ANIMATION_PERIOD).toInt()
 
 
-	function doHeal(unit u)
+	function doHeal(unit u, bool do_text)
 		real fracMissing = 1. - (u.getHP() / u.getMaxHP())
 		real exponent    = (fracMissing - .5) * 2.
 
 		// Get a rate between 0. and 1.
 		real healRate    = 10..pow(exponent) * 2. / 100.
 
-		real delHp       = u.getMaxHP() * healRate * CLOCK_PERIOD
-		u.setState(UNIT_STATE_LIFE, u.getHP() + delHp)
+		real delHp       = u.getMaxHP() * healRate * ANIMATION_PERIOD
+
+		if do_text
+			u.addEffect(Other.impaletargetdust, "origin").destr()
+			createTTEx(
+				u.getPos3(100.),
+				vec2(0., .1),
+				"+" + (delHp / ANIMATION_PERIOD).toInt().toString(),
+				11.,
+				1.,
+				colorA(155, 255, 155, 255), u.getOwner()
+			)
+
+		u.addHP(delHp)
 
 	constant grp = CreateGroup()
 	init
-		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
+		doPeriodicallyCounted(ANIMATION_PERIOD, 9000000, (CallbackCounted c) -> begin
 			grp.enumUnitsInRange(Game.westRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
 				if Players.isWest(u.getOwner().getId())
-					doHeal(u)
+					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
 
 			grp.enumUnitsInRange(Game.eastRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
 				if Players.isEast(u.getOwner().getId())
-					doHeal(u)
+					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
 		end)

@@ -55,6 +55,7 @@ CHANGELOG          = (
             "Improved behavior when a player leaves the game.",
             "Ships are now invulnerable for 6 seconds on respawn.",
             "Added further ownership indicators for the enchanting stones.",
+            "Added further repair indicators for the repair ports."
         )
     ),
     (
