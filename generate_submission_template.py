@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import sys
 import textwrap
 
@@ -47,8 +47,8 @@ REPOSITORY_URI     = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG          = (
     (
-        "next",
-        "2019",
+        "0.10.0",
+        "18 Mar 2019",
         (
             "This map is now written entirely in wurst!",
             "Added 3 new movespeed items and 3 new hitpoint regen items.",

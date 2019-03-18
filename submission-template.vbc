@@ -39,6 +39,15 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.10.0[/color] [color=#999999]18 Mar 2019[/color]:
+[list][*] This map is now written entirely in wurst!
+[*] Added 3 new movespeed items and 3 new hitpoint regen items.
+[*] Improved behavior when a player leaves the game.
+[*] Ships are now invulnerable for 6 seconds on respawn.
+[*] Added further ownership indicators for the enchanting stones.
+[*] Added further repair indicators for the repair ports.
+[/list]
+
 [color=#ffcc00]0.9.1[/color] [color=#999999]24 Feb 2017[/color]:
 [list][*] This map is now written entirely in Jurst, the jass-friendly Wurst dialect!
 [*] Revamped the behavior and apperance of central outposts
@@ -83,11 +92,11 @@ in two days on the terrain than I could do in two weeks. Do check it out!
 [*] Many more small changes and improvements
 [/list]
 
-[color=#ffcc00]0.0.6?[/color] [color=#999999]16 Jan 2014?[/color]:
+[hidden=Older Changes[color=#ffcc00]0.0.6?[/color] [color=#999999]16 Jan 2014?[/color]:
 [list][*] Initial release.
 [/list]
 
-[R][H3][color=#CCAA00]Automatic Hosting[/color][/H3][R]
+[/hidden][R][H3][color=#CCAA00]Automatic Hosting[/color][/H3][R]
 Release versions of this map are uploaded to both [url=http://makemehost.com/]MMH[/url]
 and [url=http://entgaming.net/]ENT[/url].
 
