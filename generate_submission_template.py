@@ -217,7 +217,7 @@ def print_changelog():
             write("[/list]\n\n")
 
         if CHANGELOG[5:]:
-            write("[hidden=Older Changes")
+            write("[hidden=Older Changes]")
             for log in CHANGELOG[5:]:
                 write("[color=#ffcc00]" + log[0] + "[/color] [color=#999999]" + log[1] + "[/color]:\n[list]")
                 for point in log[2]:
