@@ -39,6 +39,12 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.10.1[/color] [color=#999999]27 Mar 2019[/color]:
+[list][*] Fixed a major bug related to recently respawned ships not losing invulnerability.
+[*] Fixed a minor tooltip bug.
+[*] Fixed a couple minor cosmetic blemishes.
+[/list]
+
 [color=#ffcc00]0.10.0[/color] [color=#999999]18 Mar 2019[/color]:
 [list][*] This map is now written entirely in wurst!
 [*] Added 3 new movespeed items and 3 new hitpoint regen items.
@@ -77,7 +83,7 @@ in two days on the terrain than I could do in two weeks. Do check it out!
 [*] Various small bug fixes and improvements
 [/list]
 
-[color=#ffcc00]0.0.7?[/color] [color=#999999]21 Jan 2014[/color]:
+[hidden=Older Changes][color=#ffcc00]0.0.7?[/color] [color=#999999]21 Jan 2014[/color]:
 [list][*] Helicopter now has a unique ability
 [*] Created multiboard and some basic stat tracking
 [*] Added bounties for pvp
@@ -92,7 +98,7 @@ in two days on the terrain than I could do in two weeks. Do check it out!
 [*] Many more small changes and improvements
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.0.6?[/color] [color=#999999]16 Jan 2014?[/color]:
+[color=#ffcc00]0.0.6?[/color] [color=#999999]16 Jan 2014?[/color]:
 [list][*] Initial release.
 [/list]
 

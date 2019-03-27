@@ -681,7 +681,7 @@ import ObjEditingNatives
 	..setLvlDataString("anam", 0, 0, "Helium Overdrive")
 	..setLvlDataString("aord", 0, 0, "ambush")
 	..setLvlDataString("atp1", 1, 0, "Helium Overdrive [|cffffcc00Q|r]")
-	..setLvlDataString("aub1", 1, 0, "Enables a helium afterburner thrust with each movement that results in substantial speed boost.|n |n|cffffc00Maximum Range:|r 1300|n|cffffcc00Duration:|r 10s")
+	..setLvlDataString("aub1", 1, 0, "Enables a helium afterburner thrust with each movement that results in substantial speed boost.|n |n|cffffcc00Maximum Range:|r 1300|n|cffffcc00Duration:|r 10s")
 	..setLvlDataInt("abpy", 0, 0, 2)
 	..setLvlDataUnreal("acdn", 1, 0, 20.0)
 	..setLvlDataString("ata0", 0, 0, "")

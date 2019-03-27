@@ -59,9 +59,10 @@ package Revive
 				Ships.ships[tempDat.ownerID]..aiOnRevive()..setInvulnerable(true)
 
 				// Apply and async-clear the invulnerability status.
-				let fx = Ships.ships[tempDat.ownerID].addEffect(INVULN_FX, "origin")
+				let invuln_u = Ships.ships[tempDat.ownerID]
+				let fx = invuln_u.addEffect(INVULN_FX, "origin")
 				doAfter(INVULN_DURATION) () ->
-					Ships.ships[tempDat.ownerID].setInvulnerable(false)
+					invuln_u.setInvulnerable(false)
 					fx.destr()
 
 				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)

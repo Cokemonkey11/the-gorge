@@ -27,18 +27,18 @@ package HeliumOverdrive
     class CastFXDat
 
         // duration of the initial effect on cast
-        private static constant INITIAL_FX_DURATION = .5
+        private static constant INITIAL_FX_DURATION = .25
 
         // duration of the orb floating upwards and exploding, when the ult finishes
-        private static constant DISAPPEAR_FX_DURATION = 1.
+        private static constant DISAPPEAR_FX_DURATION = .25
 
         // max height of the heal effect that starts the ult
-        private static constant INITIAL_FX_TARGET_HEIGHT = 800.
+        private static constant INITIAL_FX_TARGET_HEIGHT = 400.
         private static constant CLOCK_PERIOD    = 1./30.
 
         // orb acceleration and velocity (projectile motion)
-        private static constant ACCELERATION    = 320.
-        private static constant MAX_VELOCITY    = 900.
+        private static constant ACCELERATION    = 420.
+        private static constant MAX_VELOCITY    = 2000.
 
         // the offset of the facing angle of the caster for the orb
         private static constant TARGET_OFFSET   = 50.
@@ -48,7 +48,7 @@ package HeliumOverdrive
 
         // calculated deceleration to apply max velocity
         private static constant DECELERATION_RATE = MAX_VELOCITY / (MAX_VELOCITY + ACCELERATION)
-        private static constant string HEAL_FX_MDL = Other.avatarcaster
+        private static constant string HEAL_FX_MDL = Other.lightningshieldtarget
         private static constant string ORB_MDL     = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
 
         private static thistype array fxDB

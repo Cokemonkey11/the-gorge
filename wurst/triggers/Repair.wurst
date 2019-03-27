@@ -17,7 +17,7 @@ package Repair
 
 		real delHp       = u.getMaxHP() * healRate * ANIMATION_PERIOD
 
-		if do_text
+		if do_text and fracMissing > 0.01
 			u.addEffect(Other.impaletargetdust, "origin").destr()
 			createTTEx(
 				u.getPos3(100.),

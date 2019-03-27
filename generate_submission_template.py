@@ -47,6 +47,15 @@ REPOSITORY_URI     = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG          = (
     (
+        "0.10.1",
+        "27 Mar 2019",
+        (
+            "Fixed a major bug related to recently respawned ships not losing invulnerability.",
+            "Fixed a minor tooltip bug.",
+            "Fixed a couple minor cosmetic blemishes."
+        )
+    ),
+    (
         "0.10.0",
         "18 Mar 2019",
         (
@@ -128,8 +137,8 @@ CHANGELOG          = (
 HOSTING            = True
 CONTRIBUTING       = "I will merge atomic, well-formed pull-requests if they are consistent with my design policies and issue tracker."
 
-def write(str):
-    sys.stdout.write(str)
+def write(st):
+    sys.stdout.write(st)
 
 
 def print_section_header(title):
