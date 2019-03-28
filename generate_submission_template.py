@@ -50,8 +50,9 @@ CHANGELOG          = (
         "0.11.0",
         "date",
         (
-            "Player ships are now hero types, and the F2 hotkey can be used.",
-            "This map now uses an up-to-date wurst standard library!"
+            "Player ships are now heroes, and the F2 hotkey can be used!",
+            "Adjusted spawn behavior so that creeps would stack up less.",
+            "This map now uses an up-to-date wurst standard library."
         )
     ),
     (
