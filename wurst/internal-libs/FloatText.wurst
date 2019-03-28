@@ -39,9 +39,9 @@ package FloatText
 			return t
 
 
-		static function reviveNumbers(real x, real y, string s, int pId) returns texttag
+		static function reviveNumbers(vec2 pos, string s, int pId) returns texttag
 			let len = StringLength(s)
-			return themedTemporaryTagPlayer(x - (.5 * KERNING * len), y, s, pId)
+			return themedTemporaryTagPlayer(pos.x - (.5 * KERNING * len), pos.y, s, pId)
 
 
 		static function goldBounty(real x, real y, int bounty, int pId) returns texttag

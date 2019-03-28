@@ -1,15 +1,36 @@
 package Units
 
 import Assets
+import HashMap
 import Items
 import UnitObjEditing
 
 constant BASE_ID_UTILITY_PORT = 'hkee'
+constant BASE_ID_HANGAR = 'hkee'
 
-constant ID_PORT_P1 = 'h006'
-constant ID_PORT_P2 = 'h007'
-constant ID_PORT_P3 = 'h008'
-constant ID_PORT_P4 = 'h009'
+public constant ID_PORT_P1 = 'h006'
+public constant ID_PORT_P2 = 'h007'
+public constant ID_PORT_P3 = 'h008'
+public constant ID_PORT_P4 = 'h009'
+
+public constant ID_HANGAR = 'h00A'
+
+public constant ID_HELICOPTER = 'H000'
+public constant ID_PARACOPTER = 'H00B'
+public constant ID_ZEPPELIN   = 'H00D'
+public constant ID_SKYBARGE   = 'H00E'
+
+public function ship_get_icon(int id) returns string
+    if id == ID_HELICOPTER
+        return "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
+    else if id == ID_PARACOPTER
+        return "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"
+    else if id == ID_SKYBARGE
+        return "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
+    else if id == ID_ZEPPELIN
+        return "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
+
+    return ""
 
 class UtilityPorts extends BuildingDefinition
     construct(int id, int page, string itemsMade)
@@ -47,3 +68,91 @@ class UtilityPorts extends BuildingDefinition
     new UtilityPorts(ID_PORT_P2, 2, "I002,I005,I004,I006")
     new UtilityPorts(ID_PORT_P3, 3, "I008,I009,I00A,I007")
     new UtilityPorts(ID_PORT_P4, 4, "I00C,I00G,I00I,I00B")
+
+class Hangar extends BuildingDefinition
+    construct (int id)
+        super(id, BASE_ID_HANGAR)
+        setNormalAbilities("Avul,Ane2,Asud,Aall")
+        setGroundTexture("HMED")
+        setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWorkshop.blp")
+        setModelFile(Units.workshop)
+        setRequiredAnimationNames("")
+        setRequiredAnimationNamesAttachments("")
+        setScalingValue(.9)
+        setSelectionScale(4.)
+        setShadowTextureBuilding("ShadowArmory")
+        setAIPlacementRadius(0.)
+        setAIPlacementType("")
+        setCollisionSize(0.)
+        setPathingMap("")
+        setPlacementRequires("")
+        setFoodProduced(0)
+        setHitPointsMaximumBase(500000)
+        setSightRadiusDay(0)
+        setSightRadiusNight(0)
+        setUnitClassification("mechanical")
+        setResearchesAvailable("")
+        setUnitsSold("H000,H00D,H00E,H00B")
+        setUnitsTrained("")
+        setUpgradesTo("")
+        setUpgradesUsed("")
+        setHotkey("")
+        setName("Hangar")
+        setTooltipBasic("")
+        setTooltipExtended("")
+
+@compiletime function hangar()
+    new Hangar(ID_HANGAR)
+
+class CopterBase extends HeroDefinition
+    construct(int id, int button_x, real anim_backwing_cast, real anim_point_cast, int red, int green, int blue, string abils, string model, bool use_tft_model, real scale, int defense, int movespeed, string movesound, string soundset, int food_produced, int hp, string shipclass, string name, string tooltipext)
+        super(id, 'hgyr')
+        setNormalAbilities(abils)
+        setModelFile(model)
+        setModelFileExtraVersions(use_tft_model ? "2" : "0")
+        setIconGameInterface(ship_get_icon(id))
+        setScalingValue(scale)
+        setSelectionCircleHeight(15.)
+        setButtonPositionX(button_x)
+        setAnimationCastBackswing(anim_backwing_cast)
+        setAnimationCastPoint(anim_point_cast)
+        setTintingColorRed(red)
+        setTintingColorGreen(green)
+        setTintingColorBlue(blue)
+        setAttacksEnabled(0)
+        setDefenseBase(defense)
+        setDefenseUpgradeBonus(0)
+        setMovementHeight(100.)
+        setMovementHeightMinimum(100.)
+        setSpeedBase(movespeed)
+        setCanFlee(false)
+        setFoodCost(0)
+        setFoodProduced(food_produced)
+        setMovementSound(movesound)
+        setUnitSoundSet(soundset)
+        setGoldBountyAwardedBase(0)
+        setGoldBountyAwardedNumberofDice(0)
+        setGoldBountyAwardedSidesperDie(0)
+        setGoldCost(30)
+        setHitPointsMaximumBase(hp)
+        setLumberCost(0)
+        setRace(Race.Orc)
+        setStockMaximum(1)
+        setStockReplenishInterval(0)
+        setStockStartDelay(20)
+        setUnitClassification("")
+        setUpgradesUsed("")
+        setHotkey("")
+        setName(shipclass)
+        setProperNames(name)
+        setProperNamesUsed(1)
+        setTooltipBasic("Purchase " + name)
+        setTooltipExtended(tooltipext)
+        hideHeroDeathMsg(true)
+
+
+@compiletime function copters()
+    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, "A00D,A00P", Units.flyingMachine,  false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate", "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
+    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, "A00D,A00Y", Units.flyingMachine,  true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler", "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
+    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00O,A013", Units.skyBarge,       false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship", "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
+    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00D,A012", Units.goblinZeppelin, false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")

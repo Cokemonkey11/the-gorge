@@ -17,14 +17,8 @@ package Revive
 	class DeathDat
 		unit u
 		int timeL
-		real teamX
+		vec2 teamPos
 		int ownerID= -1
-		int item0Id= -1
-		int item1Id= -1
-		int item2Id= -1
-		int item3Id= -1
-		int item4Id= -1
-		int item5Id= -1
 
 	constant CLOCK_PERIOD = 1.
 	constant REVIVE_OFFSET = 328.
@@ -50,12 +44,12 @@ package Revive
 		while index <= dbIndex
 			tempDat = deathDB[index]
 
-			FloatText.reviveNumbers(tempDat.teamX, 0., I2S(tempDat.timeL), tempDat.ownerID)
+			FloatText.reviveNumbers(tempDat.teamPos, I2S(tempDat.timeL), tempDat.ownerID)
 			tempDat.timeL--
 
 			if tempDat.timeL < 1 and not Game.ended
 				// Revive the ship.
-				Ships.ships[tempDat.ownerID] = CreateUnit(Players.players[tempDat.ownerID], Game.shipClass[tempDat.ownerID], tempDat.teamX, 0, 270.)
+				Ships.ships[tempDat.ownerID].revive(tempDat.teamPos, true)
 				Ships.ships[tempDat.ownerID]..aiOnRevive()..setInvulnerable(true)
 
 				// Apply and async-clear the invulnerability status.
@@ -65,10 +59,9 @@ package Revive
 					invuln_u.setInvulnerable(false)
 					fx.destr()
 
-				Equipment.playerAddItemsFromId(tempDat.ownerID, tempDat.item0Id, tempDat.item1Id, tempDat.item2Id, tempDat.item3Id, tempDat.item4Id, tempDat.item5Id)
 				AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin").destr()
 				if Players.localPlayer == Players.players[tempDat.ownerID]
-					PanCameraToTimed(tempDat.teamX, 0., 0.)
+					PanCameraToTimed(tempDat.teamPos.x, tempDat.teamPos.y, 0.)
 					ClearSelection()
 					SelectUnit(Ships.ships[tempDat.ownerID], true)
 
@@ -113,24 +106,19 @@ package Revive
 
 	function c()
 		DeathDat tempDat
-		unit tU= GetTriggerUnit()
-		unit kU
-		int id
-		int bounty
-		player kO
-		item ti
+		let tU = GetTriggerUnit()
 		if Ships.isPlayerShip(tU)
-			kU= GetKillingUnit()
-			kO= GetOwningPlayer(kU)
-			id = GetPlayerId(kO)
+			let kU = GetKillingUnit()
+			let kO = GetOwningPlayer(kU)
+			let id = GetPlayerId(kO)
 			tempDat= new DeathDat
 			tempDat.u= tU
 			tempDat.timeL= REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
 			tempDat.ownerID= GetPlayerId(GetOwningPlayer(tU))
-			if id>1
+			if id > 1
 				Game.parseKill(id)
 				parseAssists(tempDat.ownerID)
-				bounty = getBounty()
+				let bounty = getBounty()
 				SetPlayerState(kO, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(kO, PLAYER_STATE_RESOURCE_GOLD)+bounty)
 				if Players.localPlayer == Players.players[tempDat.ownerID]
 					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "Your ship was destroyed by "+Game.colors[id]+Game.names[id]+"|r; you will be rebuilt in "+I2S(tempDat.timeL)+"|r seconds.")
@@ -148,39 +136,15 @@ package Revive
 
 			Game.addDeath(tU)
 
-			ti = UnitItemInSlot(tU, 0)
-			tempDat.item0Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
-			ti = UnitItemInSlot(tU, 1)
-			tempDat.item1Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
-			ti = UnitItemInSlot(tU, 2)
-			tempDat.item2Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
-			ti = UnitItemInSlot(tU, 3)
-			tempDat.item3Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
-			ti = UnitItemInSlot(tU, 4)
-			tempDat.item4Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
-			ti = UnitItemInSlot(tU, 5)
-			tempDat.item5Id= GetItemTypeId(ti)
-			RemoveItem(ti)
-
 			if tempDat.ownerID<7
-				tempDat.teamX= TerrainData.WESTX+REVIVE_OFFSET
+				tempDat.teamPos = vec2(TerrainData.WESTX+REVIVE_OFFSET, 0.)
 				westDeadCount= westDeadCount+1
 				if westDeadCount== 1
 					SetUnitX(westDummy, TerrainData.WESTX+REVIVE_OFFSET)
 					SetUnitY(westDummy, 0.)
 
 			else
-				tempDat.teamX= TerrainData.EASTX-REVIVE_OFFSET
+				tempDat.teamPos = vec2(TerrainData.EASTX-REVIVE_OFFSET, 0.)
 				eastDeadCount= eastDeadCount+1
 				if eastDeadCount== 1
 					SetUnitX(eastDummy, TerrainData.EASTX-REVIVE_OFFSET)

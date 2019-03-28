@@ -47,6 +47,13 @@ REPOSITORY_URI     = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG          = (
     (
+        "0.11.0",
+        "date",
+        (
+            "Player ships are now hero types, and the F2 hotkey can be used."
+        )
+    ),
+    (
         "0.10.1",
         "27 Mar 2019",
         (
@@ -56,7 +63,7 @@ CHANGELOG          = (
         )
     ),
     (
-        "0.10.0",
+        "0.10.0 (blacklisted)",
         "18 Mar 2019",
         (
             "This map is now written entirely in wurst!",
