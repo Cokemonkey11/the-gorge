@@ -30,6 +30,9 @@ public constant HEALTH_REGEN_BONUS_2 = 12
 public constant HEALTH_REGEN_BONUS_3 = 16
 public constant HEALTH_REGEN_BONUS_4 = 20
 
+public constant ID_HERO_GLOW     = 'AF00'
+public constant ID_HERO_GLOW_STR = "AF00"
+
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
         super(id)
@@ -51,3 +54,15 @@ class HealthregenBonuses extends AbilityDefinitionRegenLife
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_2, HEALTH_REGEN_BONUS_2)
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_3, HEALTH_REGEN_BONUS_3)
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_4, HEALTH_REGEN_BONUS_4)
+
+class HeroGlow extends AbilityDefinitionNeutralRegenhealthonly
+    construct(int id)
+        super(id)
+        // setPercentage(1, false)
+        // setAmountofHitPointsRegenerated(1, 0)
+        // setArtTarget("GeneralHeroGlow.mdx")
+        // setTargetAttachmentPoint("origin")
+        setName("heroglow")
+
+@comiletime function initHeroGlow()
+    new HeroGlow(ID_HERO_GLOW)

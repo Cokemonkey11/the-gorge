@@ -1476,7 +1476,6 @@ import ObjEditingNatives
 @compiletime function create_w3u_H000()
 	let def = createObjectDefinition("w3u", 'H000', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00D,A00P")
 	..setString("umdl", "Units\\Human\\GyroCopter\\GyroCopter.mdx")
 	..setString("uver", "0")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp")
@@ -1518,12 +1517,12 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Helicopter")
 	..setString("utub", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
 	..setInt("uhhd", 1)
+	..setString("uabi", "A00D,A00P,AF00")
 
 
 @compiletime function create_w3u_H00B()
 	let def = createObjectDefinition("w3u", 'H00B', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00D,A00Y")
 	..setString("umdl", "Units\\Human\\Gyrocopter\\Gyrocopter_V1.mdx")
 	..setString("uver", "2")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp")
@@ -1565,12 +1564,12 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Paracopter")
 	..setString("utub", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
 	..setInt("uhhd", 1)
+	..setString("uabi", "A00D,A00Y,AF00")
 
 
 @compiletime function create_w3u_H00E()
 	let def = createObjectDefinition("w3u", 'H00E', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00O,A013")
 	..setString("umdl", "Units\\Undead\\UndeadAirBarge\\UndeadAirBarge.mdx")
 	..setString("uver", "0")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp")
@@ -1612,12 +1611,12 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Skybarge")
 	..setString("utub", "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
 	..setInt("uhhd", 1)
+	..setString("uabi", "A00O,A013,AF00")
 
 
 @compiletime function create_w3u_H00D()
 	let def = createObjectDefinition("w3u", 'H00D', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00D,A012")
 	..setString("umdl", "Units\\Creeps\\GoblinZeppelin\\GoblinZeppelin.mdx")
 	..setString("uver", "0")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp")
@@ -1659,6 +1658,7 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Zeppelin")
 	..setString("utub", "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
 	..setInt("uhhd", 1)
+	..setString("uabi", "A00D,A012,AF00")
 
 
 // Original Table (contains all modified default objects)
