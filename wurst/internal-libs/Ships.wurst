@@ -1,5 +1,6 @@
 package Ships
-	import Units
+	import HashMap
+	import UnitsApi
 
 	public class Ships
 		static constant CLASS_UNKNOWN     = -1
@@ -12,8 +13,8 @@ package Ships
 
 		static unit array ships
 
-		static let tab      = new Table
-		static let sellVals = new Table
+		static constant tab      = new HashMap<int, int>()
+		static constant sellVals = new Table
 
 		static function getClass(unit u) returns int
 			int id = GetUnitTypeId(u)

@@ -6,11 +6,10 @@ package Revive
 	import Game
 	import Players
 	import Ships
-	import Equipment
 	import RegisterEvents
 	import TerrainData
 
-	constant INVULN_FX       = Other.divineshieldtarget
+	constant INVULN_FX       = Abilities.divineShieldTarget
 	constant INVULN_DURATION = 6.
 
 

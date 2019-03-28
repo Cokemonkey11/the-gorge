@@ -50,7 +50,8 @@ CHANGELOG          = (
         "0.11.0",
         "date",
         (
-            "Player ships are now hero types, and the F2 hotkey can be used."
+            "Player ships are now hero types, and the F2 hotkey can be used.",
+            "This map now uses an up-to-date wurst standard library!"
         )
     ),
     (

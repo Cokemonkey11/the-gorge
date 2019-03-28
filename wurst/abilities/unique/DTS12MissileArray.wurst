@@ -16,6 +16,7 @@ package DTS12MissileArray
 	import DamageType
 	import Ships
 	import Sounds
+	import HashMap
 
 	native UnitAlive(unit u) returns bool
 

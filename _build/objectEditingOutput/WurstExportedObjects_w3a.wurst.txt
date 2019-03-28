@@ -599,35 +599,6 @@ import ObjEditingNatives
 	..setLvlDataString("aub1", 1, 0, "Creates a generator at the casters position which releases a mist. The caster is rendered invisible to enemies while near the shroud.|n |n|cffffcc00Duration:|r 15s|n|cffffcc00Cooldown:|r 25s")
 
 
-@compiletime function create_w3a_A00Z()
-	let def = createObjectDefinition("w3a", 'A00Z', 'ANcl')
-	..setLvlDataString("aani", 0, 0, "spell")
-	..setLvlDataInt("abpx", 0, 0, 3)
-	..setLvlDataInt("aher", 0, 0, 0)
-	..setLvlDataInt("alev", 0, 0, 1)
-	..setLvlDataString("acat", 0, 0, "")
-	..setLvlDataString("acap", 0, 0, "")
-	..setLvlDataString("aeat", 0, 0, "")
-	..setLvlDataString("aart", 0, 0, "ReplaceableTextures\\CommandButtons\\BTNAssassin.blp")
-	..setLvlDataString("Ncl6", 1, 6, "animatedead")
-	..setLvlDataUnreal("Ncl1", 1, 1, 0.0)
-	..setLvlDataInt("Ncl3", 1, 3, 1)
-	..setLvlDataUnreal("aran", 1, 0, 700.0)
-	..setLvlDataString("arac", 0, 0, "orc")
-	..setLvlDataInt("achd", 0, 0, 0)
-	..setLvlDataString("ahky", 0, 0, "A")
-	..setLvlDataString("anam", 0, 0, "Select Captain")
-	..setLvlDataString("aord", 0, 0, "animatedead")
-	..setLvlDataString("atp1", 1, 0, "Select Captain [|cffffcc00A|r]")
-	..setLvlDataString("aub1", 1, 0, "Instantly selects and goes to your captain.")
-	..setLvlDataUnreal("acdn", 1, 0, 0.5)
-	..setLvlDataString("ata0", 0, 0, "")
-	..setLvlDataUnreal("Ncl4", 1, 4, 0.0)
-	..setLvlDataString("atar", 1, 0, "air,enemies,ground,vulnerable")
-	..setLvlDataString("atat", 0, 0, "")
-	..setLvlDataInt("Ncl5", 1, 5, 0)
-
-
 @compiletime function create_w3a_A00L()
 	let def = createObjectDefinition("w3a", 'A00L', 'Aivs')
 	..setLvlDataInt("abpx", 0, 0, 0)
@@ -718,8 +689,8 @@ import ObjEditingNatives
 	..setLvlDataInt("Ncl5", 1, 5, 0)
 
 
-@compiletime function create_w3a_!e@$()
-	let def = createObjectDefinition("w3a", '!e@$', 'Adef')
+@compiletime function create_w3a_AM01()
+	let def = createObjectDefinition("w3a", 'AM01', 'Adef')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataString("anam", 0, 0, "Leave Detect")
 	..setLvlDataString("ansf", 0, 0, "(OnUnitEnterLeave)")
@@ -728,8 +699,8 @@ import ObjEditingNatives
 	..setLvlDataString("arac", 0, 0, "unknown")
 
 
-@compiletime function create_w3a_!dt*()
-	let def = createObjectDefinition("w3a", '!dt*', 'AIsr')
+@compiletime function create_w3a_AM02()
+	let def = createObjectDefinition("w3a", 'AM02', 'AIsr')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataString("anam", 0, 0, "Runed Bracer Dummy")
 	..setLvlDataString("ansf", 0, 0, "(DamageType)")

@@ -1,7 +1,6 @@
-package Units
+package UnitsApi
 
 import Assets
-import HashMap
 import Items
 import UnitObjEditing
 
@@ -38,7 +37,7 @@ class UtilityPorts extends BuildingDefinition
         setNormalAbilities("Apit,Ane2,Aall,Avul")
         setGroundTexture(page == 1 ? "HMED" : "")
         setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHumanBarracks.blp")
-        setModelFile(page == 1 ? Units.barracks : "dummy.mdl")
+        setModelFile(page == 1 ? Buildings.humanBarracks : "dummy.mdl")
         setRequiredAnimationNames("")
         setRequiredAnimationNamesAttachments("")
         setSelectionScale(4.)
@@ -75,7 +74,7 @@ class Hangar extends BuildingDefinition
         setNormalAbilities("Avul,Ane2,Asud,Aall")
         setGroundTexture("HMED")
         setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWorkshop.blp")
-        setModelFile(Units.workshop)
+        setModelFile(Buildings.workshop)
         setRequiredAnimationNames("")
         setRequiredAnimationNamesAttachments("")
         setScalingValue(.9)
@@ -152,7 +151,7 @@ class CopterBase extends HeroDefinition
 
 
 @compiletime function copters()
-    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, "A00D,A00P", Units.flyingMachine,  false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate", "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
-    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, "A00D,A00Y", Units.flyingMachine,  true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler", "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
-    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00O,A013", Units.skyBarge,       false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship", "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
-    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00D,A012", Units.goblinZeppelin, false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
+    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, "A00D,A00P", Units.gyroCopter,      false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate", "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
+    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, "A00D,A00Y", Units.gyrocopter_V1,   true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler", "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
+    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00O,A013", Units.undeadAirBarge1, false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship", "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
+    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00D,A012", Units.goblinZeppelin,  false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")

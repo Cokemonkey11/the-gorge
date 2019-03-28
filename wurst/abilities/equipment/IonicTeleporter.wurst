@@ -8,7 +8,7 @@ package IonicTeleporter
 	function effectC()
 		if GetSpellAbilityId() == TELE_ID
 			DTS12MissileArray.disjoint(GetTriggerUnit())
-			GetTriggerUnit().addEffect(Other.massteleportcaster, "origin").destr()
+			GetTriggerUnit().addEffect(Abilities.massTeleportCaster, "origin").destr()
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)

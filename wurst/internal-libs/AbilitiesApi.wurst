@@ -1,4 +1,4 @@
-package Abilities
+package AbilitiesApi
 
 import AbilityObjEditing
 

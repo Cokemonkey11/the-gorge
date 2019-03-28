@@ -4,6 +4,7 @@
 package Crewmembers
 	import Ships
 	import Game
+	import HashMap
 	import SimError
 	import RegisterEvents
 	import TerrainData

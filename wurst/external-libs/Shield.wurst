@@ -15,6 +15,7 @@
 package Shield
 	import DamageType
 	import DamageDetection
+	import HashMap
 
 	//* We must declare the UnitAlive native because StructuredDD no longer
 	//* declares it for us :) UnitAlive is proven to have less computational

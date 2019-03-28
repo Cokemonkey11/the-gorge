@@ -1,4 +1,5 @@
 package Muscii
+	import HashMap
 	import Sounds
 
 	public class Note
