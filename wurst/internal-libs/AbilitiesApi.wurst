@@ -33,6 +33,9 @@ public constant HEALTH_REGEN_BONUS_4 = 20
 public constant ID_HERO_GLOW     = 'AF00'
 public constant ID_HERO_GLOW_STR = "AF00"
 
+public constant ID_SELECT_UNIT     = 'AE01'
+public constant ID_SELECT_UNIT_STR = "AE01"
+
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
         super(id)
@@ -58,11 +61,19 @@ class HealthregenBonuses extends AbilityDefinitionRegenLife
 class HeroGlow extends AbilityDefinitionNeutralRegenhealthonly
     construct(int id)
         super(id)
-        // setPercentage(1, false)
-        // setAmountofHitPointsRegenerated(1, 0)
-        // setArtTarget("GeneralHeroGlow.mdx")
-        // setTargetAttachmentPoint("origin")
+        setPercentage(1, false)
+        setAmountofHitPointsRegenerated(1, 0)
+        setArtTarget("GeneralHeroGlow.mdx")
+        setTargetAttachmentPoint("origin")
         setName("heroglow")
 
 @comiletime function initHeroGlow()
     new HeroGlow(ID_HERO_GLOW)
+
+class SelectUnitAbil extends AbilityDefinitionNeutralBuildinganyunit
+    construct(int id)
+        super(id)
+        setCastRange(1, 450.)
+
+@compiletime function initSelectUnit()
+    new SelectUnitAbil(ID_SELECT_UNIT)

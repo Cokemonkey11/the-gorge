@@ -4,11 +4,8 @@ package Creeps
 	import Players
 	import TerrainData
 	import EnchantingStone
+	import UnitsApi
 
-	constant     GRYPH_ID = 'hgry'
-	constant    WYVERN_ID = 'owyv'
-	constant      HAWK_ID = 'hdhw'
-	constant      WYRM_ID = 'ufro'
 	constant ENCHANTED_ID = 'u006'
 
 	constant SPAWN_PERIOD = 30.
@@ -47,25 +44,25 @@ package Creeps
 	function baseSpawn()
 		if not Game.ended
 			// West units
-			spawn(0, GRYPH_ID,  .25)
-			spawn(0, GRYPH_ID,  .25)
+			spawn(0, ID_GRYPHONRIDER,  .25)
+			spawn(0, ID_GRYPHONRIDER,  .25)
 			doAfter(.5) ->
-				spawn(0, WYVERN_ID, .75)
-				spawn(0, WYVERN_ID, .75)
+				spawn(0, ID_WINDRIDER, .75)
+				spawn(0, ID_WINDRIDER, .75)
 
 			// East units
-			spawn(1, GRYPH_ID,  .25)
-			spawn(1, GRYPH_ID,  .25)
+			spawn(1, ID_GRYPHONRIDER,  .25)
+			spawn(1, ID_GRYPHONRIDER,  .25)
 			doAfter(.5) ->
-				spawn(1, WYVERN_ID, .75)
-				spawn(1, WYVERN_ID, .75)
+				spawn(1, ID_WINDRIDER, .75)
+				spawn(1, ID_WINDRIDER, .75)
+
 
 	function hawk()
 		doAfter(1.) ->
 			if not Game.ended
-				spawn(0, HAWK_ID, 1.25)
-				spawn(1, HAWK_ID, 1.25)
-
+				spawn(0, ID_DRAGONHAWK, 1.25)
+				spawn(1, ID_DRAGONHAWK, 1.25)
 
 
 	function wyrm()
@@ -73,24 +70,24 @@ package Creeps
 			if not Game.ended
 				if EnchantingStone.ownerNorth == Players.players[0]
 					spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
-					spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180., 1.75)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 				else if EnchantingStone.ownerNorth == Players.players[1]
-					spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
 					spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
 				else
-					spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0., 1.75)
-					spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180., 1.75)
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 
 
 				if EnchantingStone.ownerSouth == Players.players[0]
 					spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
-					spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180., 1.75)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 				else if EnchantingStone.ownerSouth == Players.players[1]
-					spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0., 1.75)
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
 					spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
 				else
-					spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0., 1.75)
-					spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180., 1.75)
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 
 	init
 		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function baseSpawn)
