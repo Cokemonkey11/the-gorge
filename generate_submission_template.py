@@ -49,12 +49,12 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.11.0",
-        "date",
+        "31 Mar 2019",
         (
             "Player ships are now heroes, and the F2 hotkey can be used!",
+            "This map now uses an up-to-date wurst standard library.",
             "Adjusted spawn behavior so that creeps would stack up less.",
             "Maybe bug fix: a minor change in enchanting stones.",
-            "This map now uses an up-to-date wurst standard library.",
             "Many object-defined units are now defined in wurst."
         )
     ),
