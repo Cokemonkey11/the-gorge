@@ -1,4 +1,6 @@
 package Sounds
+	import HashMap
+
 	class Slop
 		string snd
 

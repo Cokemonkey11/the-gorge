@@ -1,7 +1,6 @@
 package ShieldAllLevels
 	import Shield
 	import RegisterEvents
-	import Wurstunit
 
 	constant SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
 	constant SHIELD_FX_POINT = "origin"

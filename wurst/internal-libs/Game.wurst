@@ -8,6 +8,7 @@ package Game
 	import FloatText
 	import Players
 	import SinglePlayer
+	import UnitsApi
 
 	class AssistTimestamps
 		int array[12] vals
@@ -24,11 +25,6 @@ package Game
 		static constant        KEEP2_ID     = 'h00F'
 		static constant       SHIELD_ID     = 'h003'
 		static constant       REPAIR_ID     = 'h004'
-		static constant       HANGAR_ID     = 'h00A'
-		static constant      UTILITY_ID     = 'h006'
-		static constant     UTILITY2_ID     = 'h007'
-		static constant     UTILITY3_ID     = 'h008'
-		static constant     UTILITY4_ID     = 'h009'
 		static constant      CAPTAIN_ID     = 'H00C'
 		static constant        STONE_ID     = 'h002'
 		static constant        DUMMY_ID     = 'u000'
@@ -181,14 +177,7 @@ package Game
 
 		static function updateIcon(int pID)
 			int unitType = shipClass[pID]
-			if unitType== Ships.HELICOPTER_ID
-				scoreboard.setIcon(0, scoreboardRows[pID], HELICOPTER_ICON)
-			else if unitType== Ships.PARACOPTER_ID
-				scoreboard.setIcon(0, scoreboardRows[pID], PARACOPTER_ICON)
-			else if unitType== Ships.ZEPPELIN_ID
-				scoreboard.setIcon(0, scoreboardRows[pID], ZEPPELIN_ICON)
-			else if unitType== Ships.SKYBARGE_ID
-				scoreboard.setIcon(0, scoreboardRows[pID], SKYBARGE_ICON)
+			scoreboard.setIcon(0, scoreboardRows[pID], ship_get_icon(unitType))
 
 
 		static function addQuest(string desc, string iconPath, bool required, string title) returns quest
@@ -423,7 +412,7 @@ package Game
 			if GetPlayerSlotState(Players.players[index]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Players.players[index]) == MAP_CONTROL_USER
 				Players.playerCount++
 				Players.playing[index]  = true
-				Game.shipClass[index]   = Ships.HELICOPTER_ID
+				Game.shipClass[index]   = ID_HELICOPTER
 				Game.captains[index]    = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
 				Players.tradeExp[index] = 0
 				Game.kills[index]       = 0
@@ -433,10 +422,10 @@ package Game
 				Game.names[index]       = GetPlayerName(Players.players[index])
 
 				if index < 7
-					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(Players.players[index], ID_HELICOPTER, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.westCount++
 				else
-					Ships.ships[index] = CreateUnit(Players.players[index], Ships.HELICOPTER_ID, TerrainData.EASTX - Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(Players.players[index], ID_HELICOPTER, TerrainData.EASTX - Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.eastCount++
 
 			else
@@ -491,18 +480,18 @@ package Game
 		Game.eastRepair = CreateUnit(Players.players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
 
 		// Create Hangars.
-		Game.westHangar = CreateUnit(Players.players[0], Game.HANGAR_ID, TerrainData.WESTX-768., 0., 270.)
-		Game.eastHangar = CreateUnit(Players.players[1], Game.HANGAR_ID, TerrainData.EASTX+768., 0., 270.)
+		Game.westHangar = CreateUnit(Players.players[0], ID_HANGAR, TerrainData.WESTX-768., 0., 270.)
+		Game.eastHangar = CreateUnit(Players.players[1], ID_HANGAR, TerrainData.EASTX+768., 0., 270.)
 
 		// Create Utility Ports.
-		Game.westUtility[0] = CreateUnit(Players.players[0], Game.UTILITY_ID,  TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[1] = CreateUnit(Players.players[0], Game.UTILITY2_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[2] = CreateUnit(Players.players[0], Game.UTILITY3_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[3] = CreateUnit(Players.players[0], Game.UTILITY4_ID, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[0] = CreateUnit(Players.players[1], Game.UTILITY_ID,  TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[1] = CreateUnit(Players.players[1], Game.UTILITY2_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[2] = CreateUnit(Players.players[1], Game.UTILITY3_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[3] = CreateUnit(Players.players[1], Game.UTILITY4_ID, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[0] = CreateUnit(Players.players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[1] = CreateUnit(Players.players[0], ID_PORT_P2, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[2] = CreateUnit(Players.players[0], ID_PORT_P3, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[3] = CreateUnit(Players.players[0], ID_PORT_P4, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[0] = CreateUnit(Players.players[1], ID_PORT_P1, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[1] = CreateUnit(Players.players[1], ID_PORT_P2, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[2] = CreateUnit(Players.players[1], ID_PORT_P3, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[3] = CreateUnit(Players.players[1], ID_PORT_P4, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
 
 		// Create Stone Spider (Trade Related).
 		let s = CreateUnit(Players.playerPassive, Game.STONE_SPIDER_ID, TerrainData.STONE_SPIDER_X, TerrainData.STONE_SPIDER_Y, Game.STONE_SPIDER_FACING)

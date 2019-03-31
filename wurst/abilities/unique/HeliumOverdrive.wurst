@@ -2,7 +2,6 @@ package HeliumOverdrive
     import HashMap
 
     import Assets
-    import Terrain
 
     import RegisterEvents
 
@@ -27,18 +26,18 @@ package HeliumOverdrive
     class CastFXDat
 
         // duration of the initial effect on cast
-        private static constant INITIAL_FX_DURATION = .5
+        private static constant INITIAL_FX_DURATION = .25
 
         // duration of the orb floating upwards and exploding, when the ult finishes
-        private static constant DISAPPEAR_FX_DURATION = 1.
+        private static constant DISAPPEAR_FX_DURATION = .25
 
         // max height of the heal effect that starts the ult
-        private static constant INITIAL_FX_TARGET_HEIGHT = 800.
+        private static constant INITIAL_FX_TARGET_HEIGHT = 400.
         private static constant CLOCK_PERIOD    = 1./30.
 
         // orb acceleration and velocity (projectile motion)
-        private static constant ACCELERATION    = 320.
-        private static constant MAX_VELOCITY    = 900.
+        private static constant ACCELERATION    = 420.
+        private static constant MAX_VELOCITY    = 2000.
 
         // the offset of the facing angle of the caster for the orb
         private static constant TARGET_OFFSET   = 50.
@@ -48,8 +47,8 @@ package HeliumOverdrive
 
         // calculated deceleration to apply max velocity
         private static constant DECELERATION_RATE = MAX_VELOCITY / (MAX_VELOCITY + ACCELERATION)
-        private static constant string HEAL_FX_MDL = Other.avatarcaster
-        private static constant string ORB_MDL     = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
+        private static constant HEAL_FX_MDL = Abilities.lightningShieldTarget
+        private static constant ORB_MDL     = "Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl"
 
         private static thistype array fxDB
         private static integer dbIndex = -1
@@ -112,14 +111,14 @@ package HeliumOverdrive
                         targetY = ty + TARGET_OFFSET * Sin(facing)
                         ang = Atan2(targetY - oy,targetX - ox)
                         dist = SquareRoot((targetX-ox)*(targetX-ox) + (targetY-oy)*(targetY-oy))
-                        pitch = Atan2(getTerrainZ(tx,ty) + HEIGHT_OFFSET - getTerrainZ(ox,oy) - oz,dist)
+                        pitch = Atan2(vec2(tx, ty).getTerrainZ() + HEIGHT_OFFSET - vec2(ox, oy).getTerrainZ() - oz, dist)
                         fx.delX = (fx.delX + ACCELERATION * Cos(ang) * Cos(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
                         fx.delY = (fx.delY + ACCELERATION * Sin(ang) * Cos(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
                         fx.delZ = (fx.delZ + ACCELERATION * Sin(pitch) * CLOCK_PERIOD) * DECELERATION_RATE
 
                         SetUnitX(fx.orb,ox + fx.delX)
                         SetUnitY(fx.orb,oy + fx.delY)
-                        SetUnitFlyHeight(fx.orb,oz + fx.delZ + getTerrainZ(ox,oy) - getTerrainZ(ox+fx.delX,oy+fx.delY),0.)
+                        SetUnitFlyHeight(fx.orb,oz + fx.delZ + vec2(ox, oy).getTerrainZ() - vec2(ox + fx.delX, oy + fx.delY).getTerrainZ(), 0.)
                     else
 
                         // effect has ended, disappear animation
@@ -138,7 +137,7 @@ package HeliumOverdrive
 
                     SetUnitX(fx.orb,ox + fx.delX)
                     SetUnitY(fx.orb,oy + fx.delY)
-                    SetUnitFlyHeight(fx.orb,GetUnitFlyHeight(fx.orb) + fx.delZ + getTerrainZ(ox,oy) - getTerrainZ(ox+fx.delX,oy+fx.delY),0.)
+                    SetUnitFlyHeight(fx.orb,GetUnitFlyHeight(fx.orb) + fx.delZ + vec2(ox, oy).getTerrainZ() - vec2(ox + fx.delX, oy + fx.delY).getTerrainZ(), 0.)
 
                     if fx.duration > (DISAPPEAR_FX_DURATION*3./4.) and fx.fx != null
                         DestroyEffect(fx.fx)

@@ -1,30 +1,30 @@
 package Creeps
+	import ClosureTimers
 	import Game
 	import Players
 	import TerrainData
 	import EnchantingStone
+	import UnitsApi
 
-	constant     GRYPH_ID = 'hgry'
-	constant    WYVERN_ID = 'owyv'
-	constant      HAWK_ID = 'hdhw'
-	constant      WYRM_ID = 'ufro'
 	constant ENCHANTED_ID = 'u006'
 
 	constant SPAWN_PERIOD = 30.
 	constant  HAWK_PERIOD = 30. * 2.
 	constant  WYRM_PERIOD = 30. * 3.
 
-	function spawnUpper(int faction, int cls, real x, real face)
-		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		u.issuePointOrder("attack", TerrainData.POS_STONE1)
+	function spawnUpper(int faction, int cls, real x, real face, real order_delay)
+		let u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		doAfter(order_delay) ->
+			u.issuePointOrder("attack", TerrainData.POS_STONE1)
 
 
-	function spawnLower(int faction, int cls, real x, real face)
-		unit u = CreateUnit(Players.players[faction], cls, x, 0., face)
-		u.issuePointOrder("attack", TerrainData.POS_STONE2)
+	function spawnLower(int faction, int cls, real x, real face, real order_delay)
+		let u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		doAfter(order_delay) ->
+			u.issuePointOrder("attack", TerrainData.POS_STONE2)
 
 
-	function spawn(int faction, int cls)
+	function spawn(int faction, int cls, real order_delay)
 		real x
 		real face
 
@@ -36,56 +36,60 @@ package Creeps
 			face = 180.
 
 
-		spawnUpper(faction, cls, x, face)
+		spawnUpper(faction, cls, x, face, order_delay)
 
-		spawnLower(faction, cls, x, face)
+		spawnLower(faction, cls, x, face, order_delay)
 
 
-	function base()
+	function baseSpawn()
 		if not Game.ended
 			// West units
-			spawn(0, GRYPH_ID)
-			spawn(0, WYVERN_ID)
-			spawn(0, GRYPH_ID)
-			spawn(0, WYVERN_ID)
+			spawn(0, ID_GRYPHONRIDER,  .25)
+			spawn(0, ID_GRYPHONRIDER,  .25)
+			doAfter(.5) ->
+				spawn(0, ID_WINDRIDER, .75)
+				spawn(0, ID_WINDRIDER, .75)
 
 			// East units
-			spawn(1, GRYPH_ID)
-			spawn(1, WYVERN_ID)
-			spawn(1, GRYPH_ID)
-			spawn(1, WYVERN_ID)
+			spawn(1, ID_GRYPHONRIDER,  .25)
+			spawn(1, ID_GRYPHONRIDER,  .25)
+			doAfter(.5) ->
+				spawn(1, ID_WINDRIDER, .75)
+				spawn(1, ID_WINDRIDER, .75)
+
 
 	function hawk()
-		if not Game.ended
-			spawn(0, HAWK_ID)
-			spawn(1, HAWK_ID)
-
+		doAfter(1.) ->
+			if not Game.ended
+				spawn(0, ID_DRAGONHAWK, 1.25)
+				spawn(1, ID_DRAGONHAWK, 1.25)
 
 
 	function wyrm()
-		if not Game.ended
-			if EnchantingStone.ownerNorth == Players.players[0]
-				spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
-				spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180.)
-			else if EnchantingStone.ownerNorth == Players.players[1]
-				spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0.)
-				spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
-			else
-				spawnUpper(0,      WYRM_ID, TerrainData.WESTX,   0.)
-				spawnUpper(1,      WYRM_ID, TerrainData.EASTX, 180.)
+		doAfter(2.) ->
+			if not Game.ended
+				if EnchantingStone.ownerNorth == Players.players[0]
+					spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+				else if EnchantingStone.ownerNorth == Players.players[1]
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
+				else
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 
 
-			if EnchantingStone.ownerSouth == Players.players[0]
-				spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
-				spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180.)
-			else if EnchantingStone.ownerSouth == Players.players[1]
-				spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0.)
-				spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
-			else
-				spawnLower(0,      WYRM_ID, TerrainData.WESTX,   0.)
-				spawnLower(1,      WYRM_ID, TerrainData.EASTX, 180.)
+				if EnchantingStone.ownerSouth == Players.players[0]
+					spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+				else if EnchantingStone.ownerSouth == Players.players[1]
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
+				else
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 
 	init
-		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function base)
+		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function baseSpawn)
 		TimerStart(CreateTimer(),  HAWK_PERIOD, true, function hawk)
 		TimerStart(CreateTimer(),  WYRM_PERIOD, true, function wyrm)
