@@ -30,8 +30,8 @@ public constant HEALTH_REGEN_BONUS_2 = 12
 public constant HEALTH_REGEN_BONUS_3 = 16
 public constant HEALTH_REGEN_BONUS_4 = 20
 
-public constant ID_HERO_GLOW     = 'AF00'
-public constant ID_HERO_GLOW_STR = "AF00"
+public constant ID_HERO_GLOW     = 'Af00'
+public constant ID_HERO_GLOW_STR = "Af00"
 
 public constant ID_SELECT_UNIT     = 'AE01'
 public constant ID_SELECT_UNIT_STR = "AE01"
@@ -58,7 +58,7 @@ class HealthregenBonuses extends AbilityDefinitionRegenLife
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_3, HEALTH_REGEN_BONUS_3)
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_4, HEALTH_REGEN_BONUS_4)
 
-class HeroGlow extends AbilityDefinitionNeutralRegenhealthonly
+class AbilHeroGlow extends AbilityDefinitionNeutralRegenhealthonly
     construct(int id)
         super(id)
         setPercentage(1, false)
@@ -67,8 +67,8 @@ class HeroGlow extends AbilityDefinitionNeutralRegenhealthonly
         setTargetAttachmentPoint("origin")
         setName("heroglow")
 
-@comiletime function initHeroGlow()
-    new HeroGlow(ID_HERO_GLOW)
+@compiletime function initHeroGlow()
+    new AbilHeroGlow(ID_HERO_GLOW)
 
 class SelectUnitAbil extends AbilityDefinitionNeutralBuildinganyunit
     construct(int id)

@@ -1517,7 +1517,7 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Helicopter")
 	..setString("utub", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
 	..setInt("uhhd", 1)
-	..setString("uabi", "A00D,A00P,AF00")
+	..setString("uabi", "A00D,A00P,Af00")
 
 
 @compiletime function create_w3u_H00B()
@@ -1564,7 +1564,7 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Paracopter")
 	..setString("utub", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
 	..setInt("uhhd", 1)
-	..setString("uabi", "A00D,A00Y,AF00")
+	..setString("uabi", "A00D,A00Y,Af00")
 
 
 @compiletime function create_w3u_H00E()
@@ -1611,7 +1611,7 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Skybarge")
 	..setString("utub", "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
 	..setInt("uhhd", 1)
-	..setString("uabi", "A00O,A013,AF00")
+	..setString("uabi", "A00O,A013,Af00")
 
 
 @compiletime function create_w3u_H00D()
@@ -1658,7 +1658,7 @@ import ObjEditingNatives
 	..setString("utip", "Purchase Zeppelin")
 	..setString("utub", "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
 	..setInt("uhhd", 1)
-	..setString("uabi", "A00D,A012,AF00")
+	..setString("uabi", "A00D,A012,Af00")
 
 
 @compiletime function create_w3u_hc00()
