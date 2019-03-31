@@ -11,26 +11,27 @@ INTRODUCTION = (
 
     """
 
-        The Gorge is a battleships-style aos that focuses on simplicity. It uses
-        automatically firing weapons and interesting systems to produce a design
-        that's nostalgic yet fun.
+        The Gorge is a battleships-style AoS/MOBA that focuses on simplicity.
+        It uses automatically firing weapons, and some innovative systems, to
+        produce a design that's nostalgic, yet fun.
 
     """,
 
     """
 
-        The western nations and eatern faction have long been allies and shared
-        knowledge, as well as technology; but the recent discoery of numerous
+        The western nations and eastern faction have long been allies and shared
+        knowledge, as well as technology; but the recent discovery of numerous,
         rich resource deposits near an unnamed gorge has resulted in a bitter
-        standoff. Secure your team's victory in one final cacophony of
-        helicopters, explosives, and other armament.
+        standoff.
+        Secure your team's victory in one final cacophony of helicopters,
+        explosives, and other armament.
 
     """,
 )
 
 
 SCREENSHOTS = (
-    ("Last-hit for bounty", "http://i.imgur.com/PE862R1.jpg"),
+    ("Last-hit for creep bounty", "http://i.imgur.com/PE862R1.jpg"),
 )
 
 
@@ -43,16 +44,18 @@ ABILITIES = (
     ),
 )
 
-REPOSITORY_URI     = "https://bitbucket.org/Cokemonkey11/the-gorge/"
+REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
-CHANGELOG          = (
+CHANGELOG = (
     (
         "0.11.0",
         "date",
         (
             "Player ships are now heroes, and the F2 hotkey can be used!",
             "Adjusted spawn behavior so that creeps would stack up less.",
-            "This map now uses an up-to-date wurst standard library."
+            "Maybe bug fix: a minor change in enchanting stones.",
+            "This map now uses an up-to-date wurst standard library.",
+            "Many object-defined units are now defined in wurst."
         )
     ),
     (

@@ -5,7 +5,6 @@ package EnchantingStone
 	import Players
 	import TerrainData
 
-	constant CLOCK_PERIOD         =   1. / 30.
 	constant LOCK_HEIGHT          = 560.
 	constant OWNR_HEIGHT          = 160.
 	constant INDICATOR_SCALE      =    .5
@@ -15,20 +14,20 @@ package EnchantingStone
 	constant CAPTURE_RADIUS       = 150. + 16.
 	constant PROGRESS_OFFSET      = vec2(75., 0.)
 
-	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / CLOCK_PERIOD)
-	constant LOCK_STEPS          = R2I(   LOCK_TIME / CLOCK_PERIOD)
+	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / ANIMATION_PERIOD)
+	constant LOCK_STEPS          = R2I(   LOCK_TIME / ANIMATION_PERIOD)
 
 	constant INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
 
-	int lockStepsNorth     = LOCK_STEPS
-	int lockStepsSouth     = LOCK_STEPS
-	int captureStatusNorth = R2I(CAPTURE_STATUS_CEIL / 2)
-	int captureStatusSouth = R2I(CAPTURE_STATUS_CEIL / 2)
-	int capPowerWest       = 0
-	int capPowerEast       = 0
+	var lockStepsNorth     = LOCK_STEPS
+	var lockStepsSouth     = LOCK_STEPS
+	var captureStatusNorth = R2I(CAPTURE_STATUS_CEIL / 2)
+	var captureStatusSouth = R2I(CAPTURE_STATUS_CEIL / 2)
+	var capPowerWest       = 0
+	var capPowerEast       = 0
 
-	bool lockedNorth = true
-	bool lockedSouth = true
+	var lockedNorth = true
+	var lockedSouth = true
 
 	function texttag.updateCapStatus(int status)
 		this.setText((status / CAPTURE_STATUS_CEIL).toString(2), 11.)
@@ -50,8 +49,8 @@ package EnchantingStone
 		static player ownerSouth = null
 
 
-	unit stoneNorth
-	unit stoneSouth
+	constant stoneNorth = CreateUnit(Players.playerPassive, Game.STONE_ID, TerrainData.POS_STONE1.x, TerrainData.POS_STONE1.y, 270.)
+	constant stoneSouth = CreateUnit(Players.playerPassive, Game.STONE_ID, TerrainData.POS_STONE2.x, TerrainData.POS_STONE2.y, 270.)
 	unit lockIndicatorNorth
 	unit lockIndicatorSouth
 	unit ownerIndicatorNorth
@@ -129,7 +128,7 @@ package EnchantingStone
 			lockIndicatorNorth..setPos(TerrainData.POS_STONE1)..setFlyHeight(LOCK_HEIGHT, 0.)
 			lockStepsNorth = LOCK_STEPS
 			EnchantingStone.ownerNorth = Players.players[1]
-			ownerIndicatorSouth.setColor(PLAYER_COLOR_BLUE)
+			ownerIndicatorNorth.setColor(PLAYER_COLOR_BLUE)
 			progressIndicatorNorth..setX(TerrainData.SAFE_X)..setY(TerrainData.SAFE_Y)
 
 
@@ -187,10 +186,6 @@ package EnchantingStone
 
 
 	init
-		// Create Enchanting Stones.
-		stoneNorth = CreateUnit(Players.playerPassive, Game.STONE_ID, TerrainData.POS_STONE1.x, TerrainData.POS_STONE1.y, 270.)
-		stoneSouth = CreateUnit(Players.playerPassive, Game.STONE_ID, TerrainData.POS_STONE2.x, TerrainData.POS_STONE2.y, 270.)
-
 		// Create indicator dummies.
 		lockIndicatorNorth  = DummyUnitStack.get()
 			..setPos(TerrainData.POS_STONE1)
@@ -243,7 +238,7 @@ package EnchantingStone
 			..setScale(INDICATOR_SCALE)
 			..setTimeScale(INDICATOR_TIME_SCALE)
 
-		doPeriodically(CLOCK_PERIOD, (CallbackPeriodic _) -> begin
+		doPeriodically(ANIMATION_PERIOD, (CallbackPeriodic _) -> begin
 			if lockedNorth
 				onLockedNorth()
 			else
@@ -254,5 +249,4 @@ package EnchantingStone
 				onLockedSouth()
 			else
 				onUnlockedSouth()
-
 		end)
