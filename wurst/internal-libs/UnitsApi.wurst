@@ -1,5 +1,6 @@
 package UnitsApi
 
+import AbilitiesApi
 import Assets
 import Items
 import UnitObjEditing
@@ -19,6 +20,12 @@ public constant ID_PARACOPTER = 'H00B'
 public constant ID_ZEPPELIN   = 'H00D'
 public constant ID_SKYBARGE   = 'H00E'
 
+public constant ID_DRAGONHAWK   = 'hc00'
+public constant ID_GRYPHONRIDER = 'hc01'
+public constant ID_WINDRIDER    = 'hc02'
+public constant ID_FROSTWYRM    = 'hc03'
+
+
 public function ship_get_icon(int id) returns string
     if id == ID_HELICOPTER
         return "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
@@ -34,7 +41,7 @@ public function ship_get_icon(int id) returns string
 class UtilityPorts extends BuildingDefinition
     construct(int id, int page, string itemsMade)
         super(id, BASE_ID_UTILITY_PORT)
-        setNormalAbilities("Apit,Ane2,Aall,Avul")
+        setNormalAbilities(ID_SELECT_UNIT_STR + ",Apit,Aall,Avul")
         setGroundTexture(page == 1 ? "HMED" : "")
         setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHumanBarracks.blp")
         setModelFile(page == 1 ? Buildings.humanBarracks : "dummy.mdl")
@@ -71,7 +78,7 @@ class UtilityPorts extends BuildingDefinition
 class Hangar extends BuildingDefinition
     construct (int id)
         super(id, BASE_ID_HANGAR)
-        setNormalAbilities("Avul,Ane2,Asud,Aall")
+        setNormalAbilities(ID_SELECT_UNIT_STR + ",Avul,Asud,Aall")
         setGroundTexture("HMED")
         setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNWorkshop.blp")
         setModelFile(Buildings.workshop)
@@ -149,9 +156,130 @@ class CopterBase extends HeroDefinition
         setTooltipExtended(tooltipext)
         hideHeroDeathMsg(true)
 
-
 @compiletime function copters()
-    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, "A00D,A00P", Units.gyroCopter,      false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate", "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
-    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, "A00D,A00Y", Units.gyrocopter_V1,   true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler", "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
-    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00O,A013", Units.undeadAirBarge1, false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship", "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
-    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00D,A012", Units.goblinZeppelin,  false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
+    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, "A00D,A00P," + ID_HERO_GLOW_STR, Units.gyroCopter,      false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate",     "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array")
+    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, "A00D,A00Y," + ID_HERO_GLOW_STR, Units.gyrocopter_V1,   true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler",    "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
+    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00O,A013," + ID_HERO_GLOW_STR, Units.undeadAirBarge1, false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship",  "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2")
+    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, "A00D,A012," + ID_HERO_GLOW_STR, Units.goblinZeppelin,  false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
+
+/// Creeps
+class DragonhawkRiderCreep extends UnitDefinition
+    construct(int id)
+        super(id, 'hdhw')
+        setNormalAbilities("")
+        setProjectileImpactZ(11.)
+        setProjectileLaunchY(-9.)
+        setProjectileLaunchZ(17.)
+        setScalingValue(.6)
+        setSelectionCircleHeight(70.)
+        setSelectionScale(2.)
+        setAttack1AttackType(AttackType.Magic)
+        setAttack1DamageBase(64)
+        setAttack1DamageSidesperDie(1)
+        setAttack1ProjectileArc(0.)
+        setAttack1ProjectileSpeed(600)
+        setAttack1Range(550)
+        setArmorType(ArmorType.Unarmored)
+        setDefenseUpgradeBonus(0)
+        setMovementHeight(100.)
+        setMovementHeightMinimum(100.)
+        setSpeedBase(180)
+        setCollisionSize(6.)
+        setGoldBountyAwardedBase(29)
+        setGoldBountyAwardedNumberofDice(1)
+        setGoldBountyAwardedSidesperDie(1)
+        setHitPointsMaximumBase(771)
+        setManaInitialAmount(0)
+        setManaMaximum(0)
+        setManaRegeneration(0.)
+        setRequirements("")
+        setUpgradesUsed("")
+class GryphonRiderCreep extends UnitDefinition
+    construct(int id)
+        super(id, 'hgry')
+        setProjectileImpactZ(9.)
+        setProjectileLaunchX(5.5)
+        setProjectileLaunchY(-8.4)
+        setProjectileLaunchZ(15.5)
+        setScalingValue(.45)
+        setSelectionCircleHeight(70.)
+        setAttack1CooldownTime(2.4)
+        setAttack1DamageBase(29)
+        setAttack1DamageSidesperDie(1)
+        setAttack1Range(300)
+        setAttack1TargetsAllowed("air,enemies,ground,structure,vulnerable")
+        setAttacksEnabled(1)
+        setArmorType(ArmorType.Unarmored)
+        setMovementHeight(100.)
+        setMovementHeightMinimum(100.)
+        setSpeedBase(180)
+        setCollisionSize(6.)
+        setFoodCost(0)
+        setGoldBountyAwardedBase(19)
+        setGoldBountyAwardedNumberofDice(1)
+        setGoldBountyAwardedSidesperDie(1)
+        setHitPointsMaximumBase(707)
+        setUpgradesUsed("")
+class WindRiderCreep extends UnitDefinition
+    construct(int id)
+        super(id, 'owyv')
+        setProjectileImpactZ(10.)
+        setProjectileLaunchX(-17.5)
+        setProjectileLaunchY(15.)
+        setProjectileLaunchZ(26.)
+        setScalingValue(.5)
+        setSelectionCircleHeight(70.)
+        setAttack1CooldownTime(1.5)
+        setAttack1DamageBase(42)
+        setAttack1DamageSidesperDie(1)
+        setAttack1DamageNumberofDice(1)
+        setAttack1ProjectileSpeed(800)
+        setAttack1Range(480)
+        setArmorType(ArmorType.Unarmored)
+        setMovementHeight(100.)
+        setMovementHeightMinimum(100.)
+        setSpeedBase(180)
+        setCollisionSize(6.)
+        setFoodCost(0)
+        setGoldBountyAwardedBase(24)
+        setGoldBountyAwardedNumberofDice(1)
+        setGoldBountyAwardedSidesperDie(1)
+        setHitPointsMaximumBase(386)
+        setHitPointsRegenerationRate(.25)
+        setRequirements("")
+        setUpgradesUsed("")
+class FrostWyrm extends UnitDefinition
+    construct(int id)
+        super(id, 'ufro')
+        setNormalAbilities("")
+        setProjectileLaunchY(105.)
+        setProjectileLaunchZ(-55.)
+        setScalingValue(.85)
+        setSelectionCircleHeight(90.)
+        setAttack1AreaofEffectFullDamage(0)
+        setAttack1AreaofEffectMediumDamage(0)
+        setAttack1AreaofEffectSmallDamage(0)
+        setAttack1DamageBase(69)
+        setAttack1DamageNumberofDice(1)
+        setAttack1DamageSidesperDie(1)
+        setAttack1ProjectileArc(0.)
+        setAttack1Range(650)
+        setAttack1TargetsAllowed("air,enemies,ground,structure,vulnerable")
+        setAttack1WeaponType(WeaponType.Missile)
+        setAttacksEnabled(1)
+        setArmorType(ArmorType.Large)
+        setGroupSeparationParameter(0)
+        setMovementHeight(120.)
+        setMovementHeightMinimum(120.)
+        setSpeedBase(180)
+        setFoodCost(0)
+        setGoldBountyAwardedBase(34)
+        setGoldBountyAwardedNumberofDice(1)
+        setGoldBountyAwardedSidesperDie(1)
+        setHitPointsMaximumBase(1029)
+
+@compiletime function creeps()
+    new DragonhawkRiderCreep(ID_DRAGONHAWK)
+    new GryphonRiderCreep(ID_GRYPHONRIDER)
+    new WindRiderCreep(ID_WINDRIDER)
+    new FrostWyrm(ID_FROSTWYRM)

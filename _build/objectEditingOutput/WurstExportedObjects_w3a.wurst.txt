@@ -756,12 +756,23 @@ import ObjEditingNatives
 	..setLvlDataInt("Ihpr", 1, 1, 20)
 
 
+@compiletime function create_w3a_Af00()
+	let def = createObjectDefinition("w3a", 'Af00', 'ACnr')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Oar2", 1, 2, 0)
+	..setLvlDataUnreal("Oar1", 1, 1, 0.0)
+	..setLvlDataString("atat", 0, 0, "GeneralHeroGlow.mdx")
+	..setLvlDataString("ata0", 0, 0, "origin")
+	..setLvlDataString("anam", 0, 0, "heroglow")
+
+
+@compiletime function create_w3a_AE01()
+	let def = createObjectDefinition("w3a", 'AE01', 'Ane2')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataUnreal("aran", 1, 0, 450.0)
+
+
 // Original Table (contains all modified default objects)
 // Wurst does not support modifying default objects
 // but you can copy these functions and replace 'xxxx' with a new, custom id.
-
-@compiletime function create_w3a_    ()
-	let def = createObjectDefinition("w3a", '    ', 'Ane2')
-	..setLvlDataUnreal("aran", 1, 0, 450.0)
-
 
