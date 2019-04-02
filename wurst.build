@@ -3,6 +3,6 @@ projectName: The Gorge
 dependencies:
 - https://github.com/wurstscript/WurstStdlib2
 buildMapData:
-  name: '|cff999999The Gorge|r 0.11.0'
+  # name: '|cff999999The Gorge|r 0.11.0'
   fileName: (10)TheGorge0.11.0
   author: Cokemonkey11
