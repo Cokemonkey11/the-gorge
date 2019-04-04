@@ -13,5 +13,4 @@ init
 
 			switch first
 				case "music"
-					p.setWantsMusic(!p.wantsMusic())
-    
+					p.setWantsMusic(not p.wantsMusic())

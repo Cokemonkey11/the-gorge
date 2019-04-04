@@ -2,13 +2,16 @@ package Muscii
 	import HashMap
 	import Sounds
 
-	var wants = [true, true, true, true, true, true, true, true, true, true, true, true]
+	var wants_mask = [
+		true, true, true, true, true, true, true, true, true, true, true, true,
+		true, true, true, true, true, true, true, true, true, true, true, true
+	]
 	public function player.wantsMusic() returns boolean
-		return wants[this.getId()]
-		
+		return wants_mask[this.getId()]
+
 	public function player.setWantsMusic(boolean flag)
-		wants[this.getId()] = flag
-		
+		wants_mask[this.getId()] = flag
+
 	public class Note
 		string path
 		int volume
