@@ -48,6 +48,13 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.11.1",
+        "date",
+        (
+            "Music can now be disabled with the `-music` command.",
+        )
+    ),
+    (
         "0.11.0",
         "31 Mar 2019",
         (
