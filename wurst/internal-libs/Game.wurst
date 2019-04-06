@@ -21,8 +21,6 @@ package Game
 		static constant   SKYBARGE_ICON     = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 		static constant TRADE_SUCCESS_SOUND = "Sound\\Interface\\QuestLog.wav"
 
-		static constant         KEEP_ID     = 'h001'
-		static constant        KEEP2_ID     = 'h00F'
 		static constant       SHIELD_ID     = 'h003'
 		static constant       REPAIR_ID     = 'h004'
 		static constant      CAPTAIN_ID     = 'H00C'
@@ -463,12 +461,12 @@ package Game
 		SetPlayerState(Players.players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
 		// Create keeps.
-		Game.westKeep[0] = CreateUnit(Players.players[0], Game.KEEP_ID, TerrainData.WESTX, 0, 270)
-		Game.eastKeep[0] = CreateUnit(Players.players[1], Game.KEEP_ID, TerrainData.EASTX, 0, 270)
+		Game.westKeep[0] = CreateUnit(Players.players[0], ID_KEEP_P1, TerrainData.WESTX, 0, 270)
+		Game.eastKeep[0] = CreateUnit(Players.players[1], ID_KEEP_P1, TerrainData.EASTX, 0, 270)
 		SetUnitInvulnerable(Game.westKeep[0], true)
 		SetUnitInvulnerable(Game.eastKeep[0], true)
-		Game.westKeep[1] = CreateUnit(Players.players[0], Game.KEEP2_ID, TerrainData.WESTX, 0., 270.)
-		Game.eastKeep[1] = CreateUnit(Players.players[1], Game.KEEP2_ID, TerrainData.EASTX, 0., 270.)
+		Game.westKeep[1] = CreateUnit(Players.players[0], ID_KEEP_P2, TerrainData.WESTX, 0., 270.)
+		Game.eastKeep[1] = CreateUnit(Players.players[1], ID_KEEP_P2, TerrainData.EASTX, 0., 270.)
 
 		// Create shields.
 		index = 0

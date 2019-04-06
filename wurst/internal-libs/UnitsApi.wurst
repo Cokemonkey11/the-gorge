@@ -6,12 +6,16 @@ import Items
 import UnitObjEditing
 
 constant BASE_ID_UTILITY_PORT = 'hkee'
-constant BASE_ID_HANGAR = 'hkee'
+constant BASE_ID_HANGAR       = 'hkee'
+constant BASE_ID_KEEP         = 'hkee'
 
 public constant ID_PORT_P1 = 'h006'
 public constant ID_PORT_P2 = 'h007'
 public constant ID_PORT_P3 = 'h008'
 public constant ID_PORT_P4 = 'h009'
+
+public constant ID_KEEP_P1 = 'h001'
+public constant ID_KEEP_P2 = 'h00F'
 
 public constant ID_HANGAR = 'h00A'
 
@@ -44,7 +48,7 @@ class UtilityPorts extends BuildingDefinition
         setNormalAbilities(ID_SELECT_UNIT_STR + ",Apit,Aall,Avul")
         setGroundTexture(page == 1 ? "HMED" : "")
         setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNHumanBarracks.blp")
-        setModelFile(page == 1 ? Buildings.humanBarracks : "dummy.mdl")
+        setModelFile(page == 1 ? Buildings.humanBarracks : "none.mdl")
         setRequiredAnimationNames("")
         setRequiredAnimationNamesAttachments("")
         setSelectionScale(4.)
@@ -76,7 +80,7 @@ class UtilityPorts extends BuildingDefinition
     new UtilityPorts(ID_PORT_P4, 4, "I00C,I00G,I00I,I00B")
 
 class Hangar extends BuildingDefinition
-    construct (int id)
+    construct(int id)
         super(id, BASE_ID_HANGAR)
         setNormalAbilities(ID_SELECT_UNIT_STR + ",Avul,Asud,Aall")
         setGroundTexture("HMED")
@@ -109,6 +113,41 @@ class Hangar extends BuildingDefinition
 
 @compiletime function hangar()
     new Hangar(ID_HANGAR)
+
+class Keep extends BuildingDefinition
+    construct(int id, int page)
+        super(id, BASE_ID_KEEP)
+        setNormalAbilities(page == 1 ? "A00W,Ane2,Asud,Aall": "A00R,Apit,Ane2,Aall,Avul")
+        setModelFile(page == 1 ? Buildings.townHall : "none.mdl")
+        setGroundTexture(page == 1 ? "HTOW" : "")
+        setRequiredAnimationNames(page == 1 ? "upgrade,first" : "")
+        setRequiredAnimationNamesAttachments(page == 1 ? "large" : "")
+        setScalingValue(page == 1 ? 1. : .1)
+        setShadowTextureBuilding(page == 1 ? "ShadowKeep" : "")
+        setAIPlacementRadius(0.)
+        setAIPlacementType("")
+        setCollisionSize(0.)
+        setPathingMap("")
+        setPlacementRequires("")
+        setFoodProduced(0)
+        setSightRadiusDay(page == 1 ? 2500 : 900)
+        setSightRadiusNight(page == 1 ? 2500 : 600)
+        setItemsMade(page == 1 ? "I00E" : "I00F")
+        setHitPointsMaximumBase(page == 1 ? 2000 : 500000)
+        setHitPointsRegenerationRate(page == 1 ? 0 : 1000)
+        setHitPointsRegenerationType(page == 1 ? "none" : "always")
+        setUnitClassification(page == 1 ? "TownHall,Mechanical" : "mechanical")
+        setResearchesAvailable("")
+        setUnitsSold(page == 1 ? "o002,o003,o001,o000,o004,o005,o006,o007" : "o00G,o00I,o00K,o00M")
+        setUnitsTrained("")
+        setUpgradesTo("")
+        setUpgradesUsed("")
+        setTooltipBasic("Keep")
+        setTooltipExtended("Main structure.  Sells crewmembers.")
+
+@compiletime function keeps()
+    new Keep(ID_KEEP_P1, 1)
+    new Keep(ID_KEEP_P2, 2)
 
 class CopterBase extends HeroDefinition
     construct(int id, int button_x, real anim_backwing_cast, real anim_point_cast, int red, int green, int blue, string abils, string model, bool use_tft_model, real scale, int defense, int movespeed, string movesound, string soundset, int food_produced, int hp, string shipclass, string name, string tooltipext)
