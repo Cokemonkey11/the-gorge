@@ -36,6 +36,9 @@ public constant ID_HERO_GLOW_STR = "Af00"
 public constant ID_SELECT_UNIT     = 'AE01'
 public constant ID_SELECT_UNIT_STR = "AE01"
 
+public constant ID_FIRE_CREWMEMBER     = 'A00M'
+public constant ID_FIRE_CREWMEMBER_STR = "A00M"
+
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
         super(id)
@@ -77,3 +80,35 @@ class SelectUnitAbil extends AbilityDefinitionNeutralBuildinganyunit
 
 @compiletime function initSelectUnit()
     new SelectUnitAbil(ID_SELECT_UNIT)
+
+class ReleaseAbil extends AbilityDefinitionIllidanChannel
+    construct(int id)
+        super(id)
+        setAnimationNames("spell")
+        setButtonPositionNormalX(0)
+        setButtonPositionNormalY(2)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal("ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
+        setArtTarget("")
+        setTargetAttachmentPoint("")
+        setBaseOrderID(1, "acidbomb")
+        setDisableOtherAbilities(1, false)
+        setFollowThroughTime(1, 0.)
+        setOptions(1, 1)
+        setTargetType(1, 1)
+        setCastRange(1, 384.)
+        setCooldown(1, .25)
+        setHeroAbility(false)
+        setLevels(1)
+        setTargetsAllowed(1, "ground,invulnerable,neutral")
+        setCheckDependencies(false)
+        setHotkeyNormal("Q")
+        setName("Fire crewmember")
+        setOrderStringUseTurnOn("acidbomb")
+        setTooltipNormal(1, "Fire Crewmember [|cffffcc00Q|r]")
+        setTooltipNormalExtended(1, "Unemploy the target crewmember.  Returns half their cost as gold.")
+
+@compiletime function initFire()
+    new ReleaseAbil(ID_FIRE_CREWMEMBER)

@@ -8,6 +8,7 @@ import UnitObjEditing
 constant BASE_ID_UTILITY_PORT = 'hkee'
 constant BASE_ID_HANGAR       = 'hkee'
 constant BASE_ID_KEEP         = 'hkee'
+constant BASE_ID_CAPTAIN      = 'Hpal'
 
 public constant ID_PORT_P1 = 'h006'
 public constant ID_PORT_P2 = 'h007'
@@ -28,6 +29,8 @@ public constant ID_DRAGONHAWK   = 'hc00'
 public constant ID_GRYPHONRIDER = 'hc01'
 public constant ID_WINDRIDER    = 'hc02'
 public constant ID_FROSTWYRM    = 'hc03'
+
+public constant ID_CAPTAIN = 'H00C'
 
 
 public function ship_get_icon(int id) returns string
@@ -78,6 +81,39 @@ class UtilityPorts extends BuildingDefinition
     new UtilityPorts(ID_PORT_P2, 2, "I002,I005,I004,I006")
     new UtilityPorts(ID_PORT_P3, 3, "I008,I009,I00A,I007")
     new UtilityPorts(ID_PORT_P4, 4, "I00C,I00G,I00I,I00B")
+
+class Captain extends HeroDefinition
+    construct(int id)
+        super(id, BASE_ID_CAPTAIN)
+        setHeroAbilities("")
+        setNormalAbilities(ID_FIRE_CREWMEMBER_STR + ",A00N,A00K,Avul")
+        setAnimationCastPoint(0.)
+        setAnimationCastBackswing(0.)
+        setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAssassin.blp")
+        setIconScoreScreen("UI\\Glues\\ScoreScreen\\scorescreen-hero-warden.blp")
+        setModelFile(Units.heroWarden)
+        setPropulsionWindowdegrees(360.)
+        setScalingValue(.6)
+        setSelectionScale(.7)
+        setShadowImageCenterX(35.)
+        setShadowImageCenterY(35.)
+        setAttacksEnabled(0)
+        setTargetedAs("none")
+        setSpeedBase(0)
+        setMovementType(MovementType.None)
+        setCollisionSize(0.)
+        setUnitSoundSet("HeroWarden")
+        setFoodCost(0)
+        setHitPointsMaximumBase(500000)
+        setPrimaryAttribute("INT")
+        setSightRadiusDay(600)
+        setSightRadiusNight(600)
+        setName("Captain")
+        setProperNames("Vurst,Yass,Raust,Frotty,peq,karlek,lep,Bieber,Techies,Irnbru")
+        setProperNamesUsed(10)
+
+@compiletime function captain()
+    new Captain(ID_CAPTAIN)
 
 class Hangar extends BuildingDefinition
     construct(int id)

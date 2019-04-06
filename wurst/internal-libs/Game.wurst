@@ -23,7 +23,6 @@ package Game
 
 		static constant       SHIELD_ID     = 'h003'
 		static constant       REPAIR_ID     = 'h004'
-		static constant      CAPTAIN_ID     = 'H00C'
 		static constant        STONE_ID     = 'h002'
 		static constant        DUMMY_ID     = 'u000'
 		static constant STONE_SPIDER_ID     = 'n000'
@@ -424,7 +423,7 @@ package Game
 				Players.playerCount++
 				Players.playing[index]  = true
 				Game.shipClass[index]   = ID_HELICOPTER
-				Game.captains[index]    = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
+				Game.captains[index]    = CreateUnit(Players.players[index], ID_CAPTAIN, GetStartLocationX(index), GetStartLocationY(index), 270.)
 				Players.tradeExp[index] = 0
 				Game.kills[index]       = 0
 				Game.deaths[index]      = 0
