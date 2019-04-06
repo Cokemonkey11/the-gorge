@@ -53,8 +53,10 @@ CHANGELOG = (
         (
             "Fixed a major bug where players get gold if they destroy themselves.",
             "Music can now be disabled with the `-music` command.",
-            "Fixed a minor bug that allowed players to select stacked keep/utility port.",
-            "Minor increase to DTS-12 projectile height to aid aiming.",
+            "Fixed a minor bug that allowed players to select stacked keep and utility port.",
+            "Minor increase to DTS-12 projectile height to aid with aiming.",
+            "Reduced the cooldown time on the Sell Crewmember ability.",
+            "Replaced singleplayer chat commands from backslash to hyphen.",
         )
     ),
     (
