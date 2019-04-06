@@ -6,8 +6,7 @@ package TerrainData
 		static constant EASTX               =    -1. * WESTX
 		static constant POS_STONE1          = vec2( 380.,  1030.)
 		static constant POS_STONE2          = vec2(-140., -1020.)
-		static constant SAFE_X              = -8064.
-		static constant SAFE_Y              =  3970.
+		static constant SAFE = vec2(-8064., 3970.)
 		static constant STONE_SPIDER_X      =   -50.
 		static constant STONE_SPIDER_Y      = -4480.
 		static constant STONE_SPIDER_RADIUS =   128.
@@ -19,12 +18,7 @@ package TerrainData
 		static constant CENTRAL_MAXY     =  1870.
 
 		// Used by FillToxicSack (Trigger).
-		static rect utilityWest
-		static rect utilityEast
-		static rect spider
+		static rect utilityWest = Rect(TerrainData.WESTX - TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y - TerrainData.UTILITY_RADIUS,           TerrainData.WESTX + TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y + TerrainData.UTILITY_RADIUS)
+		static rect utilityEast = Rect(TerrainData.EASTX - TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y - TerrainData.UTILITY_RADIUS,           TerrainData.EASTX + TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y + TerrainData.UTILITY_RADIUS)
+		static rect spider      = Rect(TerrainData.STONE_SPIDER_X - TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_Y - TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_X + TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_Y + TerrainData.STONE_SPIDER_RADIUS)
 
-
-	init
-		TerrainData.utilityWest = Rect(TerrainData.WESTX - TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y - TerrainData.UTILITY_RADIUS,           TerrainData.WESTX + TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y + TerrainData.UTILITY_RADIUS)
-		TerrainData.utilityEast = Rect(TerrainData.EASTX - TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y - TerrainData.UTILITY_RADIUS,           TerrainData.EASTX + TerrainData.UTILITY_RADIUS,               TerrainData.UTILITY_Y + TerrainData.UTILITY_RADIUS)
-		TerrainData.spider      = Rect(TerrainData.STONE_SPIDER_X - TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_Y - TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_X + TerrainData.STONE_SPIDER_RADIUS, TerrainData.STONE_SPIDER_Y + TerrainData.STONE_SPIDER_RADIUS)

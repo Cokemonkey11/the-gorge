@@ -68,24 +68,24 @@ package Shield
 							tempDat.shieldLeft= tempDat.shieldLeft-damageLeft
 
 						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+damageLeft)
-						damageLeft= 0.
+						damageLeft = 0.
 					else
 						damageLeft= damageLeft-tempDat.shieldLeft
 						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
 						tempDat.shieldLeft= 0.
-						if tempDat.falseHP>damageLeft
-							tempDat.falseHP= tempDat.falseHP-damageLeft
+						if tempDat.falseHP > damageLeft
+							tempDat.falseHP -= damageLeft
 							damageLeft= 0.
 						else
-							damageLeft= damageLeft-tempDat.falseHP
-							tempDat.falseHP= 0.
-							destroyingDat= tempDat
+							damageLeft -= tempDat.falseHP
+							tempDat.falseHP = 0.
+							destroyingDat = tempDat
 							if destroyingDat.nextShield != null
-								tempDat= destroyingDat.nextShield
+								tempDat = destroyingDat.nextShield
 								tempDat.prevShield = null
 								Shield.tab.saveInt(tempDat.u.getHandleId(), tempDat castTo int)
 							else
-								noShieldsLeft= true
+								noShieldsLeft = true
 
 							destroyingDat.nextShield = null
 

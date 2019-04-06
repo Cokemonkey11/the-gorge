@@ -1,13 +1,14 @@
 package ShieldAllLevels
+	import Assets
 	import Shield
 	import RegisterEvents
 
-	constant SHIELD_FX = "Abilities\\Spells\\NightElf\\Immolation\\ImmolationTarget.mdl"
+	constant SHIELD_FX = Abilities.immolationTarget
 	constant SHIELD_FX_POINT = "origin"
 	constant SHIELD_ID = 'A00G'
 	constant SHIELD_1  = 'I005'
 	constant AMOUNT_1 = 500.
-	constant TIME_1 = 5.
+	constant TIME_1   =   5.
 
 	function getUnitShieldId(unit u) returns int
 		for index = 0 to 5
@@ -17,11 +18,9 @@ package ShieldAllLevels
 		return -1
 
 	function c()
-		int sId
-		unit tU
 		if GetSpellAbilityId() == SHIELD_ID
-			tU = GetTriggerUnit()
-			sId = getUnitShieldId(tU)
+			let tU = GetTriggerUnit()
+			let sId = getUnitShieldId(tU)
 			if sId == SHIELD_1
 				Shield.add(tU, AMOUNT_1, TIME_1, SHIELD_FX, SHIELD_FX_POINT)
 

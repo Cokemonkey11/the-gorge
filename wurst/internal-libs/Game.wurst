@@ -153,16 +153,17 @@ package Game
 
 
 		static function farmIncrement(int pID)
-			farm[pID] = farm[pID] + 1
+			farm[pID]++
 			scoreboard.setValue(4, scoreboardRows[pID], I2S(farm[pID]))
 
 
 		static function parseKill(int pID)
-			kills[pID] = kills[pID] + 1
+			kills[pID]++
+
 			if pID < 7
-				kills[0] = kills[0] + 1
+				kills[0]++
 			else
-				kills[1] = kills[1] + 1
+				kills[1]++
 
 			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff" + I2S(kills[0]) + " - " + I2S(kills[1]) + "|r]")
 			scoreboard.setValue(1, scoreboardRows[pID], I2S(kills[pID]))

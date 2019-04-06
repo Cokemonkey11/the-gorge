@@ -118,28 +118,29 @@ package Crewmembers
 				BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
 
 		static function p()
-			CrewMember temp
-			int index= 0
+			var index = 0
+
 			while index <= dbIndex
-				temp= db[index]
+				let temp = db[index]
+
 				if UnitAlive(Ships.ships[temp.ownerID]) and not Game.ended
 					SetUnitX(temp.phoenix, GetUnitX(Ships.ships[temp.ownerID]))
 					SetUnitY(temp.phoenix, GetUnitY(Ships.ships[temp.ownerID]))
 				else
-					SetUnitX(temp.phoenix, TerrainData.SAFE_X)
-					SetUnitY(temp.phoenix, TerrainData.SAFE_Y)
+					temp.phoenix.setPos(TerrainData.SAFE)
 
-				index += 1
+				index++
 
 		static function c()
 			CrewMember temp
-			unit selU = GetSellingUnit()
-			unit bU= GetBuyingUnit()
-			unit sU= GetSoldUnit()
+			let selU = GetSellingUnit()
+			let bU = GetBuyingUnit()
+			let sU = GetSoldUnit()
 			real x
 			real y
 			real face
 			player buyer = GetOwningPlayer(sU)
+
 			if Ships.getClass(sU)== Ships.CLASS_UNKNOWN
 				if IsUnitAlly(bU, GetOwningPlayer(selU))
 					temp = new CrewMember

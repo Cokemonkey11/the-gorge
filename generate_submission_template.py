@@ -51,6 +51,7 @@ CHANGELOG = (
         "0.11.1",
         "date",
         (
+            "Fixed a major bug where players get gold if they destroy themselves.",
             "Music can now be disabled with the `-music` command.",
         )
     ),
