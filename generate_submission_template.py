@@ -48,13 +48,32 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.11.2",
+        "7 Apr 2019",
+        (
+            "Fixed a desync when a player uses the -music command.",
+        )
+    ),
+    (
+        "0.11.1",
+        "7 Apr 2019",
+        (
+            "Fixed a major bug where players get gold if they destroy themselves.",
+            "Music can now be disabled with the `-music` command.",
+            "Fixed a minor bug that allowed players to select other pages of keep and utility port.",
+            "Minor increase to DTS-12 projectile height to aid with aiming.",
+            "Reduced the cooldown time on the Sell Crewmember ability.",
+            "Replaced singleplayer chat commands from backslash to hyphen.",
+        )
+    ),
+    (
         "0.11.0",
-        "date",
+        "31 Mar 2019",
         (
             "Player ships are now heroes, and the F2 hotkey can be used!",
+            "This map now uses an up-to-date wurst standard library.",
             "Adjusted spawn behavior so that creeps would stack up less.",
             "Maybe bug fix: a minor change in enchanting stones.",
-            "This map now uses an up-to-date wurst standard library.",
             "Many object-defined units are now defined in wurst."
         )
     ),

@@ -27,7 +27,7 @@ package DTS12MissileArray
 		real ddX = 0.
 		real ddY = 0.
 		real vel
-		real dist= 0.
+		real dist = 0.
 		unit missile
 		int ownerID
 		effect fx
@@ -43,7 +43,7 @@ package DTS12MissileArray
 		static constant ACCELERATION     = 100.
 		static constant CLOCK_PERIOD     = 1./30.
 		static constant COLLISION_RADIUS = 32.+64.
-		static constant FLY_HEIGHT       = 120.
+		static constant FLY_HEIGHT       = 140.
 		static constant CHEAP_FRICTION   = MAXIMUM_VELOCITY / (MAXIMUM_VELOCITY + ACCELERATION)
 		static constant SCALE = .75
 		static constant MISSILE_MODEL = "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdl"
@@ -88,11 +88,11 @@ package DTS12MissileArray
 					temp.dY = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.dY
 					oldX = GetUnitX(temp.missile)
 					oldY = GetUnitY(temp.missile)
-					newX = oldX+temp.dX
-					newY = oldY+temp.dY
+					newX = oldX + temp.dX
+					newY = oldY + temp.dY
 					SetUnitX(temp.missile, newX)
 					SetUnitY(temp.missile, newY)
-					SetUnitFlyHeight(temp.missile, GetUnitFlyHeight(temp.missile)-(getZ(newX, newY)-getZ(oldX, oldY)), 0.)
+					SetUnitFlyHeight(temp.missile, GetUnitFlyHeight(temp.missile) - (getZ(newX, newY)-getZ(oldX, oldY)), 0.)
 					temp.vel = temp.vel + ACCELERATION * CLOCK_PERIOD
 					temp.vel = (1 - CHEAP_FRICTION*CLOCK_PERIOD) * temp.vel
 					temp.dist = temp.dist + temp.vel
@@ -155,7 +155,6 @@ package DTS12MissileArray
 							PauseTimer(clock)
 
 				index += 1
-
 
 
 		static function c()

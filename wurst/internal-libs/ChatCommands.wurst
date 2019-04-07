@@ -1,0 +1,18 @@
+package ChatCommands
+import StringUtils
+import ClosureEvents
+import Muscii
+
+init
+	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
+		let str = GetEventPlayerChatString()
+
+		if str.startsWith("-")
+			let p = GetTriggerPlayer()
+			let args = str.substring(1).split(" ")
+			let first = args.dequeue()
+			destroy args
+
+			switch first
+				case "music"
+					p.setWantsMusic(not p.wantsMusic())

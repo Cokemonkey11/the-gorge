@@ -14,16 +14,20 @@
 [/CENTER]
 
 [R][H3][color=#CCAA00]Introduction[/color][/H3][R]
-The Gorge is a battleships-style AoS/MOBA that focuses on simplicity.
-It uses automatically firing weapons, and interesting systems to produce a design that's nostalgic, yet fun.
+The Gorge is a battleships-style AoS/MOBA that focuses on simplicity.         It uses
+automatically firing weapons, and some innovative systems, to         produce a design
+that's nostalgic, yet fun.
 
-The western nations and eatern faction have long been allies and shared knowledge, as well as technology; but the recent discovery of numerous rich resource deposits near an unnamed gorge has resulted in a bitter standoff.
-Secure your team's victory in one final cacophony of helicopters, explosives, and other armament.
+The western nations and eastern faction have long been allies and shared
+knowledge, as well as technology; but the recent discovery of numerous,         rich
+resource deposits near an unnamed gorge has resulted in a bitter         standoff.
+Secure your team's victory in one final cacophony of helicopters,         explosives, and
+other armament.
 
 [R][H3][color=#CCAA00]Screenshots[/color][/H3][R]
 
 
-[hidden=Last-hit for bounty]
+[hidden=Last-hit for creep bounty]
 [img]http://i.imgur.com/PE862R1.jpg[/img]
 [/hidden]
 
@@ -36,13 +40,21 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.11.0[/color] [color=#999999]31 Mar 2019[/color]:
+[list][*] Player ships are now heroes, and the F2 hotkey can be used!
+[*] This map now uses an up-to-date wurst standard library.
+[*] Adjusted spawn behavior so that creeps would stack up less.
+[*] Maybe bug fix: a minor change in enchanting stones.
+[*] Many object-defined units are now defined in wurst.
+[/list]
+
 [color=#ffcc00]0.10.1[/color] [color=#999999]27 Mar 2019[/color]:
 [list][*] Fixed a major bug related to recently respawned ships not losing invulnerability.
 [*] Fixed a minor tooltip bug.
 [*] Fixed a couple minor cosmetic blemishes.
 [/list]
 
-[color=#ffcc00]0.10.0[/color] [color=#999999]18 Mar 2019[/color]:
+[color=#ffcc00]0.10.0 (blacklisted)[/color] [color=#999999]18 Mar 2019[/color]:
 [list][*] This map is now written entirely in wurst!
 [*] Added 3 new movespeed items and 3 new hitpoint regen items.
 [*] Improved behavior when a player leaves the game.
@@ -69,7 +81,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Some undocumented/unknown improvements.
 [/list]
 
-[color=#ffcc00]0.0.8c[/color] [color=#999999]01 Feb 2014[/color]:
+[hidden=Older Changes][color=#ffcc00]0.0.8c[/color] [color=#999999]01 Feb 2014[/color]:
 [list][*] The map has received a large terrain makeover thanks to Kino! Kino has done more work
 in two days on the terrain than I could do in two weeks. Do check it out!
 [*] Your farm of neutral monsters is now displayed in the multiboard
@@ -80,7 +92,7 @@ in two days on the terrain than I could do in two weeks. Do check it out!
 [*] Various small bug fixes and improvements
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.0.7?[/color] [color=#999999]21 Jan 2014[/color]:
+[color=#ffcc00]0.0.7?[/color] [color=#999999]21 Jan 2014[/color]:
 [list][*] Helicopter now has a unique ability
 [*] Created multiboard and some basic stat tracking
 [*] Added bounties for pvp

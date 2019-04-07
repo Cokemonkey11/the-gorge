@@ -48,7 +48,7 @@ package Sounds
 
 
 		static function play(string str, real pitch, int vol)
-			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
+			let s = CreateSound(str, false, false, false, 12700, 12700, "")
 			SetSoundVolume(s, vol)
 			SetSoundPitch(s, pitch)
 			StartSound(s)

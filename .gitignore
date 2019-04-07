@@ -1,5 +1,7 @@
 .vscode/
-wurst/war3map.j
-objectEditingOutput/*
-compiled.j.txt
+/_build
 
+*.w3x
+*.w3m
+
+wurst.dependencies

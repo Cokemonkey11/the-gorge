@@ -1,8 +1,8 @@
 package Game
+	import Assets
 	import Ships
 	import MyBoard
 	import RegisterEvents
-	import Sounds
 	import Muscii
 	import TerrainData
 	import FloatText
@@ -21,11 +21,8 @@ package Game
 		static constant   SKYBARGE_ICON     = "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
 		static constant TRADE_SUCCESS_SOUND = "Sound\\Interface\\QuestLog.wav"
 
-		static constant         KEEP_ID     = 'h001'
-		static constant        KEEP2_ID     = 'h00F'
 		static constant       SHIELD_ID     = 'h003'
 		static constant       REPAIR_ID     = 'h004'
-		static constant      CAPTAIN_ID     = 'H00C'
 		static constant        STONE_ID     = 'h002'
 		static constant        DUMMY_ID     = 'u000'
 		static constant STONE_SPIDER_ID     = 'n000'
@@ -43,19 +40,19 @@ package Game
 		static constant MAP_DESCRIP           = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
 			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
 		static constant DESCRIPTION_ICON      = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
-		static constant DESCRIPTION_TITLE     = "|cffffcc00Description|r"
+		static constant DESCRIPTION_TITLE     = "Description"
 
 		static constant WEAPONS_DESCRIP       = "Your ship gains the ability to attack nearby enemies by the |cffffcc00Crew members|r purchased in " + /*
 			*/ "your base. Each crew member has unique stats and will attack automatically when in range of an enemy."
 		static constant WEAPONS_ICON          = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
-		static constant WEAPONS_TITLE         = "|cffffcc00Weapons|r"
+		static constant WEAPONS_TITLE         = "Weapons"
 
 		static constant EQUIP_DESCRIP         = "Equipment are items which can be carried by your ship. Equipment are separated into classes: " + /*
 			*/ "|cffffcc00Engine|r, |cffffcc00Mechanic|r, |cffffcc00Hull|r, |cffffcc00Teleporter|r, |cffffcc00Shield Generator|r, |cffffcc00Contract|r, " + /*
 			*/ "and |cffffcc00Special|r. A ship can only carry one item of each class, except for |cffffcc00Special|r and |cffffcc00Contract|r. " + /*
 			*/ "Additionally, some |cffffcc00Ship Classes|r cannot use certain item classes."
 		static constant EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
-		static constant EQUIP_TITLE           = "|cffffcc00Equipment|r"
+		static constant EQUIP_TITLE           = "Equipment"
 
 		static constant CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
 			*/ "Ship: |cffffcc00Frigates|r are well rounded ships designed to do well in most scenarios; |cffffcc00Battleships|r are heavy ships designed " + /*
@@ -63,12 +60,16 @@ package Game
 			*/ "chasing enemies and stopping smugglers; |cffffcc00Smugglers|r are small, light ships with abilities that aid in completing trade routes " + /*
 			*/ "for earning money."
 		static constant CLASS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNGreaterRejuvScroll.blp"
-		static constant CLASS_TITLE           = "|cffffcc00Ship Classes|r"
+		static constant CLASS_TITLE           = "Ship Classes"
+
+		static constant DESCRIPTION_COMMANDS = "|cffffcc00-music|r - enable/disable music"
+		static constant ICON_COMMANDS        = Icons.bTNGnollCommandAura
+		static constant TITLE_COMMANDS       = "Chat Commands"
 
 		static constant INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
 			*/ "map updates, or to say hello, find me on |cffffcc00hiveworkshop.com|r."
 		static constant INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
-		static constant INFO_TITLE            = "|cff88dd66Information|r"
+		static constant INFO_TITLE            = "Information"
 
 		static constant CREDS_DESCRIP         = "I'd like to thank |cffffcc00Sked|r, who developed the original Battleships map independantly and " + /*
 			*/ "envisioned a game with automatically attacking weapons (Phoenix Fire). " + /*
@@ -80,7 +81,7 @@ package Game
 			*/ "TabReader, which inspired me to build Muscii. |cffffcc00bowser499|r for creading myBoard, a multiboard framework. |cffffcc00Kino|r for " + /*
 			*/ "doing extensive Terrain work for The Gorge."
 		static constant CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
-		static constant CREDS_TITLE           = "|cff88dd66Credits|r"
+		static constant CREDS_TITLE           = "Credits"
 
 		static constant WELCOME_MESSAGE       = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
 		static constant START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
@@ -149,16 +150,17 @@ package Game
 
 
 		static function farmIncrement(int pID)
-			farm[pID] = farm[pID] + 1
+			farm[pID]++
 			scoreboard.setValue(4, scoreboardRows[pID], I2S(farm[pID]))
 
 
 		static function parseKill(int pID)
-			kills[pID] = kills[pID] + 1
+			kills[pID]++
+
 			if pID < 7
-				kills[0] = kills[0] + 1
+				kills[0]++
 			else
-				kills[1] = kills[1] + 1
+				kills[1]++
 
 			scoreboard.setTitleText("|cffffcc00Scoreboard|r [|cffffffff" + I2S(kills[0]) + " - " + I2S(kills[1]) + "|r]")
 			scoreboard.setValue(1, scoreboardRows[pID], I2S(kills[pID]))
@@ -188,7 +190,12 @@ package Game
 			QuestSetEnabled(    q, true)
 			QuestSetIconPath(   q, iconPath)
 			QuestSetRequired(   q, required)
-			QuestSetTitle(      q, title)
+			QuestSetTitle(
+				q,
+				(required ? "|cffffcc00" : "|cff88dd66") +
+				title +
+				"|r"
+			)
 			return q
 
 
@@ -202,6 +209,9 @@ package Game
 			addQuest(  EQUIP_DESCRIP,       EQUIP_ICON, true,       EQUIP_TITLE)
 			// classes.
 			addQuest(  CLASS_DESCRIP,       CLASS_ICON, true,       CLASS_TITLE)
+
+			// Commands.
+			addQuest(DESCRIPTION_COMMANDS, ICON_COMMANDS, true, TITLE_COMMANDS)
 
 			// Secondary Quests (Right).
 			// info.
@@ -413,7 +423,7 @@ package Game
 				Players.playerCount++
 				Players.playing[index]  = true
 				Game.shipClass[index]   = ID_HELICOPTER
-				Game.captains[index]    = CreateUnit(Players.players[index], Game.CAPTAIN_ID, GetStartLocationX(index), GetStartLocationY(index), 270.)
+				Game.captains[index]    = CreateUnit(Players.players[index], ID_CAPTAIN, GetStartLocationX(index), GetStartLocationY(index), 270.)
 				Players.tradeExp[index] = 0
 				Game.kills[index]       = 0
 				Game.deaths[index]      = 0
@@ -450,12 +460,12 @@ package Game
 		SetPlayerState(Players.players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
 		// Create keeps.
-		Game.westKeep[0] = CreateUnit(Players.players[0], Game.KEEP_ID, TerrainData.WESTX, 0, 270)
-		Game.eastKeep[0] = CreateUnit(Players.players[1], Game.KEEP_ID, TerrainData.EASTX, 0, 270)
+		Game.westKeep[0] = CreateUnit(Players.players[0], ID_KEEP_P1, TerrainData.WESTX, 0, 270)
+		Game.eastKeep[0] = CreateUnit(Players.players[1], ID_KEEP_P1, TerrainData.EASTX, 0, 270)
 		SetUnitInvulnerable(Game.westKeep[0], true)
 		SetUnitInvulnerable(Game.eastKeep[0], true)
-		Game.westKeep[1] = CreateUnit(Players.players[0], Game.KEEP2_ID, TerrainData.WESTX, 0., 270.)
-		Game.eastKeep[1] = CreateUnit(Players.players[1], Game.KEEP2_ID, TerrainData.EASTX, 0., 270.)
+		Game.westKeep[1] = CreateUnit(Players.players[0], ID_KEEP_P2, TerrainData.WESTX, 0., 270.)
+		Game.eastKeep[1] = CreateUnit(Players.players[1], ID_KEEP_P2, TerrainData.EASTX, 0., 270.)
 
 		// Create shields.
 		index = 0
