@@ -25,11 +25,8 @@ package Muscii
 
 
 		function play()
-			Sounds.play(
-				this.path,
-				this.pitch,
-				Players.localPlayer.wantsMusic() ? this.volume : 0
-			)
+			if GetLocalPlayer().wantsMusic()
+				Sounds.play(this.path, this.pitch, this.volume)
 
 
 		static function create(string path, int volume, real pitch) returns Note
