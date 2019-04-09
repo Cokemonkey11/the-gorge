@@ -25,15 +25,6 @@ package Equipment
 		static constant CLASS_SPECIAL    = 6
 		static constant CLASS_CONTRACT   = 7
 
-		static constant PAGE_1_2         = 'I003'
-		static constant PAGE_2_1         = 'I004'
-		static constant PAGE_2_3         = 'I006'
-		static constant PAGE_3_2         = 'I007'
-		static constant PAGE_3_4         = 'I00A'
-		static constant PAGE_4_3         = 'I00B'
-		static constant KPAGE_1_2        = 'I00E'
-		static constant KPAGE_2_1        = 'I00F'
-
 		static constant DATA_ID          = 'I00D'
 		static constant TOXIC_SUBST_FULL = 'I00H'
 		static constant VENOM_VIAL       = 'I00J'
@@ -284,56 +275,56 @@ package Equipment
 			player owner = GetOwningPlayer(buyer)
 			bool was = false
 
-			if id == PAGE_1_2
+			if id == ID_NEXT_PAGE_HULLS_AND_SHIELDS
 				was = true
 				if seller == Game.westUtility[0]
 					toSelect = Game.westUtility[1]
 				else
 					toSelect = Game.eastUtility[1]
 
-			else if id == PAGE_2_1
+			else if id == ID_PREVIOUS_ENGINES_AND_MECHANICS
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[0]
 				else
 					toSelect = Game.eastUtility[0]
 
-			else if id == PAGE_2_3
+			else if id == ID_NEXT_TELEPORTERS_AND_SPECIALS
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 
-			else if id == PAGE_3_2
+			else if id == ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[1]
 				else
 					toSelect= Game.eastUtility[1]
 
-			else if id == PAGE_3_4
+			else if id == ID_NEXT_PAGE_CONTRACTS
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[3]
 				else
 					toSelect = Game.eastUtility[3]
 
-			else if id == PAGE_4_3
+			else if id == ID_PREVIOUS_TELEPORTERS_AND_SPECIALS
 				was = true
 				if seller == Game.westUtility[3]
 					toSelect = Game.westUtility[2]
 				else
 					toSelect = Game.eastUtility[2]
 
-			else if id == KPAGE_1_2
+			else if id == ID_NEXT_KEEP_TIER_3_AND_4
 				was = true
 				if seller == Game.westKeep[0]
 					toSelect = Game.westKeep[1]
 				else
 					toSelect = Game.eastKeep[1]
 
-			else if id == KPAGE_2_1
+			else if id == ID_PREVIOUS_KEEP_TIER_1_AND_2
 				was = true
 				if seller == Game.westKeep[1]
 					toSelect = Game.westKeep[0]

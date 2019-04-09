@@ -19,6 +19,17 @@ INTRODUCTION = (
 
     """
 
+        What make The Gorge different?  Design principles: (1) Short games aide
+        replayability and reduce burnout (2) Bias for action means big damage
+        and low durability leads to faster-paced gameplay (3) MOBA design
+        principles focus more on action and less on grinding (4) Fresh means not
+        being afraid to do things new-and-improved (5) Classic battleships is a
+        competitive and brilliant game - when in doubt, remain unbroken.
+
+    """,
+
+    """
+
         The western nations and eastern faction have long been allies and shared
         knowledge, as well as technology; but the recent discovery of numerous,
         rich resource deposits near an unnamed gorge has resulted in a bitter
@@ -32,6 +43,7 @@ INTRODUCTION = (
 
 SCREENSHOTS = (
     ("Last-hit for creep bounty", "http://i.imgur.com/PE862R1.jpg"),
+    ("Enchanted frost wyrms can disable towers", "https://i.imgur.com/eKHPGvt.jpg"),
 )
 
 
@@ -47,6 +59,13 @@ ABILITIES = (
 REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
+    (
+        "next",
+        "date",
+        (
+            "Fixed a bug where next-page buttons don't work if your inventory is full.",
+        )
+    ),
     (
         "0.11.2",
         "7 Apr 2019",
@@ -288,6 +307,6 @@ print_screenshots()
 # print_abilities()
 print_repository_uri()
 print_changelog()
-print_hosting()
+# print_hosting()
 print_contributing()
 print_footer()
