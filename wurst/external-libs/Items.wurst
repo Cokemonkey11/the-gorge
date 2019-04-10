@@ -23,22 +23,22 @@ public constant ID_REPAIRCREW_3_STR = "I!04"
 public constant ID_REPAIRCREW_4     = 'I!05'
 public constant ID_REPAIRCREW_4_STR = "I!05"
 
-public constant ID_NEXT_PAGE_CONTRACTS                      = 'I00A'
-public constant ID_NEXT_PAGE_CONTRACTS_STR                  = "I00A"
-public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS              = 'I003'
-public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS_STR          = "I003"
-public constant ID_NEXT_KEEP_TIER_3_AND_4                   = 'I00E'
-public constant ID_NEXT_KEEP_TIER_3_AND_4_STR               = "I00E"
-public constant ID_NEXT_TELEPORTERS_AND_SPECIALS            = 'I006'
-public constant ID_NEXT_TELEPORTERS_AND_SPECIALS_STR        = "I006"
-public constant ID_PREVIOUS_KEEP_TIER_1_AND_2               = 'I00F'
-public constant ID_PREVIOUS_KEEP_TIER_1_AND_2_STR           = "I00F"
-public constant ID_PREVIOUS_ENGINES_AND_MECHANICS           = 'I004'
-public constant ID_PREVIOUS_ENGINES_AND_MECHANICS_STR       = "I004"
-public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS     = 'I007'
-public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS_STR = "I007"
-public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS        = 'I00B'
-public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS_STR    = "I00B"
+public constant ID_NEXT_PAGE_CONTRACTS                      = 'IP00'
+public constant ID_NEXT_PAGE_CONTRACTS_STR                  = "IP00"
+public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS              = 'IP01'
+public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS_STR          = "IP01"
+public constant ID_NEXT_KEEP_TIER_3_AND_4                   = 'IP02'
+public constant ID_NEXT_KEEP_TIER_3_AND_4_STR               = "IP02"
+public constant ID_NEXT_TELEPORTERS_AND_SPECIALS            = 'IP03'
+public constant ID_NEXT_TELEPORTERS_AND_SPECIALS_STR        = "IP03"
+public constant ID_PREVIOUS_KEEP_TIER_1_AND_2               = 'IP04'
+public constant ID_PREVIOUS_KEEP_TIER_1_AND_2_STR           = "IP04"
+public constant ID_PREVIOUS_ENGINES_AND_MECHANICS           = 'IP05'
+public constant ID_PREVIOUS_ENGINES_AND_MECHANICS_STR       = "IP05"
+public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS     = 'IP06'
+public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS_STR = "IP06"
+public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS        = 'IP07'
+public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS_STR    = "IP07"
 
 class MovespeedItems extends ItemDefinition
     construct(int id, string abil, string icon, int cost, int bonus, string name, int xPos)
