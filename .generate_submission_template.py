@@ -64,6 +64,7 @@ CHANGELOG = (
         "date",
         (
             "Fixed a bug where next-page buttons don't work if your inventory is full.",
+            "The frigate now has a sustain (healing) ability.",
         )
     ),
     (

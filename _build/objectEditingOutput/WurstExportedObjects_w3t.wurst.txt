@@ -317,8 +317,8 @@ import ObjEditingNatives
 	..setInt("ubpy", 1)
 
 
-@compiletime function create_w3t_I00A()
-	let def = createObjectDefinition("w3t", 'I00A', 'afac')
+@compiletime function create_w3t_IP00()
+	let def = createObjectDefinition("w3t", 'IP00', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 1)
@@ -341,8 +341,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I003()
-	let def = createObjectDefinition("w3t", 'I003', 'afac')
+@compiletime function create_w3t_IP01()
+	let def = createObjectDefinition("w3t", 'IP01', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 1)
@@ -365,8 +365,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I00E()
-	let def = createObjectDefinition("w3t", 'I00E', 'afac')
+@compiletime function create_w3t_IP02()
+	let def = createObjectDefinition("w3t", 'IP02', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 1)
@@ -389,8 +389,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I006()
-	let def = createObjectDefinition("w3t", 'I006', 'afac')
+@compiletime function create_w3t_IP03()
+	let def = createObjectDefinition("w3t", 'IP03', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 1)
@@ -413,8 +413,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I00F()
-	let def = createObjectDefinition("w3t", 'I00F', 'afac')
+@compiletime function create_w3t_IP04()
+	let def = createObjectDefinition("w3t", 'IP04', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 0)
@@ -437,8 +437,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I004()
-	let def = createObjectDefinition("w3t", 'I004', 'afac')
+@compiletime function create_w3t_IP05()
+	let def = createObjectDefinition("w3t", 'IP05', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 0)
@@ -461,8 +461,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I007()
-	let def = createObjectDefinition("w3t", 'I007', 'afac')
+@compiletime function create_w3t_IP06()
+	let def = createObjectDefinition("w3t", 'IP06', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 0)
@@ -485,8 +485,8 @@ import ObjEditingNatives
 	..setInt("ipow", 1)
 
 
-@compiletime function create_w3t_I00B()
-	let def = createObjectDefinition("w3t", 'I00B', 'afac')
+@compiletime function create_w3t_IP07()
+	let def = createObjectDefinition("w3t", 'IP07', 'afac')
 	..setInt("wurs", 42)
 	..setString("iabi", "")
 	..setInt("ubpx", 0)

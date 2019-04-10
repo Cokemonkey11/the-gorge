@@ -1,6 +1,7 @@
 package AbilitiesApi
 
 import AbilityObjEditing
+import Assets
 
 constant        ID_SPEED_BONUS_1     = 'A00C'
 public constant ID_SPEED_BONUS_1_STR = "A00C"
@@ -38,6 +39,9 @@ public constant ID_SELECT_UNIT_STR = "AE01"
 
 public constant ID_FIRE_CREWMEMBER     = 'A00M'
 public constant ID_FIRE_CREWMEMBER_STR = "A00M"
+
+public constant ID_MAGNETIC_REACTORS     = 'Az00'
+public constant ID_MAGNETIC_REACTORS_STR = "Az00"
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
@@ -112,3 +116,38 @@ class ReleaseAbil extends AbilityDefinitionIllidanChannel
 
 @compiletime function initFire()
     new ReleaseAbil(ID_FIRE_CREWMEMBER)
+
+class MagneticReactorsAbil extends AbilityDefinitionIllidanChannel
+    construct(int id)
+        super(id)
+        setAnimationNames("spell")
+        setButtonPositionNormalX(1)
+        setButtonPositionNormalY(2)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal(Icons.bTNBash)
+        setArtTarget("")
+        setTargetAttachmentPoint("")
+        setBaseOrderID(1, "ancestralspirit")
+        setDisableOtherAbilities(1, false)
+        setFollowThroughTime(1, 0.)
+        setOptions(1, 1)
+        setTargetType(1, 0)
+        setCastRange(1, 384.)
+        setCooldown(1, 30.)
+        setHeroAbility(false)
+        setLevels(1)
+        setTargetsAllowed(1, "ground,invulnerable,neutral")
+        setCheckDependencies(false)
+        setHotkeyNormal("W")
+        setName("Magnetic Reactors")
+        setOrderStringUseTurnOn("ancestralspirit")
+        setTooltipNormal(1, "Magnetic Reactors [|cffffcc00W|r]")
+        setTooltipNormalExtended(
+            1,
+            "Restores a fraction of your missing health over time.|n |n|cffffcc00Missing Health Restored:|r 15%|n|cffffcc00Heal Duration:|r 5s|n|cffffcc00Cooldown:|r 30s"
+        )
+
+@compiletime function initMagneticReactors()
+    new MagneticReactorsAbil(ID_MAGNETIC_REACTORS)

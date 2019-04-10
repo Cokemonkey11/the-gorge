@@ -1,0 +1,47 @@
+package MagneticReactors
+
+import AbilitiesApi
+import Assets
+import LinkedListModule
+import RegisterEvents
+
+
+function occasionally(int idx, real occasion_freq, real wrapping_period) returns bool
+    return idx % (occasion_freq / wrapping_period).toInt() == 0
+
+
+class Reactors
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+
+    unit owner
+    real durationLeft
+    real hitpoints_per_tick
+    string fx_path
+    int ticks
+
+    construct(unit owner, real duration, real hitpoints_restored)
+        this.owner = owner
+        this.durationLeft = 5.
+        this.hitpoints_per_tick = hitpoints_restored / duration * ANIMATION_PERIOD
+        this.fx_path = hitpoints_restored > 50. ? Abilities.holyBoltSpecialArt : Abilities.healBottleMissile
+        this.ticks = 0
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for reactor from staticItr()
+                    reactor.owner.addHP(reactor.hitpoints_per_tick)
+
+                    if occasionally(reactor.ticks, 1., ANIMATION_PERIOD)
+                        reactor.owner.addEffect(reactor.fx_path, "origin").destr()
+
+                    reactor.durationLeft -= ANIMATION_PERIOD
+                    reactor.ticks++
+                    if reactor.durationLeft <= 0. or not reactor.owner.isAlive()
+                        destroy reactor
+
+init
+    registerSpellEffectEvent(ID_MAGNETIC_REACTORS) ->
+        let tU = GetTriggerUnit()
+        new Reactors(tU, 5., (tU.getMaxHP() - tU.getHP()) * 15. / 100.)
