@@ -51,8 +51,14 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
-[color=#ffcc00]next[/color] [color=#999999]date[/color]:
+[color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
 [list][*] Fixed a bug where next-page buttons don't work if your inventory is full.
+[*] The interceptor now has a crowd control (damage) ability.
+[*] The frigate now has a sustain (healing) ability.
+[*] The battleship now has a sustain (healing) ability.
+[*] Fixed a minor bug where the singleplayer -fast command wouldn't work if you changed
+ship.
+[*] Minor tooltip fixes.
 [/list]
 
 [color=#ffcc00]0.11.2[/color] [color=#999999]7 Apr 2019[/color]:
