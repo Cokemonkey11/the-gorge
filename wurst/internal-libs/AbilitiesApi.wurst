@@ -42,6 +42,8 @@ public constant ID_FIRE_CREWMEMBER_STR = "A00M"
 
 public constant ID_MAGNETIC_REACTORS     = 'Az00'
 public constant ID_MAGNETIC_REACTORS_STR = "Az00"
+public constant ID_REGENERATOR           = 'Az01'
+public constant ID_REGENERATOR_STR       = "Az01"
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
@@ -151,3 +153,38 @@ class MagneticReactorsAbil extends AbilityDefinitionIllidanChannel
 
 @compiletime function initMagneticReactors()
     new MagneticReactorsAbil(ID_MAGNETIC_REACTORS)
+
+class RegeneratorAbil extends AbilityDefinitionIllidanChannel
+    construct(int id)
+        super(id)
+        setAnimationNames("spell")
+        setButtonPositionNormalX(1)
+        setButtonPositionNormalY(2)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal(Icons.bTNArcaneVault)
+        setArtTarget("")
+        setTargetAttachmentPoint("")
+        setBaseOrderID(1, "ancestralspirit")
+        setDisableOtherAbilities(1, false)
+        setFollowThroughTime(1, 10.)
+        setOptions(1, 1)
+        setTargetType(1, 0)
+        setCastRange(1, 384.)
+        setCooldown(1, 40.)
+        setHeroAbility(false)
+        setLevels(1)
+        setTargetsAllowed(1, "ground,invulnerable,neutral")
+        setCheckDependencies(false)
+        setHotkeyNormal("W")
+        setName("Regenerator")
+        setOrderStringUseTurnOn("ancestralspirit")
+        setTooltipNormal(1, "Regenerator [|cffffcc00W|r]")
+        setTooltipNormalExtended(
+            1,
+            "Diverts engine power to regenerate health while channeling.|n |n|cffffcc00Health Restored:|r 30 per second|n|cffffcc00Channel Duration:|r 10s|n|cffffcc00Cooldown:|r 40s"
+        )
+
+@compiletime function initRegenerator()
+    new RegeneratorAbil(ID_REGENERATOR)

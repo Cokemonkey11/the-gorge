@@ -65,6 +65,9 @@ CHANGELOG = (
         (
             "Fixed a bug where next-page buttons don't work if your inventory is full.",
             "The frigate now has a sustain (healing) ability.",
+            "The battleship now has a sustain (healing) ability."
+            "Fixed a minor bug where the singleplayer -fast command wouldn't work if you changed ship.",
+            "Minor tooltip fixes.",
         )
     ),
     (

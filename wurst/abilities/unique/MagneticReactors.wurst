@@ -41,6 +41,9 @@ class Reactors
                     if reactor.durationLeft <= 0. or not reactor.owner.isAlive()
                         destroy reactor
 
+                if size == 0
+                    clock.pause()
+
 init
     registerSpellEffectEvent(ID_MAGNETIC_REACTORS) ->
         let tU = GetTriggerUnit()

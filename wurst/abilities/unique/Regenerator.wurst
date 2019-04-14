@@ -1,0 +1,91 @@
+package Regenerator
+
+import AbilitiesApi
+import Assets
+import GameTimer
+import LinkedListModule
+import RegisterEvents
+
+
+function occasionally(int idx, real occasion_freq, real wrapping_period) returns bool
+    return idx % (occasion_freq / wrapping_period).toInt() == 0
+
+
+class TempLightning
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+
+    vec3 start_v
+    vec3 end_v
+    real initial_duration
+    real duration_left
+    lightning bolt
+    string style
+
+    construct(vec3 st, vec3 ed, real duration, string style)
+        this.start_v = st
+        this.end_v = ed
+        this.initial_duration = duration
+        this.duration_left = duration
+        this.style = style
+        this.bolt = addLightning(style, true, st, ed)
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for templ from staticItr()
+                    let a = (
+                        templ.duration_left / templ.initial_duration * 255
+                    ).toInt()
+                    templ.bolt.setColor(colorA(255, 255, 255, a))
+
+                    templ.duration_left -= ANIMATION_PERIOD
+
+                    if templ.duration_left <= 0.
+                        destroy templ
+
+                if size == 0
+                    clock.pause()
+
+
+class Regenerator
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+
+    unit owner
+    real durationLeft
+    real hitpoints_per_tick
+    int ticks
+
+    construct(unit owner, real duration, real hitpoints_restored)
+        this.owner = owner
+        this.durationLeft = 5.
+        this.hitpoints_per_tick = hitpoints_restored / duration * ANIMATION_PERIOD
+        this.ticks = 0
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for reactor from staticItr()
+                    reactor.owner.addHP(reactor.hitpoints_per_tick)
+
+                    if occasionally(reactor.ticks, bj_PI / 4., ANIMATION_PERIOD)
+                        reactor.owner.addEffect(Objects.impaleTargetDust, "origin").destr()
+                    if occasionally(reactor.ticks, 1., ANIMATION_PERIOD)
+                        let start = reactor.owner.getPos3Real().offset2d(angle(getElapsedGameTime()), 150.)
+                        let ed = reactor.owner.getPos3Real().offset2d(angle(getElapsedGameTime() + bj_PI), 150.)
+                        new TempLightning(start, ed, 1., "CLSB")
+
+                    reactor.durationLeft -= ANIMATION_PERIOD
+                    reactor.ticks++
+                    if reactor.durationLeft <= 0. or not reactor.owner.isAlive() or not reactor.owner.getCurrentOrder() == OrderId("ancestralspirit")
+                        destroy reactor
+
+                if size == 0
+                    clock.pause()
+
+
+init
+    registerSpellEffectEvent(ID_REGENERATOR) ->
+        let tU = GetTriggerUnit()
+        new Regenerator(tU, 10., 30. * 10.)

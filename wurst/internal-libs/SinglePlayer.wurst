@@ -1,5 +1,6 @@
 package SinglePlayer
     import Players
+    import Ships
 
     public class SinglePlayer
         static constant SP_PREFIX = "[|cffffcc00Single Player|r] "
@@ -34,11 +35,16 @@ package SinglePlayer
             return false
 
 
-        static function fast() returns bool
+        static function fast()
             print(SP_PREFIX + "Fast movement enabled.")
-            fastEnabled = true
 
-            return false
+            // Fast movement trigger.
+            trigger f = CreateTrigger()
+            TriggerRegisterUnitEvent(f, Ships.ships[SinglePlayer.thePlayer.getId()], EVENT_UNIT_ISSUED_POINT_ORDER)
+            TriggerAddCondition(f, Condition(() -> begin
+                GetTriggerUnit()..setX(GetOrderPointX())..setY(GetOrderPointY())
+                return false
+            end))
 
 
         static function clear() returns bool

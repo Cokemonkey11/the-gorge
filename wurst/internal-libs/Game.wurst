@@ -374,16 +374,6 @@ package Game
 				SelectUnit(Ships.ships[id], true)
 
 
-
-		static function fastMove() returns bool
-			if SinglePlayer.fastEnabled
-				GetTriggerUnit()..setX(GetOrderPointX())..setY(GetOrderPointY())
-
-
-			return false
-
-
-
 	init
 		int index = 0
 
@@ -448,12 +438,6 @@ package Game
 		// Potentially turn on single-player mode.
 		if Players.playerCount < 2
 			SinglePlayer.enable()
-
-			// Fast movement trigger.
-			trigger f = CreateTrigger()
-			TriggerRegisterUnitEvent(f, Ships.ships[SinglePlayer.thePlayer.getId()], EVENT_UNIT_ISSUED_POINT_ORDER)
-			TriggerAddCondition(f, Condition(function Game.fastMove))
-
 
 		// Make alliance units give bounty.
 		SetPlayerState(Players.players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
