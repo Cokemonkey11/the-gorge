@@ -1,0 +1,54 @@
+package MonsoonMk1
+
+import AbilitiesApi
+import LinkedListModule
+import RegisterEvents
+import TempLightning
+
+
+class Monsoon
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+
+    unit owner
+    unit target
+    real durationLeft
+    real damage
+    lightning lght
+
+    ondestroy
+        this.lght.destr()
+
+    construct(unit owner, unit target, real duration, real damage)
+        this.owner = owner
+        this.target = target
+        this.durationLeft = duration
+        this.damage = damage
+        this.lght = addLightning("CLPB", true, owner.getPos3Real(), target.getPos3Real())
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for reactor from staticItr()
+                    reactor.lght.move(true, reactor.owner.getPos3Real(), reactor.target.getPos3Real())
+
+                    reactor.durationLeft -= ANIMATION_PERIOD
+                    if not reactor.owner.isAlive() or not reactor.target.isAlive() or reactor.target.isInvulnerable() or reactor.owner.getPos().distanceToSq(reactor.target.getPos()) > (500. * 500.)
+                        destroy reactor
+                    else if reactor.durationLeft <= 0
+                        reactor.owner.damageTarget(reactor.target, reactor.damage)
+                        new TempLightning(reactor.owner.getPos3Real(), reactor.target.getPos3Real(), .5, "CLSB")
+                        destroy reactor
+
+                if size == 0
+                    clock.pause()
+
+
+constant grp = CreateGroup()
+init
+    registerSpellEffectEvent(ID_MONSOON_MK1) ->
+        let tU = GetTriggerUnit()
+        grp.enumUnitsInRange(vec2(GetSpellTargetX(), GetSpellTargetY()), 150.)
+        for u from grp
+            if tU.isEnemyOf(u.getOwner()) and u.isAlive()
+                new Monsoon(tU, u, 4., 200.)

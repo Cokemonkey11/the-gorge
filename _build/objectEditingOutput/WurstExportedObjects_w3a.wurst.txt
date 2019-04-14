@@ -832,6 +832,37 @@ import ObjEditingNatives
 	..setLvlDataString("aub1", 1, 0, "Diverts engine power to regenerate health while channeling.|n |n|cffffcc00Health Restored:|r 30 per second|n|cffffcc00Channel Duration:|r 10s|n|cffffcc00Cooldown:|r 40s")
 
 
+@compiletime function create_w3a_Az02()
+	let def = createObjectDefinition("w3a", 'Az02', 'ANcl')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataString("aani", 0, 0, "spell")
+	..setLvlDataInt("abpx", 0, 0, 1)
+	..setLvlDataInt("abpy", 0, 0, 2)
+	..setLvlDataString("acat", 0, 0, "")
+	..setLvlDataString("acap", 0, 0, "")
+	..setLvlDataString("aeat", 0, 0, "")
+	..setLvlDataString("aart", 0, 0, "ReplaceableTextures\\CommandButtons\\BTNMonsoon.blp")
+	..setLvlDataString("atat", 0, 0, "")
+	..setLvlDataString("ata0", 0, 0, "")
+	..setLvlDataString("Ncl6", 1, 6, "ancestralspirit")
+	..setLvlDataInt("Ncl5", 1, 5, 0)
+	..setLvlDataUnreal("Ncl1", 1, 1, 0.0)
+	..setLvlDataInt("Ncl3", 1, 3, 3)
+	..setLvlDataInt("Ncl2", 1, 2, 2)
+	..setLvlDataUnreal("aare", 1, 0, 150.0)
+	..setLvlDataUnreal("aran", 1, 0, 350.0)
+	..setLvlDataUnreal("acdn", 1, 0, 30.0)
+	..setLvlDataInt("aher", 0, 0, 0)
+	..setLvlDataInt("alev", 0, 0, 1)
+	..setLvlDataString("atar", 1, 0, "ground,vulnerable,neutral")
+	..setLvlDataInt("achd", 0, 0, 0)
+	..setLvlDataString("ahky", 0, 0, "W")
+	..setLvlDataString("anam", 0, 0, "Monsoon Mk.1")
+	..setLvlDataString("aord", 0, 0, "ancestralspirit")
+	..setLvlDataString("atp1", 1, 0, "Monsoon Mk.1 [|cffffcc00W|r]")
+	..setLvlDataString("aub1", 1, 0, "Marks a group of units and begins building power. After a time, the power is unleashed, and units that are still marked, in range, are damaged.|n |n|cffffcc00Damage:|r 200|n|cffffcc00Charge Duration:|r 4s|n|cffffcc00Cooldown:|r 30s")
+
+
 // Original Table (contains all modified default objects)
 // Wurst does not support modifying default objects
 // but you can copy these functions and replace 'xxxx' with a new, custom id.

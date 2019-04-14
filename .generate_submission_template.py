@@ -60,10 +60,11 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "next",
+        "0.12.0",
         "date",
         (
             "Fixed a bug where next-page buttons don't work if your inventory is full.",
+            "The interceptor now has a crowd control (damage) ability.",
             "The frigate now has a sustain (healing) ability.",
             "The battleship now has a sustain (healing) ability."
             "Fixed a minor bug where the singleplayer -fast command wouldn't work if you changed ship.",

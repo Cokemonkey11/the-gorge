@@ -44,6 +44,8 @@ public constant ID_MAGNETIC_REACTORS     = 'Az00'
 public constant ID_MAGNETIC_REACTORS_STR = "Az00"
 public constant ID_REGENERATOR           = 'Az01'
 public constant ID_REGENERATOR_STR       = "Az01"
+public constant ID_MONSOON_MK1           = 'Az02'
+public constant ID_MONSOON_MK1_STR       = "Az02"
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
@@ -188,3 +190,39 @@ class RegeneratorAbil extends AbilityDefinitionIllidanChannel
 
 @compiletime function initRegenerator()
     new RegeneratorAbil(ID_REGENERATOR)
+
+class MonsoonMk1Abil extends AbilityDefinitionIllidanChannel
+    construct(int id)
+        super(id)
+        setAnimationNames("spell")
+        setButtonPositionNormalX(1)
+        setButtonPositionNormalY(2)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal(Icons.bTNMonsoon)
+        setArtTarget("")
+        setTargetAttachmentPoint("")
+        setBaseOrderID(1, "ancestralspirit")
+        setDisableOtherAbilities(1, false)
+        setFollowThroughTime(1, 0.)
+        setOptions(1, 1 + 2)      // Visible + Targeting image.
+        setTargetType(1, 2)       // Point target.
+        setAreaofEffect(1, 150.)  // Targeting image.
+        setCastRange(1, 350.)
+        setCooldown(1, 30.)
+        setHeroAbility(false)
+        setLevels(1)
+        setTargetsAllowed(1, "ground,vulnerable,neutral")
+        setCheckDependencies(false)
+        setHotkeyNormal("W")
+        setName("Monsoon Mk.1")
+        setOrderStringUseTurnOn("ancestralspirit")
+        setTooltipNormal(1, "Monsoon Mk.1 [|cffffcc00W|r]")
+        setTooltipNormalExtended(
+            1,
+            "Marks a group of units and begins building power. After a time, the power is unleashed, and units that are still marked, in range, are damaged.|n |n|cffffcc00Damage:|r 200|n|cffffcc00Charge Duration:|r 4s|n|cffffcc00Cooldown:|r 30s"
+        )
+
+@compiletime function initMonsoonMk1Abil()
+    new MonsoonMk1Abil(ID_MONSOON_MK1)

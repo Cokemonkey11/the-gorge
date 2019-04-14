@@ -1622,7 +1622,7 @@ import ObjEditingNatives
 @compiletime function create_w3u_H00D()
 	let def = createObjectDefinition("w3u", 'H00D', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00D,A012,Af00")
+	..setString("uabi", "Az02,A00D,A012,Af00")
 	..setString("umdl", "Units\\Creeps\\GoblinZeppelin\\GoblinZeppelin.mdx")
 	..setString("uver", "0")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp")
@@ -1662,7 +1662,7 @@ import ObjEditingNatives
 	..setString("upro", "Zeppelin")
 	..setInt("upru", 1)
 	..setString("utip", "Purchase Zeppelin")
-	..setString("utub", "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive")
+	..setString("utub", "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive, Monsoon Mk.1")
 	..setInt("uhhd", 1)
 
 
