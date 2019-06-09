@@ -68,6 +68,8 @@ CHANGELOG = (
             "Improved messages for when a team-kill occurs.",
             "Fixed a potential damage-detection problem.",
             "Wurst optimiser and local optimiser are now enabled.",
+            "Fixed a cosmetic bug that made healing effects on dead units.",
+            "Enchanted frost wyrms now appear more blue.",
         )
     ),
     (
@@ -78,7 +80,7 @@ CHANGELOG = (
             "The interceptor now has a crowd control (damage) ability.",
             "The frigate now has a sustain (healing) ability.",
             "The battleship now has a sustain (healing) ability.",
-            "Fixed a minor bug where the singleplayer -fast command wouldn't work if you changed ship.",
+            "Fixed a bug where the singleplayer -fast command wouldn't work if you changed ship.",
             "Minor tooltip fixes.",
         )
     ),

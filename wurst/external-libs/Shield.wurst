@@ -90,10 +90,6 @@ package Shield
 							destroyingDat.nextShield = null
 
 
-
-
-
-
 		//* This function runs every TIMER_PERIOD seconds as long as the stack
 		//* is not empty, and looks for members that need to be destroyed.
 		private static function timeout()
@@ -123,73 +119,71 @@ package Shield
 					else if tempDat.prevShield != null and tempDat.nextShield != null
 						//this shield was somewhere in the middle of the list
 						//so let's make the prev and next link to each other
-						otherDat= tempDat.prevShield
-						otherDat.nextShield= tempDat.nextShield
-						otherDat= tempDat.nextShield
-						otherDat.prevShield= tempDat.prevShield
+						otherDat = tempDat.prevShield
+						otherDat.nextShield = tempDat.nextShield
+						otherDat = tempDat.nextShield
+						otherDat.prevShield = tempDat.prevShield
 
-					//let's reset the unit's hp if he has extra
-					if tempDat.falseHP>0.
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)-tempDat.falseHP)
+					// Reset the unit's hp if it has extra.
+					if tempDat.falseHP > 0.
+						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) - tempDat.falseHP)
 
 					DestroyEffect(tempDat.fx)
 					destroy tempDat
-					Shield.allShields[index]= Shield.allShields[Shield.shieldIndex]
-					Shield.shieldIndex= Shield.shieldIndex-1
-					index= index-1
-					if Shield.shieldIndex== -1
+					Shield.allShields[index] = Shield.allShields[Shield.shieldIndex]
+					Shield.shieldIndex--
+					index--
+					if Shield.shieldIndex == -1
 						PauseTimer(Shield.time)
 
-
 				index += 1
-
 
 
 		//* This function adds a shield to a unit. You can use
 		//* Shield.DEFAULT_EFFECT in the fx argument.
 		static function add(unit u, real _amount, real time, string fx, string fxpoint)
-			Shield tempDat= new Shield
+			Shield tempDat = new Shield
 			Shield linkedDat
-			real initialLife= GetWidgetLife(u)
-			real maxLife= GetUnitState(u, UNIT_STATE_MAX_LIFE)
-			real diff= maxLife-initialLife
-			tempDat.u= u
-			tempDat.timeLeft= time
-			tempDat.fx= AddSpecialEffectTarget(fx, u, fxpoint)
+			real initialLife = GetWidgetLife(u)
+			real maxLife = GetUnitState(u, UNIT_STATE_MAX_LIFE)
+			real diff = maxLife - initialLife
+			tempDat.u = u
+			tempDat.timeLeft = time
+			tempDat.fx = AddSpecialEffectTarget(fx, u, fxpoint)
 			if time == -1.
-				tempDat.useDuration= false
+				tempDat.useDuration = false
 
 			var amount = _amount
 			if _amount == -1.
 				amount = 100000.
-				tempDat.finiteShield= false
+				tempDat.finiteShield = false
 
 			//figure out how to partition the damage
 			if diff >= amount
 				//the unit has plenty of missing HP, so:
-				tempDat.shieldLeft= 0
-				tempDat.falseHP= amount
+				tempDat.shieldLeft = 0
+				tempDat.falseHP = amount
 				SetWidgetLife(u, initialLife+amount)
 			else
 				//the unit has less hp missing than the shield has value, so:
 				SetWidgetLife(u, maxLife)
-				tempDat.falseHP= diff
-				tempDat.shieldLeft= amount-diff
+				tempDat.falseHP = diff
+				tempDat.shieldLeft = amount-diff
 
-			//Now let's figure out if the unit already has a shield - if he
-			//does, we add this shield to the front:
+			// Now let's figure out if the unit already has a shield - if he
+			// does, we add this shield to the front:
 			if Shield.tab.hasInt(u.getHandleId())
-				linkedDat= Shield.tab.loadInt(u.getHandleId()) castTo Shield
-				tempDat.nextShield= linkedDat
-				linkedDat.prevShield= tempDat
+				linkedDat = Shield.tab.loadInt(u.getHandleId()) castTo Shield
+				tempDat.nextShield = linkedDat
+				linkedDat.prevShield = tempDat
 
 			Shield.tab.saveInt(u.getHandleId(), tempDat castTo int)
-			//now let's add this shield to the stack so it can be properly
-			//deallocated when its time runs out:
-			Shield.shieldIndex= Shield.shieldIndex+1
-			Shield.allShields[Shield.shieldIndex]= tempDat
-			//if allShields was previously empty we have to jumpstart the timer:
-			if Shield.shieldIndex== 0
+			// Add this shield to the stack so it can be properly
+			// deallocated when its time runs out:
+			Shield.shieldIndex++
+			Shield.allShields[Shield.shieldIndex] = tempDat
+			// If allShields was previously empty, jumpstart the timer:
+			if Shield.shieldIndex == 0
 				TimerStart(Shield.time, Shield.TIMER_PERIOD, true, function Shield.timeout)
 
 	init

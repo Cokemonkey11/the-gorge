@@ -35,11 +35,11 @@ package Repair
 		doPeriodicallyCounted(ANIMATION_PERIOD, 9000000, (CallbackCounted c) -> begin
 			grp.enumUnitsInRange(Game.westRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
-				if Players.isWest(u.getOwner().getId())
+				if Players.isWest(u.getOwner().getId()) and u.isAlive()
 					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
 
 			grp.enumUnitsInRange(Game.eastRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
-				if Players.isEast(u.getOwner().getId())
+				if Players.isEast(u.getOwner().getId()) and u.isAlive()
 					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
 		end)
