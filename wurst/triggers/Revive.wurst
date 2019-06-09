@@ -113,7 +113,10 @@ package Revive
 			tempDat.timeL = REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
 			tempDat.ownerID = GetPlayerId(GetOwningPlayer(tU))
 
-			if killerId > 1
+			if killerId > 1 and (
+				kU.isEnemyOf(tU.getOwner()) or
+				killerId == tempDat.ownerID
+			)
 				parseAssists(tempDat.ownerID)
 
 				if killerId == tempDat.ownerID
@@ -146,26 +149,125 @@ package Revive
 					let bounty = getBounty()
 					kO.addGold(bounty)
 
-					if Players.localPlayer == Players.players[tempDat.ownerID]
-						// Message for killed player.
-						DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "Your ship was destroyed by " + Game.colors[killerId] + Game.names[killerId] + "|r; you will be rebuilt in " + I2S(tempDat.timeL) + "|r seconds.")
+					// Message for killed player.
+					DisplayTimedTextToPlayer(
+						Players.players[tempDat.ownerID],
+						0.,
+						0.,
+						10.,
+						"Your ship was destroyed by " +
+							Game.colors[killerId] +
+							Game.names[killerId] +
+							"|r; you will be rebuilt in " +
+							I2S(tempDat.timeL) +
+							"|r seconds."
+					)
 
-					else if Players.localPlayer == Players.players[killerId]
-						// Message for killing player.
-						DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "You destroyed " + Game.colors[tempDat.ownerID] + Game.names[tempDat.ownerID] + "|r for |cffffcc00" + I2S(bounty) + " gold.")
+					// Message for killing player.
+					DisplayTimedTextToPlayer(
+						Players.players[killerId],
+						0.,
+						0.,
+						10.,
+						"You destroyed " +
+							Game.colors[tempDat.ownerID] +
+							Game.names[tempDat.ownerID] +
+							"|r for |cffffcc00" +
+							I2S(bounty) +
+							" gold."
+					)
 
-					else
+					if not (
+						Players.localPlayer == Players.players[tempDat.ownerID] or
+						Players.localPlayer == Players.players[killerId
+					])
 						// Message for other players.
-						DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.colors[tempDat.ownerID] + Game.names[tempDat.ownerID] + "|r was destroyed by " + Game.colors[killerId] + Game.names[killerId] + "|r for |cffffcc00" + I2S(bounty) + "|r gold.")
+						DisplayTimedTextToPlayer(
+							Players.localPlayer,
+							0.,
+							0.,
+							10.,
+							Game.colors[tempDat.ownerID] +
+								Game.names[tempDat.ownerID] +
+								"|r was destroyed by " +
+								Game.colors[killerId] +
+								Game.names[killerId] +
+								"|r for |cffffcc00" +
+								I2S(bounty) +
+								"|r gold."
+						)
 
+			else if not kU.isEnemyOf(tU.getOwner())
+				// Something weird occurred - let's display what we know, for
+				// posterity.
+
+				// Message for killed player.
+				DisplayTimedTextToPlayer(
+					Players.players[tempDat.ownerID],
+					0.,
+					0.,
+					10.,
+					"Your ship was destroyed by an ALLY " +
+						Game.colors[killerId] +
+						Game.names[killerId] +
+						"|r; you will be rebuilt in " +
+						I2S(tempDat.timeL) +
+						"|r seconds.  How did this happen?"
+				)
+
+				// Message for killing player.
+				DisplayTimedTextToPlayer(
+					Players.players[killerId],
+					0.,
+					0.,
+					10.,
+					"You destroyed an ALLY " +
+						Game.colors[tempDat.ownerID] +
+						Game.names[tempDat.ownerID] +
+						"|r.  How did this happen?"
+				)
+
+				if not (
+					Players.localPlayer == Players.players[tempDat.ownerID] or
+					Players.localPlayer == Players.players[killerId]
+				)
+					// Message for other players.
+					DisplayTimedTextToPlayer(
+						Players.localPlayer,
+						0.,
+						0.,
+						10.,
+						Game.colors[tempDat.ownerID] +
+							Game.names[tempDat.ownerID] +
+							"|r was destroyed by an ALLY " +
+							Game.colors[killerId] +
+							Game.names[killerId] +
+							"|r.  How did this happen?"
+					)
 			else
 				if Players.localPlayer == Players.players[tempDat.ownerID]
 					// Message for killed player.
-					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., "Your ship was destroyed. It will be rebuilt in |cffffcc00" + I2S(tempDat.timeL) + "|r seconds.")
+					DisplayTimedTextToPlayer(
+						Players.localPlayer,
+						0.,
+						0.,
+						10.,
+						"Your ship was destroyed. It will be rebuilt in |cffffcc00" +
+							I2S(tempDat.timeL) +
+							"|r seconds."
+					)
 
 				else
 					// Message for other players.
-					DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.colors[tempDat.ownerID] + Game.names[tempDat.ownerID] + "|r was destroyed.")
+					DisplayTimedTextToPlayer(
+						Players.localPlayer,
+						0.,
+						0.,
+						10.,
+						Game.colors[tempDat.ownerID] +
+							Game.names[tempDat.ownerID] +
+							"|r was destroyed."
+					)
 
 
 			Game.addDeath(tU)

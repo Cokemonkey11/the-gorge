@@ -3,3 +3,6 @@ wurst/war3map.j
 objectEditingOutput/*
 compiled.j.txt
 
+_build/blizzard.j
+_build/common.j
+_build/dependencies/

@@ -1,8 +1,8 @@
 package MyBoard
 	bool DEBUG_MODE = false
 
-	constant    MAX_ROW_COUNT        = 100
-	constant    MAX_COLUMN_COUNT     = 30
+	constant    MAX_ROW_COUNT        = 14
+	constant    MAX_COLUMN_COUNT     = 6
 	constant    MAX_ARRAY_SIZE       = MAX_ROW_COUNT*MAX_COLUMN_COUNT
 	constant    AVERAGE_LETTER_WIDTH = .01484375
 

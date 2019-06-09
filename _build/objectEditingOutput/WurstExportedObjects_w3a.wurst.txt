@@ -669,15 +669,6 @@ import ObjEditingNatives
 	..setLvlDataString("arac", 0, 0, "unknown")
 
 
-@compiletime function create_w3a_AM02()
-	let def = createObjectDefinition("w3a", 'AM02', 'AIsr')
-	..setLvlDataInt("wurs", 0, 0, 42)
-	..setLvlDataString("anam", 0, 0, "Runed Bracer Dummy")
-	..setLvlDataString("ansf", 0, 0, "(DamageType)")
-	..setLvlDataInt("aite", 0, 0, 0)
-	..setLvlDataUnreal("isr2", 1, 2, 2.0)
-
-
 @compiletime function create_w3a_A00C()
 	let def = createObjectDefinition("w3a", 'A00C', 'AIms')
 	..setLvlDataInt("wurs", 0, 0, 42)

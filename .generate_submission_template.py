@@ -60,6 +60,17 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "NEXT",
+        "9 Jun 2019",
+        (
+            "Fixed a fatal problem related to a 1.31 regression (map crash).",
+            "Fixed a bug where a player gets bounty when a team-kill occurs.",
+            "Improved messages for when a team-kill occurs.",
+            "Fixed a potential damage-detection problem.",
+            "Wurst optimiser and local optimiser are now enabled.",
+        )
+    ),
+    (
         "0.12.0",
         "14 Apr 2019",
         (

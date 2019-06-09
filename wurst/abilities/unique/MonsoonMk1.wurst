@@ -1,6 +1,7 @@
 package MonsoonMk1
 
 import AbilitiesApi
+import DamageType
 import LinkedListModule
 import RegisterEvents
 import TempLightning
@@ -36,7 +37,7 @@ class Monsoon
                     if not reactor.owner.isAlive() or not reactor.target.isAlive() or reactor.target.isInvulnerable() or reactor.owner.getPos().distanceToSq(reactor.target.getPos()) > (500. * 500.)
                         destroy reactor
                     else if reactor.durationLeft <= 0
-                        reactor.owner.damageTarget(reactor.target, reactor.damage)
+                        dealCodeDamage(reactor.owner, reactor.target, reactor.damage)
                         new TempLightning(reactor.owner.getPos3Real(), reactor.target.getPos3Real(), .5, "CLSB")
                         destroy reactor
 
