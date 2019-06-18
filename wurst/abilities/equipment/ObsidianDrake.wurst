@@ -1,8 +1,7 @@
 package ObsidianDrake
 	// Deals precisely 400 damage to targets below 400 hp.
 
-	import DamageType
-	import DamageDetection
+	import DamageEvent
 
 	constant DRAKE_ID = 'o00K'
 	constant HEALTH_PROC = 400
@@ -10,10 +9,13 @@ package ObsidianDrake
 	constant BONUS_DAMAGE = HEALTH_PROC - STD_DAMAGE
 
 	function h()
-		unit tU = GetTriggerUnit()
-		unit dS = GetEventDamageSource()
-		if getDamageType() == DamageType.SPELL and GetUnitTypeId(dS) == DRAKE_ID and GetWidgetLife(tU) <= HEALTH_PROC
-			dealCodeDamage(dS, tU, BONUS_DAMAGE)
+		unit tU = DamageEvent.getTarget()
+		unit dS = DamageEvent.getSource()
+		if DamageEvent.getType() == SPELL and dS.getTypeId() == DRAKE_ID and tU.getLife() <= HEALTH_PROC
+			DamageEvent.setNextDamageFromCode()
+			dS.damageTarget(tU, BONUS_DAMAGE)
+
 
 	init
-		addOnDamageFunc(Condition(function h))
+		DamageEvent.addListener() () ->
+			h()

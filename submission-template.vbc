@@ -51,13 +51,29 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.12.2[/color] [color=#999999]18 Jun 2019[/color]:
+[list][*] Fixed an error related to a 1.31.1 regression (DD wurst NPE).
+[*] Fixed a bug where selling or dropping hull never reset reduction.
+[*] Minor refactoring to use WurstCommand and DamageEvent libraries.
+[*] Minor new singleplayer commands added.
+[/list]
+
+[color=#ffcc00]0.12.1[/color] [color=#999999]9 Jun 2019[/color]:
+[list][*] Fixed a fatal problem related to a 1.31 regression (map crash).
+[*] Fixed a bug where a player gets bounty when a team-kill occurs.
+[*] Improved messages for when a team-kill occurs.
+[*] Fixed a potential damage-detection problem.
+[*] Wurst optimiser and local optimiser are now enabled.
+[*] Fixed a cosmetic bug that made healing effects on dead units.
+[*] Enchanted frost wyrms now appear more blue.
+[/list]
+
 [color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
 [list][*] Fixed a bug where next-page buttons don't work if your inventory is full.
 [*] The interceptor now has a crowd control (damage) ability.
 [*] The frigate now has a sustain (healing) ability.
 [*] The battleship now has a sustain (healing) ability.
-[*] Fixed a minor bug where the singleplayer -fast command wouldn't work if you changed
-ship.
+[*] Fixed a bug where the singleplayer -fast command wouldn't work if you changed ship.
 [*] Minor tooltip fixes.
 [/list]
 
@@ -74,7 +90,7 @@ ship.
 [*] Replaced singleplayer chat commands from backslash to hyphen.
 [/list]
 
-[color=#ffcc00]0.11.0[/color] [color=#999999]31 Mar 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.11.0[/color] [color=#999999]31 Mar 2019[/color]:
 [list][*] Player ships are now heroes, and the F2 hotkey can be used!
 [*] This map now uses an up-to-date wurst standard library.
 [*] Adjusted spawn behavior so that creeps would stack up less.
@@ -88,7 +104,7 @@ ship.
 [*] Fixed a couple minor cosmetic blemishes.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.10.0 (blacklisted)[/color] [color=#999999]18 Mar 2019[/color]:
+[color=#ffcc00]0.10.0 (blacklisted)[/color] [color=#999999]18 Mar 2019[/color]:
 [list][*] This map is now written entirely in wurst!
 [*] Added 3 new movespeed items and 3 new hitpoint regen items.
 [*] Improved behavior when a player leaves the game.

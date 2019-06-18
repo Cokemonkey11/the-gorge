@@ -42,7 +42,7 @@ package SL15ShroudGenerator
 		Gen g
 		while index <= gensIndex
 			g = gens[index]
-			g.duration = g.duration - CLOCK_PERIOD
+			g.duration -= CLOCK_PERIOD
 			SetUnitX(g.dummy, GetUnitX(g.dummy)+g.dX)
 			SetUnitY(g.dummy, GetUnitY(g.dummy)+g.dY)
 			if g.duration <= 0.
@@ -50,12 +50,12 @@ package SL15ShroudGenerator
 				DummyUnitStack.release(g.dummy)
 				destroy g
 				gens[index] = gens[gensIndex]
-				gensIndex = gensIndex - 1
-				index = index - 1
+				gensIndex--
+				index--
 				if gensIndex == -1
 					PauseTimer(clock2)
 
-			index += 1
+			index++
 
 	function p()
 		int index = 0
@@ -79,12 +79,12 @@ package SL15ShroudGenerator
 					SetUnitFlyHeight(g.dummy, 100., 0.)
 					SetUnitX(g.dummy, s.cX)
 					SetUnitY(g.dummy, s.cY)
-					gensIndex = gensIndex + 1
+					gensIndex++
 					gens[gensIndex] = g
 					if gensIndex == 0
 						TimerStart(clock2, CLOCK_PERIOD, true, function p2)
 
-					j += 1
+					j++
 
 
 			if IsUnitInRangeXY(s.caster, s.cX, s.cY, SHROUD_RADIUS)
@@ -103,15 +103,15 @@ package SL15ShroudGenerator
 				destroy s
 				shrouds[index] = shrouds[shroudsIndex]
 				shroudsIndex = shroudsIndex - 1
-				index = index - 1
+				index--
 				if shroudsIndex == -1
 					PauseTimer(clock)
 
-			index += 1
+			index++
 
 	function c()
 		Shroud s
-		if GetSpellAbilityId()== SHROUD_ID
+		if GetSpellAbilityId() == SHROUD_ID
 			s = new Shroud
 			s.caster = GetTriggerUnit()
 			s.cX = GetUnitX(s.caster)
@@ -120,7 +120,7 @@ package SL15ShroudGenerator
 			s.genTime = GEN_PERIOD
 			SetUnitX(s.dummy, s.cX)
 			SetUnitY(s.dummy, s.cY)
-			shroudsIndex = shroudsIndex + 1
+			shroudsIndex++
 			shrouds[shroudsIndex] = s
 			if shroudsIndex == 0
 				TimerStart(clock, CLOCK_PERIOD, true, function p)

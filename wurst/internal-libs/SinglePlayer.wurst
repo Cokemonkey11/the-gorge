@@ -8,14 +8,22 @@ package SinglePlayer
 
         static          player thePlayer
         static          bool   fastEnabled = false
+        static          var    isSinglePlayer = false
 
         static function help() returns bool
             print(SP_PREFIX + "Available commands:")
-            print(TAB + "-h, -help: Display this help menu.")
-            print(TAB + "-c, -clear: Clear the on-screen text messages.")
-            print(TAB + "-e, -experience: Gives 500 trading experience.")
-            print(TAB + "-v, -visibility: Disables Fog of War and Black Mask.")
-            print(TAB + "-f, -fast: Enables instant ship movement.")
+            print(TAB + "-help: Display this help menu.")
+            print(TAB + "-experience: Gives 500 trading experience.")
+            print(TAB + "-heal: fully heal your helicopter.")
+            print(TAB + "-visibility: Disables Fog of War and Black Mask.")
+            print(TAB + "-fast: Enables instant ship movement.")
+
+            return false
+
+
+        static function heal() returns bool
+            let u = Ships.ships[thePlayer.getId()]
+            u.setHP(u.getMaxHP())
 
             return false
 
@@ -47,14 +55,8 @@ package SinglePlayer
             end))
 
 
-        static function clear() returns bool
-            // Debug message redacted to avoid waste.
-            ClearTextMessages()
-
-            return false
-
-
         static function enable()
+            isSinglePlayer = true
             print(SP_PREFIX + "Single player mode enabled.  Enter -help for a list of commands.")
 
             int i = 2
@@ -65,28 +67,3 @@ package SinglePlayer
                     break
 
                 i++
-
-            trigger help = CreateTrigger()
-            help..registerPlayerChatEvent(thePlayer, "-h",    true)
-                ..registerPlayerChatEvent(thePlayer, "-help", true)
-                ..addCondition(Condition(function help))
-
-            trigger experience = CreateTrigger()
-            experience..registerPlayerChatEvent(thePlayer, "-e",               true)
-                      ..registerPlayerChatEvent(thePlayer, "-experience",      true)
-                      ..addCondition(Condition(function experience))
-
-            trigger visibility = CreateTrigger()
-            visibility..registerPlayerChatEvent(thePlayer, "-v",          true)
-                      ..registerPlayerChatEvent(thePlayer, "-visibility", true)
-                      ..addCondition(Condition(function visibility))
-
-            trigger clear = CreateTrigger()
-            clear..registerPlayerChatEvent(thePlayer, "-c",     true)
-                 ..registerPlayerChatEvent(thePlayer, "-clear", true)
-                 ..addCondition(Condition(function clear))
-
-            trigger fast = CreateTrigger()
-            fast..registerPlayerChatEvent(thePlayer, "-f",      true)
-                ..registerPlayerChatEvent(thePlayer, "-fast",   true)
-                ..addCondition(Condition(function fast))

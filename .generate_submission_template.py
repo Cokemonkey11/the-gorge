@@ -60,7 +60,17 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "NEXT",
+        "0.12.2",
+        "18 Jun 2019",
+        (
+            "Fixed an error related to a 1.31.1 regression (DD wurst NPE).",
+            "Fixed a bug where selling or dropping hull never reset reduction.",
+            "Minor refactoring to use WurstCommand and DamageEvent libraries.",
+            "Minor new singleplayer commands added.",
+        )
+    ),
+    (
+        "0.12.1",
         "9 Jun 2019",
         (
             "Fixed a fatal problem related to a 1.31 regression (map crash).",

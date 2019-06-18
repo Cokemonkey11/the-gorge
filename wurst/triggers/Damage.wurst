@@ -1,16 +1,16 @@
 package Damage
 	import Ships
 	import Game
-	import DamageDetection
+	import DamageEvent
 
 	function h() returns bool
 		int id
-		unit targ = GetTriggerUnit()
+		unit targ = DamageEvent.getTarget()
 		unit src
 		int sID
 		if Ships.isPlayerShip(targ)
 			id = GetPlayerId(GetOwningPlayer(targ))
-			src = GetEventDamageSource()
+			src = DamageEvent.getSource()
 			sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 and sID < 12 and id > 1 and id < 12
 				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
@@ -18,4 +18,5 @@ package Damage
 		return false
 
 	init
-		addOnDamageFunc(Condition(function h))
+		DamageEvent.addListener() () ->
+			h()

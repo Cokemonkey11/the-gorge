@@ -1,18 +1,44 @@
 package ChatCommands
-import StringUtils
-import ClosureEvents
+import Equipment
+import LinkedList
 import Muscii
+import Ships
+import SinglePlayer
+import WurstCommand
+
+function singlePlayerMatch(string cmd) returns CmdMatcher
+	CmdMatcher m = (player _p, string innerCmd, LinkedList<string> _args) ->
+		return SinglePlayer.isSinglePlayer and cmd == innerCmd
+	return m
+
 
 init
-	EventListener.add(EVENT_PLAYER_CHAT_FILTER) ->
-		let str = GetEventPlayerChatString()
-
-		if str.startsWith("-")
-			let p = GetTriggerPlayer()
-			let args = str.substring(1).split(" ")
-			let first = args.dequeue()
-			destroy args
-
-			switch first
-				case "music"
-					p.setWantsMusic(not p.wantsMusic())
+	addCommand("music") (p, _cmd, _args) ->
+		p.setWantsMusic(not p.wantsMusic())
+	addCommand("help") (p, _cmd, _args) ->
+		p.print("|cffffcc00Objective:|r destroy the enemy team's Keep.")
+		p.print("|cffffcc00Crewmembers:|r hired from your Keep.  Automatically attack enemies nearby your helicopter.")
+		p.print("|cffffcc00Equipment:|r bought from your Utility Port.  Can be sold for 100% their cost.")
+	addCommand("clear") (p, _c, _a) ->
+		if localPlayer == p
+			ClearTextMessages()
+	addCommand("reduction") (p, _c, _a) ->
+		p.print(
+			"|cffffcc00Damage Reduction:|r " +
+			(
+				Equipment.reduction.has(Ships.ships[p.getId()]) ?
+				Equipment.reduction.get(Ships.ships[p.getId()]).toString() :
+				"0"
+			) +
+			"%"
+		)
+	addCommand("experience", singlePlayerMatch("experience")) (_p, _c, _a) ->
+		SinglePlayer.experience()
+	addCommand("help", singlePlayerMatch("help")) (_p, _c, _a) ->
+		SinglePlayer.help()
+	addCommand("visibility", singlePlayerMatch("visibility")) (_p, _c, _a) ->
+		SinglePlayer.visibility()
+	addCommand("fast", singlePlayerMatch("fast")) (_p, _c, _a) ->
+		SinglePlayer.fast()
+	addCommand("heal", singlePlayerMatch("heal")) (_p, _c, _a) ->
+		SinglePlayer.heal()

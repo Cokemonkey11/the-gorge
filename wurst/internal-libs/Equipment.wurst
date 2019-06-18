@@ -7,13 +7,14 @@ package Equipment
 	//   * Add necessary items to DestroyDroppedContracts.tradeItems (done in DestroyDroppedContracts#init)
 	//   * Fill in pawned items in TradeRewardsPawn#c as necessary
 	//   * Fill in remaining triggers as necessary
+	import ClosureEvents
+	import ClosureTimers
 	import Items
 	import SimError
 	import Ships
 	import Game
 	import HashMap
 	import Players
-	import RegisterEvents
 
 	public class Equipment
 		static constant CLASS_UNKNOWN    = 0
@@ -56,7 +57,7 @@ package Equipment
 
 		static function autoPawnItemForPlayer(int pID, item itm)
 			int val = R2I(GetWidgetLife(itm))
-			if val>1
+			if val > 1
 				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00" + GetUnitName(Ships.ships[pID]) + "|r cannot acquire a |cffffcc00" + GetItemName(itm) + "|r; it was automatically pawned for |cffffcc00" + I2S(val) + "|r gold.")
 				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD) + val)
 
@@ -85,13 +86,11 @@ package Equipment
 			int count = 0
 
 			while index <= 5
-
 				if getItemClass(UnitItemInSlot(u, index)) == cls
 					count++
 					if count > 1
 						return true
 				index++
-
 
 			return false
 
@@ -101,7 +100,6 @@ package Equipment
 			item itm = null
 
 			while index <= 5
-
 				itm = UnitItemInSlot(u, index)
 				if getItemClass(itm) == cls
 					return itm
@@ -342,13 +340,10 @@ package Equipment
 
 
 		static function resetUnitDamageReduction(unit u)
-			int index = 0
-			while index <= 5
+			for index = 0 to 5
 				if GetItemTypeId(UnitItemInSlot(u, index)) == STONE_HULL
 					reduction.put(u, REDUCTION1)
 					return
-
-				index += 1
 
 			reduction.put(u, 0)
 
@@ -406,3 +401,12 @@ package Equipment
 		Equipment.classes.put(Equipment.DATA_ACQUISIT,         Equipment.CLASS_CONTRACT)
 		Equipment.classes.put(Equipment.TOXIC_SUBST,           Equipment.CLASS_CONTRACT)
 		Equipment.classes.put(Equipment.SPIDER_VENOM_CONTRACT, Equipment.CLASS_CONTRACT)
+
+		EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM) ->
+			let u = GetManipulatingUnit()
+			nullTimer() ->
+				Equipment.resetUnitDamageReduction(u)
+		EventListener.add(EVENT_PLAYER_UNIT_PAWN_ITEM) ->
+			let u = GetManipulatingUnit()
+			nullTimer() ->
+				Equipment.resetUnitDamageReduction(u)

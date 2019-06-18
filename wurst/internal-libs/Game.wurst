@@ -234,9 +234,6 @@ package Game
 						SetUnitInvulnerable(eastKeep[0], false)
 
 
-
-
-
 		static function fadeOut(real duration)
 			EnableUserUI(false)
 			SetCineFilterTexture("ReplaceableTextures\\CameraMasks\\White_mask.blp")
@@ -326,7 +323,6 @@ package Game
 				first..pause()..setTimeScale(0.)..addAbility('Aloc')
 
 				GroupRemoveUnit(grp, first)
-
 
 
 		static function defeatC()

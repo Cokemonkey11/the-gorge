@@ -1,20 +1,20 @@
 package DamageReduction
-	import DamageType
+	import DamageEvent
 	import Equipment
-	import DamageDetection
 
 	function h() returns bool
-		real d = GetEventDamage()
-		unit tU = GetTriggerUnit()
+		real d = DamageEvent.getAmount()
+		unit tU = DamageEvent.getTarget()
 
-		if getDamageType() != DamageType.CODE and Equipment.reduction.has(tU)
+		if DamageEvent.getType() != CODE and Equipment.reduction.has(tU)
 			if d < 0.
 				d = d*-1.
 
 			d = d*I2R(Equipment.reduction.get(tU))/100.
-			SetWidgetLife(tU, GetWidgetLife(tU)+d)
+			SetWidgetLife(tU, GetWidgetLife(tU) + d)
 
 		return false
 
 	init
-		addOnDamageFunc(Condition(function h))
+		DamageEvent.addListener() () ->
+			h()

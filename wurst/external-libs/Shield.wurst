@@ -13,8 +13,7 @@
 //*                         'u' using effect with model 'f' on attachment
 //*                         point 'p'.
 package Shield
-	import DamageType
-	import DamageDetection
+	import DamageEvent
 	import HashMap
 
 	//* We must declare the UnitAlive native because StructuredDD no longer
@@ -55,24 +54,24 @@ package Shield
 		static function handler()
 			Shield tempDat
 			Shield destroyingDat
-			unit tU= GetTriggerUnit()
-			real damageLeft= GetEventDamage()
-			bool noShieldsLeft= false
-			if getDamageType() != DamageType.SPELL and UnitAlive(tU) and tab.hasInt(tU.getHandleId())
-				tempDat= Shield.tab.loadInt(tU.getHandleId()) castTo Shield
+			unit tU = DamageEvent.getTarget()
+			real damageLeft = DamageEvent.getAmount()
+			bool noShieldsLeft = false
+			if DamageEvent.getType() != SPELL and UnitAlive(tU) and tab.hasInt(tU.getHandleId())
+				tempDat = Shield.tab.loadInt(tU.getHandleId()) castTo Shield
 				//we need to loop until either all the damage is mitigated
 				//or there's no shield left on this unit.
 				while damageLeft > 0. and not noShieldsLeft
-					if tempDat.shieldLeft>damageLeft
+					if tempDat.shieldLeft > damageLeft
 						if tempDat.finiteShield
-							tempDat.shieldLeft= tempDat.shieldLeft-damageLeft
+							tempDat.shieldLeft = tempDat.shieldLeft-damageLeft
 
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+damageLeft)
+						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) + damageLeft)
 						damageLeft = 0.
 					else
 						damageLeft= damageLeft-tempDat.shieldLeft
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u)+tempDat.shieldLeft)
-						tempDat.shieldLeft= 0.
+						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) + tempDat.shieldLeft)
+						tempDat.shieldLeft = 0.
 						if tempDat.falseHP > damageLeft
 							tempDat.falseHP -= damageLeft
 							damageLeft= 0.
@@ -93,13 +92,13 @@ package Shield
 		//* This function runs every TIMER_PERIOD seconds as long as the stack
 		//* is not empty, and looks for members that need to be destroyed.
 		private static function timeout()
-			int index= 0
+			int index = 0
 			Shield tempDat
 			Shield otherDat
 			while index <= Shield.shieldIndex
-				tempDat= Shield.allShields[index]
-				tempDat.timeLeft= tempDat.timeLeft-TIMER_PERIOD
-				if (tempDat.timeLeft<= 0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP)<= 0. or UnitAlive(tempDat.u)== false
+				tempDat = Shield.allShields[index]
+				tempDat.timeLeft = tempDat.timeLeft-TIMER_PERIOD
+				if (tempDat.timeLeft <= 0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP) <= 0. or UnitAlive(tempDat.u) == false
 					//deallocate it, depending on the values of prevShield
 					//and nextShield
 					if tempDat.prevShield == null and tempDat.nextShield == null and Shield.tab.loadInt(tempDat.u.getHandleId()) == tempDat castTo int
@@ -108,8 +107,8 @@ package Shield
 					else if tempDat.prevShield == null and tempDat.nextShield != null
 						//the shield was the first in a list so we have to
 						//make next into the new first!
-						otherDat= tempDat.nextShield
-						otherDat.prevShield= null
+						otherDat = tempDat.nextShield
+						otherDat.prevShield = null
 						Shield.tab.saveInt(tempDat.u.getHandleId(), otherDat castTo int)
 					else if tempDat.prevShield != null and tempDat.nextShield == null
 						//the shield was the end of the list so let's do the
@@ -188,4 +187,5 @@ package Shield
 
 	init
 		Shield.tab = new Table
-		addOnDamageFunc(Condition(function Shield.handler))
+		DamageEvent.addListener() () ->
+			Shield.handler()

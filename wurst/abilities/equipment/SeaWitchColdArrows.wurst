@@ -1,15 +1,14 @@
 package SeaWitchColdArrows
-	import DamageType
-	import DamageDetection
+	import DamageEvent
 	import Game
 
 	constant SEAWITCH_ID = 'o005'
-	constant SLOW_ID = 'A009'
+	constant SLOW_ID     = 'A009'
 	unit dummy
 
 	function h() returns bool
-		unit tU = GetTriggerUnit()
-		if getDamageType() == DamageType.SPELL and GetUnitTypeId(GetEventDamageSource()) == SEAWITCH_ID
+		unit tU = DamageEvent.getTarget()
+		if DamageEvent.getType() == SPELL and GetUnitTypeId(DamageEvent.getSource()) == SEAWITCH_ID
 			SetUnitX(dummy, GetUnitX(tU))
 			SetUnitY(dummy, GetUnitY(tU))
 			UnitAddAbility(dummy, SLOW_ID)
@@ -19,6 +18,7 @@ package SeaWitchColdArrows
 		return false
 
 	init
-		addOnDamageFunc(Condition(function h))
+		DamageEvent.addListener() () ->
+			h()
 		dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Game.DUMMY_ID, 0., 0., 0.)
 		UnitAddAbility(dummy, 'Aloc')

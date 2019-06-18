@@ -13,7 +13,7 @@ package DTS12MissileArray
 
 	import Players
 	import RegisterEvents
-	import DamageType
+	import DamageEvent
 	import Ships
 	import Sounds
 	import HashMap
@@ -102,7 +102,8 @@ package DTS12MissileArray
 						first = FirstOfGroup(grp)
 						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
 							hit = true
-							dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
+							DamageEvent.setNextDamageFromCode()
+							Ships.ships[temp.ownerID].damageTarget(first, DAMAGE)
 
 						GroupRemoveUnit(grp, first)
 
@@ -140,7 +141,8 @@ package DTS12MissileArray
 						first = FirstOfGroup(grp)
 						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
 							hit = true
-							dealCodeDamage(Ships.ships[temp.ownerID], first, DAMAGE)
+							DamageEvent.setNextDamageFromCode()
+							Ships.ships[temp.ownerID].damageTarget(first, DAMAGE)
 
 						GroupRemoveUnit(grp, first)
 
@@ -167,17 +169,16 @@ package DTS12MissileArray
 			real tX
 			real tY
 			player owner
-			if GetSpellAbilityId()== ARRAY_ID
+			if GetSpellAbilityId() == ARRAY_ID
 				targ = GetSpellTargetUnit()
 				tU = GetTriggerUnit()
-				cX= GetUnitX(tU)
-				cY= GetUnitY(tU)
+				cX = GetUnitX(tU)
+				cY = GetUnitY(tU)
 				Sounds.play3D(SOUND, 1., cX, cY, 100.)
-				if targ!= null
-					tU= GetTriggerUnit()
+				if targ != null
 					owner = GetOwningPlayer(tU)
-					cX= GetUnitX(tU)
-					cY= GetUnitY(tU)
+					cX = GetUnitX(tU)
+					cY = GetUnitY(tU)
 					face = Atan2(GetUnitY(targ)-cY, GetUnitX(targ)-cX)
 					temp = new Missile
 					temp.target = targ
@@ -215,12 +216,11 @@ package DTS12MissileArray
 					dbIndex = dbIndex+1
 					db[dbIndex] = temp
 				else
-					tU= GetTriggerUnit()
 					owner = GetOwningPlayer(tU)
-					cX= GetUnitX(tU)
-					cY= GetUnitY(tU)
-					tX= GetSpellTargetX()
-					tY= GetSpellTargetY()
+					cX = GetUnitX(tU)
+					cY = GetUnitY(tU)
+					tX = GetSpellTargetX()
+					tY = GetSpellTargetY()
 					face = Atan2(tY-cY, tX-cX)
 					temp = new Missile
 					temp.target = null
@@ -246,8 +246,8 @@ package DTS12MissileArray
 					temp = new Missile
 					temp.target = null
 					temp.missile = CreateUnit(GetOwningPlayer(tU), DUMMY_ID, cX, cY, face*bj_RADTODEG)
-					SetUnitX(temp.missile, cX+INITIAL_OFFSET*Cos(face-bj_PI/2.))
-					SetUnitY(temp.missile, cY+INITIAL_OFFSET*Sin(face-bj_PI/2.))
+					SetUnitX(temp.missile, cX + INITIAL_OFFSET*Cos(face - bj_PI/2.))
+					SetUnitY(temp.missile, cY + INITIAL_OFFSET*Sin(face - bj_PI/2.))
 					UnitAddAbility(temp.missile, 'Arav')
 					UnitAddAbility(temp.missile, 'Aloc')
 					SetUnitFlyHeight(temp.missile, FLY_HEIGHT, 0.)
@@ -259,7 +259,7 @@ package DTS12MissileArray
 					temp.ddX = ACCELERATION * Cos(face) * CLOCK_PERIOD
 					temp.ddY = ACCELERATION * Sin(face) * CLOCK_PERIOD
 					temp.ownerID = GetPlayerId(owner)
-					dbIndex = dbIndex+1
+					dbIndex++
 					db[dbIndex] = temp
 
 				if not ht.hasInt(tU.getHandleId())
