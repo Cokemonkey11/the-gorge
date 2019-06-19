@@ -63,7 +63,7 @@ package SinglePlayer
             while i <= 11
 
                 if Players.playing[i]
-                    thePlayer = Players.players[i]
+                    thePlayer = players[i]
                     break
 
                 i++

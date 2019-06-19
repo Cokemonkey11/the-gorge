@@ -58,8 +58,8 @@ package Equipment
 		static function autoPawnItemForPlayer(int pID, item itm)
 			int val = R2I(GetWidgetLife(itm))
 			if val > 1
-				DisplayTextToPlayer(Players.players[pID], 0., 0., "Your |cffffcc00" + GetUnitName(Ships.ships[pID]) + "|r cannot acquire a |cffffcc00" + GetItemName(itm) + "|r; it was automatically pawned for |cffffcc00" + I2S(val) + "|r gold.")
-				SetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[pID], PLAYER_STATE_RESOURCE_GOLD) + val)
+				DisplayTextToPlayer(players[pID], 0., 0., "Your |cffffcc00" + GetUnitName(Ships.ships[pID]) + "|r cannot acquire a |cffffcc00" + GetItemName(itm) + "|r; it was automatically pawned for |cffffcc00" + I2S(val) + "|r gold.")
+				SetPlayerState(players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[pID], PLAYER_STATE_RESOURCE_GOLD) + val)
 
 			RemoveItem(itm)
 
@@ -332,7 +332,7 @@ package Equipment
 
 			if was
 				RemoveItem(sI)
-				if Players.localPlayer == owner
+				if localPlayer == owner
 					SelectUnit(seller, false)
 					SelectUnit(toSelect, true)
 

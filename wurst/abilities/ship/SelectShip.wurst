@@ -1,5 +1,4 @@
 package SelectShip
-	import Players
 	import SimError
 	import Ships
 	import RegisterEvents
@@ -15,7 +14,7 @@ package SelectShip
 			int id = GetPlayerId(owner)
 
 			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0
-				if Players.localPlayer == owner
+				if localPlayer == owner
 					ClearSelection()
 					SelectUnit(Ships.ships[id], true)
 					PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)

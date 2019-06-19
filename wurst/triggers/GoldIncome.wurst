@@ -1,6 +1,5 @@
 package GoldIncome
 	import Game
-	import Players
 
 	constant CLOCK_PERIOD = 1.
 	constant GOLD_PER_SECOND = 1
@@ -9,7 +8,7 @@ package GoldIncome
 		int index= 0
 		if not Game.ended
 			while index <= 11
-				SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_PER_SECOND)
+				SetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD) + GOLD_PER_SECOND)
 				index += 1
 
 	init

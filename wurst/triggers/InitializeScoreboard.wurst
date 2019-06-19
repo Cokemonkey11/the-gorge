@@ -10,6 +10,7 @@ package InitializeScoreboard
 	// player10 0      0       0        0
 	// player11 0      0       0        0
 
+	import ClosureTimers
 	import Game
 	import MyBoard
 	import Players
@@ -76,9 +77,8 @@ package InitializeScoreboard
 		Game.scoreboard.setValue(3, 1 + Game.westCount, "")
 		Game.scoreboard.setValue(4, 1 + Game.westCount, "")
 
-		var i = 2
 		var j = 0
-		while i <= 11
+		for i = 2 to 11
 			if Players.playing[i]
 				if i < 7
 					Game.scoreboard.setValue(0, 1 + j, Game.colors[i] + Game.names[i] + "|r")
@@ -90,12 +90,9 @@ package InitializeScoreboard
 					Game.scoreboardRows[i] = 2 + j
 
 				j += 1
-			i += 1
 
 		Game.scoreboard.setShow(true)
 		Game.scoreboard.setSuppress(true)
 
-		DestroyTimer(GetExpiredTimer())
-
 	init
-		TimerStart(CreateTimer(), 0., false, function initialize)
+		nullTimer(() -> initialize())

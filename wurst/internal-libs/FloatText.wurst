@@ -1,7 +1,5 @@
 // Thanks to Cohadar for a good reference for TextTag values.
 package FloatText
-	import Players
-
 	public class FloatText
 		static constant KERNING          =  5.5
 		static constant VERTICAL_KERNING = 48.
@@ -34,7 +32,7 @@ package FloatText
 		static function themedTemporaryTagPlayer(real x, real y, string s, int pId) returns texttag
 			texttag t = themedTemporaryTag(x, y, s)
 
-			t.setVisibility(Players.localPlayer == Players.players[pId])
+			t.setVisibility(localPlayer == players[pId])
 
 			return t
 

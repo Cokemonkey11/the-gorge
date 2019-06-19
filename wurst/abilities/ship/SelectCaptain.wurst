@@ -1,6 +1,5 @@
 package SelectCaptain
 	import Game
-	import Players
 	import RegisterEvents
 
 	constant SELECT_CAPT_ID = 'A00Z'
@@ -10,7 +9,7 @@ package SelectCaptain
 			player owner = GetOwningPlayer(GetTriggerUnit())
 			int id = GetPlayerId(owner)
 
-			if Players.localPlayer == owner
+			if localPlayer == owner
 				ClearSelection()
 				SelectUnit(Game.captains[id], true)
 				PanCameraToTimed(GetUnitX(Game.captains[id]), GetUnitY(Game.captains[id]), 0.)

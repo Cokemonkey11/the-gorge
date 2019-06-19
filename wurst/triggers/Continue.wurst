@@ -1,5 +1,4 @@
 package Continue
-	import Players
 	import TerrainData
 
 	constant RECT_SIZE = 250.
@@ -12,9 +11,9 @@ package Continue
 		unit fU = GetFilterUnit()
 		player owner = GetOwningPlayer(fU)
 
-		if owner == Players.players[0]
+		if owner == players[0]
 			IssuePointOrder(fU, "attack", TerrainData.EASTX, 0.)
-		else if owner == Players.players[1]
+		else if owner == players[1]
 			IssuePointOrder(fU, "attack", TerrainData.WESTX, 0.)
 
 		return false

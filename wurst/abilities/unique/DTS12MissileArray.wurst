@@ -11,7 +11,6 @@ package DTS12MissileArray
 	//		Maximum Velocity: 1200
 	//		Acceleration:     100
 
-	import Players
 	import RegisterEvents
 	import DamageEvent
 	import Ships
@@ -100,7 +99,7 @@ package DTS12MissileArray
 					hit = false
 					while FirstOfGroup(grp) != null
 						first = FirstOfGroup(grp)
-						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
+						if IsUnitEnemy(first, players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
 							hit = true
 							DamageEvent.setNextDamageFromCode()
 							Ships.ships[temp.ownerID].damageTarget(first, DAMAGE)
@@ -139,7 +138,7 @@ package DTS12MissileArray
 					hit = false
 					while FirstOfGroup(grp) != null
 						first = FirstOfGroup(grp)
-						if IsUnitEnemy(first, Players.players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
+						if IsUnitEnemy(first, players[temp.ownerID]) and UnitAlive(first) and IsUnitType(first, UNIT_TYPE_STRUCTURE)== false and not hit
 							hit = true
 							DamageEvent.setNextDamageFromCode()
 							Ships.ships[temp.ownerID].damageTarget(first, DAMAGE)

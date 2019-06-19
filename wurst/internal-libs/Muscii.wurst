@@ -1,6 +1,5 @@
 package Muscii
 	import HashMap
-	import Players
 	import Sounds
 
 	var wants_mask = [
@@ -28,7 +27,7 @@ package Muscii
 			Sounds.play(
 				this.path,
 				this.pitch,
-				Players.localPlayer.wantsMusic() ? this.volume : 0
+				localPlayer.wantsMusic() ? this.volume : 0
 			)
 
 

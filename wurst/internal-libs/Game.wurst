@@ -1,5 +1,7 @@
 package Game
+	import Ai
 	import Assets
+	import ClosureTimers
 	import Ships
 	import MyBoard
 	import RegisterEvents
@@ -262,28 +264,28 @@ package Game
 
 		static function defeatTeam(int team)
 			if team == 0
-				RemovePlayer(Players.players[1], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[7], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[8], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[9], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[10], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[11], PLAYER_GAME_RESULT_VICTORY)
-				RemovePlayer(Players.players[0], PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Players.players[2], PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Players.players[3], PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Players.players[4], PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Players.players[5], PLAYER_GAME_RESULT_DEFEAT)
-				RemovePlayer(Players.players[6], PLAYER_GAME_RESULT_DEFEAT)
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[2])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[3])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[4])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[5])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[6])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[7])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[8])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[9])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[10])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[11])
+				RemovePlayer(players[1], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[7], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[8], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[9], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[10], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[11], PLAYER_GAME_RESULT_VICTORY)
+				RemovePlayer(players[0], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[2], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[3], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[4], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[5], PLAYER_GAME_RESULT_DEFEAT)
+				RemovePlayer(players[6], PLAYER_GAME_RESULT_DEFEAT)
+				Sounds.playForPlayer(DEF_SOUND, 1., players[2])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[3])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[4])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[5])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[6])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[7])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[8])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[9])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[10])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[11])
 			else
 				RemovePlayer(Player(1), PLAYER_GAME_RESULT_DEFEAT)
 				RemovePlayer(Player(7), PLAYER_GAME_RESULT_DEFEAT)
@@ -297,21 +299,16 @@ package Game
 				RemovePlayer(Player(4), PLAYER_GAME_RESULT_VICTORY)
 				RemovePlayer(Player(5), PLAYER_GAME_RESULT_VICTORY)
 				RemovePlayer(Player(6), PLAYER_GAME_RESULT_VICTORY)
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[2])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[3])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[4])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[5])
-				Sounds.playForPlayer(WIN_SOUND, 1., Players.players[6])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[7])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[8])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[9])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[10])
-				Sounds.playForPlayer(DEF_SOUND, 1., Players.players[11])
-
-
-
-		static function defeatAfter()
-			EndGame(true)
+				Sounds.playForPlayer(WIN_SOUND, 1., players[2])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[3])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[4])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[5])
+				Sounds.playForPlayer(WIN_SOUND, 1., players[6])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[7])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[8])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[9])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[10])
+				Sounds.playForPlayer(DEF_SOUND, 1., players[11])
 
 
 		static function pauseUnits()
@@ -328,21 +325,23 @@ package Game
 		static function defeatC()
 			unit tU = GetTriggerUnit()
 			if tU == westKeep[0]
-				DisplayTextToPlayer(Players.localPlayer, 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(localPlayer, 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
-				defeatTeam(0)
 				Muscii.interrupt()
-				TimerStart(CreateTimer(), 30., false, function defeatAfter)
+				doAfter(30.) ->
+					defeatTeam(0)
+					EndGame(true)
 			else if tU == eastKeep[0]
-				DisplayTextToPlayer(Players.localPlayer, 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
+				DisplayTextToPlayer(localPlayer, 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
 				ended = true
 				fadeOut(FADEOUT_DURATION)
 				Muscii.interrupt()
-				defeatTeam(1)
-				TimerStart(CreateTimer(), 30., false, function defeatAfter)
+				doAfter(30.) ->
+					defeatTeam(1)
+					EndGame(true)
 
 
 
@@ -360,12 +359,12 @@ package Game
 
 
 		static function after()
-			int id = GetPlayerId(Players.localPlayer)
+			int id = GetPlayerId(localPlayer)
 			DestroyTimer(GetExpiredTimer())
 			Sounds.play(START_SOUND, .75, 127)
 			fadeIn(1.)
 			PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
-			if Players.localPlayer == GetOwningPlayer(Ships.ships[id])
+			if localPlayer == GetOwningPlayer(Ships.ships[id])
 				ClearSelection()
 				SelectUnit(Ships.ships[id], true)
 
@@ -390,14 +389,13 @@ package Game
 
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
-		Players.localPlayer   = GetLocalPlayer()
 		Players.playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
 		Game.initializeQuests()
 
 		// Set starting gold and initialize player array.
 		while index <= 11
-			Players.players[index] = Player(index)
-			SetPlayerState(Players.players[index], PLAYER_STATE_RESOURCE_GOLD, Game.START_GOLD)
+			players[index] = Player(index)
+			SetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD, Game.START_GOLD)
 
 			index++
 
@@ -405,24 +403,27 @@ package Game
 		// Create starting ships for players.
 		index = 2
 		while index <= 11
-			if GetPlayerSlotState(Players.players[index]) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Players.players[index]) == MAP_CONTROL_USER
+			if GetPlayerSlotState(players[index]) == PLAYER_SLOT_STATE_PLAYING
 				Players.playerCount++
 				Players.playing[index]  = true
 				Game.shipClass[index]   = ID_HELICOPTER
-				Game.captains[index]    = CreateUnit(Players.players[index], ID_CAPTAIN, GetStartLocationX(index), GetStartLocationY(index), 270.)
+				Game.captains[index]    = CreateUnit(players[index], ID_CAPTAIN, GetStartLocationX(index), GetStartLocationY(index), 270.)
 				Players.tradeExp[index] = 0
 				Game.kills[index]       = 0
 				Game.deaths[index]      = 0
 				Game.assists[index]     = 0
 				Game.farm[index]        = 0
-				Game.names[index]       = GetPlayerName(Players.players[index])
+				Game.names[index]       = GetPlayerName(players[index])
 
 				if index < 7
-					Ships.ships[index] = CreateUnit(Players.players[index], ID_HELICOPTER, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(players[index], ID_HELICOPTER, TerrainData.WESTX + Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.westCount++
 				else
-					Ships.ships[index] = CreateUnit(Players.players[index], ID_HELICOPTER, TerrainData.EASTX - Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
+					Ships.ships[index] = CreateUnit(players[index], ID_HELICOPTER, TerrainData.EASTX - Game.SHIP_OFFSET + Game.LATER_OFFSET*Cos(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), Game.LATER_OFFSET*Sin(2.*bj_PI*(I2R(index)-1.5)/10. - bj_PI/2.), 270.)
 					Game.eastCount++
+
+				if not GetPlayerController(players[index]) == MAP_CONTROL_USER
+					players[index].intoAi()
 
 			else
 				Players.playing[index] = false
@@ -436,28 +437,28 @@ package Game
 			SinglePlayer.enable()
 
 		// Make alliance units give bounty.
-		SetPlayerState(Players.players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
-		SetPlayerState(Players.players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
+		SetPlayerState(players[0], PLAYER_STATE_GIVES_BOUNTY, 1)
+		SetPlayerState(players[1], PLAYER_STATE_GIVES_BOUNTY, 1)
 
 		// Create keeps.
-		Game.westKeep[0] = CreateUnit(Players.players[0], ID_KEEP_P1, TerrainData.WESTX, 0, 270)
-		Game.eastKeep[0] = CreateUnit(Players.players[1], ID_KEEP_P1, TerrainData.EASTX, 0, 270)
+		Game.westKeep[0] = CreateUnit(players[0], ID_KEEP_P1, TerrainData.WESTX, 0, 270)
+		Game.eastKeep[0] = CreateUnit(players[1], ID_KEEP_P1, TerrainData.EASTX, 0, 270)
 		SetUnitInvulnerable(Game.westKeep[0], true)
 		SetUnitInvulnerable(Game.eastKeep[0], true)
-		Game.westKeep[1] = CreateUnit(Players.players[0], ID_KEEP_P2, TerrainData.WESTX, 0., 270.)
-		Game.eastKeep[1] = CreateUnit(Players.players[1], ID_KEEP_P2, TerrainData.EASTX, 0., 270.)
+		Game.westKeep[1] = CreateUnit(players[0], ID_KEEP_P2, TerrainData.WESTX, 0., 270.)
+		Game.eastKeep[1] = CreateUnit(players[1], ID_KEEP_P2, TerrainData.EASTX, 0., 270.)
 
 		// Create shields.
 		index = 0
 		while index < Game.SHIELD_COUNT
-			CreateUnit(Players.players[0], Game.SHIELD_ID, TerrainData.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
+			CreateUnit(players[0], Game.SHIELD_ID, TerrainData.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
 
 			index++
 
 
 		index = 0
 		while index < Game.SHIELD_COUNT
-			CreateUnit(Players.players[1], Game.SHIELD_ID, TerrainData.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
+			CreateUnit(players[1], Game.SHIELD_ID, TerrainData.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
 
 			index++
 
@@ -466,22 +467,22 @@ package Game
 		SetTimeOfDayScale(0.)
 
 		// Create Repair Ports.
-		Game.westRepair = CreateUnit(Players.players[0], Game.REPAIR_ID, TerrainData.WESTX, 1024., 270.)
-		Game.eastRepair = CreateUnit(Players.players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
+		Game.westRepair = CreateUnit(players[0], Game.REPAIR_ID, TerrainData.WESTX, 1024., 270.)
+		Game.eastRepair = CreateUnit(players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
 
 		// Create Hangars.
-		Game.westHangar = CreateUnit(Players.players[0], ID_HANGAR, TerrainData.WESTX-768., 0., 270.)
-		Game.eastHangar = CreateUnit(Players.players[1], ID_HANGAR, TerrainData.EASTX+768., 0., 270.)
+		Game.westHangar = CreateUnit(players[0], ID_HANGAR, TerrainData.WESTX-768., 0., 270.)
+		Game.eastHangar = CreateUnit(players[1], ID_HANGAR, TerrainData.EASTX+768., 0., 270.)
 
 		// Create Utility Ports.
-		Game.westUtility[0] = CreateUnit(Players.players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[1] = CreateUnit(Players.players[0], ID_PORT_P2, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[2] = CreateUnit(Players.players[0], ID_PORT_P3, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.westUtility[3] = CreateUnit(Players.players[0], ID_PORT_P4, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[0] = CreateUnit(Players.players[1], ID_PORT_P1, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[1] = CreateUnit(Players.players[1], ID_PORT_P2, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[2] = CreateUnit(Players.players[1], ID_PORT_P3, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
-		Game.eastUtility[3] = CreateUnit(Players.players[1], ID_PORT_P4, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[0] = CreateUnit(players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[1] = CreateUnit(players[0], ID_PORT_P2, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[2] = CreateUnit(players[0], ID_PORT_P3, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.westUtility[3] = CreateUnit(players[0], ID_PORT_P4, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[0] = CreateUnit(players[1], ID_PORT_P1, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[1] = CreateUnit(players[1], ID_PORT_P2, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[2] = CreateUnit(players[1], ID_PORT_P3, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
+		Game.eastUtility[3] = CreateUnit(players[1], ID_PORT_P4, TerrainData.EASTX, TerrainData.UTILITY_Y, 270.)
 
 		// Create Stone Spider (Trade Related).
 		let s = CreateUnit(Players.playerPassive, Game.STONE_SPIDER_ID, TerrainData.STONE_SPIDER_X, TerrainData.STONE_SPIDER_Y, Game.STONE_SPIDER_FACING)
@@ -496,7 +497,7 @@ package Game
 
 		// Initial blackness.
 		Game.fadeOut(0.)
-		DisplayTimedTextToPlayer(Players.localPlayer, 0., 0., 10., Game.WELCOME_MESSAGE)
+		DisplayTimedTextToPlayer(localPlayer, 0., 0., 10., Game.WELCOME_MESSAGE)
 
 		Sounds.preload(Game.WIN_SOUND)
 		Sounds.preload(Game.DEF_SOUND)

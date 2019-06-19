@@ -3,8 +3,8 @@ import sys
 import textwrap
 
 
-MAP_NAME           = "The Gorge"
-AUTHOR             = "Cokemonkey11"
+MAP_NAME = "The Gorge"
+AUTHOR   = "Cokemonkey11"
 
 
 INTRODUCTION = (
@@ -59,6 +59,15 @@ ABILITIES = (
 REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
+    (
+        "0.12.3",
+        "19 Jun 2019",
+        (
+            "regression: scoreboard fixed, when more than 5 players present.",
+            "fixed a minor desync at end-of-game.",
+            "very minor code tidying.",
+        )
+    ),
     (
         "0.12.2",
         "18 Jun 2019",

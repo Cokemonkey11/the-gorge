@@ -8,7 +8,7 @@ package TradingExperience
 		int id
 		if GetSpellAbilityId() == SHOW_ID
 			id = GetPlayerId(GetOwningPlayer(GetTriggerUnit()))
-			DisplayTextToPlayer(Players.players[id], 0., 0., "You have |cffffcc00"+I2S(Players.tradeExp[id])+"|r Trading Experience.")
+			DisplayTextToPlayer(players[id], 0., 0., "You have |cffffcc00" + I2S(Players.tradeExp[id]) + "|r Trading Experience.")
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)

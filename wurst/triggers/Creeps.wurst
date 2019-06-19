@@ -1,7 +1,6 @@
 package Creeps
 	import ClosureTimers
 	import Game
-	import Players
 	import TerrainData
 	import EnchantingStone
 	import UnitsApi
@@ -13,14 +12,14 @@ package Creeps
 	constant  WYRM_PERIOD = 30. * 3.
 
 	function spawnUpper(int faction, int cls, real x, real face, real order_delay) returns unit
-		let u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		let u = CreateUnit(players[faction], cls, x, 0., face)
 		doAfter(order_delay) ->
 			u.issuePointOrder("attack", TerrainData.POS_STONE1)
 		return u
 
 
 	function spawnLower(int faction, int cls, real x, real face, real order_delay) returns unit
-		let u = CreateUnit(Players.players[faction], cls, x, 0., face)
+		let u = CreateUnit(players[faction], cls, x, 0., face)
 		doAfter(order_delay) ->
 			u.issuePointOrder("attack", TerrainData.POS_STONE2)
 		return u
@@ -70,11 +69,11 @@ package Creeps
 	function wyrm()
 		doAfter(2.) ->
 			if not Game.ended
-				if EnchantingStone.ownerNorth == Players.players[0]
+				if EnchantingStone.ownerNorth == players[0]
 					spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
 						..setVertexColor(155, 155, 255, 225)
 					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
-				else if EnchantingStone.ownerNorth == Players.players[1]
+				else if EnchantingStone.ownerNorth == players[1]
 					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
 					spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
 						..setVertexColor(155, 155, 255, 225)
@@ -83,11 +82,11 @@ package Creeps
 					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
 
 
-				if EnchantingStone.ownerSouth == Players.players[0]
+				if EnchantingStone.ownerSouth == players[0]
 					spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
 						..setVertexColor(155, 155, 255, 225)
 					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
-				else if EnchantingStone.ownerSouth == Players.players[1]
+				else if EnchantingStone.ownerSouth == players[1]
 					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
 					spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
 						..setVertexColor(155, 155, 255, 225)

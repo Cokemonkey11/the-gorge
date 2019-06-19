@@ -8,7 +8,6 @@ package Crewmembers
 	import SimError
 	import RegisterEvents
 	import TerrainData
-	import Players
 
 	native UnitAlive(unit u) returns bool
 
@@ -99,12 +98,12 @@ package Crewmembers
 			if fromDummy.hasInt(u.getHandleId())
 				temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
 				val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
-				SetPlayerState(Players.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Players.players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD)+val)
-				DisplayTextToPlayer(Players.players[temp.ownerID], 0., 0., "You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00"+I2S(val)+"|r gold.")
+				SetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD) + val)
+				DisplayTextToPlayer(players[temp.ownerID], 0., 0., "You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00" + I2S(val) + "|r gold.")
 				index = getMemberIndex(temp.ownerID, temp)
 				if index!= -1
 					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
-					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] - 1
+					slotIndices[temp.ownerID]--
 					if slotIndices[temp.ownerID] != -1
 						updatePosition(inventories[temp.ownerID].slots[index], index)
 

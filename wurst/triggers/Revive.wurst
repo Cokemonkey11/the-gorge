@@ -60,7 +60,7 @@ package Revive
 					fx.destr()
 
 				AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin").destr()
-				if Players.localPlayer == Players.players[tempDat.ownerID]
+				if localPlayer == players[tempDat.ownerID]
 					PanCameraToTimed(tempDat.teamPos.x, tempDat.teamPos.y, 0.)
 					ClearSelection()
 					SelectUnit(Ships.ships[tempDat.ownerID], true)
@@ -121,10 +121,10 @@ package Revive
 
 				if killerId == tempDat.ownerID
 					// Player suicide occurred.
-					if Players.localPlayer == Players.players[killerId]
+					if localPlayer == players[killerId]
 						// Message for suicide player.
 						DisplayTimedTextToPlayer(
-							Players.localPlayer,
+							localPlayer,
 							0.,
 							0.,
 							10.,
@@ -134,7 +134,7 @@ package Revive
 					else
 						// Message for other players.
 						DisplayTimedTextToPlayer(
-							Players.localPlayer,
+							localPlayer,
 							0.,
 							0.,
 							10.,
@@ -151,7 +151,7 @@ package Revive
 
 					// Message for killed player.
 					DisplayTimedTextToPlayer(
-						Players.players[tempDat.ownerID],
+						players[tempDat.ownerID],
 						0.,
 						0.,
 						10.,
@@ -165,7 +165,7 @@ package Revive
 
 					// Message for killing player.
 					DisplayTimedTextToPlayer(
-						Players.players[killerId],
+						players[killerId],
 						0.,
 						0.,
 						10.,
@@ -178,12 +178,12 @@ package Revive
 					)
 
 					if not (
-						Players.localPlayer == Players.players[tempDat.ownerID] or
-						Players.localPlayer == Players.players[killerId
+						localPlayer == players[tempDat.ownerID] or
+						localPlayer == players[killerId
 					])
 						// Message for other players.
 						DisplayTimedTextToPlayer(
-							Players.localPlayer,
+							localPlayer,
 							0.,
 							0.,
 							10.,
@@ -203,7 +203,7 @@ package Revive
 
 				// Message for killed player.
 				DisplayTimedTextToPlayer(
-					Players.players[tempDat.ownerID],
+					players[tempDat.ownerID],
 					0.,
 					0.,
 					10.,
@@ -217,7 +217,7 @@ package Revive
 
 				// Message for killing player.
 				DisplayTimedTextToPlayer(
-					Players.players[killerId],
+					players[killerId],
 					0.,
 					0.,
 					10.,
@@ -228,12 +228,12 @@ package Revive
 				)
 
 				if not (
-					Players.localPlayer == Players.players[tempDat.ownerID] or
-					Players.localPlayer == Players.players[killerId]
+					localPlayer == players[tempDat.ownerID] or
+					localPlayer == players[killerId]
 				)
 					// Message for other players.
 					DisplayTimedTextToPlayer(
-						Players.localPlayer,
+						localPlayer,
 						0.,
 						0.,
 						10.,
@@ -245,10 +245,10 @@ package Revive
 							"|r.  How did this happen?"
 					)
 			else
-				if Players.localPlayer == Players.players[tempDat.ownerID]
+				if localPlayer == players[tempDat.ownerID]
 					// Message for killed player.
 					DisplayTimedTextToPlayer(
-						Players.localPlayer,
+						localPlayer,
 						0.,
 						0.,
 						10.,
@@ -260,7 +260,7 @@ package Revive
 				else
 					// Message for other players.
 					DisplayTimedTextToPlayer(
-						Players.localPlayer,
+						localPlayer,
 						0.,
 						0.,
 						10.,

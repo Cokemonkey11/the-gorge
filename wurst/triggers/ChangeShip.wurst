@@ -1,7 +1,6 @@
 package ChangeShip
 	import Ships
 	import Game
-	import Players
 	import Equipment
 	import SimError
 	import RegisterEvents
@@ -43,7 +42,7 @@ package ChangeShip
 						Ships.ships[id] = sU
 						Equipment.playerAddItemsFromIdConditional(id, tempIds[0], tempIds[1], tempIds[2], tempIds[3], tempIds[4], tempIds[5])
 						Equipment.resetUnitDamageReduction(Ships.ships[id])
-						if Players.localPlayer == buyer
+						if localPlayer == buyer
 							SelectUnit(Ships.ships[id], true)
 							SelectUnit(selU, false)
 
