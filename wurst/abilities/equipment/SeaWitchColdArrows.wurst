@@ -1,10 +1,16 @@
 package SeaWitchColdArrows
 	import DamageEvent
 	import Game
+	import Players
 
 	constant SEAWITCH_ID = 'o005'
 	constant SLOW_ID     = 'A009'
-	unit dummy
+	let dummy = createUnit(
+		Players.playerHostile,
+		Game.DUMMY_ID,
+		vec2(0., 0.),
+		angle(0.)
+	)..addAbility('Aloc')
 
 	function h() returns bool
 		unit tU = DamageEvent.getTarget()
@@ -20,5 +26,3 @@ package SeaWitchColdArrows
 	init
 		DamageEvent.addListener() () ->
 			h()
-		dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Game.DUMMY_ID, 0., 0., 0.)
-		UnitAddAbility(dummy, 'Aloc')

@@ -62,6 +62,8 @@ class HealthregenBonuses extends AbilityDefinitionRegenLife
     construct(int id, int hpps_bonus)
         super(id)
         setHitPointsRegeneratedPerSecond(1, hpps_bonus)
+        setArtTarget("")
+        setArtCaster("")
 
 @compiletime function initItemHealthregenAbilities()
     new HealthregenBonuses(ID_HEALTH_REGEN_BONUS_1, HEALTH_REGEN_BONUS_1)
@@ -76,6 +78,7 @@ class AbilHeroGlow extends AbilityDefinitionNeutralRegenhealthonly
         setAmountofHitPointsRegenerated(1, 0)
         setArtTarget("GeneralHeroGlow.mdx")
         setTargetAttachmentPoint("origin")
+        setTargetsAllowed(1, "self")
         setName("heroglow")
 
 @compiletime function initHeroGlow()

@@ -60,6 +60,14 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.12.4",
+        "22 Jun 2019",
+        (
+            "minor improvements related to the use of DamageEvent (wurst)",
+            "fixed a minor cosmetic bug that made creeps appear to be healing",
+        )
+    ),
+    (
         "0.12.3",
         "19 Jun 2019",
         (

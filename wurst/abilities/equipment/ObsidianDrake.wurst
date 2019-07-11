@@ -9,11 +9,11 @@ package ObsidianDrake
 	constant BONUS_DAMAGE = HEALTH_PROC - STD_DAMAGE
 
 	function h()
-		unit tU = DamageEvent.getTarget()
-		unit dS = DamageEvent.getSource()
+		let tU = DamageEvent.getTarget()
+		let dS = DamageEvent.getSource()
+
 		if DamageEvent.getType() == SPELL and dS.getTypeId() == DRAKE_ID and tU.getLife() <= HEALTH_PROC
-			DamageEvent.setNextDamageFromCode()
-			dS.damageTarget(tU, BONUS_DAMAGE)
+			DamageEvent.addAmount(BONUS_DAMAGE)
 
 
 	init

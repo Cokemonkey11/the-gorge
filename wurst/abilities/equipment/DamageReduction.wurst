@@ -2,18 +2,16 @@ package DamageReduction
 	import DamageEvent
 	import Equipment
 
-	function h() returns bool
-		real d = DamageEvent.getAmount()
-		unit tU = DamageEvent.getTarget()
+	function h()
+		var d = DamageEvent.getAmount()
+		let tU = DamageEvent.getTarget()
 
+		// Don't apply this affect to CODE damage, which we use for all
+		// triggered spells.  Damage reduction only applies to phoenix fire and
+		// basic atacks.
 		if DamageEvent.getType() != CODE and Equipment.reduction.has(tU)
-			if d < 0.
-				d = d*-1.
-
-			d = d*I2R(Equipment.reduction.get(tU))/100.
-			SetWidgetLife(tU, GetWidgetLife(tU) + d)
-
-		return false
+			d *= ((100 - Equipment.reduction.get(tU)) / 100.)
+			DamageEvent.setAmount(d)
 
 	init
 		DamageEvent.addListener() () ->

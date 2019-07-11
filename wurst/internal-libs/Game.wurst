@@ -389,7 +389,6 @@ package Game
 
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
-		Players.playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
 		Game.initializeQuests()
 
 		// Set starting gold and initialize player array.

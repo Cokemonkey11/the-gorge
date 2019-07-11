@@ -51,6 +51,11 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.12.4[/color] [color=#999999]22 Jun 2019[/color]:
+[list][*] minor improvements related to the use of DamageEvent (wurst)
+[*] fixed a minor cosmetic bug that made creeps appear to be healing
+[/list]
+
 [color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
 [list][*] regression: scoreboard fixed, when more than 5 players present.
 [*] fixed a minor desync at end-of-game.
@@ -83,11 +88,11 @@ All iterations of this map are maintained in a public git repository at
 [*] Minor tooltip fixes.
 [/list]
 
-[color=#ffcc00]0.11.2[/color] [color=#999999]7 Apr 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.11.2[/color] [color=#999999]7 Apr 2019[/color]:
 [list][*] Fixed a desync when a player uses the -music command.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.11.1[/color] [color=#999999]7 Apr 2019[/color]:
+[color=#ffcc00]0.11.1[/color] [color=#999999]7 Apr 2019[/color]:
 [list][*] Fixed a major bug where players get gold if they destroy themselves.
 [*] Music can now be disabled with the `-music` command.
 [*] Fixed a minor bug that allowed players to select other pages of keep and utility port.

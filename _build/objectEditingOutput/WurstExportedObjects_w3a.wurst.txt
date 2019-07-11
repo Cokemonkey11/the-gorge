@@ -697,24 +697,32 @@ import ObjEditingNatives
 	let def = createObjectDefinition("w3a", 'A00E', 'Arel')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataInt("Ihpr", 1, 1, 8)
+	..setLvlDataString("atat", 0, 0, "")
+	..setLvlDataString("acat", 0, 0, "")
 
 
 @compiletime function create_w3a_A!03()
 	let def = createObjectDefinition("w3a", 'A!03', 'Arel')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataInt("Ihpr", 1, 1, 12)
+	..setLvlDataString("atat", 0, 0, "")
+	..setLvlDataString("acat", 0, 0, "")
 
 
 @compiletime function create_w3a_A!04()
 	let def = createObjectDefinition("w3a", 'A!04', 'Arel')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataInt("Ihpr", 1, 1, 16)
+	..setLvlDataString("atat", 0, 0, "")
+	..setLvlDataString("acat", 0, 0, "")
 
 
 @compiletime function create_w3a_A!05()
 	let def = createObjectDefinition("w3a", 'A!05', 'Arel')
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataInt("Ihpr", 1, 1, 20)
+	..setLvlDataString("atat", 0, 0, "")
+	..setLvlDataString("acat", 0, 0, "")
 
 
 @compiletime function create_w3a_Af00()
@@ -724,6 +732,7 @@ import ObjEditingNatives
 	..setLvlDataUnreal("Oar1", 1, 1, 0.0)
 	..setLvlDataString("atat", 0, 0, "GeneralHeroGlow.mdx")
 	..setLvlDataString("ata0", 0, 0, "origin")
+	..setLvlDataString("atar", 1, 0, "self")
 	..setLvlDataString("anam", 0, 0, "heroglow")
 
 

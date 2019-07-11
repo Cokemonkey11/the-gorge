@@ -3,19 +3,15 @@ package Damage
 	import Game
 	import DamageEvent
 
-	function h() returns bool
-		int id
-		unit targ = DamageEvent.getTarget()
-		unit src
-		int sID
+	function h()
+		let targ = DamageEvent.getTarget()
+
 		if Ships.isPlayerShip(targ)
-			id = GetPlayerId(GetOwningPlayer(targ))
-			src = DamageEvent.getSource()
-			sID = GetPlayerId(GetOwningPlayer(src))
+			let id = GetPlayerId(GetOwningPlayer(targ))
+			let src = DamageEvent.getSource()
+			let sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 and sID < 12 and id > 1 and id < 12
 				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
-
-		return false
 
 	init
 		DamageEvent.addListener() () ->

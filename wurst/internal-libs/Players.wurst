@@ -2,7 +2,8 @@ package Players
     public class Players
         static bool   array playing
         static int    array tradeExp
-        static player       playerPassive
+        static player       playerPassive = Player(PLAYER_NEUTRAL_PASSIVE)
+        static player       playerHostile = Player(PLAYER_NEUTRAL_AGGRESSIVE)
         static int          playerCount = 0
 
         static function isWest(int id) returns bool

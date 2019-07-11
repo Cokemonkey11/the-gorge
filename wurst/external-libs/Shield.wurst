@@ -54,27 +54,32 @@ package Shield
 		static function handler()
 			Shield tempDat
 			Shield destroyingDat
-			unit tU = DamageEvent.getTarget()
+			let tU = DamageEvent.getTarget()
 			real damageLeft = DamageEvent.getAmount()
 			bool noShieldsLeft = false
+
 			if DamageEvent.getType() != SPELL and UnitAlive(tU) and tab.hasInt(tU.getHandleId())
 				tempDat = Shield.tab.loadInt(tU.getHandleId()) castTo Shield
-				//we need to loop until either all the damage is mitigated
-				//or there's no shield left on this unit.
+
+				// Loop until either all the damage is mitigated, or there's no
+				// shield left on this unit.
 				while damageLeft > 0. and not noShieldsLeft
 					if tempDat.shieldLeft > damageLeft
 						if tempDat.finiteShield
-							tempDat.shieldLeft = tempDat.shieldLeft-damageLeft
+							tempDat.shieldLeft -= damageLeft
 
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) + damageLeft)
+						DamageEvent.subAmount(damageLeft)
+
 						damageLeft = 0.
 					else
-						damageLeft= damageLeft-tempDat.shieldLeft
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) + tempDat.shieldLeft)
+						damageLeft -= tempDat.shieldLeft
+
+						DamageEvent.subAmount(tempDat.shieldLeft)
+
 						tempDat.shieldLeft = 0.
 						if tempDat.falseHP > damageLeft
 							tempDat.falseHP -= damageLeft
-							damageLeft= 0.
+							damageLeft = 0.
 						else
 							damageLeft -= tempDat.falseHP
 							tempDat.falseHP = 0.
