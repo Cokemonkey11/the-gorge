@@ -1,0 +1,60 @@
+package BlackWalkable
+
+import ClosureForGroups
+import ClosureTimers
+import Execute
+import MapBounds
+import TerrainUtils
+
+interface TileClosure
+    function do(tile t)
+
+/**
+    Takes ownership of the closure, destroying it when finished.
+*/
+function forAllTiles(TileClosure t)
+    var x = boundMin.x
+    while x <= boundMax.x
+        execute() () ->
+            var y = boundMin.y
+            while y <= boundMax.y
+                y += 128.
+                t.do(tile(x, y))
+        x += 128.
+
+function tile.setWalkable()
+    this.setPathing(PATHING_TYPE_WALKABILITY, true)
+
+/**
+    A 64x64 area consisting of 4 32x32s, each represented by a vec2.
+*/
+tuple sixty4By64(vec2 tl, vec2 tr, vec2 bl, vec2 br)
+
+function destructable.as64by64() returns sixty4By64
+    return sixty4By64(
+        this.getPos() + vec2(-16., -16.),
+        this.getPos() + vec2(-16.,  16.),
+        this.getPos() + vec2( 16., -16.),
+        this.getPos() + vec2( 16.,  16.)
+    )
+
+function sixty4By64.setUnwalkable()
+    this.tl.setTerrainPathable(PATHING_TYPE_WALKABILITY, false)
+    this.tr.setTerrainPathable(PATHING_TYPE_WALKABILITY, false)
+    this.bl.setTerrainPathable(PATHING_TYPE_WALKABILITY, false)
+    this.br.setTerrainPathable(PATHING_TYPE_WALKABILITY, false)
+
+/**
+    Returns true if the tile.toVec2 can be walked on by ground units.
+*/
+function tile.isWalkable() returns bool
+    return this.toVec2().isTerrainPathable(PATHING_TYPE_WALKABILITY)
+
+init
+    doAfter(0.) ->
+        forAllTiles() t ->
+            if t.getType() == vec2(-241.5, 2052.0).getTerrainType()
+                t.setWalkable()
+        forDestructablesInRect(bj_mapInitialPlayableArea) (destructable d) ->
+            if d.getTypeId() == 'YTlb'
+                d.as64by64().setUnwalkable()

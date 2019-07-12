@@ -1,4 +1,4 @@
-scope GetSpiderVenom
+package GetSpiderVenom
 	import Equipment
 	import Game
 	import TerrainData
