@@ -1,8 +1,147 @@
 package Ai
 
+import ErrorHandling
+import LinkedList
+import LinkedListModule
 import Ships
+import TerrainData
 
 bool array ai_controlled
+
+constant UPDATE_PERIOD = 1.
+
+public enum Propensity
+    None
+    North
+    South
+
+public enum Status
+    None
+    OwnTower
+    Obelisk
+    EnemyTower
+    EnemyKeep
+
+function Status.toVec2(Propensity p, player alliance) returns vec2
+    switch alliance.getId()
+        case 0  // West team
+            switch p
+                case North
+                    switch this
+                        case OwnTower
+                            return TerrainData.POS_TOWER_WEST_NORTH
+                        case Obelisk
+                            return TerrainData.POS_STONE1
+                        case EnemyTower
+                            return TerrainData.POS_TOWER_EAST_NORTH
+                        case EnemyKeep
+                            return TerrainData.POS_KEEP_EAST
+                        default
+                            error("Tried to get the target for an improper status.")
+                case South
+                    switch this
+                        case OwnTower
+                            return TerrainData.POS_TOWER_WEST_SOUTH
+                        case Obelisk
+                            return TerrainData.POS_STONE2
+                        case EnemyTower
+                            return TerrainData.POS_TOWER_EAST_SOUTH
+                        case EnemyKeep
+                            return TerrainData.POS_KEEP_EAST
+                        default
+                            error("Tried to get the target for an improper status.")
+                default
+                    error("Tried to get the target without a propensity.")
+        case 1  // East team
+            switch p
+                case North
+                    switch this
+                        case OwnTower
+                            return TerrainData.POS_TOWER_EAST_NORTH
+                        case Obelisk
+                            return TerrainData.POS_STONE1
+                        case EnemyTower
+                            return TerrainData.POS_TOWER_WEST_NORTH
+                        case EnemyKeep
+                            return TerrainData.POS_KEEP_WEST
+                        default
+                            error("Tried to get the target for an improper status.")
+                case South
+                    switch this
+                        case OwnTower
+                            return TerrainData.POS_TOWER_EAST_SOUTH
+                        case Obelisk
+                            return TerrainData.POS_STONE2
+                        case EnemyTower
+                            return TerrainData.POS_TOWER_WEST_SOUTH
+                        case EnemyKeep
+                            return TerrainData.POS_KEEP_WEST
+                        default
+                            error("Tried to get the target for an improper status.")
+                default
+                    error("Tried to get the target without a propensity.")
+        default
+            error("Tried to get the target for a non-team player.")
+    return vec2(0., 0.)
+
+class CreepAi
+    use LinkedListModule
+
+    static timer t = CreateTimer()
+
+    unit u
+    Propensity p
+    LinkedList<Status> s
+
+    function tick()
+        let target = this.s.getFirst().toVec2(
+            this.p,
+            this.u.getOwner()
+        )
+        if this.u.getPos().distanceToSq(target) < 500. * 500. and this.s.size() > 1
+            print("dequeue")
+            this.s.dequeue()
+        else
+            this.u.issuePointOrder("attack", target)
+
+    static function periodic()
+        let iter = CreepAi.iterator()
+        while iter.hasNext()
+            let inst = iter.next()
+            if inst.u.isAlive()
+                inst.tick()
+            else
+                inst.remove()
+                destroy inst
+
+        iter.close()
+        if CreepAi.size == 0
+            CreepAi.t.pause()
+            print("pause")
+
+    construct(unit u, Propensity p)
+        this.u = u
+        this.p = p
+        this.s = new LinkedList<Status>()..add(
+            Status.OwnTower,
+            Status.Obelisk,
+            Status.EnemyTower,
+            Status.EnemyKeep
+        )
+
+        tick()
+
+        print(CreepAi.size)
+        if CreepAi.size == 1
+            print("+")
+            CreepAi.t.startPeriodic(UPDATE_PERIOD, function CreepAi.periodic)
+            print("-")
+
+    ondestroy
+        destroy s
+
+public function unit.intoCreepAi(Propensity p)
+    new CreepAi(this, p)
 
 function lockShip(unit u)
     u..setPos(u.getOwner().getStartLocation())

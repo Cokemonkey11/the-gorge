@@ -4,7 +4,7 @@ package ProbeContractAbility
 	import Ships
 	import Equipment
 	import Game
-	import Sounds
+	import SoundsLib
 
 	constant ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."
 	constant ALREADY_MESSAGE   = "You already have data on this rock formation."
@@ -30,7 +30,7 @@ package ProbeContractAbility
 			else
 				UnitAddItem(tU, CreateItem(Equipment.DATA_ID, GetUnitX(tU), GetUnitY(tU)))
 				DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
-				Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+				SoundsLib.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function effectC)

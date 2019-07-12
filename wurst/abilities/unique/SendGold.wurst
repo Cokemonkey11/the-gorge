@@ -1,0 +1,50 @@
+package SendGold
+
+import Abilities
+import AbilitiesApi
+import ClosureEvents
+import Players
+import Sounds
+import SoundsLib
+
+init
+    SetMapFlag(MAP_LOCK_RESOURCE_TRADING, true)
+
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
+        if GetSpellAbilityId() == ID_SEND_GOLD
+            let caster = GetTriggerUnit()
+            let target = GetSpellTargetUnit()
+            let owner = caster.getOwner()
+            let base_gold = min(owner.getGold(), 500).toReal()
+            let trade_experience = Players.tradeExp[owner.getId()]
+            let with_interest = base_gold * (100 + trade_experience).toReal() / 100.
+            owner.subGold(base_gold.toInt())
+            target.getOwner().addGold(with_interest.toInt())
+
+            let v = target.getPos3Real()
+            SoundsLib.play3D(Sounds.alchemistTransmuteDeath1, 1., v.x, v.y, v.z)
+
+            addEffect(Abilities.goldBottleMissile, caster.getPos()).destr()
+            addEffect(Abilities.goldBottleMissile, target.getPos()).destr()
+
+            createTTEx(
+                caster.getPos3with(100.),
+                vec2(0., .05),
+                "-" + base_gold.toInt().toString(),
+                11.,
+                2.,
+                colorA(255, 200, 0, 255),
+                owner
+            )
+
+            createTTEx(
+                target.getPos3with(100.),
+                vec2(0., .05),
+                "+" + with_interest.toInt().toString(),
+                11.,
+                2.,
+                colorA(255, 200, 0, 255),
+                target.getOwner()
+            )..setVisibility(
+                localPlayer == target.getOwner() or localPlayer == caster.getOwner()
+            )

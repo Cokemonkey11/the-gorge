@@ -10,6 +10,7 @@ package Game
 	import FloatText
 	import Players
 	import SinglePlayer
+	import SoundsLib
 	import UnitsApi
 
 	class AssistTimestamps
@@ -276,16 +277,16 @@ package Game
 				RemovePlayer(players[4], PLAYER_GAME_RESULT_DEFEAT)
 				RemovePlayer(players[5], PLAYER_GAME_RESULT_DEFEAT)
 				RemovePlayer(players[6], PLAYER_GAME_RESULT_DEFEAT)
-				Sounds.playForPlayer(DEF_SOUND, 1., players[2])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[3])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[4])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[5])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[6])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[7])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[8])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[9])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[10])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[11])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[2])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[3])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[4])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[5])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[6])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[7])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[8])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[9])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[10])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[11])
 			else
 				RemovePlayer(Player(1), PLAYER_GAME_RESULT_DEFEAT)
 				RemovePlayer(Player(7), PLAYER_GAME_RESULT_DEFEAT)
@@ -299,16 +300,16 @@ package Game
 				RemovePlayer(Player(4), PLAYER_GAME_RESULT_VICTORY)
 				RemovePlayer(Player(5), PLAYER_GAME_RESULT_VICTORY)
 				RemovePlayer(Player(6), PLAYER_GAME_RESULT_VICTORY)
-				Sounds.playForPlayer(WIN_SOUND, 1., players[2])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[3])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[4])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[5])
-				Sounds.playForPlayer(WIN_SOUND, 1., players[6])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[7])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[8])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[9])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[10])
-				Sounds.playForPlayer(DEF_SOUND, 1., players[11])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[2])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[3])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[4])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[5])
+				SoundsLib.playForPlayer(WIN_SOUND, 1., players[6])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[7])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[8])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[9])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[10])
+				SoundsLib.playForPlayer(DEF_SOUND, 1., players[11])
 
 
 		static function pauseUnits()
@@ -361,7 +362,7 @@ package Game
 		static function after()
 			int id = GetPlayerId(localPlayer)
 			DestroyTimer(GetExpiredTimer())
-			Sounds.play(START_SOUND, .75, 127)
+			SoundsLib.play(START_SOUND, .75, 127)
 			fadeIn(1.)
 			PanCameraToTimed(GetUnitX(Ships.ships[id]), GetUnitY(Ships.ships[id]), 0.)
 			if localPlayer == GetOwningPlayer(Ships.ships[id])
@@ -491,16 +492,16 @@ package Game
 		TimerStart(CreateTimer(), 1., true, function Game.second)
 
 		// Do starting sound stuff.
-		Sounds.preload(Game.START_SOUND)
+		SoundsLib.preload(Game.START_SOUND)
 		TimerStart(CreateTimer(), Game.START_TIME, false, function Game.after)
 
 		// Initial blackness.
 		Game.fadeOut(0.)
 		DisplayTimedTextToPlayer(localPlayer, 0., 0., 10., Game.WELCOME_MESSAGE)
 
-		Sounds.preload(Game.WIN_SOUND)
-		Sounds.preload(Game.DEF_SOUND)
-		Sounds.preload(Game.TRADE_SUCCESS_SOUND)
+		SoundsLib.preload(Game.WIN_SOUND)
+		SoundsLib.preload(Game.DEF_SOUND)
+		SoundsLib.preload(Game.TRADE_SUCCESS_SOUND)
 
 		// Colors.
 		Game.colors[0] = "|cffff0303"

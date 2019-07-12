@@ -64,8 +64,10 @@ CHANGELOG = (
         "NEXT",
         (
             "Reworked vision/pathing to behave more like classic Battleships.",
+            "Disable global trading and add a send-gold ability to trader.",
+            "[trading] fixed the broken spider venom job.",
         )
-    )
+    ),
     (
         "0.12.4",
         "22 Jun 2019",

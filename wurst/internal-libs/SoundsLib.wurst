@@ -1,10 +1,10 @@
-package Sounds
+package SoundsLib
 	import HashMap
 
 	class Slop
 		string snd
 
-	public class Sounds
+	public class SoundsLib
 		static Table preloadDB
 
 		private static function preloadAfter()
@@ -23,7 +23,7 @@ package Sounds
 			Slop s= new Slop
 			s.snd= str
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
-			TimerStart(time, .01, false, function Sounds.preloadAfter)
+			TimerStart(time, .01, false, function SoundsLib.preloadAfter)
 
 
 		static function play3D(string str, real pitch, real x, real y, real z)
@@ -55,4 +55,4 @@ package Sounds
 			KillSoundWhenDone(s)
 
 	init
-		Sounds.preloadDB = new Table
+		SoundsLib.preloadDB = new Table

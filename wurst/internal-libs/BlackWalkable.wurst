@@ -58,3 +58,7 @@ init
         forDestructablesInRect(bj_mapInitialPlayableArea) (destructable d) ->
             if d.getTypeId() == 'YTlb'
                 d.as64by64().setUnwalkable()
+        doAfter(0.1) ->
+            FogEnable(false)
+            doAfter(0.1) ->
+                FogEnable(true)

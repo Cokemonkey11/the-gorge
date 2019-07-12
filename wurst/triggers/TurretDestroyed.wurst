@@ -1,5 +1,5 @@
 package TurretDestroyed
-	import Sounds
+	import SoundsLib
 	import RegisterEvents
 
 	constant TURRET_ID = 'h005'
@@ -16,15 +16,15 @@ package TurretDestroyed
 			while index <= 11
 				if IsUnitAlly(tU, players[index])
 					DisplayTimedTextToPlayer(players[index], 0., 0., 10., WARNING_MESSAGE)
-					Sounds.playForPlayer(WARNING, 1., players[index])
+					SoundsLib.playForPlayer(WARNING, 1., players[index])
 				else
 					SetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[index], PLAYER_STATE_RESOURCE_GOLD)+GOLD_BONUS)
 					DisplayTimedTextToPlayer(players[index], 0., 0., 10., SUCCESS)
-					Sounds.playForPlayer(GOODJOB, 1., players[index])
+					SoundsLib.playForPlayer(GOODJOB, 1., players[index])
 
 				index++
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
-		Sounds.preload(GOODJOB)
-		Sounds.preload(WARNING)
+		SoundsLib.preload(GOODJOB)
+		SoundsLib.preload(WARNING)

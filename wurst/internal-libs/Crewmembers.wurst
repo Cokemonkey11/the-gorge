@@ -92,16 +92,13 @@ package Crewmembers
 
 
 		static function release(unit u)
-			CrewMember temp
-			int val
-			int index
 			if fromDummy.hasInt(u.getHandleId())
-				temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
-				val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
+				let temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
+				let val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
 				SetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD) + val)
-				DisplayTextToPlayer(players[temp.ownerID], 0., 0., "You pawned your |cffffcc00"+GetUnitName(u)+"|r for |cffffcc00" + I2S(val) + "|r gold.")
-				index = getMemberIndex(temp.ownerID, temp)
-				if index!= -1
+				DisplayTextToPlayer(players[temp.ownerID], 0., 0., "You pawned your |cffffcc00" + GetUnitName(u) + "|r for |cffffcc00" + I2S(val) + "|r gold.")
+				let index = getMemberIndex(temp.ownerID, temp)
+				if index != -1
 					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
 					slotIndices[temp.ownerID]--
 					if slotIndices[temp.ownerID] != -1

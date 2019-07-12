@@ -1,4 +1,5 @@
 package Creeps
+	import Ai
 	import ClosureTimers
 	import Game
 	import TerrainData
@@ -14,14 +15,14 @@ package Creeps
 	function spawnUpper(int faction, int cls, real x, real face, real order_delay) returns unit
 		let u = CreateUnit(players[faction], cls, x, 0., face)
 		doAfter(order_delay) ->
-			u.issuePointOrder("attack", TerrainData.POS_STONE1)
+			u.intoCreepAi(Propensity.North)
 		return u
 
 
 	function spawnLower(int faction, int cls, real x, real face, real order_delay) returns unit
 		let u = CreateUnit(players[faction], cls, x, 0., face)
 		doAfter(order_delay) ->
-			u.issuePointOrder("attack", TerrainData.POS_STONE2)
+			u.intoCreepAi(Propensity.South)
 		return u
 
 

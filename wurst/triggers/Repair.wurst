@@ -21,11 +21,12 @@ package Repair
 			u.addEffect(Objects.impaleTargetDust, "origin").destr()
 			createTTEx(
 				u.getPos3with(100.),
-				vec2(0., .1),
+				vec2(0., .05),
 				"+" + (delHp / ANIMATION_PERIOD).toInt().toString(),
 				11.,
 				1.,
-				colorA(155, 255, 155, 255), u.getOwner()
+				colorA(155, 255, 155, 255),
+				u.getOwner()
 			)
 
 		u.addHP(delHp)

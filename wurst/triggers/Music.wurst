@@ -1,6 +1,6 @@
 package Music
 	import Muscii
-	import Sounds
+	import SoundsLib
 
 	// Back Against the Wall by Cage the Elephant
 	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
@@ -459,17 +459,17 @@ package Music
 		//		end song3
 
 
-		Sounds.preload(HAT_PATH)
-		Sounds.preload(SNR_PATH)
-		Sounds.preload(BAS_PATH)
-		Sounds.preload(RID_PATH)
-		Sounds.preload(FLM_PATH)
-		Sounds.preload(RIM_PATH)
-		Sounds.preload(CRS_PATH)
-		Sounds.preload(HATOPEN_PATH)
-		Sounds.preload(TM1_PATH)
-		Sounds.preload(TM1DOUBLE_PATH)
-		Sounds.preload(TM4_PATH)
-		Sounds.preload(TM5_PATH)
-		Sounds.preload(TM5DOUBLE_PATH)
-		Sounds.preload(HATPDL_PATH)
+		SoundsLib.preload(HAT_PATH)
+		SoundsLib.preload(SNR_PATH)
+		SoundsLib.preload(BAS_PATH)
+		SoundsLib.preload(RID_PATH)
+		SoundsLib.preload(FLM_PATH)
+		SoundsLib.preload(RIM_PATH)
+		SoundsLib.preload(CRS_PATH)
+		SoundsLib.preload(HATOPEN_PATH)
+		SoundsLib.preload(TM1_PATH)
+		SoundsLib.preload(TM1DOUBLE_PATH)
+		SoundsLib.preload(TM4_PATH)
+		SoundsLib.preload(TM5_PATH)
+		SoundsLib.preload(TM5DOUBLE_PATH)
+		SoundsLib.preload(HATPDL_PATH)

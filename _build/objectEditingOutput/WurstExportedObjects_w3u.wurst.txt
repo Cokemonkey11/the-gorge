@@ -1530,7 +1530,7 @@ import ObjEditingNatives
 @compiletime function create_w3u_H00B()
 	let def = createObjectDefinition("w3u", 'H00B', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "A00D,A00Y,Af00")
+	..setString("uabi", "Az03,A00D,A00Y,Af00")
 	..setString("umdl", "Units\\Human\\Gyrocopter\\Gyrocopter_V1.mdx")
 	..setString("uver", "2")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp")

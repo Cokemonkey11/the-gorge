@@ -14,7 +14,7 @@ package DTS12MissileArray
 	import RegisterEvents
 	import DamageEvent
 	import Ships
-	import Sounds
+	import SoundsLib
 	import HashMap
 
 	native UnitAlive(unit u) returns bool
@@ -173,7 +173,7 @@ package DTS12MissileArray
 				tU = GetTriggerUnit()
 				cX = GetUnitX(tU)
 				cY = GetUnitY(tU)
-				Sounds.play3D(SOUND, 1., cX, cY, 100.)
+				SoundsLib.play3D(SOUND, 1., cX, cY, 100.)
 				if targ != null
 					owner = GetOwningPlayer(tU)
 					cX = GetUnitX(tU)
@@ -274,4 +274,4 @@ package DTS12MissileArray
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function DTS12MissileArray.c)
 		DTS12MissileArray.ht = new Table
-		Sounds.preload(DTS12MissileArray.SOUND)
+		SoundsLib.preload(DTS12MissileArray.SOUND)

@@ -2,7 +2,7 @@ package GetSpiderVenom
 	import Equipment
 	import Game
 	import TerrainData
-	import Sounds
+	import SoundsLib
 	import Ships
 	import SimError
 
@@ -20,7 +20,7 @@ package GetSpiderVenom
 			else
 				UnitAddItem(fU, CreateItem(Equipment.VENOM_VIAL, GetUnitX(fU), GetUnitY(fU)))
 				DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
-				Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+				SoundsLib.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 
 		return false
 

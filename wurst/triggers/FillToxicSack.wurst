@@ -2,7 +2,7 @@ package FillToxicSack
 	import Equipment
 	import Game
 	import TerrainData
-	import Sounds
+	import SoundsLib
 
 	constant MIN_X =  722.
 	constant MIN_Y = 2865.
@@ -23,7 +23,7 @@ package FillToxicSack
 			RemoveItem(UnitItemInSlot(fU, slt))
 			UnitAddItem(fU, CreateItem(Equipment.TOXIC_SUBST_FULL, GetUnitX(fU), GetUnitY(fU)))
 			DisplayTextToPlayer(owner, 0., 0., SUCCESS_MESSAGE)
-			Sounds.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
+			SoundsLib.playForPlayer(Game.TRADE_SUCCESS_SOUND, 1., owner)
 
 		return false
 

@@ -46,6 +46,8 @@ public constant ID_REGENERATOR           = 'Az01'
 public constant ID_REGENERATOR_STR       = "Az01"
 public constant ID_MONSOON_MK1           = 'Az02'
 public constant ID_MONSOON_MK1_STR       = "Az02"
+public constant ID_SEND_GOLD             = 'Az03'
+public constant ID_SEND_GOLD_STR         = "Az03"
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
@@ -123,6 +125,38 @@ class ReleaseAbil extends AbilityDefinitionIllidanChannel
 
 @compiletime function initFire()
     new ReleaseAbil(ID_FIRE_CREWMEMBER)
+
+class SendGoldAbil extends AbilityDefinitionIllidanChannel
+    construct(int id)
+        super(id)
+        setAnimationNames("spell")
+        setButtonPositionNormalX(1)
+        setButtonPositionNormalY(2)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal("ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
+        setArtTarget("")
+        setTargetAttachmentPoint("")
+        setBaseOrderID(1, "acidbomb")
+        setDisableOtherAbilities(1, false)
+        setFollowThroughTime(1, 0.)
+        setOptions(1, 1)
+        setTargetType(1, 1)
+        setCastRange(1, 800.)
+        setCooldown(1,   20.)
+        setHeroAbility(false)
+        setLevels(1)
+        setTargetsAllowed(1, "hero,allied,invulnerable,vulnerable,notself")
+        setCheckDependencies(false)
+        setHotkeyNormal("W")
+        setName("Send Gold")
+        setOrderStringUseTurnOn("acidbomb")
+        setTooltipNormal(1, "Send Gold [|cffffcc00W|r]")
+        setTooltipNormalExtended(1, "Send your own gold to an allied player ship.  The recipient gets free interest that increases with your trading experience.|n|n|cffffcc00Maximum Base Gold:|r 500|n|cffffcc00Interest Rate:|r 1% for every 1 trading experience")
+
+@compiletime function initSendGold()
+    new SendGoldAbil(ID_SEND_GOLD)
 
 class MagneticReactorsAbil extends AbilityDefinitionIllidanChannel
     construct(int id)
