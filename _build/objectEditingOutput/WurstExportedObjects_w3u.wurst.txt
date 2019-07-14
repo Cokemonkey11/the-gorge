@@ -1703,6 +1703,8 @@ import ObjEditingNatives
 	..setUnreal("umpr", 0.0)
 	..setString("ureq", "")
 	..setString("upgr", "")
+	..setInt("usid", 900)
+	..setInt("usin", 900)
 
 
 @compiletime function create_w3u_hc01()
@@ -1732,6 +1734,8 @@ import ObjEditingNatives
 	..setInt("ubsi", 1)
 	..setInt("uhpm", 707)
 	..setString("upgr", "")
+	..setInt("usid", 900)
+	..setInt("usin", 900)
 
 
 @compiletime function create_w3u_hc02()
@@ -1763,6 +1767,8 @@ import ObjEditingNatives
 	..setUnreal("uhpr", 0.25)
 	..setString("ureq", "")
 	..setString("upgr", "")
+	..setInt("usid", 900)
+	..setInt("usin", 900)
 
 
 @compiletime function create_w3u_hc03()
@@ -1795,6 +1801,8 @@ import ObjEditingNatives
 	..setInt("ubdi", 1)
 	..setInt("ubsi", 1)
 	..setInt("uhpm", 1029)
+	..setInt("usid", 900)
+	..setInt("usin", 900)
 
 
 // Original Table (contains all modified default objects)

@@ -1,7 +1,7 @@
 package Ai
 
 import ErrorHandling
-import LinkedList
+import HashMap
 import LinkedListModule
 import Ships
 import TerrainData
@@ -10,10 +10,27 @@ bool array ai_controlled
 
 constant UPDATE_PERIOD = 1.
 
+class Vec2
+    vec2 v
+    construct(vec2 which)
+        this.v = which
+
+constant aiMap = new HashMap<string, Vec2>()
+
 public enum Propensity
     None
     North
     South
+
+function Propensity.toString() returns string
+    switch this
+        case North
+            return "North"
+        case South
+            return "South"
+        default
+            error("Bad propensity to make into string")
+            return ""
 
 public enum Status
     None
@@ -22,32 +39,72 @@ public enum Status
     EnemyTower
     EnemyKeep
 
+function Status.next() returns Status
+    switch this
+        case OwnTower
+            return Status.Obelisk
+        case Obelisk
+            return Status.EnemyTower
+        case EnemyTower
+            return Status.EnemyKeep
+        case EnemyKeep
+            return Status.EnemyKeep
+        default
+            error("Unexpected Status")
+            return Status.None
+
+function Status.toString() returns string
+    switch this
+        case OwnTower
+            return "OwnTower"
+        case Obelisk
+            return "Obelisk"
+        case EnemyTower
+            return "EnemyTower"
+        case EnemyKeep
+            return "EnemyKeep"
+        default
+            error("Base Status to display")
+            return ""
+
 function Status.toVec2(Propensity p, player alliance) returns vec2
+    let key = this.toString() + p.toString() + alliance.getName()
+    if aiMap.has(key)
+        return aiMap.get(key).v
+
     switch alliance.getId()
         case 0  // West team
             switch p
                 case North
                     switch this
                         case OwnTower
-                            return TerrainData.POS_TOWER_WEST_NORTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_NORTH))
+                            return this.toVec2(p, alliance)
                         case Obelisk
-                            return TerrainData.POS_STONE1
+                            aiMap.put(key, new Vec2(TerrainData.POS_STONE1))
+                            return this.toVec2(p, alliance)
                         case EnemyTower
-                            return TerrainData.POS_TOWER_EAST_NORTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_NORTH))
+                            return this.toVec2(p, alliance)
                         case EnemyKeep
-                            return TerrainData.POS_KEEP_EAST
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_EAST))
+                            return this.toVec2(p, alliance)
                         default
                             error("Tried to get the target for an improper status.")
                 case South
                     switch this
                         case OwnTower
-                            return TerrainData.POS_TOWER_WEST_SOUTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_SOUTH))
+                            return this.toVec2(p, alliance)
                         case Obelisk
-                            return TerrainData.POS_STONE2
+                            aiMap.put(key, new Vec2(TerrainData.POS_STONE2))
+                            return this.toVec2(p, alliance)
                         case EnemyTower
-                            return TerrainData.POS_TOWER_EAST_SOUTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_SOUTH))
+                            return this.toVec2(p, alliance)
                         case EnemyKeep
-                            return TerrainData.POS_KEEP_EAST
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_EAST))
+                            return this.toVec2(p, alliance)
                         default
                             error("Tried to get the target for an improper status.")
                 default
@@ -57,25 +114,33 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
                 case North
                     switch this
                         case OwnTower
-                            return TerrainData.POS_TOWER_EAST_NORTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_NORTH))
+                            return this.toVec2(p, alliance)
                         case Obelisk
-                            return TerrainData.POS_STONE1
+                            aiMap.put(key, new Vec2(TerrainData.POS_STONE1))
+                            return this.toVec2(p, alliance)
                         case EnemyTower
-                            return TerrainData.POS_TOWER_WEST_NORTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_NORTH))
+                            return this.toVec2(p, alliance)
                         case EnemyKeep
-                            return TerrainData.POS_KEEP_WEST
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_WEST))
+                            return this.toVec2(p, alliance)
                         default
                             error("Tried to get the target for an improper status.")
                 case South
                     switch this
                         case OwnTower
-                            return TerrainData.POS_TOWER_EAST_SOUTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_SOUTH))
+                            return this.toVec2(p, alliance)
                         case Obelisk
-                            return TerrainData.POS_STONE2
+                            aiMap.put(key, new Vec2(TerrainData.POS_STONE2))
+                            return this.toVec2(p, alliance)
                         case EnemyTower
-                            return TerrainData.POS_TOWER_WEST_SOUTH
+                            aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_SOUTH))
+                            return this.toVec2(p, alliance)
                         case EnemyKeep
-                            return TerrainData.POS_KEEP_WEST
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_WEST))
+                            return this.toVec2(p, alliance)
                         default
                             error("Tried to get the target for an improper status.")
                 default
@@ -91,54 +156,43 @@ class CreepAi
 
     unit u
     Propensity p
-    LinkedList<Status> s
+    Status s
 
     function tick()
-        let target = this.s.getFirst().toVec2(
+        let target = this.s.toVec2(
             this.p,
             this.u.getOwner()
         )
-        if this.u.getPos().distanceToSq(target) < 500. * 500. and this.s.size() > 1
-            print("dequeue")
-            this.s.dequeue()
+        if this.u.getPos().distanceToSq(target) < 500. * 500.
+            this.s = this.s.next()
         else
-            this.u.issuePointOrder("attack", target)
+            this.u.issuePointOrder(
+                "attack",
+                this.u.getPos().moveTowards(target, 500.)
+            )
 
     static function periodic()
         let iter = CreepAi.iterator()
         while iter.hasNext()
             let inst = iter.next()
-            if inst.u.isAlive()
+            if inst.u != null and inst.u.isAlive()
                 inst.tick()
             else
-                inst.remove()
                 destroy inst
 
         iter.close()
         if CreepAi.size == 0
             CreepAi.t.pause()
-            print("pause")
 
     construct(unit u, Propensity p)
         this.u = u
         this.p = p
-        this.s = new LinkedList<Status>()..add(
-            Status.OwnTower,
-            Status.Obelisk,
-            Status.EnemyTower,
-            Status.EnemyKeep
-        )
+        this.s = Status.OwnTower
 
         tick()
 
-        print(CreepAi.size)
         if CreepAi.size == 1
-            print("+")
             CreepAi.t.startPeriodic(UPDATE_PERIOD, function CreepAi.periodic)
-            print("-")
-
-    ondestroy
-        destroy s
 
 public function unit.intoCreepAi(Propensity p)
     new CreepAi(this, p)

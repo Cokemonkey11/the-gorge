@@ -271,6 +271,8 @@ class DragonhawkRiderCreep extends UnitDefinition
         setManaRegeneration(0.)
         setRequirements("")
         setUpgradesUsed("")
+        setSightRadiusDay(900)
+        setSightRadiusNight(900)
 class GryphonRiderCreep extends UnitDefinition
     construct(int id)
         super(id, 'hgry')
@@ -298,6 +300,8 @@ class GryphonRiderCreep extends UnitDefinition
         setGoldBountyAwardedSidesperDie(1)
         setHitPointsMaximumBase(707)
         setUpgradesUsed("")
+        setSightRadiusDay(900)
+        setSightRadiusNight(900)
 class WindRiderCreep extends UnitDefinition
     construct(int id)
         super(id, 'owyv')
@@ -327,6 +331,8 @@ class WindRiderCreep extends UnitDefinition
         setHitPointsRegenerationRate(.25)
         setRequirements("")
         setUpgradesUsed("")
+        setSightRadiusDay(900)
+        setSightRadiusNight(900)
 class FrostWyrm extends UnitDefinition
     construct(int id)
         super(id, 'ufro')
@@ -357,6 +363,8 @@ class FrostWyrm extends UnitDefinition
         setGoldBountyAwardedNumberofDice(1)
         setGoldBountyAwardedSidesperDie(1)
         setHitPointsMaximumBase(1029)
+        setSightRadiusDay(900)
+        setSightRadiusNight(900)
 
 @compiletime function creeps()
     new DragonhawkRiderCreep(ID_DRAGONHAWK)
