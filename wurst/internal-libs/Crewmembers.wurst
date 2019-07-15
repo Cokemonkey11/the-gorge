@@ -2,14 +2,13 @@
 // necessary crew member unit, create necessary cargo unit, add crew member
 // unit to keep slot, link member + cargo in this script.
 package Crewmembers
+	import ClosureTimers
 	import Ships
 	import Game
 	import HashMap
 	import SimError
 	import RegisterEvents
 	import TerrainData
-
-	native UnitAlive(unit u) returns bool
 
 	constant MAX_SLOTS = 10
 
@@ -60,43 +59,47 @@ package Crewmembers
 		static constant VTEMPT_D_ID      = 'o00N'
 
 		private static constant ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
-		private static constant CLOCK_PERIOD = 1./30.
-		private static constant OFFSET = 256.+64.
+		private static constant OFFSET = 256. + 64.
 		private static constant SELL_RATE = .5
 
 		private static CrewMember array db
-		private static int dbIndex= -1
-		private static timer time= CreateTimer()
-		static Table fromDummy
-		static Table links
+		private static int dbIndex = -1
+		private static timer time = CreateTimer()
+		static constant fromDummy = new HashMap<unit, CrewMember>()
+		static constant links = new HashMap<int, int>()
 		static CrewInventory array inventories
 		static int array slotIndices
 
 		static function getMemberIndex(int id, CrewMember cre) returns int
-			int index= 0
-			while index <= slotIndices[id]
+			for index = 0 to slotIndices[id]
 				if inventories[id].slots[index] == cre
 					return index
-
-				index += 1
 
 			return -1
 
 
 		static function updatePosition(CrewMember cre, int index)
-			real face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
-			real x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
-			real y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
+			let face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
+			let x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
+			let y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
 			SetUnitPosition(cre.dummy, x, y)
 			SetUnitFacing(cre.dummy, face*bj_RADTODEG)
 
 
 		static function release(unit u)
-			if fromDummy.hasInt(u.getHandleId())
-				let temp = fromDummy.loadInt(u.getHandleId()) castTo CrewMember
+			if fromDummy.has(u)
+				let temp = fromDummy.get(u)
 				let val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
-				SetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[temp.ownerID], PLAYER_STATE_RESOURCE_GOLD) + val)
-				DisplayTextToPlayer(players[temp.ownerID], 0., 0., "You pawned your |cffffcc00" + GetUnitName(u) + "|r for |cffffcc00" + I2S(val) + "|r gold.")
+				players[temp.ownerID].addGold(val)
+				printTimedToPlayer(
+					"You pawned your |cffffcc00"
+						+ GetUnitName(u)
+						+ "|r for |cffffcc00"
+						+ I2S(val)
+						+ "|r gold.",
+					10.,
+					players[temp.ownerID]
+				)
 				let index = getMemberIndex(temp.ownerID, temp)
 				if index != -1
 					inventories[temp.ownerID].slots[index] = inventories[temp.ownerID].slots[slotIndices[temp.ownerID]]
@@ -104,8 +107,8 @@ package Crewmembers
 					if slotIndices[temp.ownerID] != -1
 						updatePosition(inventories[temp.ownerID].slots[index], index)
 
-					RemoveUnit(temp.dummy)
-					RemoveUnit(temp.phoenix)
+					temp.dummy.remove()
+					temp.phoenix.remove()
 					destroy temp
 				else
 					BJDebugMsg("Error: tried to release a unit that had no index :(")
@@ -119,75 +122,100 @@ package Crewmembers
 			while index <= dbIndex
 				let temp = db[index]
 
-				if UnitAlive(Ships.ships[temp.ownerID]) and not Game.ended
-					SetUnitX(temp.phoenix, GetUnitX(Ships.ships[temp.ownerID]))
-					SetUnitY(temp.phoenix, GetUnitY(Ships.ships[temp.ownerID]))
+				if Ships.ships[temp.ownerID].isAlive() and not Game.ended
+					temp.phoenix.setPos(Ships.ships[temp.ownerID].getPos())
 				else
 					temp.phoenix.setPos(TerrainData.SAFE)
 
 				index++
 
 		static function c()
-			CrewMember temp
 			let selU = GetSellingUnit()
 			let bU = GetBuyingUnit()
 			let sU = GetSoldUnit()
-			real x
-			real y
-			real face
-			player buyer = GetOwningPlayer(sU)
+			let buyer = GetOwningPlayer(sU)
 
-			if Ships.getClass(sU)== Ships.CLASS_UNKNOWN
+			if Ships.getClass(sU) == Ships.CLASS_UNKNOWN
 				if IsUnitAlly(bU, GetOwningPlayer(selU))
-					temp = new CrewMember
-					temp.ownerID= GetPlayerId(buyer)
-					slotIndices[temp.ownerID] = slotIndices[temp.ownerID] + 1
+					let temp = new CrewMember
+					temp.ownerID = GetPlayerId(buyer)
+					slotIndices[temp.ownerID]++
 					inventories[temp.ownerID].slots[slotIndices[temp.ownerID]] = temp
-					face = I2R(slotIndices[temp.ownerID]) * 2. * bj_PI / I2R(MAX_SLOTS)
-					x = GetStartLocationX(temp.ownerID) + OFFSET*Cos(face)
-					y = GetStartLocationY(temp.ownerID) + OFFSET*Sin(face)
-					temp.dummy = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), links.loadInt(sU.getTypeId()), x, y, face*bj_RADTODEG)
+					let face = I2R(slotIndices[temp.ownerID]) * 2. * bj_PI / I2R(MAX_SLOTS)
+					let x = GetStartLocationX(temp.ownerID) + OFFSET*Cos(face)
+					let y = GetStartLocationY(temp.ownerID) + OFFSET*Sin(face)
+					temp.dummy = createUnit(buyer, links.get(sU.getTypeId()), vec2(x, y), angle(face))
+					PingMinimapForPlayer(buyer, x, y, 5.)
 					temp.phoenix = sU
-					dbIndex = dbIndex + 1
+					dbIndex++
 					db[dbIndex] = temp
-					fromDummy.saveInt(temp.dummy.getHandleId(), temp castTo int)
+					fromDummy.put(temp.dummy, temp)
+
 					if dbIndex == 0
-						TimerStart(time, CLOCK_PERIOD, true, function p)
+						TimerStart(time, ANIMATION_PERIOD, true, function p)
 
 				else
 					simError(GetOwningPlayer(bU), ERROR_MESSAGE)
-					SetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(buyer, PLAYER_STATE_RESOURCE_GOLD)+R2I(GetWidgetLife(sU)))
-					RemoveUnit(sU)
+					buyer.addGold(sU.getLife().toInt())
+					sU.remove()
 
 	init
-		int index = 0
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function Crewmembers.c)
 
 		// Format Links
-		Crewmembers.links = new Table
-		Crewmembers.links.saveInt(Crewmembers.HEADHUNTER_ID, Crewmembers.HEADHUNTER_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.WITCHDOCTOR_ID, Crewmembers.WITCHDOCTOR_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.SPEARMAN_ID, Crewmembers.SPEARMAN_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.UNBROKEN_ID, Crewmembers.UNBROKEN_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.SHAMAN_ID, Crewmembers.SHAMAN_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.SEAWITCH_ID, Crewmembers.SEAWITCH_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.GRENADIER_ID, Crewmembers.GRENADIER_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.LASERRIFLE_ID, Crewmembers.LASERRIFLE_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.GRYPHON_ID, Crewmembers.GRYPHON_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.AMASTER_ID, Crewmembers.AMASTER_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.ODRAKE_ID, Crewmembers.ODRAKE_D_ID)
-		Crewmembers.links.saveInt(Crewmembers.VTEMPT_ID, Crewmembers.VTEMPT_D_ID)
-
-		Crewmembers.fromDummy = new Table
+		Crewmembers.links.put(Crewmembers.HEADHUNTER_ID,  Crewmembers.HEADHUNTER_D_ID)
+		Crewmembers.links.put(Crewmembers.WITCHDOCTOR_ID, Crewmembers.WITCHDOCTOR_D_ID)
+		Crewmembers.links.put(Crewmembers.SPEARMAN_ID,    Crewmembers.SPEARMAN_D_ID)
+		Crewmembers.links.put(Crewmembers.UNBROKEN_ID,    Crewmembers.UNBROKEN_D_ID)
+		Crewmembers.links.put(Crewmembers.SHAMAN_ID,      Crewmembers.SHAMAN_D_ID)
+		Crewmembers.links.put(Crewmembers.SEAWITCH_ID,    Crewmembers.SEAWITCH_D_ID)
+		Crewmembers.links.put(Crewmembers.GRENADIER_ID,   Crewmembers.GRENADIER_D_ID)
+		Crewmembers.links.put(Crewmembers.LASERRIFLE_ID,  Crewmembers.LASERRIFLE_D_ID)
+		Crewmembers.links.put(Crewmembers.GRYPHON_ID,     Crewmembers.GRYPHON_D_ID)
+		Crewmembers.links.put(Crewmembers.AMASTER_ID,     Crewmembers.AMASTER_D_ID)
+		Crewmembers.links.put(Crewmembers.ODRAKE_ID,      Crewmembers.ODRAKE_D_ID)
+		Crewmembers.links.put(Crewmembers.VTEMPT_ID,      Crewmembers.VTEMPT_D_ID)
 
 		// Initialize slotInidices
-		while index <= 11
+		for index = 0 to 11
 			Crewmembers.slotIndices[index] = -1
-			index += 1
-
 
 		// Initialize CrewInventories
-		index = 0
-		while index <= 11
+		for index = 0 to 11
 			Crewmembers.inventories[index] = new CrewInventory()
-			index++
+
+		let text = createTTEx(
+			TerrainData.POS_KEEP_EAST.withTerrainZ(),
+			"Buy weapons here",
+			10.
+		)
+
+		let text2 = createTTEx(
+			TerrainData.POS_KEEP_WEST.withTerrainZ(),
+			"Buy weapons here",
+			10.
+		)
+
+		let offset = vec3(-100., 0., 0)
+		doPeriodicallyCounted(
+			ANIMATION_PERIOD,
+			(45. / ANIMATION_PERIOD).toInt()
+		) (CallbackCounted cb) ->
+			if cb.isLast()
+				text.destr()
+				text2.destr()
+			else
+				let base_ = (
+					8. * (cb.getCount().toReal() * ANIMATION_PERIOD) / (2. * PI)
+				).cos()
+
+				text.setPos(
+					TerrainData.POS_KEEP_EAST.withTerrainZ(
+						50. * (base_ * base_)
+					) + offset
+				)
+				text2.setPos(
+					TerrainData.POS_KEEP_WEST.withTerrainZ(
+						50. * (base_ * base_)
+					) + offset
+				)

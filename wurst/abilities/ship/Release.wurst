@@ -1,13 +1,12 @@
 package Release
 	import Abilities
+	import AbilitiesApi
 	import RegisterEvents
 	import Crewmembers
 
-	constant RELEASE_ID = 'A00M'
-
 	function c()
-		if GetSpellAbilityId() == RELEASE_ID
-			let tU = GetSpellTargetUnit()
+		if GetSpellAbilityId() == ID_FIRE_CREWMEMBER
+			let tU = GetTriggerUnit()
 			Crewmembers.release(tU)
 			addEffect(Abilities.goldBottleMissile, tU.getPos()).destr()
 

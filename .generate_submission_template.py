@@ -64,8 +64,9 @@ CHANGELOG = (
         "NEXT",
         (
             "Reworked vision/pathing to behave more like classic Battleships.",
-            "Disable global trading and add a send-gold ability to trader.",
+            "Disabled global trading and added a send-gold ability to trader.",
             "[trading] fixed the broken spider venom job.",
+            "Reworked crewmembers slightly to reduce the learning curve.",
         )
     ),
     (
