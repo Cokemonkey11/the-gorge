@@ -2,6 +2,7 @@ package Game
 	import Ai
 	import Assets
 	import ClosureTimers
+	import Damage
 	import Ships
 	import MyBoard
 	import RegisterEvents
@@ -12,10 +13,6 @@ package Game
 	import SinglePlayer
 	import SoundsLib
 	import UnitsApi
-
-	class AssistTimestamps
-		int array[12] vals
-
 
 	public class Game
 		static constant HELICOPTER_ICON     = "ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp"
@@ -30,7 +27,6 @@ package Game
 		static constant        DUMMY_ID     = 'u000'
 		static constant STONE_SPIDER_ID     = 'n000'
 
-		static constant ASSIST_TIME         =    15
 		static constant START_GOLD          =   200
 		static constant SHIELD_COUNT        =    10
 		static constant    SHIELDOFFS          =   200.
@@ -96,7 +92,6 @@ package Game
 		static int eastCount   = 0
 		static int array shipClass
 		static int array scoreboardRows
-		static real seconds = 0.
 		static unit westRepair
 		static unit eastRepair
 		static unit westHangar
@@ -106,7 +101,6 @@ package Game
 		static unit array captains
 		static string array colors
 		static string array names
-		static AssistTimestamps array assistTimestamps
 		static int array kills
 		static int array deaths
 		static int array assists
@@ -118,8 +112,6 @@ package Game
 		static unit array eastKeep
 		static int westShieldsLeft = 10
 		static int eastShieldsLeft = 10
-		static int secondsFSM = 0
-		static int minutesFSM = 0
 		static group grp = CreateGroup()
 
 		static constant REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
@@ -146,10 +138,6 @@ package Game
 
 		static function playerIsWest(int id) returns bool
 			return GetUnitX(Ships.ships[id]) < 0.
-
-
-		static function getMinutes() returns int
-			return minutesFSM
 
 
 		static function farmIncrement(int pID)
@@ -331,6 +319,8 @@ package Game
 				ended = true
 				fadeOut(FADEOUT_DURATION)
 				Muscii.interrupt()
+				doAfter(5.) ->
+					Stats.display(localPlayer)
 				doAfter(30.) ->
 					defeatTeam(0)
 					EndGame(true)
@@ -340,23 +330,11 @@ package Game
 				ended = true
 				fadeOut(FADEOUT_DURATION)
 				Muscii.interrupt()
+				doAfter(5.) ->
+					Stats.display(localPlayer)
 				doAfter(30.) ->
 					defeatTeam(1)
 					EndGame(true)
-
-
-
-		static function second()
-			seconds++
-			secondsFSM++
-
-			if secondsFSM == 60
-				secondsFSM = 0
-				minutesFSM++
-
-
-			if seconds < 0. or (seconds == (seconds + 1.))
-				BJDebugMsg("Seconds overflow!")
 
 
 		static function after()
@@ -372,21 +350,6 @@ package Game
 
 	init
 		int index = 0
-
-		// Initialize assist stamps.
-		int i = 0
-		int j = 0
-		while i <= 11
-			Game.assistTimestamps[i] = new AssistTimestamps()
-
-			while j <= 11
-				Game.assistTimestamps[i].vals[j] = -1 * Game.ASSIST_TIME
-
-				j++
-
-
-			i++
-
 
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
@@ -487,9 +450,6 @@ package Game
 		// Create Stone Spider (Trade Related).
 		let s = CreateUnit(Players.playerPassive, Game.STONE_SPIDER_ID, TerrainData.STONE_SPIDER_X, TerrainData.STONE_SPIDER_Y, Game.STONE_SPIDER_FACING)
 		s..addAbility('Aloc')..setTimeScale(0.)
-
-		// Start game timer.
-		TimerStart(CreateTimer(), 1., true, function Game.second)
 
 		// Do starting sound stuff.
 		SoundsLib.preload(Game.START_SOUND)

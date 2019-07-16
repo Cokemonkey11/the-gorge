@@ -1,0 +1,17 @@
+package Assists
+
+class AssistTimestamps
+    real array[12] vals
+
+public class Assists
+    static constant ASSIST_TIME = 15.
+
+    static AssistTimestamps array assistTimestamps
+
+init
+    // Initialize assist stamps.
+    for i = 0 to 11
+        Assists.assistTimestamps[i] = new AssistTimestamps()
+
+        for j = 0 to 11
+            Assists.assistTimestamps[i].vals[j] = -1 * Assists.ASSIST_TIME

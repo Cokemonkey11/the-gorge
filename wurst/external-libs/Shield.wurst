@@ -146,7 +146,7 @@ package Shield
 		//* This function adds a shield to a unit. You can use
 		//* Shield.DEFAULT_EFFECT in the fx argument.
 		static function add(unit u, real _amount, real time, string fx, string fxpoint)
-			Shield tempDat = new Shield
+			let tempDat = new Shield
 			Shield linkedDat
 			real initialLife = GetWidgetLife(u)
 			real maxLife = GetUnitState(u, UNIT_STATE_MAX_LIFE)

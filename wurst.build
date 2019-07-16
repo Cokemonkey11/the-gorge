@@ -3,6 +3,8 @@ projectName: The Gorge
 dependencies:
 - https://github.com/wurstscript/WurstStdlib2
 - https://github.com/Cokemonkey11/WurstCommand
+- https://github.com/Cokemonkey11/WurstLinkedHashMap
+- https://github.com/Cokemonkey11/WurstRealHeapGuard
 buildMapData:
   name: '|cff999999The Gorge|r 0.12.4'
   fileName: (10)TheGorge0.12.4

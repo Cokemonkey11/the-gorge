@@ -1,4 +1,5 @@
 package ChatCommands
+import Damage
 import Equipment
 import LinkedList
 import Muscii
@@ -32,6 +33,8 @@ init
 			) +
 			"%"
 		)
+	addCommand("stats") (p, _c, _a) ->
+		Stats.display(p)
 	addCommand("experience", singlePlayerMatch("experience")) (_p, _c, _a) ->
 		SinglePlayer.experience()
 	addCommand("help", singlePlayerMatch("help")) (_p, _c, _a) ->

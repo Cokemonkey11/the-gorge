@@ -1,9 +1,11 @@
 package Revive
 	import Ai
 	import Assets
+	import Assists
 	import ClosureTimers
 	import FloatText
 	import Game
+	import GameTimer
 	import Players
 	import Ships
 	import RegisterEvents
@@ -87,18 +89,14 @@ package Revive
 
 
 	function getBounty() returns int
-		return FLAT_BOUNTY + BOUNTY_PER_MINUTE * Game.getMinutes()
+		return (FLAT_BOUNTY + BOUNTY_PER_MINUTE * getElapsedGameTime() / 60.).toInt()
 
 
 	function parseAssists(int pID)
-		var index = 2
-
-		while index <= 11
-			if Game.seconds - Game.assistTimestamps[pID].vals[index] <= Game.ASSIST_TIME
+		for index = 2 to 11
+			if (getElapsedGameTime() - Assists.assistTimestamps[pID].vals[index]) <= Assists.ASSIST_TIME
 				Game.assists[index]++
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
-
-			index++
 
 
 	function c()
@@ -110,7 +108,7 @@ package Revive
 			let killerId = GetPlayerId(kO)
 			let tempDat = new DeathDat
 			tempDat.u = tU
-			tempDat.timeL = REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * Game.getMinutes()
+			tempDat.timeL = (REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * getElapsedGameTime() / 60.).toInt()
 			tempDat.ownerID = GetPlayerId(GetOwningPlayer(tU))
 
 			if killerId > 1 and (

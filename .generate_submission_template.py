@@ -67,6 +67,7 @@ CHANGELOG = (
             "Disabled global trading and added a send-gold ability to trader.",
             "[trading] fixed the broken spider venom job.",
             "Reworked crewmembers slightly to reduce the learning curve.",
+            "Top weapon stats are now displayed at the end of the match.",
         )
     ),
     (

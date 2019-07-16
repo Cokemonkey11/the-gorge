@@ -295,7 +295,7 @@ package MyBoard
 		// Initializer.
 
 		static function create(int cols, int rows, string title) returns MyBoard
-			MyBoard  board    = new MyBoard
+			let  board    = new MyBoard
 			int  colLoop  = 0
 			int  rowLoop
 			int  arrIndex

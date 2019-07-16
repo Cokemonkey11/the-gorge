@@ -1,17 +1,84 @@
 package Damage
+	import ErrorHandling
+	import GameTimer
 	import Ships
-	import Game
+	import Assists
 	import DamageEvent
+	import WurstLinkedHashMap
+	import WurstRealHeapGuard
+
+	class Real
+		real v
+
+		construct()
+			this.v = 0.
+
+		function incr(real n)
+			this.v += n
+
+	public class Stats
+		// source, crewmember inst, damage
+		protected static constant map = new LinkedHashMap<player, LinkedHashMap<string, Real>>()
+
+		construct()
+			error("Not constructible")
+
+		protected static function keyFromCrewmember(
+			unit crewmember
+		) returns string
+			return crewmember.getName()
+				+ "::"
+				+ crewmember.getHandleId().toString()
+
+		protected static function incr(unit crewmember, real damage)
+			let source = crewmember.getOwner()
+			let cm_key = keyFromCrewmember(crewmember)
+
+			if not map.has(source)
+				map.put(source, new LinkedHashMap<string, Real>())
+
+			if not map.get(source).has(cm_key)
+				map.get(source).put(cm_key, new Real())
+
+			map.get(source).get(cm_key).incr(damage)
+
+		static function display(player forWhom)
+			new RealHeapGuard<string>() guard ->
+				Stats.map.forEach() kv ->
+					let p = kv.key
+
+					kv.value.forEach() (LHMEntry<string, Real> kv2) ->
+						let disp = p.getNameColored()
+							+ " "
+							+ kv2.key
+							+ " "
+							+ kv2.value.v.toInt().toString()
+						guard.push(kv2.value.v, disp)
+
+				forWhom.print("|cffffcc00Top weapons:|r")
+				for _i = 0 to 9
+					let disp = guard.pop()
+					if disp != null
+						forWhom.print(disp)
+				destroy guard
 
 	function h()
 		let targ = DamageEvent.getTarget()
+
+		let source = DamageEvent.getSource()
+
+		if source.getOwner().getId() > 1
+			Stats.incr(
+				source,
+				DamageEvent.getAmount()
+			)
 
 		if Ships.isPlayerShip(targ)
 			let id = GetPlayerId(GetOwningPlayer(targ))
 			let src = DamageEvent.getSource()
 			let sID = GetPlayerId(GetOwningPlayer(src))
 			if sID > 1 and sID < 12 and id > 1 and id < 12
-				Game.assistTimestamps[id].vals[sID] = R2I(Game.seconds)
+				Assists.assistTimestamps[id].vals[sID] = getElapsedGameTime()
 
 	init
 		DamageEvent.addListener() () ->

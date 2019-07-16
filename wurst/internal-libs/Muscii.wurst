@@ -32,7 +32,7 @@ package Muscii
 
 
 		static function create(string path, int volume, real pitch) returns Note
-			Note n = new Note
+			let n = new Note
 			n.path = path
 			n.volume = volume
 			n.pitch = pitch
@@ -76,7 +76,7 @@ package Muscii
 
 		static function create(Note n) returns Chord
 			Note q = Note.create(n.path, n.volume, n.pitch)
-			Chord c = new Chord
+			let c = new Chord
 			c.previous = null
 			c.next = null
 			c.first = q
@@ -168,7 +168,7 @@ package Muscii
 
 
 		static function create(Chord c, real tempo) returns Muscii
-			Muscii m = new Muscii
+			let m = new Muscii
 			Chord cop = c.copy()
 			m.first = cop
 			m.last = cop

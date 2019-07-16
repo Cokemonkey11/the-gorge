@@ -20,8 +20,8 @@ package SoundsLib
 
 		static function preload(string str)
 			timer time= CreateTimer()
-			Slop s= new Slop
-			s.snd= str
+			let s = new Slop
+			s.snd = str
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
 			TimerStart(time, .01, false, function SoundsLib.preloadAfter)
 
