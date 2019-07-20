@@ -65,6 +65,7 @@ CHANGELOG = (
         (
             "Made changes to crewmembers to clarify stats and sell value.",
             "All long-range crew are now incapable of hitting structures.",
+            "Significant rework to crewmember balance, improves synergy.",
         )
     ),
     (

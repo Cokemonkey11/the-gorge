@@ -179,8 +179,8 @@ class Keep extends BuildingDefinition
         setResearchesAvailable("")
         setUnitsSold(
             page == 1
-            ? commaList('o002', 'o003', 'o001', CREW_PROPS.get(Crewmember.Headhunter).id, 'o004', 'o005', 'o006', 'o007')
-            : commaList('o00G', 'o00I', 'o00K', 'o00M')
+            ? commaList(CREW_PROPS.get(Crewmember.TuskarrSpearman).id, CREW_PROPS.get(Crewmember.Unbroken).id, CREW_PROPS.get(Crewmember.WitchDoctor).id, CREW_PROPS.get(Crewmember.Headhunter).id, CREW_PROPS.get(Crewmember.Shaman).id, ID_SEAWITCH, CREW_PROPS.get(Crewmember.Grenadier).id, CREW_PROPS.get(Crewmember.LaserRifleman).id)
+            : commaList(CREW_PROPS.get(Crewmember.GryphonRider).id, ID_AMASTER, ID_ODRAKE, CREW_PROPS.get(Crewmember.VileTemptress).id)
         )
         setUnitsTrained("")
         setUpgradesTo("")
@@ -606,6 +606,7 @@ class CrewmemberDef extends UnitDefinition
         ..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNNagaSeaWitch.blp")
         ..setString("usnd", "SeaWitch")
         ..setInt("ubpy", 1)
+        ..setInt("ubpx", 3)
         ..setString("ushu", "")
         ..setUnreal("ulpz", 100.0)
         ..setInt("usst", 20)
@@ -666,6 +667,8 @@ class CrewmemberDef extends UnitDefinition
         ..setInt("usrg", 0)
         ..setUnreal("ulpx", 0.0)
         ..setUnreal("ulpy", 0.0)
+        ..setInt("ubpx", 3)
+        ..setInt("ubpy", 0)
         ..setString("umdl", "dummy.mdl")
         ..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNBlackDragonRoost.blp")
         ..setString("usnd", "AzureDragon")

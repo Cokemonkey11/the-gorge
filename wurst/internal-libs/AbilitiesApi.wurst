@@ -58,14 +58,41 @@ public class CrewmemberProps
     real projectileArc
     int idIcon
 
-    construct(int id, int idpp, int idcargo, string name, int posX, int posY, int price, string missile, int damage, real aps, int range, string icon, real projectileScale, string soundSet, string dummyModel, real dummyScale, int projectileSpeed, bool shouldHitStructures, real projectileArc, int idIcon)
+    static function regressDamage(real aps, int range, int cost) returns real
+        return (-0.10868*range + 0.26748*cost + 98.35081) / aps
+
+        // Old damage values:
+        //  25
+        //  13
+        //  45
+        // 123
+        //  70
+        //  50
+        //  30
+        // 115
+        //  50
+
+        // Regression data:
+        // 450   20   25     hh huge buff
+        // 500   20   26     dok huge buff
+        // 900   20   22     tusk huge nerf
+        // 200   20   61     unbroken buff
+        // 650   150  77     shaman nerf
+        // 900   150  55     grenadier nerf
+        // 200   150  168    lr signif nerf
+        // 800   600  161    grph buff
+        // 650   600  187.5  archer fine
+        // 1000  600  145    temptress slight buff
+
+    construct(int id, int idpp, int idcargo, string name, int posX, int posY, int price, string missile, real aps, int range, string icon, real projectileScale, string soundSet, string dummyModel, real dummyScale, int projectileSpeed, bool shouldHitStructures, real projectileArc, int idIcon)
         this.id = id            // The purchasable unit.  No model.  Always stacks on hero.
         this.idpp = idpp        // The phoenix fire ability.  Attachs to the purchasable unit.
         this.idcargo = idcargo  // The dummy unit that appears in the player's cargo hold.  Acts as a handle for selling.
         this.name = name
         this.price = price
         this.missile = missile
-        this.damage = damage
+        // Used multiple linear regression - may need some work.
+        this.damage = regressDamage(aps, range, price).toInt()
         this.aps = aps  // Attacks per second.
         this.range = range
         this.posX = posX
@@ -92,50 +119,10 @@ public enum Crewmember
     GryphonRider
     VileTemptress
 
-constant ID_HEADHUNTER      = 'o000'
-constant ID_HEADHUNTER_D    = 'o009'
-constant ID_HEADHUNTER_PP   = 'A000'
-constant ID_HEADHUNTER_ICON = '![00'
-
-constant ID_WITCHDOCTOR      = 'o001'
-constant ID_WITCHDOCTOR_D    = 'o00F'
-constant ID_WITCHDOCTOR_PP   = 'A003'
-constant ID_WITCHDOCTOR_ICON = '![01'
-
-constant ID_SPEARMAN       = 'o002'
-constant ID_SPEARMAN_D     = 'o00D'
-constant ID_SPEARMAN_PP    = 'A001'
-constant ID_SPEARMAN_ICON  = '![02'
-
-constant ID_UNBROKEN       = 'o003'
-constant ID_UNBROKEN_D     = 'o00E'
-constant ID_UNBROKEN_PP    = 'A002'
-constant ID_UNBROKEN_ICON  = '![03'
-
-constant ID_SHAMAN         = 'o004'
-constant ID_SHAMAN_D       = 'o00C'
-constant ID_SHAMAN_PP      = 'A004'
-constant ID_SHAMAN_ICON    = '![04'
-
 public constant ID_SEAWITCH       = 'o005'
 public constant ID_SEAWITCH_D     = 'o00B'
 public constant ID_SEAWITCH_PP    = 'A005'
 public constant ID_SEAWITCH_ICON  = '![09'
-
-constant ID_GRENADIER      = 'o006'
-constant ID_GRENADIER_D    = 'o008'
-constant ID_GRENADIER_PP   = 'A006'
-constant ID_GRENADIER_ICON = '![05'
-
-constant ID_LASERRIFLE      = 'o007'
-constant ID_LASERRIFLE_D    = 'o00A'
-constant ID_LASERRIFLE_PP   = 'A007'
-constant ID_LASERRIFLE_ICON = '![06'
-
-constant ID_GRYPHON        = 'o00G'
-constant ID_GRYPHON_D      = 'o00H'
-constant ID_GRYPHON_PP     = 'A00Q'
-constant ID_GRYPHON_ICON   = '![07'
 
 public constant ID_AMASTER        = 'o00I'
 public constant ID_AMASTER_D      = 'o00J'
@@ -147,21 +134,17 @@ public constant ID_ODRAKE_D       = 'o00L'
 public constant ID_ODRAKE_PP      = 'A00V'
 public constant ID_ODRAKE_ICON    = '![0B'
 
-constant ID_VTEMPT         = 'o00M'
-constant ID_VTEMPT_D       = 'o00N'
-constant ID_VTEMPT_PP      = 'A00X'
-constant ID_VTEMPT_ICON    = '![08'
-
 public constant CREW_PROPS = new LinkedHashMap<Crewmember, CrewmemberProps>()
-    ..put(Crewmember.Headhunter,      new CrewmemberProps(ID_HEADHUNTER,  ID_HEADHUNTER_PP,  ID_HEADHUNTER_D,  "Headhunter",       0, 0,  20, Abilities.huntermissile,        25, 1.,    450, Icons.bTNHeadhunter,   /* Projectile Scale */ 1.,  "HeadHunter",   Units.headhunter_V1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,   .1,  ID_HEADHUNTER_ICON))
-    ..put(Crewmember.WitchDoctor,     new CrewmemberProps(ID_WITCHDOCTOR, ID_WITCHDOCTOR_PP, ID_WITCHDOCTOR_D, "Witch Doctor",     1, 0,  20, Abilities.witchDoctorMissile,   13, 2.,    500, Icons.bTNWitchDoctor,  /* Projectile Scale */  .5, "WitchDoctor",  Units.witchDoctor1,  /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,  0.,   ID_WITCHDOCTOR_ICON))
-    ..put(Crewmember.TuskarrSpearman, new CrewmemberProps(ID_SPEARMAN,    ID_SPEARMAN_PP,    ID_SPEARMAN_D,    "Tuskarr Spearman", 2, 0,  20, Abilities.tuskarSpear,          45,  .5,   900, Icons.bTNTuskaarBrown, /* Projectile Scale */ 1.,  "Tuskarr",      Units.tuskarRanged,  /* Cargodummy Scale */ .5, /* Projectile Speed */ 1700, false,  .1,  ID_SPEARMAN_ICON))
-    ..put(Crewmember.Unbroken,        new CrewmemberProps(ID_UNBROKEN,    ID_UNBROKEN_PP,    ID_UNBROKEN_D,    "Unbroken",         3, 0,  20, Abilities.wardenMissile,       123,  .5,   200, Icons.bTNUnbroken,     /* Projectile Scale */ 1.,  "Unbroken",     Units.unbroken,      /* Cargodummy Scale */ .4, /* Projectile Speed */ 1000, true,  0.,   ID_UNBROKEN_ICON))
-    ..put(Crewmember.Shaman,          new CrewmemberProps(ID_SHAMAN,      ID_SHAMAN_PP,      ID_SHAMAN_D,      "Shaman",           0, 1, 150, Abilities.farseerMissile,       70, 1.1,   650, Icons.bTNShaman,       /* Projectile Scale */  .8, "Shaman",       Units.shaman1,       /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, true,   .15, ID_SHAMAN_ICON))
-    ..put(Crewmember.Grenadier,       new CrewmemberProps(ID_GRENADIER,   ID_GRENADIER_PP,   ID_GRENADIER_D,   "Grenadier",        2, 1, 150, Abilities.mortarMissile,        50, 1.1,   900, Icons.bTNMortarTeam,   /* Projectile Scale */  .6, "Grenadier",    Units.mortarTeam1,   /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, false,  .15, ID_GRENADIER_ICON))
-    ..put(Crewmember.LaserRifleman,   new CrewmemberProps(ID_LASERRIFLE,  ID_LASERRIFLE_PP,  ID_LASERRIFLE_D,  "Laser Rifleman",   3, 1, 150, Abilities.phoenix_Missile,      30, 5.56,  200, Icons.bTNSkink,        /* Projectile Scale */  .3, "Skink",        Units.skink1,        /* Cargodummy Scale */ .9, /* Projectile Speed */ 1500, true,  0.,   ID_LASERRIFLE_ICON))
-    ..put(Crewmember.GryphonRider,    new CrewmemberProps(ID_GRYPHON,     ID_GRYPHON_PP,     ID_GRYPHON_D,     "Gryphon Rider",    0, 0, 600, Abilities.gryphonRiderMissile, 115, 1.43,  800, Icons.bTNGryphonRider, /* Projectile Scale */  .7, "GryphonRider", Units.gryphonRider1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1600, true,   .1,  ID_GRYPHON_ICON))
-    ..put(Crewmember.VileTemptress,   new CrewmemberProps(ID_VTEMPT,      ID_VTEMPT_PP,      ID_VTEMPT_D,      "Vile Temptress",   3, 0, 600, Abilities.necromancerMissile,   50, 2.86, 1000, Icons.bTNDemoness,     /* Projectile Scale */  .8, "Demoness",     Units.demoness1,     /* Cargodummy Scale */ .7, /* Projectile Speed */ 1600, false, 0.,   ID_VTEMPT_ICON))
+    ..put(Crewmember.Headhunter,      new CrewmemberProps('o000', 'A000', 'o009', "Headhunter",       0, 0,  20, Abilities.huntermissile,       1.,    400, Icons.bTNHeadhunter,   /* Projectile Scale */ 1.,  "HeadHunter",   Units.headhunter_V1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,   .1,  '![00'))
+    ..put(Crewmember.WitchDoctor,     new CrewmemberProps('o001', 'A003', 'o00F', "Witch Doctor",     1, 0,  20, Abilities.witchDoctorMissile,  2.,    650, Icons.bTNWitchDoctor,  /* Projectile Scale */  .5, "WitchDoctor",  Units.witchDoctor1,  /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,  0.,   '![01'))
+    ..put(Crewmember.TuskarrSpearman, new CrewmemberProps('o002', 'A001', 'o00D', "Tuskarr Spearman", 2, 0,  20, Abilities.tuskarSpear,          .5,   900, Icons.bTNTuskaarBrown, /* Projectile Scale */ 1.,  "Tuskarr",      Units.tuskarRanged,  /* Cargodummy Scale */ .5, /* Projectile Speed */ 1700, false,  .1,  '![02'))
+    ..put(Crewmember.Unbroken,        new CrewmemberProps('o003', 'A002', 'o00E', "Unbroken",         3, 0,  20, Abilities.wardenMissile,        .5,   200, Icons.bTNUnbroken,     /* Projectile Scale */ 1.,  "Unbroken",     Units.unbroken,      /* Cargodummy Scale */ .4, /* Projectile Speed */ 1000, true,  0.,   '![03'))
+    ..put(Crewmember.LaserRifleman,   new CrewmemberProps('o007', 'A007', 'o00A', "Laser Rifleman",   0, 1, 150, Abilities.phoenix_Missile,     5.56,  400, Icons.bTNSkink,        /* Projectile Scale */  .3, "Skink",        Units.skink1,        /* Cargodummy Scale */ .9, /* Projectile Speed */ 1500, true,  0.,   '![06'))
+    ..put(Crewmember.Shaman,          new CrewmemberProps('o004', 'A004', 'o00C', "Shaman",           1, 1, 150, Abilities.farseerMissile,      1.1,   650, Icons.bTNShaman,       /* Projectile Scale */  .8, "Shaman",       Units.shaman1,       /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, true,   .15, '![04'))
+    ..put(Crewmember.Grenadier,       new CrewmemberProps('o006', 'A006', 'o008', "Grenadier",        2, 1, 150, Abilities.mortarMissile,       1.1,   900, Icons.bTNMortarTeam,   /* Projectile Scale */  .6, "Grenadier",    Units.mortarTeam1,   /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, false,  .15, '![05'))
+    ..put(Crewmember.GryphonRider,    new CrewmemberProps('o00G', 'A00Q', 'o00H', "Gryphon Rider",    0, 0, 600, Abilities.gryphonRiderMissile, 1.43,  400, Icons.bTNGryphonRider, /* Projectile Scale */  .7, "GryphonRider", Units.gryphonRider1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1600, true,   .1,  '![07'))
+    ..put(Crewmember.VileTemptress,   new CrewmemberProps('o00M', 'A00X', 'o00N', "Vile Temptress",   2, 0, 600, Abilities.necromancerMissile,  2.86,  900, Icons.bTNDemoness,     /* Projectile Scale */  .8, "Demoness",     Units.demoness1,     /* Cargodummy Scale */ .7, /* Projectile Speed */ 1600, false, 0.,   '![08'))
+
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
