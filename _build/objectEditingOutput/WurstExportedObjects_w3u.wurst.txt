@@ -463,7 +463,7 @@ import ObjEditingNatives
 	..setInt("ufma", 0)
 	..setInt("uhpm", 500000)
 	..setString("utyp", "mechanical")
-	..setString("umki", "I002,I005,IP03,IP05")
+	..setString("umki", "I002,Ihu1,I005,Ish1,IP03,IP05")
 	..setString("ures", "")
 	..setString("utra", "")
 	..setString("uupt", "")

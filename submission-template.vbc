@@ -51,6 +51,12 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.13.1[/color] [color=#999999]20 Jul 2019[/color]:
+[list][*] Made changes to crewmembers to clarify stats and sell value.
+[*] All long-range crew are now incapable of hitting structures.
+[*] Significant rework to crewmember balance, improves synergy.
+[/list]
+
 [color=#ffcc00]0.13.0[/color] [color=#999999]16 Jul 2019[/color]:
 [list][*] Reworked vision/pathing to behave more like classic Battleships.
 [*] Disabled global trading and added a send-gold ability to trader.
@@ -77,7 +83,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Minor new singleplayer commands added.
 [/list]
 
-[color=#ffcc00]0.12.1[/color] [color=#999999]9 Jun 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.12.1[/color] [color=#999999]9 Jun 2019[/color]:
 [list][*] Fixed a fatal problem related to a 1.31 regression (map crash).
 [*] Fixed a bug where a player gets bounty when a team-kill occurs.
 [*] Improved messages for when a team-kill occurs.
@@ -87,7 +93,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Enchanted frost wyrms now appear more blue.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
+[color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
 [list][*] Fixed a bug where next-page buttons don't work if your inventory is full.
 [*] The interceptor now has a crowd control (damage) ability.
 [*] The frigate now has a sustain (healing) ability.

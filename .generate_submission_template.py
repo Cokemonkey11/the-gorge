@@ -61,7 +61,7 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.13.1",
-        "NEXT",
+        "20 Jul 2019",
         (
             "Made changes to crewmembers to clarify stats and sell value.",
             "All long-range crew are now incapable of hitting structures.",

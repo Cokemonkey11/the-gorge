@@ -30,10 +30,6 @@ package Equipment
 		static constant TOXIC_SUBST_FULL = 'I00H'
 		static constant VENOM_VIAL       = 'I00J'
 
-		// Hulls
-		static constant STONE_HULL     = 'I002'
-		// Shield Generators
-		static constant BRONZE_GEN     = 'I005'
 		// Teleporters
 		static constant IONIC_TELEPORT = 'I008'
 		// Special
@@ -45,6 +41,7 @@ package Equipment
 
 		// Hull reduction levels
 		static constant REDUCTION1 = 10
+		static constant REDUCTION2 = 20
 
 		static constant WRONG_CLASS             = "Your ship class cannot use that type of equipment."
 		static constant INSUFFICIENT_EXPERIENCE = "You have insufficient experience for the selected contract."
@@ -341,8 +338,12 @@ package Equipment
 
 		static function resetUnitDamageReduction(unit u)
 			for index = 0 to 5
-				if GetItemTypeId(UnitItemInSlot(u, index)) == STONE_HULL
+				let id = GetItemTypeId(UnitItemInSlot(u, index))
+				if id == ID_STONE_HULL
 					reduction.put(u, REDUCTION1)
+					return
+				else if id == ID_ELVEN_HULL
+					reduction.put(u, REDUCTION2)
 					return
 
 			reduction.put(u, 0)
@@ -394,8 +395,10 @@ package Equipment
 		Equipment.classes.put(ID_REPAIRCREW_2,                 Equipment.CLASS_MECHANIC)
 		Equipment.classes.put(ID_REPAIRCREW_3,                 Equipment.CLASS_MECHANIC)
 		Equipment.classes.put(ID_REPAIRCREW_4,                 Equipment.CLASS_MECHANIC)
-		Equipment.classes.put(Equipment.STONE_HULL,            Equipment.CLASS_HULL)
-		Equipment.classes.put(Equipment.BRONZE_GEN,            Equipment.CLASS_SHIELDGEN)
+		Equipment.classes.put(ID_STONE_HULL,                   Equipment.CLASS_HULL)
+		Equipment.classes.put(ID_ELVEN_HULL,                   Equipment.CLASS_HULL)
+		Equipment.classes.put(ID_SHIELD_BRONZE,                Equipment.CLASS_SHIELDGEN)
+		Equipment.classes.put(ID_SHIELD_SILVER,                Equipment.CLASS_SHIELDGEN)
 		Equipment.classes.put(Equipment.IONIC_TELEPORT,        Equipment.CLASS_TELEPORT)
 		Equipment.classes.put(Equipment.SHIP_LOCATOR,          Equipment.CLASS_SPECIAL)
 		Equipment.classes.put(Equipment.DATA_ACQUISIT,         Equipment.CLASS_CONTRACT)

@@ -1,19 +1,24 @@
 package ShieldAllLevels
 	import Assets
+	import Items
 	import Shield
 	import RegisterEvents
 
 	constant SHIELD_FX = Abilities.immolationTarget
 	constant SHIELD_FX_POINT = "origin"
 	constant SHIELD_ID = 'A00G'
-	constant SHIELD_1  = 'I005'
 	constant AMOUNT_1 = 500.
+	constant AMOUNT_2 = 750.
 	constant TIME_1   =   5.
+	constant TIME_2   =   5.
 
 	function getUnitShieldId(unit u) returns int
 		for index = 0 to 5
-			if GetItemTypeId(UnitItemInSlot(u, index)) == SHIELD_1
-				return SHIELD_1
+			let id = GetItemTypeId(UnitItemInSlot(u, index))
+			if id == ID_SHIELD_BRONZE
+				return ID_SHIELD_BRONZE
+			else if id == ID_SHIELD_SILVER
+				return ID_SHIELD_SILVER
 
 		return -1
 
@@ -21,8 +26,10 @@ package ShieldAllLevels
 		if GetSpellAbilityId() == SHIELD_ID
 			let tU = GetTriggerUnit()
 			let sId = getUnitShieldId(tU)
-			if sId == SHIELD_1
+			if sId == ID_SHIELD_BRONZE
 				Shield.add(tU, AMOUNT_1, TIME_1, SHIELD_FX, SHIELD_FX_POINT)
+			else if sId == ID_SHIELD_SILVER
+				Shield.add(tU, AMOUNT_2, TIME_2, SHIELD_FX, SHIELD_FX_POINT)
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)

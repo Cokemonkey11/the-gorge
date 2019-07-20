@@ -12,17 +12,6 @@ import ObjEditingNatives
 	..setString("fube", "This unit is slowed; its movement speed is reduced.")
 
 
-@compiletime function create_w3h_B001()
-	let def = createObjectDefinition("w3h", 'B001', 'Bbsk')
-	..setString("fart", "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp")
-	..setString("ftat", "")
-	..setString("fta0", "")
-	..setString("fta1", "")
-	..setInt("ftac", 0)
-	..setString("ftip", "Shield")
-	..setString("fube", "This unit has shielded itself; it will temporarily avoid damage to a limit.")
-
-
 @compiletime function create_w3h_B002()
 	let def = createObjectDefinition("w3h", 'B002', 'Bbsk')
 	..setString("fart", "ReplaceableTextures\\CommandButtons\\BTNUnload.blp")
@@ -52,6 +41,18 @@ import ObjEditingNatives
 @compiletime function create_w3h_B004()
 	let def = createObjectDefinition("w3h", 'B004', 'Binv')
 	..setString("fnsf", "(SL15 Effect)")
+
+
+@compiletime function create_w3h_B001()
+	let def = createObjectDefinition("w3h", 'B001', 'Bbsk')
+	..setInt("wurs", 42)
+	..setString("fart", "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp")
+	..setString("ftat", "")
+	..setString("fta0", "")
+	..setString("fta1", "")
+	..setInt("ftac", 0)
+	..setString("ftip", "Shield")
+	..setString("fube", "This unit has shielded itself; it will temporarily avoid damage to a limit.")
 
 
 // Original Table (contains all modified default objects)

@@ -2,6 +2,7 @@ package Items
 
 // To create a new item, be sure to set its classifications in `Equipment#init`.
 import AbilitiesApi
+import AbilityObjEditing
 import Assets
 import ItemObjEditing
 import ObjectIds
@@ -15,6 +16,14 @@ public constant ID_REPAIRCREW_1     = 'I001'
 public constant ID_REPAIRCREW_2     = 'I!03'
 public constant ID_REPAIRCREW_3     = 'I!04'
 public constant ID_REPAIRCREW_4     = 'I!05'
+
+// Hulls
+public constant ID_STONE_HULL     = 'I002'
+public constant ID_ELVEN_HULL     = 'Ihu1'
+
+// Shields
+public constant ID_SHIELD_BRONZE = 'I005'
+public constant ID_SHIELD_SILVER = 'Ish1'
 
 public constant ID_NEXT_PAGE_CONTRACTS                      = 'IP00'
 public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS              = 'IP01'
@@ -100,3 +109,112 @@ class PageButtons extends ItemDefinition
     new PageButtons(ID_PREVIOUS_ENGINES_AND_MECHANICS,       false, "Go to |cffffcc00Engines|r and |cffffcc00Mechanics|r")
     new PageButtons(ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS, false, "Go to |cffffcc00Hulls|r and |cffffcc00Shield Generators|r")
     new PageButtons(ID_PREVIOUS_TELEPORTERS_AND_SPECIALS,    false, "Go to |cffffcc00Teleporters|r and |cffffcc00Specials|r")
+
+class HitpointBonus extends AbilityDefinitionMaxLifeBonusLeast
+    construct(int id, int amt)
+        super(id)
+        setMaxLifeGained(1, amt)
+
+class HullDefinition extends ItemDefinition
+    construct(int id, int idBonusHp, string name, string icon, int cost, int healthBonus, int damageReduction)
+        super(id, 'afac')
+        setAbilities(commaList(idBonusHp))
+        setInterfaceIcon(icon)
+        setGoldCost(cost)
+        setDescription("Provides bonus health and damage reduction.")
+        setName(name)
+        setTooltipBasic("Purchase " + name)
+        setTooltipExtended(
+            "Boosts health and damage reduction of your ship.|n |n|cffffcc00Heath Bonus:|r "
+            + healthBonus.toString()
+            + "|n|cffffcc00Damage Reduction:|r "
+            + damageReduction.toString()
+            + "%|n|cffffcc00Class:|r Hull|n|cffffcc00Applicable Ship Classes:|r Frigate, Battleship, Interceptor"
+        )
+
+        setLevelUnclassified(1)
+        setLevel(1)
+        setPriority(1)
+        setStockReplenishInterval(0)
+        setStockMaximum(1)
+        setStockStartDelay(30)
+        setHitPoints(cost)
+
+        new HitpointBonus(idBonusHp, healthBonus)
+
+@compiletime function create_hulls()
+    new HullDefinition(ID_STONE_HULL, 'A00F', "Sone Reinforced Hull", Icons.bTNAdvancedSpikedBarricades, 150, 300, 10)
+    new HullDefinition(ID_ELVEN_HULL, 'Ahu1', "Plated Elven Hull",    Icons.bTNLeatherUpgradeThree,      300, 500, 15)
+
+// Generic shield buff.
+@compiletime function create_w3h_B001()
+    let _def = createObjectDefinition("w3h", 'B001', 'Bbsk')
+        ..setString("fart", "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp")
+        ..setString("ftat", "")
+        ..setString("fta0", "")
+        ..setString("fta1", "")
+        ..setInt("ftac", 0)
+        ..setString("ftip", "Shield")
+        ..setString("fube", "This unit has shielded itself; it will temporarily avoid damage to a limit.")
+
+// Ship locator.
+@compiletime function create_w3a_A00I()
+    let _def = createObjectDefinition("w3a", 'A00I', 'Absk')
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataInt("aite", 0, 0, 1)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataUnreal("bsk2", 1, 2, 0.0)
+        ..setLvlDataUnreal("bsk3", 1, 3, 0.0)
+        ..setLvlDataUnreal("bsk1", 1, 1, 0.0)
+        ..setLvlDataString("abuf", 1, 0, "B001")
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataString("anam", 0, 0, "Ship Locator (Dummy)")
+        ..setLvlDataString("ahky", 0, 0, "")
+
+
+class ShieldDefinition extends ItemDefinition
+    construct(int id, int cost, string name, int blocked, int duration, string icon)
+        super(id, 'afac')
+        setAbilities("A00G")
+        setInterfaceIcon(icon)
+        setGoldCost(cost)
+        setDescription("Prevents damage for a time.")
+        setName(name)
+        setTooltipBasic("Purchase " + name)
+        setTooltipExtended(
+            "Prevents damage temporarily when activated.|n |n|cffffcc00Damage Blocked:|r "
+            + blocked.toString()
+            + "|n|cffffcc00Duration: |r"
+            + duration.toString()
+            + "|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Shield Generator|n|cffffcc00Applicable Ship Classes:|r Frigate, Battleship, Interceptor"
+        )
+
+        setLevelUnclassified(1)
+        setLevel(1)
+        setPriority(1)
+        setHitPoints(cost)
+        setButtonPositionY(1)
+        setCooldownGroup("A00G")
+        setActivelyUsed(true)
+        setStockReplenishInterval(0)
+        setStockStartDelay(30)
+        setStockMaximum(1)
+
+@compiletime function create_shields()
+    new ShieldDefinition(ID_SHIELD_BRONZE, 150, "Bronze Hull Generator", 500, 5, Icons.bTNArcaniteArmor)
+    new ShieldDefinition(ID_SHIELD_SILVER, 300, "Silver Hull Generator", 750, 5, Icons.bTNControlMagic)
+
+// Generic shield ability.  Shared by all shield items.
+@compiletime function create_w3a_A00G()
+    let _def = createObjectDefinition("w3a", 'A00G', 'Absk')
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataInt("aite", 0, 0, 1)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataUnreal("bsk2", 1, 2, 0.0)
+        ..setLvlDataUnreal("bsk3", 1, 3, 0.0)
+        ..setLvlDataUnreal("bsk1", 1, 1, 0.0)
+        ..setLvlDataString("abuf", 1, 0, "B001")
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataString("anam", 0, 0, "Shield (All Levels)")
