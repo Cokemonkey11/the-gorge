@@ -51,9 +51,17 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.13.0[/color] [color=#999999]16 Jul 2019[/color]:
+[list][*] Reworked vision/pathing to behave more like classic Battleships.
+[*] Disabled global trading and added a send-gold ability to trader.
+[*] [trading] fixed the broken spider venom job.
+[*] Reworked crewmembers slightly to reduce the learning curve.
+[*] Top weapon stats are now displayed at the end of the match.
+[/list]
+
 [color=#ffcc00]0.12.4[/color] [color=#999999]22 Jun 2019[/color]:
-[list][*] minor improvements related to the use of DamageEvent (wurst)
-[*] fixed a minor cosmetic bug that made creeps appear to be healing
+[list][*] minor improvements related to the use of DamageEvent (wurst).
+[*] fixed a minor cosmetic bug that made creeps appear to be healing.
 [/list]
 
 [color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
@@ -79,7 +87,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Enchanted frost wyrms now appear more blue.
 [/list]
 
-[color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.12.0[/color] [color=#999999]14 Apr 2019[/color]:
 [list][*] Fixed a bug where next-page buttons don't work if your inventory is full.
 [*] The interceptor now has a crowd control (damage) ability.
 [*] The frigate now has a sustain (healing) ability.
@@ -88,7 +96,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Minor tooltip fixes.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.11.2[/color] [color=#999999]7 Apr 2019[/color]:
+[color=#ffcc00]0.11.2[/color] [color=#999999]7 Apr 2019[/color]:
 [list][*] Fixed a desync when a player uses the -music command.
 [/list]
 

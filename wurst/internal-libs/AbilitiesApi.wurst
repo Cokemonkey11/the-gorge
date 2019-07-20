@@ -2,29 +2,23 @@ package AbilitiesApi
 
 import AbilityObjEditing
 import Assets
+import LinkedList
+import WurstLinkedHashMap
 
-constant        ID_SPEED_BONUS_1     = 'A00C'
-public constant ID_SPEED_BONUS_1_STR = "A00C"
-constant        ID_SPEED_BONUS_2     = 'A!00'
-public constant ID_SPEED_BONUS_2_STR = "A!00"
-constant        ID_SPEED_BONUS_3     = 'A!01'
-public constant ID_SPEED_BONUS_3_STR = "A!01"
-constant        ID_SPEED_BONUS_4     = 'A!02'
-public constant ID_SPEED_BONUS_4_STR = "A!02"
+public constant ID_SPEED_BONUS_1     = 'A00C'
+public constant ID_SPEED_BONUS_2     = 'A!00'
+public constant ID_SPEED_BONUS_3     = 'A!01'
+public constant ID_SPEED_BONUS_4     = 'A!02'
 
 public constant SPEED_BONUS_1 =  50
 public constant SPEED_BONUS_2 =  75
 public constant SPEED_BONUS_3 = 100
 public constant SPEED_BONUS_4 = 125
 
-constant        ID_HEALTH_REGEN_BONUS_1     = 'A00E'
-public constant ID_HEALTH_REGEN_BONUS_1_STR = "A00E"
-constant        ID_HEALTH_REGEN_BONUS_2     = 'A!03'
-public constant ID_HEALTH_REGEN_BONUS_2_STR = "A!03"
-constant        ID_HEALTH_REGEN_BONUS_3     = 'A!04'
-public constant ID_HEALTH_REGEN_BONUS_3_STR = "A!04"
-constant        ID_HEALTH_REGEN_BONUS_4     = 'A!05'
-public constant ID_HEALTH_REGEN_BONUS_4_STR = "A!05"
+public constant ID_HEALTH_REGEN_BONUS_1     = 'A00E'
+public constant ID_HEALTH_REGEN_BONUS_2     = 'A!03'
+public constant ID_HEALTH_REGEN_BONUS_3     = 'A!04'
+public constant ID_HEALTH_REGEN_BONUS_4     = 'A!05'
 
 public constant HEALTH_REGEN_BONUS_1 =  8
 public constant HEALTH_REGEN_BONUS_2 = 12
@@ -32,25 +26,142 @@ public constant HEALTH_REGEN_BONUS_3 = 16
 public constant HEALTH_REGEN_BONUS_4 = 20
 
 public constant ID_HERO_GLOW     = 'Af00'
-public constant ID_HERO_GLOW_STR = "Af00"
-
 public constant ID_SELECT_UNIT     = 'AE01'
-public constant ID_SELECT_UNIT_STR = "AE01"
-
 public constant ID_FIRE_CREWMEMBER     = 'A00M'
-public constant ID_FIRE_CREWMEMBER_STR = "A00M"
 
 public constant ID_MAGNETIC_REACTORS     = 'Az00'
-public constant ID_MAGNETIC_REACTORS_STR = "Az00"
 public constant ID_REGENERATOR           = 'Az01'
-public constant ID_REGENERATOR_STR       = "Az01"
 public constant ID_MONSOON_MK1           = 'Az02'
-public constant ID_MONSOON_MK1_STR       = "Az02"
 public constant ID_SEND_GOLD             = 'Az03'
-public constant ID_SEND_GOLD_STR         = "Az03"
 
 public constant ID_SHOW_TRADE_EXP        = 'A00N'
-public constant ID_SHOW_TRADE_EXP_STR    = "A00N"
+
+public class CrewmemberProps
+    int id
+    int idpp
+    int idcargo
+    string name
+    int price
+    string missile
+    int damage
+    real aps
+    int range
+    int posX
+    int posY
+    string icon
+    real projectileScale
+    string soundSet
+    string dummyModel
+    real dummyScale
+    int projectileSpeed
+    bool shouldHitStructures
+    real projectileArc
+    int idIcon
+
+    construct(int id, int idpp, int idcargo, string name, int posX, int posY, int price, string missile, int damage, real aps, int range, string icon, real projectileScale, string soundSet, string dummyModel, real dummyScale, int projectileSpeed, bool shouldHitStructures, real projectileArc, int idIcon)
+        this.id = id            // The purchasable unit.  No model.  Always stacks on hero.
+        this.idpp = idpp        // The phoenix fire ability.  Attachs to the purchasable unit.
+        this.idcargo = idcargo  // The dummy unit that appears in the player's cargo hold.  Acts as a handle for selling.
+        this.name = name
+        this.price = price
+        this.missile = missile
+        this.damage = damage
+        this.aps = aps  // Attacks per second.
+        this.range = range
+        this.posX = posX
+        this.posY = posY
+        this.icon = icon
+        this.projectileScale = projectileScale
+        this.soundSet = soundSet
+        this.dummyModel = dummyModel
+        this.dummyScale = dummyScale
+        this.projectileSpeed = projectileSpeed
+        this.shouldHitStructures = shouldHitStructures
+        this.projectileArc = projectileArc
+        this.idIcon = idIcon  // The ID for the ability that cargo dummies have to provide information.
+
+public enum Crewmember
+    None
+    Headhunter
+    WitchDoctor
+    TuskarrSpearman
+    Unbroken
+    Shaman
+    Grenadier
+    LaserRifleman
+    GryphonRider
+    VileTemptress
+
+constant ID_HEADHUNTER      = 'o000'
+constant ID_HEADHUNTER_D    = 'o009'
+constant ID_HEADHUNTER_PP   = 'A000'
+constant ID_HEADHUNTER_ICON = '![00'
+
+constant ID_WITCHDOCTOR      = 'o001'
+constant ID_WITCHDOCTOR_D    = 'o00F'
+constant ID_WITCHDOCTOR_PP   = 'A003'
+constant ID_WITCHDOCTOR_ICON = '![01'
+
+constant ID_SPEARMAN       = 'o002'
+constant ID_SPEARMAN_D     = 'o00D'
+constant ID_SPEARMAN_PP    = 'A001'
+constant ID_SPEARMAN_ICON  = '![02'
+
+constant ID_UNBROKEN       = 'o003'
+constant ID_UNBROKEN_D     = 'o00E'
+constant ID_UNBROKEN_PP    = 'A002'
+constant ID_UNBROKEN_ICON  = '![03'
+
+constant ID_SHAMAN         = 'o004'
+constant ID_SHAMAN_D       = 'o00C'
+constant ID_SHAMAN_PP      = 'A004'
+constant ID_SHAMAN_ICON    = '![04'
+
+public constant ID_SEAWITCH       = 'o005'
+public constant ID_SEAWITCH_D     = 'o00B'
+public constant ID_SEAWITCH_PP    = 'A005'
+public constant ID_SEAWITCH_ICON  = '![09'
+
+constant ID_GRENADIER      = 'o006'
+constant ID_GRENADIER_D    = 'o008'
+constant ID_GRENADIER_PP   = 'A006'
+constant ID_GRENADIER_ICON = '![05'
+
+constant ID_LASERRIFLE      = 'o007'
+constant ID_LASERRIFLE_D    = 'o00A'
+constant ID_LASERRIFLE_PP   = 'A007'
+constant ID_LASERRIFLE_ICON = '![06'
+
+constant ID_GRYPHON        = 'o00G'
+constant ID_GRYPHON_D      = 'o00H'
+constant ID_GRYPHON_PP     = 'A00Q'
+constant ID_GRYPHON_ICON   = '![07'
+
+public constant ID_AMASTER        = 'o00I'
+public constant ID_AMASTER_D      = 'o00J'
+public constant ID_AMASTER_PP     = asList('A00S', 'A00T', 'A00U')
+public constant ID_AMASTER_ICON   = '![0A'
+
+public constant ID_ODRAKE         = 'o00K'
+public constant ID_ODRAKE_D       = 'o00L'
+public constant ID_ODRAKE_PP      = 'A00V'
+public constant ID_ODRAKE_ICON    = '![0B'
+
+constant ID_VTEMPT         = 'o00M'
+constant ID_VTEMPT_D       = 'o00N'
+constant ID_VTEMPT_PP      = 'A00X'
+constant ID_VTEMPT_ICON    = '![08'
+
+public constant CREW_PROPS = new LinkedHashMap<Crewmember, CrewmemberProps>()
+    ..put(Crewmember.Headhunter,      new CrewmemberProps(ID_HEADHUNTER,  ID_HEADHUNTER_PP,  ID_HEADHUNTER_D,  "Headhunter",       0, 0,  20, Abilities.huntermissile,        25, 1.,    450, Icons.bTNHeadhunter,   /* Projectile Scale */ 1.,  "HeadHunter",   Units.headhunter_V1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,   .1,  ID_HEADHUNTER_ICON))
+    ..put(Crewmember.WitchDoctor,     new CrewmemberProps(ID_WITCHDOCTOR, ID_WITCHDOCTOR_PP, ID_WITCHDOCTOR_D, "Witch Doctor",     1, 0,  20, Abilities.witchDoctorMissile,   13, 2.,    500, Icons.bTNWitchDoctor,  /* Projectile Scale */  .5, "WitchDoctor",  Units.witchDoctor1,  /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,  0.,   ID_WITCHDOCTOR_ICON))
+    ..put(Crewmember.TuskarrSpearman, new CrewmemberProps(ID_SPEARMAN,    ID_SPEARMAN_PP,    ID_SPEARMAN_D,    "Tuskarr Spearman", 2, 0,  20, Abilities.tuskarSpear,          45,  .5,   900, Icons.bTNTuskaarBrown, /* Projectile Scale */ 1.,  "Tuskarr",      Units.tuskarRanged,  /* Cargodummy Scale */ .5, /* Projectile Speed */ 1700, false,  .1,  ID_SPEARMAN_ICON))
+    ..put(Crewmember.Unbroken,        new CrewmemberProps(ID_UNBROKEN,    ID_UNBROKEN_PP,    ID_UNBROKEN_D,    "Unbroken",         3, 0,  20, Abilities.wardenMissile,       123,  .5,   200, Icons.bTNUnbroken,     /* Projectile Scale */ 1.,  "Unbroken",     Units.unbroken,      /* Cargodummy Scale */ .4, /* Projectile Speed */ 1000, true,  0.,   ID_UNBROKEN_ICON))
+    ..put(Crewmember.Shaman,          new CrewmemberProps(ID_SHAMAN,      ID_SHAMAN_PP,      ID_SHAMAN_D,      "Shaman",           0, 1, 150, Abilities.farseerMissile,       70, 1.1,   650, Icons.bTNShaman,       /* Projectile Scale */  .8, "Shaman",       Units.shaman1,       /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, true,   .15, ID_SHAMAN_ICON))
+    ..put(Crewmember.Grenadier,       new CrewmemberProps(ID_GRENADIER,   ID_GRENADIER_PP,   ID_GRENADIER_D,   "Grenadier",        2, 1, 150, Abilities.mortarMissile,        50, 1.1,   900, Icons.bTNMortarTeam,   /* Projectile Scale */  .6, "Grenadier",    Units.mortarTeam1,   /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, false,  .15, ID_GRENADIER_ICON))
+    ..put(Crewmember.LaserRifleman,   new CrewmemberProps(ID_LASERRIFLE,  ID_LASERRIFLE_PP,  ID_LASERRIFLE_D,  "Laser Rifleman",   3, 1, 150, Abilities.phoenix_Missile,      30, 5.56,  200, Icons.bTNSkink,        /* Projectile Scale */  .3, "Skink",        Units.skink1,        /* Cargodummy Scale */ .9, /* Projectile Speed */ 1500, true,  0.,   ID_LASERRIFLE_ICON))
+    ..put(Crewmember.GryphonRider,    new CrewmemberProps(ID_GRYPHON,     ID_GRYPHON_PP,     ID_GRYPHON_D,     "Gryphon Rider",    0, 0, 600, Abilities.gryphonRiderMissile, 115, 1.43,  800, Icons.bTNGryphonRider, /* Projectile Scale */  .7, "GryphonRider", Units.gryphonRider1, /* Cargodummy Scale */ .6, /* Projectile Speed */ 1600, true,   .1,  ID_GRYPHON_ICON))
+    ..put(Crewmember.VileTemptress,   new CrewmemberProps(ID_VTEMPT,      ID_VTEMPT_PP,      ID_VTEMPT_D,      "Vile Temptress",   3, 0, 600, Abilities.necromancerMissile,   50, 2.86, 1000, Icons.bTNDemoness,     /* Projectile Scale */  .8, "Demoness",     Units.demoness1,     /* Cargodummy Scale */ .7, /* Projectile Speed */ 1600, false, 0.,   ID_VTEMPT_ICON))
 
 class MovespeedBonuses extends AbilityDefinitionMoveSpeedBonus
     construct(int id, int speed_bonus)
@@ -114,11 +225,8 @@ class ReleaseAbil extends AbilityDefinitionIllidanChannel
         setFollowThroughTime(1, 0.)
         setOptions(1, 1)
         setTargetType(1, 0) // 1 -> Target Unit, 0 -> No Target
-        // setCastRange(1, 384.)
-        // setCooldown(1, .25)
         setHeroAbility(false)
         setLevels(1)
-        // setTargetsAllowed(1, "ground,invulnerable,neutral")
         setCheckDependencies(false)
         setHotkeyNormal("Q")
         setName("Fire crewmember")
@@ -294,3 +402,174 @@ class MonsoonMk1Abil extends AbilityDefinitionIllidanChannel
         ..setLvlDataString("ata0", 0, 0, "")
         ..setLvlDataUnreal("Ncl4", 1, 4, 0.0)
         ..setLvlDataInt("Ncl5", 1, 5, 0)
+
+class PhoenixFireBase extends AbilityDefinitionPhoenixFire
+    construct(int abilId, string name, string missile, int missileSpeed, real damage, real range, real cooldown, bool hitStructures, real missileArc)
+        super(abilId)
+        setName(name)
+        setEditorSuffix("(Phoenix Fire)")
+        setMissileArt(missile)
+        setMissileSpeed(missileSpeed)
+        setInitialDamage(1, damage)
+        setAreaofEffect(1, range)
+        setDurationHero(1, .01)
+        setDurationNormal(1, .01)
+        setCooldown(1, cooldown)
+        setTargetsAllowed(1, "air,enemies,ground,vulnerable" + (hitStructures ? ",structure" : ""))
+        setMissileArc(missileArc)
+
+@compiletime function create_phoenix_fires()
+    CREW_PROPS.forEach() (LHMEntry<Crewmember, CrewmemberProps> kv) ->
+        new PhoenixFireBase(
+            kv.value.idpp,
+            kv.value.name,
+            kv.value.missile,
+            kv.value.projectileSpeed,
+            kv.value.damage.toReal(),
+            kv.value.range.toReal(),
+            1. / kv.value.aps,
+            kv.value.shouldHitStructures,
+            kv.value.projectileArc
+        )
+
+@compiletime function create_w3a_A005()
+    let _def = createObjectDefinition("w3a", 'A005', 'Apxf')
+        ..setLvlDataString("anam", 0, 0, "Sea Witch")
+        ..setLvlDataString("ansf", 0, 0, "(Phoenix Fire)")
+        ..setLvlDataString("atp1", 1, 0, "")
+        ..setLvlDataString("aub1", 1, 0, "")
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataString("amat", 0, 0, "Abilities\\Spells\\Other\\FrostArrows\\NagaColdArrowMissile.mdl")
+        ..setLvlDataUnreal("pxf2", 1, 2, 0.0)
+        ..setLvlDataUnreal("pxf1", 1, 1, 35.0)
+        ..setLvlDataUnreal("aare", 1, 0, 550.0)
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataUnreal("acdn", 1, 0, 0.8)
+        ..setLvlDataString("atar", 1, 0, "air,enemies,ground,structure,vulnerable")
+        ..setLvlDataUnreal("amac", 0, 0, 0.1)
+
+@compiletime function create_w3a_A00S()
+    let _def = createObjectDefinition("w3a", 'A00S', 'Apxf')
+        ..setLvlDataString("anam", 0, 0, "Master Archer")
+        ..setLvlDataString("ansf", 0, 0, "(A) (Phoenix Fire)")
+        ..setLvlDataString("atp1", 1, 0, "")
+        ..setLvlDataString("aub1", 1, 0, "")
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl")
+        ..setLvlDataInt("amsp", 0, 0, 1800)
+        ..setLvlDataUnreal("pxf2", 1, 2, 0.0)
+        ..setLvlDataUnreal("pxf1", 1, 1, 50.0)
+        ..setLvlDataUnreal("aare", 1, 0, 650.0)
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataUnreal("acdn", 1, 0, 0.8)
+        ..setLvlDataString("atar", 1, 0, "air,enemies,ground,structure,vulnerable")
+        ..setLvlDataUnreal("amac", 0, 0, 0.1)
+        ..setLvlDataInt("amho", 0, 0, 0)
+
+
+@compiletime function create_w3a_A00T()
+    let _def = createObjectDefinition("w3a", 'A00T', 'Apxf')
+        ..setLvlDataString("anam", 0, 0, "Master Archer")
+        ..setLvlDataString("ansf", 0, 0, "(B) (Phoenix Fire)")
+        ..setLvlDataString("atp1", 1, 0, "")
+        ..setLvlDataString("aub1", 1, 0, "")
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl")
+        ..setLvlDataInt("amsp", 0, 0, 1800)
+        ..setLvlDataUnreal("pxf2", 1, 2, 0.0)
+        ..setLvlDataUnreal("pxf1", 1, 1, 50.0)
+        ..setLvlDataUnreal("aare", 1, 0, 650.0)
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataUnreal("acdn", 1, 0, 0.8)
+        ..setLvlDataString("atar", 1, 0, "air,enemies,ground,structure,vulnerable")
+        ..setLvlDataUnreal("amac", 0, 0, 0.1)
+        ..setLvlDataInt("amho", 0, 0, 0)
+
+
+@compiletime function create_w3a_A00U()
+    let _def = createObjectDefinition("w3a", 'A00U', 'Apxf')
+        ..setLvlDataString("anam", 0, 0, "Master Archer")
+        ..setLvlDataString("ansf", 0, 0, "(C) (Phoenix Fire)")
+        ..setLvlDataString("atp1", 1, 0, "")
+        ..setLvlDataString("aub1", 1, 0, "")
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl")
+        ..setLvlDataInt("amsp", 0, 0, 1800)
+        ..setLvlDataUnreal("pxf2", 1, 2, 0.0)
+        ..setLvlDataUnreal("pxf1", 1, 1, 50.0)
+        ..setLvlDataUnreal("aare", 1, 0, 650.0)
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataUnreal("acdn", 1, 0, 0.8)
+        ..setLvlDataString("atar", 1, 0, "air,enemies,ground,structure,vulnerable")
+        ..setLvlDataUnreal("amac", 0, 0, 0.1)
+        ..setLvlDataInt("amho", 0, 0, 0)
+
+
+@compiletime function create_w3a_A00V()
+    let _def = createObjectDefinition("w3a", 'A00V', 'Apxf')
+        ..setLvlDataString("anam", 0, 0, "Obsidian Drake")
+        ..setLvlDataString("ansf", 0, 0, "(Phoenix Fire)")
+        ..setLvlDataString("atp1", 1, 0, "")
+        ..setLvlDataString("aub1", 1, 0, "")
+        ..setLvlDataInt("abpy", 0, 0, 0)
+        ..setLvlDataString("aart", 0, 0, "")
+        ..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\RedDragonBreath\\RedDragonMissile.mdl")
+        ..setLvlDataUnreal("pxf2", 1, 2, 0.0)
+        ..setLvlDataUnreal("pxf1", 1, 1, 320.0)
+        ..setLvlDataUnreal("ahdu", 1, 0, 0.01)
+        ..setLvlDataUnreal("adur", 1, 0, 0.01)
+        ..setLvlDataUnreal("acdn", 1, 0, 1.8)
+        ..setLvlDataString("atar", 1, 0, "air,enemies,ground,structure,vulnerable")
+        ..setLvlDataInt("abpx", 0, 0, 2)
+        ..setLvlDataInt("amsp", 0, 0, 1200)
+
+class CrewmemberInfoIcon extends AbilityDefinitionTaurenChieftainEnduranceAura
+    construct(int id, string name, int damage, real aps, int range, int sellValue, string special)
+        super(id)
+        setHeroAbility(false)
+        setTooltipNormal(1, "Info (" + name + ")")
+        setTooltipNormalExtended(
+            1,
+            "|cffffcc00Sell value:|r "
+            + sellValue.toString()
+            + "|n |n|cff999999Damage:|r "
+            + damage.toString()
+            + "|n|cff999999Attack speed:|r "
+            + aps.toString(1)
+            + " per second"
+            + "|n|cff999999Range:|r "
+            + range.toString()
+            + (special.length() > 0 ? "|n|cffffcc00Special:|r " + special : "")
+        )
+        setIconNormal(Icons.pASBTNEngineeringUpgrade)
+        setButtonPositionNormalX(0)
+        setButtonPositionNormalY(0)
+        setArtCaster("")
+        setArtEffect("")
+        setArtTarget("")
+        setArtSpecial("")
+        setTargetsAllowed(1, "none")
+
+@compiletime function create_info_icons()
+    CREW_PROPS.forEach() (LHMEntry<Crewmember, CrewmemberProps> kv) ->
+        new CrewmemberInfoIcon(
+            kv.value.idIcon,
+            kv.value.name,
+            kv.value.damage,
+            kv.value.aps,
+            kv.value.range,
+            (kv.value.price / 2.).toInt(),
+            ""
+        )
+
+    new CrewmemberInfoIcon(ID_SEAWITCH_ICON, "Sea Witch",       35, 1. / .8,  550,  75, "Attacks slow the target by 20% for 5 seconds (non-stacking)")
+    new CrewmemberInfoIcon(ID_AMASTER_ICON,  "Master Archer",   50, 1. / .8,  650, 300, "Fires 3 independent projectiles (can strike the same target)")
+    new CrewmemberInfoIcon(ID_ODRAKE_ICON,   "Obsidian Drake", 320, 1. / 1.8, 600, 300, "Deals a total of 400 damage if the target is below 400 HP")

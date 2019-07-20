@@ -6,6 +6,6 @@ dependencies:
 - https://github.com/Cokemonkey11/WurstLinkedHashMap
 - https://github.com/Cokemonkey11/WurstRealHeapGuard
 buildMapData:
-  name: '|cff999999The Gorge|r 0.12.4'
-  fileName: (10)TheGorge0.12.4
+  name: '|cff999999The Gorge|r 0.13.0'
+  fileName: (10)TheGorge0.13.0
   author: Cokemonkey11

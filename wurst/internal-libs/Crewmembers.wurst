@@ -2,7 +2,10 @@
 // necessary crew member unit, create necessary cargo unit, add crew member
 // unit to keep slot, link member + cargo in this script.
 package Crewmembers
+	import AbilitiesApi
 	import ClosureTimers
+	import ErrorHandling
+	import WurstLinkedHashMap
 	import Ships
 	import Game
 	import HashMap
@@ -22,42 +25,6 @@ package Crewmembers
 
 
 	public class Crewmembers
-		static constant HEADHUNTER_ID    = 'o000'
-		static constant HEADHUNTER_D_ID  = 'o009'
-
-		static constant WITCHDOCTOR_ID   = 'o001'
-		static constant WITCHDOCTOR_D_ID = 'o00F'
-
-		static constant SPEARMAN_ID      = 'o002'
-		static constant SPEARMAN_D_ID    = 'o00D'
-
-		static constant UNBROKEN_ID      = 'o003'
-		static constant UNBROKEN_D_ID    = 'o00E'
-
-		static constant SHAMAN_ID        = 'o004'
-		static constant SHAMAN_D_ID      = 'o00C'
-
-		static constant SEAWITCH_ID      = 'o005'
-		static constant SEAWITCH_D_ID    = 'o00B'
-
-		static constant GRENADIER_ID     = 'o006'
-		static constant GRENADIER_D_ID   = 'o008'
-
-		static constant LASERRIFLE_ID    = 'o007'
-		static constant LASERRIFLE_D_ID  = 'o00A'
-
-		static constant GRYPHON_ID       = 'o00G'
-		static constant GRYPHON_D_ID     = 'o00H'
-
-		static constant AMASTER_ID       = 'o00I'
-		static constant AMASTER_D_ID     = 'o00J'
-
-		static constant ODRAKE_ID        = 'o00K'
-		static constant ODRAKE_D_ID      = 'o00L'
-
-		static constant VTEMPT_ID        = 'o00M'
-		static constant VTEMPT_D_ID      = 'o00N'
-
 		private static constant ERROR_MESSAGE = "You cannot purchase crewmen from your opponent."
 		private static constant OFFSET = 256. + 64.
 		private static constant SELL_RATE = .5
@@ -79,17 +46,19 @@ package Crewmembers
 
 
 		static function updatePosition(CrewMember cre, int index)
-			let face = I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS)
-			let x = GetStartLocationX(cre.ownerID) + OFFSET*Cos(face)
-			let y = GetStartLocationY(cre.ownerID) + OFFSET*Sin(face)
-			SetUnitPosition(cre.dummy, x, y)
-			SetUnitFacing(cre.dummy, face*bj_RADTODEG)
+			let face = angle(I2R(index) * 2. * bj_PI / I2R(MAX_SLOTS))
+			let start = vec2(
+				GetStartLocationX(cre.ownerID),
+				GetStartLocationY(cre.ownerID)
+			)
+			cre.dummy.setPos(start.polarOffset(face, OFFSET))
+			cre.dummy.setFacing(face)
 
 
 		static function release(unit u)
 			if fromDummy.has(u)
 				let temp = fromDummy.get(u)
-				let val = R2I(GetWidgetLife(temp.phoenix)*SELL_RATE)
+				let val = (temp.phoenix.getHP() * SELL_RATE).toInt()
 				players[temp.ownerID].addGold(val)
 				printTimedToPlayer(
 					"You pawned your |cffffcc00"
@@ -111,10 +80,10 @@ package Crewmembers
 					temp.phoenix.remove()
 					destroy temp
 				else
-					BJDebugMsg("Error: tried to release a unit that had no index :(")
+					error("Error: tried to release a unit that had no index :(")
 
 			else
-				BJDebugMsg("Error: Tried to release a unit that wasn't logged :(")
+				error("Error: Tried to release a unit that wasn't logged :(")
 
 		static function p()
 			var index = 0
@@ -163,18 +132,12 @@ package Crewmembers
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL, function Crewmembers.c)
 
 		// Format Links
-		Crewmembers.links.put(Crewmembers.HEADHUNTER_ID,  Crewmembers.HEADHUNTER_D_ID)
-		Crewmembers.links.put(Crewmembers.WITCHDOCTOR_ID, Crewmembers.WITCHDOCTOR_D_ID)
-		Crewmembers.links.put(Crewmembers.SPEARMAN_ID,    Crewmembers.SPEARMAN_D_ID)
-		Crewmembers.links.put(Crewmembers.UNBROKEN_ID,    Crewmembers.UNBROKEN_D_ID)
-		Crewmembers.links.put(Crewmembers.SHAMAN_ID,      Crewmembers.SHAMAN_D_ID)
-		Crewmembers.links.put(Crewmembers.SEAWITCH_ID,    Crewmembers.SEAWITCH_D_ID)
-		Crewmembers.links.put(Crewmembers.GRENADIER_ID,   Crewmembers.GRENADIER_D_ID)
-		Crewmembers.links.put(Crewmembers.LASERRIFLE_ID,  Crewmembers.LASERRIFLE_D_ID)
-		Crewmembers.links.put(Crewmembers.GRYPHON_ID,     Crewmembers.GRYPHON_D_ID)
-		Crewmembers.links.put(Crewmembers.AMASTER_ID,     Crewmembers.AMASTER_D_ID)
-		Crewmembers.links.put(Crewmembers.ODRAKE_ID,      Crewmembers.ODRAKE_D_ID)
-		Crewmembers.links.put(Crewmembers.VTEMPT_ID,      Crewmembers.VTEMPT_D_ID)
+		CREW_PROPS.forEach() (LHMEntry<Crewmember, CrewmemberProps> kv) ->
+			Crewmembers.links.put(kv.value.id, kv.value.idcargo)
+
+		Crewmembers.links.put(ID_SEAWITCH,    ID_SEAWITCH_D)
+		Crewmembers.links.put(ID_AMASTER,     ID_AMASTER_D)
+		Crewmembers.links.put(ID_ODRAKE,      ID_ODRAKE_D)
 
 		// Initialize slotInidices
 		for index = 0 to 11

@@ -60,8 +60,16 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "0.13.0",
+        "0.13.1",
         "NEXT",
+        (
+            "Made changes to crewmembers to clarify stats and sell value.",
+            "All long-range crew are now incapable of hitting structures.",
+        )
+    ),
+    (
+        "0.13.0",
+        "16 Jul 2019",
         (
             "Reworked vision/pathing to behave more like classic Battleships.",
             "Disabled global trading and added a send-gold ability to trader.",

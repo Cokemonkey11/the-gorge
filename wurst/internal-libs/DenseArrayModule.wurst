@@ -1,0 +1,100 @@
+/**
+    A module that provides iterability to classes as simply as possible.
+*/
+package DenseArrayModule
+
+import ErrorHandling
+
+/** Proides iterator(), and forget(Iterator) to the using class. */
+public module DenseArrayModule
+    static thistype array arr
+    static int size = 0
+
+    construct()
+        arr[size] = this
+        size++
+
+    /**
+        Remove an instance from the iterable array, shuffling the last member
+        into its place, and returning the forgotten result.  If using an
+        iterator, prefer `forget(DenseArrayModuleIterator)` for consistency.
+    */
+    static function forget(int idx) returns thistype
+        if idx >= size
+            error("Tried to forget from dense array at invalid index.")
+            return null
+
+        let ret = arr[idx]
+        arr[idx] = arr[size - 1]
+        size--
+
+        return ret
+
+    /**
+        Remove an instance from the iterable array, shuffling the last member
+        into its place, returning the forgotten result, and decrementing the
+        iterator for consistency.
+    */
+    static function forget(DenseArrayModuleIterator iter) returns thistype
+        iter.idx--
+        return forget(iter.idx + 1)
+
+    /**
+        Provides an iterator for the class with `for in` semantics.  To provide
+        mutable access (forgetting or removers with consistency), use the
+        unsugared `iterator(); while; close()` syntax, and
+        `DenseArrayModule.forget(DenseArrayModuleIterator)`.
+    */
+    static function iterator() returns DenseArrayModuleIterator
+        return new DenseArrayModuleIterator()
+
+    static class DenseArrayModuleIterator
+        int idx
+
+        construct()
+            this.idx = -1
+
+        function hasNext() returns bool
+            return this.idx < (size - 1)
+
+        function next() returns DenseArrayModule.thistype
+            this.idx++
+            return arr[this.idx]
+
+        function close()
+            destroy this
+
+// class TestClass
+//     use DenseArrayModule
+//     int z
+
+//     construct(int v)
+//         this.z = v
+
+// init
+//     new TestClass(5)
+//     new TestClass(9)
+//     new TestClass(11)
+
+//     // Iterator supported for readonly access.
+//     for TestClass t in TestClass
+//         print(t.z)
+
+//     new TestClass(91)
+//     new TestClass(5)
+//     new TestClass(101)
+//     new TestClass(3)
+//     new TestClass(1)
+//     new TestClass(55)
+
+//     // Verbose iterator supported with static forget(iter.idx) capability.
+//     let iter = TestClass.iterator()
+//     while iter.hasNext()
+//         let t = iter.next()
+//         if t.z > 50
+//             destroy TestClass.forget(iter)
+//     iter.close()
+
+//     print("---")
+//     for TestClass t in TestClass
+//         print(t.z)

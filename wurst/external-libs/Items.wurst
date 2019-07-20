@@ -4,46 +4,31 @@ package Items
 import AbilitiesApi
 import Assets
 import ItemObjEditing
+import ObjectIds
 
 public constant ID_ENGINE_1     = 'I000'
-public constant ID_ENGINE_1_STR = "I000"
 public constant ID_ENGINE_2     = 'I!00'
-public constant ID_ENGINE_2_STR = "I!00"
 public constant ID_ENGINE_3     = 'I!01'
-public constant ID_ENGINE_3_STR = "I!01"
 public constant ID_ENGINE_4     = 'I!02'
-public constant ID_ENGINE_4_STR = "I!02"
 
 public constant ID_REPAIRCREW_1     = 'I001'
-public constant ID_REPAIRCREW_1_STR = "I001"
 public constant ID_REPAIRCREW_2     = 'I!03'
-public constant ID_REPAIRCREW_2_STR = "I!03"
 public constant ID_REPAIRCREW_3     = 'I!04'
-public constant ID_REPAIRCREW_3_STR = "I!04"
 public constant ID_REPAIRCREW_4     = 'I!05'
-public constant ID_REPAIRCREW_4_STR = "I!05"
 
 public constant ID_NEXT_PAGE_CONTRACTS                      = 'IP00'
-public constant ID_NEXT_PAGE_CONTRACTS_STR                  = "IP00"
 public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS              = 'IP01'
-public constant ID_NEXT_PAGE_HULLS_AND_SHIELDS_STR          = "IP01"
 public constant ID_NEXT_KEEP_TIER_3_AND_4                   = 'IP02'
-public constant ID_NEXT_KEEP_TIER_3_AND_4_STR               = "IP02"
 public constant ID_NEXT_TELEPORTERS_AND_SPECIALS            = 'IP03'
-public constant ID_NEXT_TELEPORTERS_AND_SPECIALS_STR        = "IP03"
 public constant ID_PREVIOUS_KEEP_TIER_1_AND_2               = 'IP04'
-public constant ID_PREVIOUS_KEEP_TIER_1_AND_2_STR           = "IP04"
 public constant ID_PREVIOUS_ENGINES_AND_MECHANICS           = 'IP05'
-public constant ID_PREVIOUS_ENGINES_AND_MECHANICS_STR       = "IP05"
 public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS     = 'IP06'
-public constant ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS_STR = "IP06"
 public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS        = 'IP07'
-public constant ID_PREVIOUS_TELEPORTERS_AND_SPECIALS_STR    = "IP07"
 
 class MovespeedItems extends ItemDefinition
-    construct(int id, string abil, string icon, int cost, int bonus, string name, int xPos)
+    construct(int id, int abil, string icon, int cost, int bonus, string name, int xPos)
         super(id, 'afac')
-        setAbilities(abil)
+        setAbilities(commaList(abil))
         setInterfaceIcon(icon)
         setGoldCost(cost)
         setHitPoints(cost)
@@ -56,15 +41,15 @@ class MovespeedItems extends ItemDefinition
         setButtonPositionX(xPos)
 
 @compiletime function initMovespeedItems()
-    new MovespeedItems(ID_ENGINE_1, ID_SPEED_BONUS_1_STR, "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp",      150, SPEED_BONUS_1, "Steam Core Engine", 0)
-    new MovespeedItems(ID_ENGINE_2, ID_SPEED_BONUS_2_STR, "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp",     300, SPEED_BONUS_2, "Turbodiesel Engine", 1)
-    new MovespeedItems(ID_ENGINE_3, ID_SPEED_BONUS_3_STR, "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp",  450, SPEED_BONUS_3, "Super-compressed Core Engine", 2)
-    new MovespeedItems(ID_ENGINE_4, ID_SPEED_BONUS_4_STR, "ReplaceableTextures\\CommandButtons\\BTNOrbOfLightning.blp", 600, SPEED_BONUS_4, "Electric Motor", 3)
+    new MovespeedItems(ID_ENGINE_1, ID_SPEED_BONUS_1, "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp",      150, SPEED_BONUS_1, "Steam Core Engine", 0)
+    new MovespeedItems(ID_ENGINE_2, ID_SPEED_BONUS_2, "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp",     300, SPEED_BONUS_2, "Turbodiesel Engine", 1)
+    new MovespeedItems(ID_ENGINE_3, ID_SPEED_BONUS_3, "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp",  450, SPEED_BONUS_3, "Super-compressed Core Engine", 2)
+    new MovespeedItems(ID_ENGINE_4, ID_SPEED_BONUS_4, "ReplaceableTextures\\CommandButtons\\BTNOrbOfLightning.blp", 600, SPEED_BONUS_4, "Electric Motor", 3)
 
 class HealthregenItems extends ItemDefinition
-    construct(int id, string abil, string icon, int cost, int bonus, string name, int xPos)
+    construct(int id, int abil, string icon, int cost, int bonus, string name, int xPos)
         super(id, 'afac')
-        setAbilities(abil)
+        setAbilities(commaList(abil))
         setInterfaceIcon(icon)
         setGoldCost(cost)
         setHitPoints(cost)
@@ -78,10 +63,10 @@ class HealthregenItems extends ItemDefinition
         setButtonPositionY(1)
 
 @compiletime function initHealthregenItems()
-    new HealthregenItems(ID_REPAIRCREW_1, ID_HEALTH_REGEN_BONUS_1_STR, "ReplaceableTextures\\CommandButtons\\BTNPeon.blp",            150, HEALTH_REGEN_BONUS_1, "Peon Problem Solver", 0)
-    new HealthregenItems(ID_REPAIRCREW_2, ID_HEALTH_REGEN_BONUS_2_STR, "ReplaceableTextures\\CommandButtons\\BTNMortarTeam.blp",      300, HEALTH_REGEN_BONUS_2, "Dwarven Technicians", 1)
-    new HealthregenItems(ID_REPAIRCREW_3, ID_HEALTH_REGEN_BONUS_3_STR, "ReplaceableTextures\\CommandButtons\\BTNGoblinSapper.blp",    450, HEALTH_REGEN_BONUS_3, "Goblin Scientist", 2)
-    new HealthregenItems(ID_REPAIRCREW_4, ID_HEALTH_REGEN_BONUS_4_STR, "ReplaceableTextures\\CommandButtons\\BTNBloodElfPeasant.blp", 600, HEALTH_REGEN_BONUS_4, "Elven Engineer", 3)
+    new HealthregenItems(ID_REPAIRCREW_1, ID_HEALTH_REGEN_BONUS_1, "ReplaceableTextures\\CommandButtons\\BTNPeon.blp",            150, HEALTH_REGEN_BONUS_1, "Peon Problem Solver", 0)
+    new HealthregenItems(ID_REPAIRCREW_2, ID_HEALTH_REGEN_BONUS_2, "ReplaceableTextures\\CommandButtons\\BTNMortarTeam.blp",      300, HEALTH_REGEN_BONUS_2, "Dwarven Technicians", 1)
+    new HealthregenItems(ID_REPAIRCREW_3, ID_HEALTH_REGEN_BONUS_3, "ReplaceableTextures\\CommandButtons\\BTNGoblinSapper.blp",    450, HEALTH_REGEN_BONUS_3, "Goblin Scientist", 2)
+    new HealthregenItems(ID_REPAIRCREW_4, ID_HEALTH_REGEN_BONUS_4, "ReplaceableTextures\\CommandButtons\\BTNBloodElfPeasant.blp", 600, HEALTH_REGEN_BONUS_4, "Elven Engineer", 3)
 
 class PageButtons extends ItemDefinition
     construct(int id, bool is_page_down, string tooltip_extended)
