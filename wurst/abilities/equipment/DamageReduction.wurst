@@ -14,5 +14,5 @@ package DamageReduction
 			DamageEvent.setAmount(d)
 
 	init
-		DamageEvent.addListener() () ->
+		DamageEvent.addListener(0) () ->
 			h()

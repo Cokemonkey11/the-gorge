@@ -1,4 +1,6 @@
 package SinglePlayer
+    import DamageEvent
+    import LinkedList
     import Players
     import Ships
 
@@ -10,7 +12,7 @@ package SinglePlayer
         static          bool   fastEnabled = false
         static          var    isSinglePlayer = false
 
-        static function help() returns bool
+        static function help()
             print(SP_PREFIX + "Available commands:")
             print(TAB + "-help: Display this help menu.")
             print(TAB + "-experience: Gives 500 trading experience.")
@@ -18,29 +20,31 @@ package SinglePlayer
             print(TAB + "-visibility: Disables Fog of War and Black Mask.")
             print(TAB + "-fast: Enables instant ship movement.")
 
-            return false
 
-
-        static function heal() returns bool
+        static function heal()
             let u = Ships.ships[thePlayer.getId()]
             u.setHP(u.getMaxHP())
 
-            return false
+
+        static function hp(LinkedList<string> args)
+            Ships.ships[thePlayer.getId()].setHP(args.getFirst().toReal())
 
 
-        static function experience() returns bool
+        static function damage(LinkedList<string> args)
+            let ship = Ships.ships[thePlayer.getId()]
+            DamageEvent.setNextDamageFromCode()
+            ship.damageTarget(ship, args.getFirst().toReal())
+
+
+        static function experience()
             print(SP_PREFIX + "500 trading experience added.")
             Players.tradeExp[thePlayer.getId()] += 500
 
-            return false
 
-
-        static function visibility() returns bool
+        static function visibility()
             print(SP_PREFIX + "Full visibility enabled.")
             FogMaskEnable(false)
             FogEnable(false)
-
-            return false
 
 
         static function fast()
@@ -51,7 +55,6 @@ package SinglePlayer
             TriggerRegisterUnitEvent(f, Ships.ships[SinglePlayer.thePlayer.getId()], EVENT_UNIT_ISSUED_POINT_ORDER)
             TriggerAddCondition(f, Condition(() -> begin
                 GetTriggerUnit()..setX(GetOrderPointX())..setY(GetOrderPointY())
-                return false
             end))
 
 

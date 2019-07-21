@@ -16,11 +16,6 @@ package Shield
 	import DamageEvent
 	import HashMap
 
-	//* We must declare the UnitAlive native because StructuredDD no longer
-	//* declares it for us :) UnitAlive is proven to have less computational
-	//* cost compared to IsUnitType(u, UNIT_TYPE_DEAD)
-	native UnitAlive(unit u) returns bool
-
 	//* This class is just a shim for a pretty API. (You don't instanciate
 	//* Shield objects yourself)
 	public class Shield
@@ -30,17 +25,17 @@ package Shield
 		//* smaller value will reduce the likelihood of a unit blocking damage
 		//* with a shield that would otherwise be expired, at the cost of
 		//* performance. A good value is between 1./30. and 1./2.
-		private static constant TIMER_PERIOD= 1./10.
+		private static constant TIMER_PERIOD = 1. / 10.
 
 		//> END CUSTOMIZABLE SECTION
 
 		private static Shield array allShields
-		private static int shieldIndex= -1
-		private static timer time= CreateTimer()
+		private static int shieldIndex = -1
+		private static timer time = CreateTimer()
 		static Table tab
 
-		private bool useDuration= true
-		private bool finiteShield= true
+		private bool useDuration = true
+		private bool finiteShield = true
 		private unit u
 		private real shieldLeft
 		private real falseHP
@@ -58,7 +53,7 @@ package Shield
 			real damageLeft = DamageEvent.getAmount()
 			bool noShieldsLeft = false
 
-			if DamageEvent.getType() != SPELL and UnitAlive(tU) and tab.hasInt(tU.getHandleId())
+			if tU.isAlive() and tab.hasInt(tU.getHandleId())
 				tempDat = Shield.tab.loadInt(tU.getHandleId()) castTo Shield
 
 				// Loop until either all the damage is mitigated, or there's no
@@ -103,26 +98,26 @@ package Shield
 			while index <= Shield.shieldIndex
 				tempDat = Shield.allShields[index]
 				tempDat.timeLeft = tempDat.timeLeft-TIMER_PERIOD
-				if (tempDat.timeLeft <= 0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP) <= 0. or UnitAlive(tempDat.u) == false
-					//deallocate it, depending on the values of prevShield
-					//and nextShield
+				if (tempDat.timeLeft <= 0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP) <= 0. or tempDat.u.isAlive() == false
+					// Deallocate it, depending on the values of prevShield
+					// and nextShield
 					if tempDat.prevShield == null and tempDat.nextShield == null and Shield.tab.loadInt(tempDat.u.getHandleId()) == tempDat castTo int
-						//this was the only shield left on the unit so:
+						// This was the only shield left on the unit so:
 						Shield.tab.removeInt(tempDat.u.getHandleId())
 					else if tempDat.prevShield == null and tempDat.nextShield != null
-						//the shield was the first in a list so we have to
-						//make next into the new first!
+						// The shield was the first in a list so we have to
+						// make next into the new first!
 						otherDat = tempDat.nextShield
 						otherDat.prevShield = null
 						Shield.tab.saveInt(tempDat.u.getHandleId(), otherDat castTo int)
 					else if tempDat.prevShield != null and tempDat.nextShield == null
-						//the shield was the end of the list so let's do the
-						//proper changes to the previous member.
-						otherDat= tempDat.prevShield
+						// The shield was the end of the list so let's do the
+						// proper changes to the previous member.
+						otherDat = tempDat.prevShield
 						otherDat.nextShield = null
 					else if tempDat.prevShield != null and tempDat.nextShield != null
-						//this shield was somewhere in the middle of the list
-						//so let's make the prev and next link to each other
+						// This shield was somewhere in the middle of the list
+						// so let's make the prev and next link to each other
 						otherDat = tempDat.prevShield
 						otherDat.nextShield = tempDat.nextShield
 						otherDat = tempDat.nextShield
@@ -130,7 +125,7 @@ package Shield
 
 					// Reset the unit's hp if it has extra.
 					if tempDat.falseHP > 0.
-						SetWidgetLife(tempDat.u, GetWidgetLife(tempDat.u) - tempDat.falseHP)
+						tempDat.u.subHP(tempDat.falseHP)
 
 					DestroyEffect(tempDat.fx)
 					destroy tempDat
@@ -148,7 +143,7 @@ package Shield
 		static function add(unit u, real _amount, real time, string fx, string fxpoint)
 			let tempDat = new Shield
 			Shield linkedDat
-			real initialLife = GetWidgetLife(u)
+			real initialLife = u.getHP()
 			real maxLife = GetUnitState(u, UNIT_STATE_MAX_LIFE)
 			real diff = maxLife - initialLife
 			tempDat.u = u
@@ -162,19 +157,19 @@ package Shield
 				amount = 100000.
 				tempDat.finiteShield = false
 
-			//figure out how to partition the damage
+			// Figure out how to partition the damage
 			if diff >= amount
-				//the unit has plenty of missing HP, so:
+				// The unit has plenty of missing HP, so:
 				tempDat.shieldLeft = 0
 				tempDat.falseHP = amount
-				SetWidgetLife(u, initialLife+amount)
+				u.setHP(initialLife + amount)
 			else
-				//the unit has less hp missing than the shield has value, so:
-				SetWidgetLife(u, maxLife)
+				// The unit has less hp missing than the shield has value, so:
+				u.setHP(maxLife)
 				tempDat.falseHP = diff
-				tempDat.shieldLeft = amount-diff
+				tempDat.shieldLeft = amount - diff
 
-			// Now let's figure out if the unit already has a shield - if he
+			// Now let's figure out if the unit already has a shield - if it
 			// does, we add this shield to the front:
 			if Shield.tab.hasInt(u.getHandleId())
 				linkedDat = Shield.tab.loadInt(u.getHandleId()) castTo Shield
@@ -192,5 +187,5 @@ package Shield
 
 	init
 		Shield.tab = new Table
-		DamageEvent.addListener() () ->
+		DamageEvent.addListener(1) () ->
 			Shield.handler()

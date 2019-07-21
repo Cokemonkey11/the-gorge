@@ -7,12 +7,6 @@ import Ships
 import SinglePlayer
 import WurstCommand
 
-function singlePlayerMatch(string cmd) returns CmdMatcher
-	CmdMatcher m = (player _p, string innerCmd, LinkedList<string> _args) ->
-		return SinglePlayer.isSinglePlayer and cmd == innerCmd
-	return m
-
-
 init
 	addCommand("music") (p, _cmd, _args) ->
 		p.setWantsMusic(not p.wantsMusic())
@@ -35,13 +29,18 @@ init
 		)
 	addCommand("stats") (p, _c, _a) ->
 		Stats.display(p)
-	addCommand("experience", singlePlayerMatch("experience")) (_p, _c, _a) ->
-		SinglePlayer.experience()
-	addCommand("help", singlePlayerMatch("help")) (_p, _c, _a) ->
-		SinglePlayer.help()
-	addCommand("visibility", singlePlayerMatch("visibility")) (_p, _c, _a) ->
-		SinglePlayer.visibility()
-	addCommand("fast", singlePlayerMatch("fast")) (_p, _c, _a) ->
-		SinglePlayer.fast()
-	addCommand("heal", singlePlayerMatch("heal")) (_p, _c, _a) ->
-		SinglePlayer.heal()
+	if SinglePlayer.isSinglePlayer
+		addCommand("experience") (_p, _c, _a) ->
+			SinglePlayer.experience()
+		addCommand("help") (_p, _c, _a) ->
+			SinglePlayer.help()
+		addCommand("visibility") (_p, _c, _a) ->
+			SinglePlayer.visibility()
+		addCommand("fast") (_p, _c, _a) ->
+			SinglePlayer.fast()
+		addCommand("heal") (_p, _c, _a) ->
+			SinglePlayer.heal()
+		addCommand("hp") (_p, _c, a) ->
+			SinglePlayer.hp(a)
+		addCommand("damage") (_p, _c, a) ->
+			SinglePlayer.damage(a)

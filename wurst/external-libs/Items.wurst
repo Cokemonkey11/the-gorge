@@ -202,8 +202,8 @@ class ShieldDefinition extends ItemDefinition
         setStockMaximum(1)
 
 @compiletime function create_shields()
-    new ShieldDefinition(ID_SHIELD_BRONZE, 150, "Bronze Hull Generator", 500, 5, Icons.bTNArcaniteArmor)
-    new ShieldDefinition(ID_SHIELD_SILVER, 300, "Silver Hull Generator", 750, 5, Icons.bTNControlMagic)
+    new ShieldDefinition(ID_SHIELD_BRONZE, 150, "Bronze Shield Generator", 500, 5, Icons.bTNArcaniteArmor)
+    new ShieldDefinition(ID_SHIELD_SILVER, 300, "Silver Shield Generator", 750, 5, Icons.bTNControlMagic)
 
 // Generic shield ability.  Shared by all shield items.
 @compiletime function create_w3a_A00G()

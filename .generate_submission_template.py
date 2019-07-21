@@ -60,6 +60,14 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.13.2",
+        "NEXT",
+        (
+            "Fixed a bug where shields would cause you to kill yourself.",
+
+        )
+    ),
+    (
         "0.13.1",
         "20 Jul 2019",
         (
