@@ -64,7 +64,7 @@ CHANGELOG = (
         "NEXT",
         (
             "Fixed a bug where shields would cause you to kill yourself.",
-
+            "Adjusted base layout and increased repair-port repair rate.",
         )
     ),
     (

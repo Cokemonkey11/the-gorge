@@ -430,12 +430,12 @@ package Game
 		SetTimeOfDayScale(0.)
 
 		// Create Repair Ports.
-		Game.westRepair = CreateUnit(players[0], Game.REPAIR_ID, TerrainData.WESTX, 1024., 270.)
-		Game.eastRepair = CreateUnit(players[1], Game.REPAIR_ID, TerrainData.EASTX, 1024., 270.)
+		Game.westRepair = CreateUnit(players[0], Game.REPAIR_ID, TerrainData.WESTX, 512., 270.)
+		Game.eastRepair = CreateUnit(players[1], Game.REPAIR_ID, TerrainData.EASTX, 512., 270.)
 
 		// Create Hangars.
-		Game.westHangar = CreateUnit(players[0], ID_HANGAR, TerrainData.WESTX-768., 0., 270.)
-		Game.eastHangar = CreateUnit(players[1], ID_HANGAR, TerrainData.EASTX+768., 0., 270.)
+		Game.westHangar = CreateUnit(players[0], ID_HANGAR, TerrainData.WESTX - 512., 0., 270.)
+		Game.eastHangar = CreateUnit(players[1], ID_HANGAR, TerrainData.EASTX + 512., 0., 270.)
 
 		// Create Utility Ports.
 		Game.westUtility[0] = CreateUnit(players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)

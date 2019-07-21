@@ -15,7 +15,7 @@ package Repair
 		// Get a rate between 0. and 1.
 		real healRate    = 10..pow(exponent) * 2. / 100.
 
-		real delHp       = u.getMaxHP() * healRate * ANIMATION_PERIOD
+		real delHp       = (10. + u.getMaxHP() * healRate) * ANIMATION_PERIOD
 
 		if do_text and fracMissing > 0.01
 			u.addEffect(Objects.impaleTargetDust, "origin").destr()
