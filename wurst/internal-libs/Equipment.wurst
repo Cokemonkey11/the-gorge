@@ -17,6 +17,10 @@ package Equipment
 	import Profile
 	import Players
 
+	unit array utilities
+	unit array keeps
+
+
 	public class Equipment
 		static constant CLASS_UNKNOWN    = 0
 		static constant CLASS_ENGINE     = 1
@@ -264,6 +268,7 @@ package Equipment
 
 		static function pageC() returns bool
 			profile()
+
 			item sI = GetSoldItem()
 			unit seller = GetSellingUnit()
 			unit buyer = GetBuyingUnit()
@@ -276,57 +281,73 @@ package Equipment
 				was = true
 				if seller == Game.westUtility[0]
 					toSelect = Game.westUtility[1]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastUtility[1]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_PREVIOUS_ENGINES_AND_MECHANICS
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[0]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastUtility[0]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_NEXT_TELEPORTERS_AND_SPECIALS
 				was = true
 				if seller == Game.westUtility[1]
 					toSelect = Game.westUtility[2]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastUtility[2]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_PREVIOUS_HULLS_AND_SHIELD_GENERATORS
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[1]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect= Game.eastUtility[1]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_NEXT_PAGE_CONTRACTS
 				was = true
 				if seller == Game.westUtility[2]
 					toSelect = Game.westUtility[3]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastUtility[3]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_PREVIOUS_TELEPORTERS_AND_SPECIALS
 				was = true
 				if seller == Game.westUtility[3]
 					toSelect = Game.westUtility[2]
+					utilities[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastUtility[2]
+					utilities[owner.getId()] = toSelect
 
 			else if id == ID_NEXT_KEEP_TIER_3_AND_4
 				was = true
 				if seller == Game.westKeep[0]
 					toSelect = Game.westKeep[1]
+					keeps[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastKeep[1]
+					keeps[owner.getId()] = toSelect
 
 			else if id == ID_PREVIOUS_KEEP_TIER_1_AND_2
 				was = true
 				if seller == Game.westKeep[1]
 					toSelect = Game.westKeep[0]
+					keeps[owner.getId()] = toSelect
 				else
 					toSelect = Game.eastKeep[0]
+					keeps[owner.getId()] = toSelect
 
 
 			if was
@@ -350,9 +371,23 @@ package Equipment
 
 			reduction.put(u, 0)
 
+		static function selectedC() returns bool
+			let selected = GetTriggerUnit()
+			let p = GetTriggerPlayer()
+
+			if (selected == Game.westUtility[0] or selected == Game.westUtility[1] or selected == Game.westUtility[2] or selected == Game.westUtility[3] or selected == Game.eastUtility[0] or selected == Game.eastUtility[1] or selected == Game.eastUtility[2] or selected == Game.eastUtility[3]) and not selected == utilities[p.getId()]
+				p.selectSingle(utilities[p.getId()])
+			else if (selected == Game.westKeep[0] or selected == Game.westKeep[1] or selected == Game.eastKeep[0] or selected == Game.eastKeep[1]) and not selected == keeps[p.getId()]
+				p.selectSingle(keeps[p.getId()])
+
+			profile()
+
+			return false
+
 
 		static function c() returns bool
 			profile()
+
 			unit buyer = GetBuyingUnit()
 			item sI = GetSoldItem()
 			player buyerP = GetOwningPlayer(buyer)
@@ -389,6 +424,14 @@ package Equipment
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.c)
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELL_ITEM, function Equipment.pageC)
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED,  function Equipment.selectedC)
+
+		for i = 2 to 6
+			keeps[i] = Game.westKeep[0]
+			utilities[i] = Game.westUtility[0]
+		for i = 7 to 11
+			keeps[i] = Game.eastKeep[0]
+			utilities[i] = Game.eastUtility[0]
 
 		Equipment.classes.put(ID_ENGINE_1,                     Equipment.CLASS_ENGINE)
 		Equipment.classes.put(ID_ENGINE_2,                     Equipment.CLASS_ENGINE)

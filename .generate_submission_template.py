@@ -65,6 +65,8 @@ CHANGELOG = (
         (
             "Fixed a bug where shields would cause you to kill yourself.",
             "Adjusted base layout and increased repair-port repair rate.",
+            "Selected pages in keep/utility ports are now saved/reselected.",
+            "Minor performance improvement and auditing capability.",
         )
     ),
     (
