@@ -8,6 +8,7 @@ package Revive
 	import GameTimer
 	import Players
 	import Ships
+	import Profile
 	import RegisterEvents
 	import TerrainData
 
@@ -46,6 +47,8 @@ package Revive
 
 		while index <= dbIndex
 			tempDat = deathDB[index]
+			profile()
+
 			FloatText.reviveNumbers(tempDat.teamPos, I2S(tempDat.timeL), tempDat.ownerID)
 			tempDat.timeL--
 
@@ -110,6 +113,10 @@ package Revive
 			tempDat.u = tU
 			tempDat.timeL = (REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * getElapsedGameTime() / 60.).toInt()
 			tempDat.ownerID = GetPlayerId(GetOwningPlayer(tU))
+
+			addEffect(Objects.demonLargeDeathExplode, tU.getPos())..destr()
+
+			tU.setPos(TerrainData.SAFE)
 
 			if killerId > 1 and (
 				kU.isEnemyOf(tU.getOwner()) or

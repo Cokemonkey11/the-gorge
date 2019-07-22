@@ -1,5 +1,6 @@
 package ReactiveShields
 	import Assets
+	import Profile
 	import RegisterEvents
 
 	import Shield
@@ -10,6 +11,7 @@ package ReactiveShields
 	constant SHIELD_EFFECT   = Abilities.frostArmorTarget
 
 	function onCast()
+		profile()
 		Shield.add(GetTriggerUnit(), SHIELD_AMOUNT, SHIELD_DURATION, SHIELD_EFFECT, "origin")
 
 	init

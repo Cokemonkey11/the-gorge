@@ -2,6 +2,7 @@ package ChangeShip
 	import Ships
 	import Game
 	import Equipment
+	import Profile
 	import SimError
 	import RegisterEvents
 
@@ -14,15 +15,17 @@ package ChangeShip
 
 	function c()
 		unit selU = GetSellingUnit()
-		unit bU= GetBuyingUnit()
-		unit sU= GetSoldUnit()
+		unit bU = GetBuyingUnit()
+		unit sU = GetSoldUnit()
 		player buyer = GetOwningPlayer(sU)
 		int cls = Ships.getClass(sU)
 		int id
 		int val
-		int index= 0
+		int index = 0
 
 		if cls != Ships.CLASS_UNKNOWN
+			profile()
+
 			if IsUnitAlly(bU, GetOwningPlayer(selU))
 				if GetUnitTypeId(sU) != GetUnitTypeId(bU)
 					if GetUnitFoodMade(sU) >= GetPlayerState(buyer, PLAYER_STATE_RESOURCE_FOOD_USED)

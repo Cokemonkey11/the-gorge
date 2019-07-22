@@ -14,6 +14,7 @@ package Equipment
 	import Ships
 	import Game
 	import HashMap
+	import Profile
 	import Players
 
 	public class Equipment
@@ -262,6 +263,7 @@ package Equipment
 
 
 		static function pageC() returns bool
+			profile()
 			item sI = GetSoldItem()
 			unit seller = GetSellingUnit()
 			unit buyer = GetBuyingUnit()
@@ -350,6 +352,7 @@ package Equipment
 
 
 		static function c() returns bool
+			profile()
 			unit buyer = GetBuyingUnit()
 			item sI = GetSoldItem()
 			player buyerP = GetOwningPlayer(buyer)
@@ -407,9 +410,11 @@ package Equipment
 
 		EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM) ->
 			let u = GetManipulatingUnit()
+			profile()
 			nullTimer() ->
 				Equipment.resetUnitDamageReduction(u)
 		EventListener.add(EVENT_PLAYER_UNIT_PAWN_ITEM) ->
 			let u = GetManipulatingUnit()
+			profile()
 			nullTimer() ->
 				Equipment.resetUnitDamageReduction(u)

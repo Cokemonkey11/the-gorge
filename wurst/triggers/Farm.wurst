@@ -1,8 +1,11 @@
 package Farm
 	import Game
+	import Profile
 	import RegisterEvents
 
 	function c()
+		profile()
+
 		player p = GetOwningPlayer(GetKillingUnit())
 		int id = GetPlayerId(p)
 		if id > 1

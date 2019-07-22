@@ -3,12 +3,13 @@ package Ai
 import ErrorHandling
 import HashMap
 import LinkedListModule
+import Profile
 import Ships
 import TerrainData
 
 bool array ai_controlled
 
-constant UPDATE_PERIOD = 1.
+constant UPDATE_PERIOD = 1.5
 
 class Vec2
     vec2 v
@@ -163,18 +164,20 @@ class CreepAi
             this.p,
             this.u.getOwner()
         )
-        if this.u.getPos().distanceToSq(target) < 500. * 500.
+        if this.u.getPos().distanceToSq(target) < 550. * 550.
             this.s = this.s.next()
         else
             this.u.issuePointOrder(
                 "attack",
-                this.u.getPos().moveTowards(target, 500.)
+                this.u.getPos().moveTowards(target, 550.)
             )
 
     static function periodic()
-        let iter = CreepAi.iterator()
+        let iter = CreepAi.staticItr()
         while iter.hasNext()
             let inst = iter.next()
+            profile()
+
             if inst.u != null and inst.u.isAlive()
                 inst.tick()
             else

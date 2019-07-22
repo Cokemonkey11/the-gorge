@@ -1,5 +1,6 @@
 package SL15ShroudGenerator
 	import DummyUnitStack
+	import Profile
 	import RegisterEvents
 
 	native UnitAlive(unit u) returns bool
@@ -42,6 +43,8 @@ package SL15ShroudGenerator
 		Gen g
 		while index <= gensIndex
 			g = gens[index]
+			profile()
+
 			g.duration -= CLOCK_PERIOD
 			SetUnitX(g.dummy, GetUnitX(g.dummy)+g.dX)
 			SetUnitY(g.dummy, GetUnitY(g.dummy)+g.dY)

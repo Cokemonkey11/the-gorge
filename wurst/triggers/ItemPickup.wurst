@@ -1,10 +1,13 @@
 package ItemPickup
 	import Equipment
+	import Profile
 	import RegisterEvents
 
 	function c()
 		int id = GetPlayerId(GetTriggerPlayer())
 		item itm = GetManipulatedItem()
+
+		profile()
 
 		if not Equipment.unitCanAcquireItemIdPost(GetTriggerUnit(), GetItemTypeId(itm))
 			Equipment.autoPawnItemForPlayer(id, itm)

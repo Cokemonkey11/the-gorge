@@ -3,6 +3,7 @@ package EnchantingStone
 	import DummyUnitStack
 	import Game
 	import Players
+	// import Profile
 	import TerrainData
 
 	constant LOCK_HEIGHT          = 560.
@@ -14,8 +15,10 @@ package EnchantingStone
 	constant CAPTURE_RADIUS       = 150. + 16.
 	constant PROGRESS_OFFSET      = vec2(75., 0.)
 
-	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / ANIMATION_PERIOD)
-	constant LOCK_STEPS          = R2I(   LOCK_TIME / ANIMATION_PERIOD)
+	constant PERIOD = 1. / 10.
+
+	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / PERIOD)
+	constant LOCK_STEPS          = R2I(   LOCK_TIME / PERIOD)
 
 	constant INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
 
@@ -234,7 +237,9 @@ package EnchantingStone
 			..setScale(INDICATOR_SCALE)
 			..setTimeScale(INDICATOR_TIME_SCALE)
 
-		doPeriodically(ANIMATION_PERIOD, (CallbackPeriodic _) -> begin
+		doPeriodically(PERIOD, (CallbackPeriodic _) -> begin
+			// profile()
+
 			if lockedNorth
 				onLockedNorth()
 			else

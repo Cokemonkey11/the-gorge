@@ -1,0 +1,53 @@
+package Profile
+import ErrorHandling
+import StringUtils
+import WurstLinkedHashMap
+import WurstRealHeapGuard
+
+@configurable public constant profiling_enabled = true
+
+public class Profile
+    // source, crewmember inst, damage
+    protected static constant map = new LinkedHashMap<string, int>()
+
+    construct()
+        error("Not constructible")
+
+    protected static function incr(string stack)
+        if not map.has(stack)
+            map.put(stack, 0)
+
+        map.put(stack, map.get(stack) + 1)
+
+    static function display(player forWhom)
+        if not profiling_enabled
+            error("Profiling disabled")
+
+        new RealHeapGuard<string>() guard ->
+            Profile.map.forEach() kv ->
+                let splits = kv.key.split("\n")
+                guard.push(
+                    kv.value.toReal(),
+                    (
+                        splits.get(1).trim().trim("when calling ")
+                            + "."
+                            + splits.get(2).trim().trim("when calling ")
+                            + " :: "
+                            + kv.value.toString()
+                    ).trim("profile in ")
+                )
+                destroy splits
+
+            forWhom.print("|cffffcc00Map profile:|r")
+            for _i = 0 to 4
+                let disp = guard.pop()
+                forWhom.print(disp)
+            destroy guard
+
+
+public function profile()
+    if profiling_enabled
+        Profile.incr(
+            getStackTraceString()
+        )
+        Profile.incr("<profiler>")

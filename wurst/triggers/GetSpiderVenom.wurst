@@ -1,6 +1,7 @@
 package GetSpiderVenom
 	import Equipment
 	import Game
+	import Profile
 	import TerrainData
 	import SoundsLib
 	import Ships
@@ -10,8 +11,10 @@ package GetSpiderVenom
 	constant NO_SPACE_MESSAGE = "You don't have inventory space for |cffffcc00Spider Venom|r."
 
 	function spiderAction() returns bool
-		unit fU      = GetFilterUnit()
-		int slt  = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
+		profile()
+
+		unit fU = GetFilterUnit()
+		int slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
 		player owner = GetOwningPlayer(fU)
 
 		if slt > -1 and (not Ships.hasItemOfType(fU, Equipment.VENOM_VIAL))

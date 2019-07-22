@@ -1,10 +1,8 @@
 package HeliumOverdrive
     import HashMap
-
     import Assets
-
+    import Profile
     import RegisterEvents
-
     import DummyUnitStack
 
     native UnitAlive(unit u) returns bool
@@ -84,6 +82,7 @@ package HeliumOverdrive
             real dist
             while index <= dbIndex
                 fx = fxDB[index]
+                profile()
 
                 // state 0: the flash of light flies up
                 if fx.state == 0
@@ -280,5 +279,5 @@ package HeliumOverdrive
 
 
     init
-        registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT,function a)
+        registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function a)
         smartOrder = OrderId("smart")

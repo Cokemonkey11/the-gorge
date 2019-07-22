@@ -1,5 +1,6 @@
 package Muscii
 	import HashMap
+	import Profile
 	import SoundsLib
 
 	var wants_mask = [
@@ -184,6 +185,8 @@ package Muscii
 
 
 		private static function p()
+			profile()
+
 			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
 			Muscii next
 			Chord now = m.iterator

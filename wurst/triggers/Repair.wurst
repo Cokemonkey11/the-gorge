@@ -3,9 +3,11 @@ package Repair
 	import ClosureTimers
 	import Game
 	import Players
+	// import Profile
 
 	constant REPAIR_RADIUS = 400.
-	constant ANIMATION_PERIOD_INV = (1. / ANIMATION_PERIOD).toInt()
+	constant PERIOD = 1. / 10.
+	constant PERIOD_INV = (1. / PERIOD).toInt()
 
 
 	function doHeal(unit u, bool do_text)
@@ -15,14 +17,14 @@ package Repair
 		// Get a rate between 0. and 1.
 		real healRate    = 10..pow(exponent) * 2. / 100.
 
-		real delHp       = (10. + u.getMaxHP() * healRate) * ANIMATION_PERIOD
+		real delHp       = (10. + u.getMaxHP() * healRate) * PERIOD
 
 		if do_text and fracMissing > 0.01
 			u.addEffect(Objects.impaleTargetDust, "origin").destr()
 			createTTEx(
 				u.getPos3with(100.),
 				vec2(0., .05),
-				"+" + (delHp / ANIMATION_PERIOD).toInt().toString(),
+				"+" + (delHp / PERIOD).toInt().toString(),
 				11.,
 				1.,
 				colorA(155, 255, 155, 255),
@@ -33,14 +35,16 @@ package Repair
 
 	constant grp = CreateGroup()
 	init
-		doPeriodicallyCounted(ANIMATION_PERIOD, 9000000, (CallbackCounted c) -> begin
+		doPeriodicallyCounted(PERIOD, 9000000, (CallbackCounted c) -> begin
+			// profile()
+
 			grp.enumUnitsInRange(Game.westRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
 				if Players.isWest(u.getOwner().getId()) and u.isAlive()
-					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
+					doHeal(u, c.getCount() % PERIOD_INV == 0)
 
 			grp.enumUnitsInRange(Game.eastRepair.getPos(), REPAIR_RADIUS)
 			for u from grp
 				if Players.isEast(u.getOwner().getId()) and u.isAlive()
-					doHeal(u, c.getCount() % ANIMATION_PERIOD_INV == 0)
+					doHeal(u, c.getCount() % PERIOD_INV == 0)
 		end)

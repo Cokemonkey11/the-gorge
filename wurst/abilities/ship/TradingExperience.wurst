@@ -1,11 +1,13 @@
 package TradingExperience
 	import AbilitiesApi
+	import Profile
 	import RegisterEvents
 	import Players
 
 	function c()
 		int id
 		if GetSpellAbilityId() == ID_SHOW_TRADE_EXP
+			profile()
 			id = GetPlayerId(GetOwningPlayer(GetTriggerUnit()))
 			DisplayTextToPlayer(players[id], 0., 0., "You have |cffffcc00" + I2S(Players.tradeExp[id]) + "|r Trading Experience.")
 

@@ -4,6 +4,7 @@ package Damage
 	import Ships
 	import Assists
 	import DamageEvent
+	import Profile
 	import WurstLinkedHashMap
 	import WurstRealHeapGuard
 
@@ -63,17 +64,23 @@ package Damage
 				destroy guard
 
 	function h()
+		profile()
+
 		let targ = DamageEvent.getTarget()
 
 		let source = DamageEvent.getSource()
 
 		if source.getOwner().getId() > 1
+			profile()
+
 			Stats.incr(
 				source,
 				DamageEvent.getAmount()
 			)
 
 		if Ships.isPlayerShip(targ)
+			profile()
+
 			let id = GetPlayerId(GetOwningPlayer(targ))
 			let src = DamageEvent.getSource()
 			let sID = GetPlayerId(GetOwningPlayer(src))

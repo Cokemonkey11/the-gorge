@@ -1,6 +1,7 @@
 package ShieldAllLevels
 	import Assets
 	import Items
+	import Profile
 	import Shield
 	import RegisterEvents
 
@@ -24,6 +25,7 @@ package ShieldAllLevels
 
 	function c()
 		if GetSpellAbilityId() == SHIELD_ID
+			profile()
 			let tU = GetTriggerUnit()
 			let sId = getUnitShieldId(tU)
 			if sId == ID_SHIELD_BRONZE

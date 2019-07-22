@@ -3,6 +3,7 @@ import Damage
 import Equipment
 import LinkedList
 import Muscii
+import Profile
 import Ships
 import SinglePlayer
 import WurstCommand
@@ -29,6 +30,9 @@ init
 		)
 	addCommand("stats") (p, _c, _a) ->
 		Stats.display(p)
+	if profiling_enabled
+		addCommand("profile") (p, _c, _a) ->
+			Profile.display(p)
 	if SinglePlayer.isSinglePlayer
 		addCommand("experience") (_p, _c, _a) ->
 			SinglePlayer.experience()

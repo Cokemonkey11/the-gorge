@@ -5,9 +5,9 @@ package Crewmembers
 	import AbilitiesApi
 	import ClosureTimers
 	import ErrorHandling
+	import Profile
 	import WurstLinkedHashMap
 	import Ships
-	import Game
 	import HashMap
 	import SimError
 	import RegisterEvents
@@ -32,6 +32,8 @@ package Crewmembers
 		private static CrewMember array db
 		private static int dbIndex = -1
 		private static timer time = CreateTimer()
+		private static vec2 array shipLocs
+
 		static constant fromDummy = new HashMap<unit, CrewMember>()
 		static constant links = new HashMap<int, int>()
 		static CrewInventory array inventories
@@ -87,14 +89,16 @@ package Crewmembers
 
 		static function p()
 			var index = 0
+			// profile()
+
+			for i = 2 to 11
+				shipLocs[i] = Ships.ships[i].getPos()
 
 			while index <= dbIndex
 				let temp = db[index]
+				// profile()
 
-				if Ships.ships[temp.ownerID].isAlive() and not Game.ended
-					temp.phoenix.setPos(Ships.ships[temp.ownerID].getPos())
-				else
-					temp.phoenix.setPos(TerrainData.SAFE)
+				temp.phoenix.setPos(shipLocs[temp.ownerID])
 
 				index++
 
@@ -164,6 +168,7 @@ package Crewmembers
 			ANIMATION_PERIOD,
 			(45. / ANIMATION_PERIOD).toInt()
 		) (CallbackCounted cb) ->
+			profile()
 			if cb.isLast()
 				text.destr()
 				text2.destr()

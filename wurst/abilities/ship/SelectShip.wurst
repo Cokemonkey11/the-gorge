@@ -1,4 +1,5 @@
 package SelectShip
+	import Profile
 	import SimError
 	import Ships
 	import RegisterEvents
@@ -10,6 +11,7 @@ package SelectShip
 
 	function c()
 		if GetSpellAbilityId() == SELECT_SHIP_ID
+			profile()
 			player owner = GetOwningPlayer(GetTriggerUnit())
 			int id = GetPlayerId(owner)
 
@@ -24,4 +26,3 @@ package SelectShip
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function c)
-

@@ -3,6 +3,7 @@ package MagneticReactors
 import AbilitiesApi
 import Assets
 import LinkedListModule
+import Profile
 import RegisterEvents
 
 
@@ -31,6 +32,7 @@ class Reactors
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
                 for reactor from staticItr()
+                    profile()
                     reactor.owner.addHP(reactor.hitpoints_per_tick)
 
                     if occasionally(reactor.ticks, 1., ANIMATION_PERIOD)

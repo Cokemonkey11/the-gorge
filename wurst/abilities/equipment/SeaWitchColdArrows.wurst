@@ -2,6 +2,7 @@ package SeaWitchColdArrows
 	import DamageEvent
 	import Game
 	import Players
+	import Profile
 
 	constant SEAWITCH_ID = 'o005'
 	constant SLOW_ID     = 'A009'
@@ -15,6 +16,7 @@ package SeaWitchColdArrows
 	function h() returns bool
 		unit tU = DamageEvent.getTarget()
 		if DamageEvent.getType() == SPELL and GetUnitTypeId(DamageEvent.getSource()) == SEAWITCH_ID
+			profile()
 			SetUnitX(dummy, GetUnitX(tU))
 			SetUnitY(dummy, GetUnitY(tU))
 			UnitAddAbility(dummy, SLOW_ID)

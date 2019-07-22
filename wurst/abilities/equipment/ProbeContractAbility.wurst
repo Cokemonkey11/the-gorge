@@ -4,6 +4,7 @@ package ProbeContractAbility
 	import Ships
 	import Equipment
 	import Game
+	import Profile
 	import SoundsLib
 
 	constant ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."
@@ -18,6 +19,7 @@ package ProbeContractAbility
 		player owner
 
 		if GetSpellAbilityId() == PROBE_ID
+			profile()
 			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 

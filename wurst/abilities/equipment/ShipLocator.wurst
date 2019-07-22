@@ -1,4 +1,5 @@
 package ShipLocator
+	import Profile
 	import RegisterEvents
 
 	constant SHIP_LOC_ID   = 'A00I'
@@ -14,6 +15,7 @@ package ShipLocator
 		player owner
 
 		if GetSpellAbilityId() == SHIP_LOC_ID
+			profile()
 			tU = GetTriggerUnit()
 			owner = GetOwningPlayer(tU)
 			GroupEnumUnitsInRange(grp, GetUnitX(tU), GetUnitY(tU), RANGE, null)
