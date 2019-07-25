@@ -1,0 +1,105 @@
+package XtsMissileBarrage
+
+import Abilities
+import AbilitiesApi
+import ClosureEvents
+import ClosureTimers
+import DamageEvent
+import Fx
+import LinkedListModule
+import Profile
+import SoundUtils
+
+constant HALF_COUNT = 10 div 2
+constant INITIAL_VEL = ANIMATION_PERIOD * 900.
+constant PERIOD = .5 / HALF_COUNT
+constant ACCELERATION = ANIMATION_PERIOD * 80.
+constant MAXIMUM_VEL = ANIMATION_PERIOD * 1200.
+constant HIT_DISTANCE = MAXIMUM_VEL * 3.
+constant VEL_RATIO = 1. - ACCELERATION / MAXIMUM_VEL
+
+constant ORIGIN = vec3(0., 0., 0.)
+
+constant LAUNCH_SOUND = new SoundDefinition(
+    Sounds.tinkerMissileLaunch1,
+    false,
+    true
+)
+
+class XtsMissileBarrage
+    use LinkedListModule
+
+    unit source
+    unit target
+    Fx dummy
+    vec3 vel
+
+    ondestroy
+        destroy this.dummy
+
+    static function disjoint(unit u)
+        for msl from staticItr()
+            if msl.target == u
+                destroy msl
+
+    construct(unit source, unit dest, angle faceOffset, angle zAngle)
+        this.source = source
+        this.target = dest
+        let facing = source.getFacingAngle() + faceOffset
+
+        LAUNCH_SOUND.playOnPoint(source.getPos3Real())
+
+        this.dummy = new Fx(
+            source.getPos3with(100.),
+            facing,
+            Abilities.rocketMissile
+        )
+
+        this.vel = ORIGIN.polarProject(INITIAL_VEL, facing, zAngle)
+
+        if size == 1
+            doPeriodically(ANIMATION_PERIOD) (CallbackPeriodic cb) ->
+                for msl from staticItr()
+                    profile()
+
+                    let curr = msl.dummy.getPos3() + msl.vel
+                    msl.dummy.setXYZ(curr, true)
+                    msl.dummy.setXYAngle(ORIGIN.angleTo2d(msl.vel))
+                    // msl.dummy.setZAngle(ORIGIN.) TODO
+
+                    var hit = false
+
+                    if curr.distanceToSq(
+                        msl.target.getPos3with(100.)
+                    ) < (HIT_DISTANCE * HIT_DISTANCE)
+                        DamageEvent.setNextDamageFromCode()
+                        msl.source.damageTarget(msl.target, 55.)
+                        hit = true
+
+                    if not hit
+                        let accel = (
+                            msl.target.getPos3with(100.) - curr
+                        ).norm() * ACCELERATION
+
+                        msl.vel = VEL_RATIO * msl.vel + accel
+
+                    if hit or msl.target == null or not msl.target.isAlive()
+                        destroy msl
+
+                if size == 0
+                    destroy cb
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
+        if GetSpellAbilityId() == ID_XTS_MISSILE_ARRAY
+            let target = GetSpellTargetUnit()
+            let tU = GetTriggerUnit()
+
+            doPeriodicallyCounted(PERIOD, HALF_COUNT) (CallbackCounted cb) ->
+                let offset = angle(
+                    (PI / 100.)
+                    + cb.getCount() * (PI / 2.) / (HALF_COUNT + 1)
+                )
+
+                new XtsMissileBarrage(tU, target, angle( PI / 2.), offset)
+                new XtsMissileBarrage(tU, target, angle(-PI / 2.), offset)

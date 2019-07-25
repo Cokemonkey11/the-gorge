@@ -60,13 +60,15 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "0.13.2",
+        "0.14.0",
         "NEXT",
         (
+            "New frigate, new battleship, and new interceptor.",
             "Fixed a bug where shields would cause you to kill yourself.",
             "Adjusted base layout and increased repair-port repair rate.",
             "Selected pages in keep/utility ports are now saved/reselected.",
             "Minor performance improvement and auditing capability.",
+            "[balance] improved the utility of Monsoon Mk. 1.",
         )
     ),
     (

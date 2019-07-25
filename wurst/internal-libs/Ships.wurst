@@ -48,11 +48,17 @@ package Ships
 
 	init
 		Ships.tab.saveInt(ID_HELICOPTER, Ships.CLASS_FRIGATE)
-		Ships.tab.saveInt(ID_PARACOPTER, Ships.CLASS_SMUGGLER)
 		Ships.tab.saveInt(ID_ZEPPELIN,   Ships.CLASS_INTERCEPTOR)
 		Ships.tab.saveInt(ID_SKYBARGE,   Ships.CLASS_BATTLESHIP)
+		Ships.tab.saveInt(ID_PARACOPTER, Ships.CLASS_SMUGGLER)
+		Ships.tab.saveInt(ID_GUNSHIP,    Ships.CLASS_FRIGATE)
+		Ships.tab.saveInt(ID_FIRESHIP,   Ships.CLASS_INTERCEPTOR)
+		Ships.tab.saveInt(ID_FFORTRESS,  Ships.CLASS_BATTLESHIP)
 
 		Ships.sellVals.saveInt(ID_HELICOPTER, 15)
 		Ships.sellVals.saveInt(ID_PARACOPTER, 15)
 		Ships.sellVals.saveInt(ID_ZEPPELIN,   15)
 		Ships.sellVals.saveInt(ID_SKYBARGE,   15)
+		Ships.sellVals.saveInt(ID_GUNSHIP,   150)
+		Ships.sellVals.saveInt(ID_FIRESHIP,  150)
+		Ships.sellVals.saveInt(ID_FFORTRESS,  150)

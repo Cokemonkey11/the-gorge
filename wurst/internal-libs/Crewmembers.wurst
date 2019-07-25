@@ -13,7 +13,7 @@ package Crewmembers
 	import RegisterEvents
 	import TerrainData
 
-	constant MAX_SLOTS = 10
+	constant MAX_SLOTS = 12
 
 	class CrewMember
 		int ownerID

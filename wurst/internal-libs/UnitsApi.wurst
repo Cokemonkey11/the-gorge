@@ -27,6 +27,9 @@ public constant ID_HELICOPTER = 'H000'
 public constant ID_PARACOPTER = 'H00B'
 public constant ID_ZEPPELIN   = 'H00D'
 public constant ID_SKYBARGE   = 'H00E'
+public constant ID_GUNSHIP    = 'Hsh4'
+public constant ID_FIRESHIP   = 'Hsh5'
+public constant ID_FFORTRESS  = 'Hsh6'
 
 public constant ID_DRAGONHAWK   = 'hc00'
 public constant ID_GRYPHONRIDER = 'hc01'
@@ -45,6 +48,12 @@ public function ship_get_icon(int id) returns string
         return "ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp"
     else if id == ID_ZEPPELIN
         return "ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp"
+    else if id == ID_GUNSHIP
+        return Icons.bTNBLoodMage2
+    else if id == ID_FIRESHIP
+        return Icons.bTNLavaSpawn
+    else if id == ID_FFORTRESS
+        return Icons.bTNCrypt
 
     return ""
 
@@ -141,7 +150,17 @@ class Hangar extends BuildingDefinition
         setSightRadiusNight(0)
         setUnitClassification("mechanical")
         setResearchesAvailable("")
-        setUnitsSold("H000,H00D,H00E,H00B")
+        setUnitsSold(
+            commaList(
+                ID_HELICOPTER,
+                ID_ZEPPELIN,
+                ID_SKYBARGE,
+                ID_PARACOPTER,
+                ID_GUNSHIP,
+                ID_FIRESHIP,
+                ID_FFORTRESS
+            )
+        )
         setUnitsTrained("")
         setUpgradesTo("")
         setUpgradesUsed("")
@@ -193,7 +212,7 @@ class Keep extends BuildingDefinition
     new Keep(ID_KEEP_P2, 2)
 
 class CopterBase extends HeroDefinition
-    construct(int id, int button_x, real anim_backwing_cast, real anim_point_cast, int red, int green, int blue, string abils, string model, bool use_tft_model, real scale, int defense, int movespeed, string movesound, string soundset, int food_produced, int hp, string shipclass, string name, string tooltipext)
+    construct(int id, int button_x, int button_y, int gold_cost, real anim_backwing_cast, real anim_point_cast, int red, int green, int blue, string abils, string model, bool use_tft_model, real scale, int defense, int movespeed, string movesound, string soundset, int food_produced, int hp, string shipclass, string name, string tooltipext)
         super(id, 'hgyr')
         setNormalAbilities(abils)
         setModelFile(model)
@@ -202,6 +221,7 @@ class CopterBase extends HeroDefinition
         setScalingValue(scale)
         setSelectionCircleHeight(15.)
         setButtonPositionX(button_x)
+        setButtonPositionY(button_y)
         setAnimationCastBackswing(anim_backwing_cast)
         setAnimationCastPoint(anim_point_cast)
         setTintingColorRed(red)
@@ -222,7 +242,7 @@ class CopterBase extends HeroDefinition
         setGoldBountyAwardedBase(0)
         setGoldBountyAwardedNumberofDice(0)
         setGoldBountyAwardedSidesperDie(0)
-        setGoldCost(30)
+        setGoldCost(gold_cost)
         setHitPointsMaximumBase(hp)
         setLumberCost(0)
         setRace(Race.Orc)
@@ -239,11 +259,17 @@ class CopterBase extends HeroDefinition
         setTooltipExtended(tooltipext)
         hideHeroDeathMsg(true)
 
+constant ID_INVEN_4 = 'A00D'
+constant ID_INVEN_5 = 'A00O'
+
 @compiletime function copters()
-    new CopterBase('H000', 0 /* Button X */,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, commaList(ID_MAGNETIC_REACTORS, 'A00D', 'A00P', ID_HERO_GLOW), Units.gyroCopter,      false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate",     "Helicopter", "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array, Magnetic Reacetors")
-    new CopterBase('H00B', 3 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, commaList(ID_SEND_GOLD,         'A00D', 'A00Y', ID_HERO_GLOW), Units.gyrocopter_V1,   true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler",    "Paracopter", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
-    new CopterBase('H00E', 2 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(ID_REGENERATOR,       'A00O', 'A013', ID_HERO_GLOW), Units.undeadAirBarge1, false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship",  "Skybarge",   "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2|n|cffffcc00Abilities:|r Reactive Shields, Regenerator")
-    new CopterBase('H00D', 1 /* Button X */, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(ID_MONSOON_MK1,       'A00D', 'A012', ID_HERO_GLOW), Units.goblinZeppelin,  false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",   "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive, Monsoon Mk.1")
+    new CopterBase(ID_HELICOPTER, 0 /* Button X */, 0,  30,  .51,  .3 /* Cast backswing and point */, 200, 255, 200, commaList(ID_MAGNETIC_REACTORS, ID_INVEN_4, 'A00P', ID_HERO_GLOW), Units.gyroCopter,           false /* Use TFT modelfile */, .6,  0 /* defense */, 220, "HumanGyrocopterMovement", "Gyrocopter",      5 /* Food produced */, 1000, "Frigate",     "Helicopter",      "Basic war ship, can be adapted to serve well in most low-intensity scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 1000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 5|n|cffffcc00Movement Speed:|r 220|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r DTS-12 Missile Array, Magnetic Reacetors")
+    new CopterBase(ID_ZEPPELIN,   1 /* Button X */, 0,  30, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(ID_MONSOON_MK1,       ID_INVEN_4, 'A012', ID_HERO_GLOW), Units.goblinZeppelin,       false /* Use TFT modelfile */, .5,  0 /* defense */, 280, "GoblinZeppelinMovement",  "GoblinZeppelin",  4 /* Food produced */,  750, "Interceptor", "Zeppelin",        "The Zeppelin is an ultra-lightweight aircraft designed for mobility.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 750|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 4|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r Helium Overdrive, Monsoon Mk.1")
+    new CopterBase(ID_SKYBARGE,   2 /* Button X */, 0,  30, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(ID_REGENERATOR,       ID_INVEN_5, 'A013', ID_HERO_GLOW), Units.undeadAirBarge1,      false /* Use TFT modelfile */, .55, 2 /* defense */, 180, "",                        "",               10 /* Food produced */, 1200, "Battleship",  "Skybarge",        "The Skybarge is an oversized aircraft designed for transporting troops in war scenarios. In a pinch, it can be used as a basic war ship.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 1200|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 10|n|cffffcc00Movement Speed:|r 180|n|cffffcc00Armor:|r 2|n|cffffcc00Abilities:|r Reactive Shields, Regenerator")
+    new CopterBase(ID_PARACOPTER, 3 /* Button X */, 0,  30, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, commaList(ID_SEND_GOLD,         ID_INVEN_4, 'A00Y', ID_HERO_GLOW), Units.gyrocopter_V1,        true  /* Use TFT modelfile */, .5,  0 /* defense */, 280, "HumanGyrocopterMovement", "Gyrocopter",      2 /* Food produced */,  500, "Smuggler",    "Paracopter",      "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator")
+    new CopterBase(ID_GUNSHIP,    0 /* Button X */, 1, 300, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(ID_XTS_MISSILE_ARRAY, ID_INVEN_4, ID_EMP, ID_HERO_GLOW), "DFA_D35.mdl",              false /* Use TFT modelfile */, .7,  0 /* defense */, 230, "GoblinZeppelinMovement",  "Gyrocopter",      7 /* Food produced */, 2000, "Frigate",     "Gunship",         "Large war ship, can be adapted to serve well in most scenarios.|n |n|cffffcc00Class:|r Frigate|n|cffffcc00Hit Points:|r 2000|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 7|n|cffffcc00Movement Speed:|r 230|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r XTS Missile Barrage, EMP")
+    new CopterBase(ID_FIRESHIP,   1 /* Button X */, 1, 300, 0.,   0.  /* Cast backswing and point */, 255, 155, 155, commaList(                      ID_INVEN_4,         ID_HERO_GLOW), "GoblinAirDroneFinal.mdl",  false /* Use TFT modelfile */, .9,  0 /* defense */, 300, "GoblinZeppelinMovement",  "GoblinZeppelin",  6 /* Food produced */, 1500, "Interceptor", "Fire Ship",       "The Fire Ship is a lightweight aircraft designed for mobility. It's uniquely equipped to work with fire and flames.|n |n|cffffcc00Class:|r Interceptor|n|cffffcc00Hit Points:|r 1500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 6|n|cffffcc00Movement Speed:|r 300|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r")
+    new CopterBase(ID_FFORTRESS,  2 /* Button X */, 1, 300, 0.,   0.  /* Cast backswing and point */, 255, 255, 255, commaList(                      ID_INVEN_5,         ID_HERO_GLOW), "Undead Fighter 2.0.mdl",   false /* Use TFT modelfile */, .55, 2 /* defense */, 200, "",                        "",               12 /* Food produced */, 2400, "Battleship",  "Flying Fortress", "The Flying Fortress is an enormous tank of an aircraft, with both durability and powerful attacks.|n |n|cffffcc00Class:|r Battleship|n|cffffcc00Hit Points:|r 2400|n|cffffcc00Inventory Size:|r 5|n|cffffcc00Crew Capacity:|r 12|n|cffffcc00Movement Speed:|r 200|n|cffffcc00Armor:|r 2|n|cffffcc00Abilities:|r ")
 
 /// Creeps
 class DragonhawkRiderCreep extends UnitDefinition

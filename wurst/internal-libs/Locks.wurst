@@ -1,0 +1,70 @@
+package Locks
+
+import ErrorHandling
+import HashMap
+import HashSet
+
+/**
+    Implements boolean locks for a resource.
+
+    A boolean locked is either locked (at least one uid associated), or unlocked
+    (no uids associated).
+*/
+public module Lock<T>
+    private static constant locks = new HashMap<T, HashSet<int>>()
+
+    protected static function lock(T resource, int uid)
+        if not locks.has(resource)
+            locks.put(resource, new HashSet<int>)
+        locks.get(resource).add(uid)
+
+    protected static function unlock(T resource, int uid) returns bool
+        let them = locks.get(resource)
+        them.remove(uid)
+
+        if them.isEmpty()
+            callback(resource)
+        return them.isEmpty()
+
+    protected static function callback(T _t)
+        skip
+
+/**
+    Multi-instanceable stuns for a unit.  The unit is unpaused if all uids are
+    removed.
+
+    Example usage:
+
+    ```
+    package Example
+    import ClosureTimers
+    init
+        let u = createUnit(...)
+        doPeriodically(3.) ->
+            StunLocks.add(u, 'ev3s')
+            doAfter(1.) ->
+                StunLocks.remove(u, 'ev3s')
+        doPeriodically(9.) ->
+            StunLocks.add(u, 'ev9s')
+            doAfter(3.) ->
+                StunLocks.remove(u, 'ev9s')
+    ```
+
+    In the above example, the unit is paused/stunned whenever either of the
+    competing StunLocks is held.
+*/
+public class StunLocks
+    use Lock<unit>
+
+    override static function callback(unit u)
+        u.unpause()
+
+    construct()
+        error("StunLocks shouldn't be instantiated")
+
+    static function add(unit u, int uid)
+        lock(u, uid)
+        u.pause()
+
+    static function remove(unit u, int uid) returns bool
+        return unlock(u, uid)

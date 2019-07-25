@@ -33,6 +33,8 @@ public constant ID_MAGNETIC_REACTORS     = 'Az00'
 public constant ID_REGENERATOR           = 'Az01'
 public constant ID_MONSOON_MK1           = 'Az02'
 public constant ID_SEND_GOLD             = 'Az03'
+public constant ID_XTS_MISSILE_ARRAY     = 'Az04'
+public constant ID_EMP                   = 'Az05'
 
 public constant ID_SHOW_TRADE_EXP        = 'A00N'
 
@@ -191,172 +193,189 @@ class SelectUnitAbil extends AbilityDefinitionNeutralBuildinganyunit
 @compiletime function initSelectUnit()
     new SelectUnitAbil(ID_SELECT_UNIT)
 
-class ReleaseAbil extends AbilityDefinitionIllidanChannel
-    construct(int id)
+enum TargetType
+    Instant
+    Unit
+    Point
+
+function TargetType.toChannelIntValue() returns int
+    switch this
+        case Instant
+            return 0
+        case Unit
+            return 1
+        case Point
+            return 1
+
+class ChannelCommon extends AbilityDefinitionIllidanChannel
+    construct(int id, string animationName, int x, int y, string icon, real cooldown, string orderid, real castRange, int options, TargetType targetType, string hotkey, string name, string targetsAllowed, string tooltipExtended, real followThroughTime, real aoe)
         super(id)
-        setAnimationNames("spell")
-        setButtonPositionNormalX(0)
-        setButtonPositionNormalY(2)
+        setAnimationNames(animationName)
+        setButtonPositionNormalX(x)
+        setButtonPositionNormalY(y)
         setArtCaster("")
         setCasterAttachmentPoint("")
         setArtEffect("")
-        setIconNormal("ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
+        setIconNormal(icon)
         setArtTarget("")
+        setCooldown(1, cooldown)
         setTargetAttachmentPoint("")
-        setBaseOrderID(1, "acidbomb")
+        setBaseOrderID(1, orderid)
         setDisableOtherAbilities(1, false)
-        setFollowThroughTime(1, 0.)
-        setOptions(1, 1)
-        setTargetType(1, 0) // 1 -> Target Unit, 0 -> No Target
+        setFollowThroughTime(1, followThroughTime)
+        setOptions(1, options)
+        setCastRange(1, castRange)
+        setTargetType(1, targetType.toChannelIntValue())
         setHeroAbility(false)
         setLevels(1)
         setCheckDependencies(false)
-        setHotkeyNormal("Q")
-        setName("Fire crewmember")
-        setOrderStringUseTurnOn("acidbomb")
-        setTooltipNormal(1, "Fire Crewmember [|cffffcc00Q|r]")
-        setTooltipNormalExtended(1, "Unemploy this crewmember.  Returns half their cost as gold.")
+        setHotkeyNormal(hotkey)
+        setName(name)
+        setTargetsAllowed(1, targetsAllowed)
+        setOrderStringUseTurnOn(orderid)
+        setTooltipNormal(1, name + " [|cffffcc00" + hotkey + "|r]")
+        setTooltipNormalExtended(1, tooltipExtended)
+        setAreaofEffect(1, aoe)  // Used for targeting image.
+
+@compiletime function init_xts()
+    new ChannelCommon(
+        ID_XTS_MISSILE_ARRAY,
+        "spell",
+        0,
+        2,
+        Icons.bTNScatterRockets,
+        30.,
+        "acidbomb",
+        1100.,
+        1,
+        TargetType.Unit,
+        "Q",
+        "XTS Missile Barrage",
+        "air,enemies,ground,vulnerable",
+        "A barrage of 10 missiles is launched in sequence.  Each one seeks out the target enemy unit.|n |n|cffffcc00Damage (Each):|r 55|n|cffffcc00Cooldown:|r 30s|n|cffffcc00Range:|r 1100",
+        0.,
+        0.
+    )
+
+@compiletime function init_emp()
+    new ChannelCommon(
+        ID_EMP,
+        "spell",
+        1,
+        2,
+        Icons.bTNLightningShield,
+        40.,
+        "ancestralspirit",
+        300.,
+        1,
+        TargetType.Instant,
+        "W",
+        "EMP",
+        "air,enemies,ground,vulnerable",
+        "While channeling, a short wavelength signal is emitted.  If an enemy hero is struck, a secondary effect is triggered: a barrage of plasma is emitted which damages and stuns the marked unit. While this effect occurs, the marked enemy deals reduced damage to you. Both effects are interrupted if channeling is ceased.|n |n|cffffcc00Range:|r 250|n|cffffcc00Damage:|r 150|n|cffffcc00Duration:|r 5s|n|cffffcc00Cooldown:|r 40s|n|cffffcc00Damage Reduction:|r 20%",
+        5. + 1.,
+        0.
+    )
 
 @compiletime function initFire()
-    new ReleaseAbil(ID_FIRE_CREWMEMBER)
-
-class SendGoldAbil extends AbilityDefinitionIllidanChannel
-    construct(int id)
-        super(id)
-        setAnimationNames("spell")
-        setButtonPositionNormalX(1)
-        setButtonPositionNormalY(2)
-        setArtCaster("")
-        setCasterAttachmentPoint("")
-        setArtEffect("")
-        setIconNormal("ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
-        setArtTarget("")
-        setTargetAttachmentPoint("")
-        setBaseOrderID(1, "acidbomb")
-        setDisableOtherAbilities(1, false)
-        setFollowThroughTime(1, 0.)
-        setOptions(1, 1)
-        setTargetType(1, 1)
-        setCastRange(1, 800.)
-        setCooldown(1,   20.)
-        setHeroAbility(false)
-        setLevels(1)
-        setTargetsAllowed(1, "hero,allied,invulnerable,vulnerable,notself")
-        setCheckDependencies(false)
-        setHotkeyNormal("W")
-        setName("Send Gold")
-        setOrderStringUseTurnOn("acidbomb")
-        setTooltipNormal(1, "Send Gold [|cffffcc00W|r]")
-        setTooltipNormalExtended(1, "Send your own gold to an allied player ship.  The recipient gets free interest that increases with your trading experience.|n|n|cffffcc00Maximum Base Gold:|r 500|n|cffffcc00Interest Rate:|r 1% for every 1 trading experience")
+    new ChannelCommon(
+        ID_FIRE_CREWMEMBER,
+        "spell",
+        0,
+        2,
+        Icons.bTNChestOfGold,
+        20.,
+        "acidbomb",
+        800.,
+        1,
+        TargetType.Instant,
+        "Q",
+        "Fire Crewmember",
+        "hero,allied,invulnerable,vulnerable,notself",
+        "Unemploy this crewmember.  Returns half their cost as gold.",
+        0.,
+        0.
+    )
 
 @compiletime function initSendGold()
-    new SendGoldAbil(ID_SEND_GOLD)
-
-class MagneticReactorsAbil extends AbilityDefinitionIllidanChannel
-    construct(int id)
-        super(id)
-        setAnimationNames("spell")
-        setButtonPositionNormalX(1)
-        setButtonPositionNormalY(2)
-        setArtCaster("")
-        setCasterAttachmentPoint("")
-        setArtEffect("")
-        setIconNormal(Icons.bTNBash)
-        setArtTarget("")
-        setTargetAttachmentPoint("")
-        setBaseOrderID(1, "ancestralspirit")
-        setDisableOtherAbilities(1, false)
-        setFollowThroughTime(1, 0.)
-        setOptions(1, 1)
-        setTargetType(1, 0)
-        setCastRange(1, 384.)
-        setCooldown(1, 30.)
-        setHeroAbility(false)
-        setLevels(1)
-        setTargetsAllowed(1, "ground,invulnerable,neutral")
-        setCheckDependencies(false)
-        setHotkeyNormal("W")
-        setName("Magnetic Reactors")
-        setOrderStringUseTurnOn("ancestralspirit")
-        setTooltipNormal(1, "Magnetic Reactors [|cffffcc00W|r]")
-        setTooltipNormalExtended(
-            1,
-            "Restores a fraction of your missing health over time.|n |n|cffffcc00Missing Health Restored:|r 15%|n|cffffcc00Heal Duration:|r 5s|n|cffffcc00Cooldown:|r 30s"
-        )
+    new ChannelCommon(
+        ID_SEND_GOLD,
+        "spell",
+        1,
+        2,
+        Icons.bTNChestOfGold,
+        20.,
+        "acidbomb",
+        800.,
+        1,
+        TargetType.Unit,
+        "W",
+        "Send Gold",
+        "hero,allied,invulnerable,vulnerable,notself",
+        "Send your own gold to an allied player ship.  The recipient gets free interest that increases with your trading experience.|n|n|cffffcc00Maximum Base Gold:|r 500|n|cffffcc00Interest Rate:|r 1% for every 1 trading experience",
+        0.,
+        0.
+    )
 
 @compiletime function initMagneticReactors()
-    new MagneticReactorsAbil(ID_MAGNETIC_REACTORS)
-
-class RegeneratorAbil extends AbilityDefinitionIllidanChannel
-    construct(int id)
-        super(id)
-        setAnimationNames("spell")
-        setButtonPositionNormalX(1)
-        setButtonPositionNormalY(2)
-        setArtCaster("")
-        setCasterAttachmentPoint("")
-        setArtEffect("")
-        setIconNormal(Icons.bTNArcaneVault)
-        setArtTarget("")
-        setTargetAttachmentPoint("")
-        setBaseOrderID(1, "ancestralspirit")
-        setDisableOtherAbilities(1, false)
-        setFollowThroughTime(1, 10.)
-        setOptions(1, 1)
-        setTargetType(1, 0)
-        setCastRange(1, 384.)
-        setCooldown(1, 40.)
-        setHeroAbility(false)
-        setLevels(1)
-        setTargetsAllowed(1, "ground,invulnerable,neutral")
-        setCheckDependencies(false)
-        setHotkeyNormal("W")
-        setName("Regenerator")
-        setOrderStringUseTurnOn("ancestralspirit")
-        setTooltipNormal(1, "Regenerator [|cffffcc00W|r]")
-        setTooltipNormalExtended(
-            1,
-            "Diverts engine power to regenerate health while channeling.|n |n|cffffcc00Health Restored:|r 30 per second|n|cffffcc00Channel Duration:|r 10s|n|cffffcc00Cooldown:|r 40s"
-        )
+    new ChannelCommon(
+        ID_MAGNETIC_REACTORS,
+        "spell",
+        1,
+        2,
+        Icons.bTNBash,
+        30.,
+        "ancestralspirit",
+        384.,
+        1,
+        TargetType.Instant,
+        "W",
+        "Magnetic Reactors",
+        "ground,invulnerable,neutral",
+        "Restores a fraction of your missing health over time.|n |n|cffffcc00Missing Health Restored:|r 15%|n|cffffcc00Heal Duration:|r 5s|n|cffffcc00Cooldown:|r 30s",
+        0.,
+        0.
+    )
 
 @compiletime function initRegenerator()
-    new RegeneratorAbil(ID_REGENERATOR)
-
-class MonsoonMk1Abil extends AbilityDefinitionIllidanChannel
-    construct(int id)
-        super(id)
-        setAnimationNames("spell")
-        setButtonPositionNormalX(1)
-        setButtonPositionNormalY(2)
-        setArtCaster("")
-        setCasterAttachmentPoint("")
-        setArtEffect("")
-        setIconNormal(Icons.bTNMonsoon)
-        setArtTarget("")
-        setTargetAttachmentPoint("")
-        setBaseOrderID(1, "ancestralspirit")
-        setDisableOtherAbilities(1, false)
-        setFollowThroughTime(1, 0.)
-        setOptions(1, 1 + 2)      // Visible + Targeting image.
-        setTargetType(1, 2)       // Point target.
-        setAreaofEffect(1, 150.)  // Targeting image.
-        setCastRange(1, 350.)
-        setCooldown(1, 30.)
-        setHeroAbility(false)
-        setLevels(1)
-        setTargetsAllowed(1, "ground,vulnerable,neutral")
-        setCheckDependencies(false)
-        setHotkeyNormal("W")
-        setName("Monsoon Mk.1")
-        setOrderStringUseTurnOn("ancestralspirit")
-        setTooltipNormal(1, "Monsoon Mk.1 [|cffffcc00W|r]")
-        setTooltipNormalExtended(
-            1,
-            "Marks a group of units and begins building power. After a time, the power is unleashed, and units that are still marked, in range, are damaged.|n |n|cffffcc00Damage:|r 200|n|cffffcc00Charge Duration:|r 4s|n|cffffcc00Cooldown:|r 30s"
-        )
+    new ChannelCommon(
+        ID_REGENERATOR,
+        "spell",
+        1,
+        2,
+        Icons.bTNArcaneVault,
+        40.,
+        "ancestralspirit",
+        384.,
+        1,
+        TargetType.Instant,
+        "W",
+        "Regenerator",
+        "ground,invulnerable,neutral",
+        "Diverts engine power to regenerate health while channeling.|n |n|cffffcc00Health Restored:|r 30 per second|n|cffffcc00Channel Duration:|r 10s|n|cffffcc00Cooldown:|r 40s",
+        10.,
+        0.
+    )
 
 @compiletime function initMonsoonMk1Abil()
-    new MonsoonMk1Abil(ID_MONSOON_MK1)
+    new ChannelCommon(
+        ID_MONSOON_MK1,
+        "spell",
+        1,
+        2,
+        Icons.bTNMonsoon,
+        30.,
+        "ancestralspirit",
+        400.,
+        1 + 2, // Visible + Targeting Image
+        TargetType.Point,
+        "W",
+        "Monsoon Mk.1",
+        "air,enemies,ground,vulnerable,terrain",
+        "Marks a group of units and begins building power. After a time, the power is unleashed, and units that are still marked, in range, are damaged.|n |n|cffffcc00Damage:|r 250|n|cffffcc00Charge Duration:|r 3.5s|n|cffffcc00Cooldown:|r 30s|n|cffffcc00Range:|r 400",
+        0.,
+        200.
+    )
 
 @compiletime function create_w3a_A00N()
     let _def = createObjectDefinition("w3a", ID_SHOW_TRADE_EXP, 'ANcl')

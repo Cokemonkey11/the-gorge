@@ -1,0 +1,124 @@
+package Emp
+
+import AbilitiesApi
+import ClosureEvents
+import DamageEvent
+import LinkedListModule
+import Locks
+import Profile
+import TempLightning
+import UnitsApi
+
+constant ORDER = "ancestralspirit"
+
+class Hit
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+    static constant damage = 150.
+    static constant fullDuration = 5.
+
+    unit owner
+    unit target
+    real duration
+    int ticks
+
+    static function find(unit caster) returns thistype
+        for hit from staticItr()
+            if hit.owner == caster
+                return hit
+        return null
+
+    ondestroy
+        StunLocks.remove(this.target, 'emp!')
+
+    construct(unit owner, unit target)
+        this.owner = owner
+        this.target = target
+        this.duration = fullDuration
+        this.ticks = 0
+
+        StunLocks.add(target, 'emp!')
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for inst from staticItr()
+                    profile()
+                    inst.duration -= ANIMATION_PERIOD
+                    inst.ticks++
+
+                    if inst.ticks % 10 == 0
+                        let start = inst.owner.getPos3Real() + vec3(0., 0., 50.)
+                        let ang = start.angleTo2d(
+                            inst.target.getPos())
+                            + angle(GetRandomReal(- PI / 10., PI / 10.)
+                        )
+                        new TempLightning(start, start.offset2d(ang, 350.), 0.5, "CLPB")
+
+                    DamageEvent.setNextDamageFromCode()
+                    inst.owner.damageTarget(inst.target, damage * ANIMATION_PERIOD / fullDuration)
+
+                    if inst.duration <= 0. or not inst.owner.isAlive() or not inst.target.isAlive() or not inst.owner.getCurrentOrder() == OrderId(ORDER)
+                        destroy inst
+
+                if size == 0
+                    clock.pause()
+
+class Emp
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+    static constant tick_count = 5
+    static constant period = .8 / tick_count
+    static constant grp = CreateGroup()
+
+    unit owner
+    int ticks
+    construct(unit owner)
+        this.owner = owner
+        this.ticks = 0
+
+        if size == 1
+            clock.startPeriodic(period) ->
+                for emp from staticItr()
+                    profile()
+                    emp.ticks++
+
+                    let radius = 50. + emp.ticks * 40.
+
+                    TempLightning.ring(
+                        emp.owner.getPos3Real() + vec3(0., 0., 25.),
+                        radius,
+                        .5,
+                        "SPLK"
+                    )
+
+                    var hit = false
+                    grp.enumUnitsInRange(emp.owner.getPos(), radius)
+                    for u from grp
+                        if u.isType(UNIT_TYPE_HERO) and emp.owner.isEnemyOf(u.getOwner()) and u.isAlive()
+                            hit = true
+                            new Hit(emp.owner, u)
+                            break
+
+                    if emp.ticks >= Emp.tick_count or not emp.owner.isAlive() or hit or not emp.owner.getCurrentOrder() == OrderId(ORDER)
+                        if not hit
+                            emp.owner.issueImmediateOrder("stop")
+                        destroy emp
+
+                if size == 0
+                    clock.pause()
+
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
+        if GetSpellAbilityId() == ID_EMP
+            let tU = GetTriggerUnit()
+            new Emp(tU)
+
+    DamageEvent.addListener(0) () ->
+        let target = DamageEvent.getTarget()
+        if target.getTypeId() == ID_GUNSHIP and target.getCurrentOrder() == OrderId(ORDER) and Hit.find(target).owner == DamageEvent.getSource()
+            DamageEvent.setAmount(
+                DamageEvent.getAmount() * .8
+            )

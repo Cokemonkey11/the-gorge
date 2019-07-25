@@ -7,6 +7,9 @@ import Profile
 import RegisterEvents
 import TempLightning
 
+constant CHARGE_DURATION =   3.5
+constant DAMAGE          = 250.
+constant LEASH_RANGE     = 550.
 
 class Monsoon
     use LinkedListModule
@@ -36,7 +39,7 @@ class Monsoon
                     reactor.lght.move(true, reactor.owner.getPos3Real(), reactor.target.getPos3Real())
 
                     reactor.durationLeft -= ANIMATION_PERIOD
-                    if not reactor.owner.isAlive() or not reactor.target.isAlive() or reactor.target.isInvulnerable() or reactor.owner.getPos().distanceToSq(reactor.target.getPos()) > (500. * 500.)
+                    if not reactor.owner.isAlive() or not reactor.target.isAlive() or reactor.target.isInvulnerable() or reactor.owner.getPos().distanceToSq(reactor.target.getPos()) > (LEASH_RANGE * LEASH_RANGE)
                         destroy reactor
                     else if reactor.durationLeft <= 0
                         DamageEvent.setNextDamageFromCode()
@@ -55,4 +58,4 @@ init
         grp.enumUnitsInRange(vec2(GetSpellTargetX(), GetSpellTargetY()), 150.)
         for u from grp
             if tU.isEnemyOf(u.getOwner()) and u.isAlive()
-                new Monsoon(tU, u, 4., 200.)
+                new Monsoon(tU, u, CHARGE_DURATION, DAMAGE)

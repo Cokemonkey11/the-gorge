@@ -1,13 +1,17 @@
 package IonicTeleporter
 	import Assets
 	import DTS12MissileArray
+	import XtsMissileBarrage
 	import RegisterEvents
 
 	constant TELE_ID = 'A00H'
 
 	function effectC()
 		if GetSpellAbilityId() == TELE_ID
-			DTS12MissileArray.disjoint(GetTriggerUnit())
+			let tU = GetTriggerUnit()
+
+			DTS12MissileArray.disjoint(tU)
+			XtsMissileBarrage.disjoint(tU)
 			GetTriggerUnit().addEffect(Abilities.massTeleportCaster, "origin").destr()
 
 	init

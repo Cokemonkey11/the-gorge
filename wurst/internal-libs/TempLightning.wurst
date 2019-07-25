@@ -15,6 +15,17 @@ public class TempLightning
     lightning bolt
     string style
 
+    static function ring(vec3 ctr, real rad, real dur, string st, int seg)
+        let segments = max(3, seg)
+
+        for i = 0 to segments
+            new TempLightning(
+                ctr.offset2d(angle(2. * PI * i / segments), rad),
+                ctr.offset2d(angle(2. * PI * (i + 1) / segments), rad), dur, st)
+
+    static function ring(vec3 center, real radius, real duration, string style)
+        ring(center, radius, duration, style, (2. * radius * PI / 100.).toInt())
+
     ondestroy
         this.bolt.destr()
 
