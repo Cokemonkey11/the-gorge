@@ -1,0 +1,173 @@
+package IonCannons
+
+import Abilities
+import AbilitiesApi
+import ClosureEvents
+import DamageEvent
+import LinkedListModule
+import Profile
+
+constant ORDER = "acidbomb"
+
+class Knockback
+    use LinkedListModule
+
+    static constant clock     = CreateTimer()
+    static constant minVel    = 20. * ANIMATION_PERIOD
+    static constant retention =   .96
+
+    unit which
+    vec2 vel
+
+    construct(unit which, vec2 vel)
+        this.which = which
+        this.vel = vel
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for inst from staticItr()
+                    profile()
+                    inst.vel *= retention
+
+                    inst.which.setXY(inst.which.getPos() + inst.vel)
+
+                    if inst.vel.lengthSq() <= (minVel * minVel) or not inst.which.isAlive()
+                        destroy inst
+
+                if size == 0
+                    clock.pause()
+
+
+class Missile
+    use LinkedListModule
+
+    static constant clock    = CreateTimer()
+    static constant damage   =  100.
+    static constant range    = 1000.
+    static constant velocity =  800.
+    static constant grp      = CreateGroup()
+    static constant radius   =   64.
+
+    unit owner
+    lightning fx
+    vec3 head
+    vec3 vel
+    real speedRef
+    real rangeLeft
+
+    ondestroy
+        fx.destr()
+
+    construct(unit owner, int seed)
+        this.owner = owner
+        this.rangeLeft = range
+        this.head = owner
+            .getPos3Real()
+            .offset2d(owner.getFacingAngle(), velocity / 5.)
+            .offset2d(
+                owner.getFacingAngle()
+                + angle(PI / 2.),
+                64. * Cos(seed.toReal() * 10.)
+            ) + vec3(0., 0., 50.)
+        this.vel = ZERO3.offset2d(
+            owner.getFacingAngle(),
+            velocity * ANIMATION_PERIOD
+        )
+        this.speedRef = this.vel.length()
+        this.fx = addLightning(
+            "CLSB",
+            true,
+            this.head,
+            this.head
+            - (.25 / ANIMATION_PERIOD) * this.vel
+        )
+
+        addEffect(
+            Abilities.lightningBoltMissile,
+            this.head
+        ).destr()
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for inst from staticItr()
+                    profile()
+                    inst.rangeLeft -= inst.speedRef
+
+                    inst.head += inst.vel
+                    inst.fx.move(
+                        true,
+                        inst.head,
+                        inst.head - (.25 / ANIMATION_PERIOD) * inst.vel
+                    )
+
+                    var hit = false
+                    grp.enumUnitsInRange(inst.head.toVec2(), radius)
+                    for u from grp
+                        if inst.owner.isEnemyOf(u.getOwner()) and u.isAlive()
+                            hit = true
+                            DamageEvent.setNextDamageFromCode()
+                            inst.owner.damageTarget(u, damage)
+                            u.addEffect(
+                                Abilities.lightningBoltMissile,
+                                "origin"
+                            ).destr()
+                            break
+
+                    if hit or inst.rangeLeft <= 0. or not inst.owner.isAlive()
+                        destroy inst
+
+                if size == 0
+                    clock.pause()
+
+class IonCannons
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+    static constant fullDuration = 10.
+    static constant velocity = 50.
+    static constant period = 1. / 2.
+
+    unit owner
+    real duration
+    int seed
+
+    construct(unit owner)
+        this.owner = owner
+        this.duration = fullDuration
+        this.seed = 0
+
+        new Missile(owner, this.seed)
+        new Knockback(
+            owner,
+            ZERO2.polarOffset(
+                owner.getFacingAngle(),
+                -velocity * ANIMATION_PERIOD)
+        )
+
+        if size == 1
+            clock.startPeriodic(period) ->
+                for ion from staticItr()
+                    profile()
+
+                    ion.seed++
+                    if ion.owner.getCurrentOrder() == OrderId(ORDER)
+                        new Missile(ion.owner, ion.seed)
+                        new Knockback(
+                            ion.owner,
+                            ZERO2.polarOffset(
+                                ion.owner.getFacingAngle(),
+                                -velocity * ANIMATION_PERIOD)
+                        )
+
+                    if ion.duration <= 0. or not ion.owner.isAlive() or not ion.owner.getCurrentOrder() == OrderId(ORDER)
+                        destroy ion
+
+                if size == 0
+                    clock.pause()
+
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
+        if GetSpellAbilityId() == ID_ION_CANNONS
+            let tU = GetTriggerUnit()
+            new IonCannons(tU)

@@ -18,6 +18,12 @@ init
 	addCommand("clear") (p, _c, _a) ->
 		if localPlayer == p
 			ClearTextMessages()
+	addCommand("speed") (p, _c, _a) ->
+		printTimedToPlayer(
+			Ships.ships[p.getId()].getMoveSpeed().toString(1),
+			10.,
+			p
+		)
 	addCommand("reduction") (p, _c, _a) ->
 		p.print(
 			"|cffffcc00Damage Reduction:|r " +

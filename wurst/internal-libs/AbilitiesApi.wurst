@@ -3,6 +3,7 @@ package AbilitiesApi
 import AbilityObjEditing
 import Assets
 import LinkedList
+import ObjectIds
 import WurstLinkedHashMap
 
 public constant ID_SPEED_BONUS_1     = 'A00C'
@@ -25,9 +26,10 @@ public constant HEALTH_REGEN_BONUS_2 = 12
 public constant HEALTH_REGEN_BONUS_3 = 16
 public constant HEALTH_REGEN_BONUS_4 = 20
 
-public constant ID_HERO_GLOW     = 'Af00'
-public constant ID_SELECT_UNIT     = 'AE01'
+public constant ID_HERO_GLOW           = 'Af00'
+public constant ID_SELECT_UNIT         = 'AE01'
 public constant ID_FIRE_CREWMEMBER     = 'A00M'
+public constant ID_SHROUD              = 'A00Y'
 
 public constant ID_MAGNETIC_REACTORS     = 'Az00'
 public constant ID_REGENERATOR           = 'Az01'
@@ -35,6 +37,11 @@ public constant ID_MONSOON_MK1           = 'Az02'
 public constant ID_SEND_GOLD             = 'Az03'
 public constant ID_XTS_MISSILE_ARRAY     = 'Az04'
 public constant ID_EMP                   = 'Az05'
+public constant ID_ION_CANNONS           = 'Az06'
+public constant ID_DISRUPTOR             = 'Az07'
+public constant ID_FIREBLAST             = 'Az08'
+public constant ID_FLIGHT_MODE           = 'Az09'
+public constant ID_FLIGHT_MODE_OFF       = 'Az0A'
 
 public constant ID_SHOW_TRADE_EXP        = 'A00N'
 
@@ -205,7 +212,7 @@ function TargetType.toChannelIntValue() returns int
         case Unit
             return 1
         case Point
-            return 1
+            return 2
 
 class ChannelCommon extends AbilityDefinitionIllidanChannel
     construct(int id, string animationName, int x, int y, string icon, real cooldown, string orderid, real castRange, int options, TargetType targetType, string hotkey, string name, string targetsAllowed, string tooltipExtended, real followThroughTime, real aoe)
@@ -256,6 +263,25 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         0.,
         0.
     )
+
+@compiletime function init_ion_cannons()
+    new ChannelCommon(
+        ID_ION_CANNONS,
+        "spell",
+        0,
+        2,
+        Icons.bTNBlizzard,
+        15.,
+        "acidbomb",
+        1000.,
+        1,
+        TargetType.Point,
+        "Q",
+        "Ion Cannons",
+        "air,enemies,ground,vulnerable",
+        "Begins channeling to divert power.  Ion bolts are loosed periodically in the target direction.|n |n|cffffcc00Damage (Each):|r 100|n|cffffcc00Cooldown:|r 15s|n|cffffcc00Range:|r 1100|n|cffffcc00Rate of fire:|r 2 per second",
+        10.,
+        0.)
 
 @compiletime function init_emp()
     new ChannelCommon(
@@ -375,6 +401,85 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         "Marks a group of units and begins building power. After a time, the power is unleashed, and units that are still marked, in range, are damaged.|n |n|cffffcc00Damage:|r 250|n|cffffcc00Charge Duration:|r 3.5s|n|cffffcc00Cooldown:|r 30s|n|cffffcc00Range:|r 400",
         0.,
         200.
+    )
+
+@compiletime function init_disruptor_beam()
+    new ChannelCommon(
+        ID_DISRUPTOR,
+        "spell",
+        1,
+        2,
+        Icons.bTNSilence,
+        30.,
+        "ancestralspirit",
+        1200.,
+        1,
+        TargetType.Point,
+        "W",
+        "Disruptor Beam",
+        "enemies,ground,vulnerable",
+        "Charges breifly before emitting an enormous beam that silences enemy units.|n |n|cffffcc00Range:|r 1200|n|cffffcc00Duration:|r 5s|n|cffffcc00Cooldown:|r 30s|n|cffffcc00Beam width:|r 400",
+        .5,
+        0.
+    )
+
+@compiletime function init_fire_blast()
+    new ChannelCommon(
+        ID_FIREBLAST,
+        "",
+        0,
+        2,
+        Icons.bTNVolcano,
+        30.,
+        "acidbomb",
+        900.,
+        1,
+        TargetType.Point,
+        "Q",
+        "Fire Blast",
+        "enemies,ground,vulnerable",
+        "Looses a triplet of molten fire bombs in the target direction.  Damage scales with movement speed, including speed obtained in flight mode.|n |n|cffffcc00Damage:|r 100 + 50% ms|n|cffffcc00Range:|r 900|n|cffffcc00Cooldown:|r 30",
+        0.,
+        0.
+    )
+
+@compiletime function init_flight_mode()
+    new ChannelCommon(
+        ID_FLIGHT_MODE,
+        "",
+        1,
+        2,
+        Icons.bTNWindWalkOn,
+        0.,
+        "ancestralspirit",
+        0.,
+        1,
+        TargetType.Instant,
+        "W",
+        "Flight Mode",
+        "enemies,ground,vulnerable",
+        "Toggleable.  Provides an alternate movement style with the capability to move at much greater speed, at a cost of reduced control.|n |n|cffffcc00Maximum speed:|r 200% ms",
+        0.,
+        0
+    )
+
+    new ChannelCommon(
+        ID_FLIGHT_MODE_OFF,
+        "",
+        1,
+        2,
+        Icons.bTNWindWalkOff,
+        0.,
+        "ancestralspirit",
+        0.,
+        1,
+        TargetType.Instant,
+        "W",
+        "Hover Mode",
+        "enemies,ground,vulnerable",
+        "Disables flight mode.",
+        0.,
+        0.
     )
 
 @compiletime function create_w3a_A00N()
@@ -544,7 +649,7 @@ class CrewmemberInfoIcon extends AbilityDefinitionTaurenChieftainEnduranceAura
             + sellValue.toString()
             + "|n |n|cff999999Damage:|r "
             + damage.toString()
-            + "|n|cff999999Attack speed:|r "
+            + "|n|cff999999Rate of fire:|r "
             + aps.toString(1)
             + " per second"
             + "|n|cff999999Range:|r "
@@ -575,3 +680,22 @@ class CrewmemberInfoIcon extends AbilityDefinitionTaurenChieftainEnduranceAura
     new CrewmemberInfoIcon(ID_SEAWITCH_ICON, "Sea Witch",       35, 1. / .8,  550,  75, "Attacks slow the target by 20% for 5 seconds (non-stacking)")
     new CrewmemberInfoIcon(ID_AMASTER_ICON,  "Master Archer",   50, 1. / .8,  650, 300, "Fires 3 independent projectiles (can strike the same target)")
     new CrewmemberInfoIcon(ID_ODRAKE_ICON,   "Obsidian Drake", 320, 1. / 1.8, 600, 300, "Deals a total of 400 damage if the target is below 400 HP")
+
+class SilenceSingle extends AbilityDefinitionFirelordSoulBurn
+    construct(int id)
+        super(id)
+        setHeroAbility(false)
+        setAttackSpeedReduction(1, 0.)
+        setDamageAmount(1, 0.)
+        setMovementSpeedReduction(1, 0.)
+        setDamagePenalty(1, 0.)
+        presetDurationNormal(lvl -> lvl.toReal())
+        presetDurationHero(lvl -> lvl.toReal())
+        setLevels(10)
+        presetManaCost(lvl -> 0)
+        presetAreaofEffect(lvl -> 0.)
+        presetBuffs(lvl -> commaList('BNsi'))
+        presetTargetsAllowed(lvl -> "vulnerable,self")
+
+@compiletime function create_silence()
+    new SilenceSingle('$si$')

@@ -18,8 +18,6 @@ constant MAXIMUM_VEL = ANIMATION_PERIOD * 1200.
 constant HIT_DISTANCE = MAXIMUM_VEL * 3.
 constant VEL_RATIO = 1. - ACCELERATION / MAXIMUM_VEL
 
-constant ORIGIN = vec3(0., 0., 0.)
-
 constant LAUNCH_SOUND = new SoundDefinition(
     Sounds.tinkerMissileLaunch1,
     false,
@@ -55,7 +53,7 @@ class XtsMissileBarrage
             Abilities.rocketMissile
         )
 
-        this.vel = ORIGIN.polarProject(INITIAL_VEL, facing, zAngle)
+        this.vel = ZERO3.polarProject(INITIAL_VEL, facing, zAngle)
 
         if size == 1
             doPeriodically(ANIMATION_PERIOD) (CallbackPeriodic cb) ->
@@ -64,7 +62,7 @@ class XtsMissileBarrage
 
                     let curr = msl.dummy.getPos3() + msl.vel
                     msl.dummy.setXYZ(curr, true)
-                    msl.dummy.setXYAngle(ORIGIN.angleTo2d(msl.vel))
+                    msl.dummy.setXYAngle(ZERO3.angleTo2d(msl.vel))
                     // msl.dummy.setZAngle(ORIGIN.) TODO
 
                     var hit = false

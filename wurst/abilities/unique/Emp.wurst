@@ -55,8 +55,8 @@ class Hit
                         )
                         new TempLightning(start, start.offset2d(ang, 350.), 0.5, "CLPB")
 
-                    DamageEvent.setNextDamageFromCode()
-                    inst.owner.damageTarget(inst.target, damage * ANIMATION_PERIOD / fullDuration)
+                        DamageEvent.setNextDamageFromCode()
+                        inst.owner.damageTarget(inst.target, 10. * damage * ANIMATION_PERIOD / fullDuration)
 
                     if inst.duration <= 0. or not inst.owner.isAlive() or not inst.target.isAlive() or not inst.owner.getCurrentOrder() == OrderId(ORDER)
                         destroy inst

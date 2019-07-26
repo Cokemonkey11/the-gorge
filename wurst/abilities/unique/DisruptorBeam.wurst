@@ -1,0 +1,89 @@
+package DisruptorBeam
+
+import AbilitiesApi
+import ClosureEvents
+import ClosureTimers
+import HashSet
+import InstantDummyCaster
+import Profile
+import SoundUtils
+import TempLightning
+
+constant RADIUS =  400. / 2.
+constant RANGE  = 1200.
+
+constant tempSet = new HashSet<unit>()
+constant grp = CreateGroup()
+
+constant snd = new SoundDefinition(Sounds.dispelMagicTarget1, false, true)
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
+        if GetSpellAbilityId() == ID_DISRUPTOR
+            let target = EventData.getSpellTargetPos()
+            let caster = GetTriggerUnit()
+            let castPos = caster.getPos3Real()
+            let facing = castPos.toVec2().angleTo(target)
+
+            let start1 = castPos.offset2d(
+                facing + angle(PI / 2.),
+                RADIUS
+            ) + vec3(0., 0., 50.)
+            let start2 = castPos.offset2d(
+                facing + angle(PI / 2.),
+                -RADIUS
+            ) + vec3(0., 0., 50.)
+
+            new TempLightning(
+                start1,
+                start1.offset2d(facing, RANGE),
+                0.5,
+                "SPLK"
+            )
+            new TempLightning(
+                start2,
+                start2.offset2d(facing, RANGE),
+                1.,
+                "SPLK"
+            )
+
+            snd.playOnPoint(castPos)
+
+            doAfter(.5) ->
+                for j = 0 to 6
+                    let source = castPos.polarProject(
+                        RADIUS / 2.,
+                        facing + angle(PI / 2.),
+                        angle(j * 2. * PI / 7.)
+                    ) + vec3(0., 0., 100.)
+                    let tgt = source.offset2d(facing, RANGE)
+
+                    new TempLightning(
+                        source,
+                        tgt,
+                        0.5,
+                        "AFOD"
+                    )
+
+                tempSet.clear()
+                var i = RADIUS
+                while i <= RANGE + RADIUS
+                    profile()
+
+                    grp.enumUnitsInRange(
+                        castPos.toVec2().polarOffset(facing, i),
+                        RADIUS
+                    )
+                    for u from grp
+                        if u.isAlive() and u.isEnemyOf(caster.getOwner())
+                            tempSet.add(u)
+                    i += (RADIUS / 2.)
+                tempSet.forEach() (unit t) ->
+                    InstantDummyCaster.castTarget(
+                        caster.getOwner(),
+                        '$si$',
+                        5,
+                        "soulburn",
+                        t,
+                        t.getPos()
+                    )

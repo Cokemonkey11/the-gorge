@@ -1,4 +1,5 @@
 package SL15ShroudGenerator
+	import AbilitiesApi
 	import DummyUnitStack
 	import Profile
 	import RegisterEvents
@@ -20,7 +21,6 @@ package SL15ShroudGenerator
 		real dY
 		real duration
 
-	constant SHROUD_ID = 'A00Y'
 	constant INVIS_ID  = 'A00L'
 	constant BUF_ID    = 'B004'
 	constant GEN_COUNT = 32
@@ -113,9 +113,8 @@ package SL15ShroudGenerator
 			index++
 
 	function c()
-		Shroud s
-		if GetSpellAbilityId() == SHROUD_ID
-			s = new Shroud
+		if GetSpellAbilityId() == ID_SHROUD
+			let s = new Shroud
 			s.caster = GetTriggerUnit()
 			s.cX = GetUnitX(s.caster)
 			s.cY = GetUnitY(s.caster)

@@ -1,0 +1,110 @@
+package FlightMode
+
+import AbilitiesApi
+import ClosureEvents
+import ClosureTimers
+import HashMap
+import LinkedListModule
+import Profile
+import TerrainUtils
+
+constant listeners = new HashMap<unit, trigger>()
+constant movements = new HashMap<unit, Movement>()
+
+constant maxVelMultSq = ANIMATION_PERIOD * ANIMATION_PERIOD * 2. * 2.
+
+public function unit.getFlightModeSpeed() returns real
+    if not movements.has(this)
+        movements.put(this, new Movement(this))
+    return movements.get(this).vel.length()
+
+class Movement
+    use LinkedListModule
+
+    static constant clock = CreateTimer()
+    static constant retention = .985
+    static constant minVel = ANIMATION_PERIOD * 20.
+
+    vec2 vel
+    unit which
+
+    construct(unit u)
+        this.which = u
+        this.vel = vec2(0., 0)
+
+        if size == 1
+            clock.startPeriodic(ANIMATION_PERIOD) ->
+                for inst from staticItr()
+                    profile()
+
+                    if inst.which != null and inst.which.getTypeId() > 0
+                        inst.vel *= retention
+
+                        if inst.which.isAlive() and inst.vel.lengthSq() > (minVel * minVel)
+                            inst.which.setPropWindow(angle(0.))
+                            let next = inst.which.getPos() + inst.vel
+                            if not next.isTerrainPathable(PATHING_TYPE_WALKABILITY)
+                                inst.which.setXY(next)
+                                // https://www.hiveworkshop.com/threads/spell-cast-window.255842/
+                                // inst.which.setFacing(ZERO2.angleTo(inst.vel))
+                            else
+                                inst.vel *= .5
+                        else
+                            inst.which.setPropWindow(
+                                inst.which.getDefaultPropWindow()
+                            )
+                    else
+                        destroy inst
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
+        if GetSpellAbilityId() == ID_FLIGHT_MODE
+            profile()
+
+            let tU = GetTriggerUnit()
+
+            tU..removeAbility(ID_FLIGHT_MODE)..addAbility(ID_FLIGHT_MODE_OFF)
+
+            if not movements.has(tU)
+                movements.put(tU, new Movement(tU))
+
+            let listener = CreateTrigger()
+            listener..registerUnitEvent(tU, EVENT_UNIT_ISSUED_POINT_ORDER)
+                ..addAction() ->
+                profile()
+
+                let issued = GetOrderedUnit()
+                let order = GetIssuedOrderId()
+
+                if order == OrderId("smart") or order == OrderId("move")
+                    let target = vec2(GetOrderPointX(), GetOrderPointY())
+                    issued.setFacing(issued.getPos().angleTo(target))
+
+                    nullTimer() ->
+                        issued.issueImmediateOrder("stop")
+
+                    let movement = movements.get(issued)
+                    let ms = issued.getMoveSpeed()
+                    let bonus = ZERO2.polarOffset(
+                        issued
+                            .getPos()
+                            .angleTo(target),
+                        ANIMATION_PERIOD * ms / 2.
+                    )
+
+                    movement.vel += bonus
+
+                    if movement.vel.lengthSq() > (maxVelMultSq * ms * ms)
+                        movement.vel = ANIMATION_PERIOD * movement.vel.norm() * 2 * ms
+
+            listeners.put(
+                tU,
+                listener
+            )
+
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
+        if GetSpellAbilityId() == ID_FLIGHT_MODE_OFF
+            let tU = GetTriggerUnit()
+            tU..removeAbility(ID_FLIGHT_MODE_OFF)..addAbility(ID_FLIGHT_MODE)
+
+            listeners.get(tU).destr()

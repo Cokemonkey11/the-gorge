@@ -1,0 +1,97 @@
+package FireBlast
+
+import Abilities
+import AbilitiesApi
+import ClosureEvents
+import ClosureTimers
+import DamageEvent
+import FlightMode
+import Fx
+import LinkedListModule
+import Profile
+import SoundUtils
+
+constant HALF_COUNT = 10 div 2
+constant INITIAL_VEL = ANIMATION_PERIOD * 900.
+constant PERIOD = .5 / HALF_COUNT
+constant ACCELERATION = ANIMATION_PERIOD * 80.
+constant MAXIMUM_VEL = ANIMATION_PERIOD * 1200.
+constant HIT_DISTANCE = MAXIMUM_VEL * 3.
+constant VEL_RATIO = 1. - ACCELERATION / MAXIMUM_VEL
+
+constant LAUNCH_SOUND = new SoundDefinition(
+    Sounds.flameStrikeTargetWaveNonLoop1,
+    false,
+    true
+)
+
+constant HIT_SOUND = new SoundDefinition(Sounds.soulBurn1, false, true)
+
+class FireBlast
+    use LinkedListModule
+
+    static constant velocity = 800. * ANIMATION_PERIOD
+    static constant grp = CreateGroup()
+    static constant maxRange = 900.
+
+    unit source
+    real damage
+    real range
+    Fx dummy
+    vec2 vel
+
+    ondestroy
+        destroy this.dummy
+
+    construct(unit source, vec2 target, real damage)
+        this.source = source
+        let ang = source.getPos().angleTo(target)
+        this.vel = ZERO2.polarOffset(ang, velocity)
+        this.damage = damage
+        this.range = maxRange
+
+        LAUNCH_SOUND.playOnPoint(source.getPos3Real())
+
+        this.dummy = new Fx(
+            source.getPos3with(100.),
+            ang,
+            Abilities.lavaSpawnBirthMissile
+        )
+
+        if size == 1
+            doPeriodically(ANIMATION_PERIOD) (CallbackPeriodic cb) ->
+                for msl from staticItr()
+                    profile()
+
+                    msl.dummy.setXY(msl.dummy.getPos2() + msl.vel)
+                    msl.range -= velocity
+
+                    var hit = false
+                    grp.enumUnitsInRange(msl.dummy.getPos2(), 64.)
+                    for u from grp
+                        if u.isEnemyOf(msl.source.getOwner()) and u.isAlive()
+                            hit = true
+                            DamageEvent.setNextDamageFromCode()
+                            msl.source.damageTarget(u, msl.damage)
+
+                            HIT_SOUND.playOnPoint(u.getPos3Real())
+
+                    if msl.range <= 0. or hit
+                        destroy msl
+
+                if size == 0
+                    destroy cb
+
+init
+    EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
+        if GetSpellAbilityId() == ID_FIREBLAST
+            let target = EventData.getSpellTargetPos()
+            let tU = GetTriggerUnit()
+            let ms = tU.getMoveSpeed()
+
+            let offset_angle = tU.getPos().angleTo(target) + angle(PI / 2.)
+            let damage = max(100. + .5 * ms, tU.getFlightModeSpeed())
+
+            new FireBlast(tU, target, damage)
+            new FireBlast(tU, target.polarOffset(offset_angle,  64.), damage)
+            new FireBlast(tU, target.polarOffset(offset_angle, -64.), damage)
