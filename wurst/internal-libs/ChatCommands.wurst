@@ -54,3 +54,5 @@ init
 			SinglePlayer.hp(a)
 		addCommand("damage") (_p, _c, a) ->
 			SinglePlayer.damage(a)
+		addCommand("ai") (_p, _c, a) ->
+			SinglePlayer.ai(a)

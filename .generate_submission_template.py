@@ -60,8 +60,20 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "0.14.0",
+        "0.14.1",
         "NEXT",
+        (
+            "Adjusted Shroud generator effect and appearance to reduce lag.",
+            "Adjusted the handling of creeps to reduce lag.",
+            "Increased tier-2 ship cost to 400.",
+            "Fixed a bug where the Disruptor Beam was not working at all.",
+            "Reduced starting gold to 150.",
+            "Increased turret hit points from 2000 to 3000.",
+        )
+    ),
+    (
+        "0.14.0",
+        "26 Jul 2019",
         (
             "New frigate, new battleship, and new interceptor.",
             "Fixed a bug where shields would cause you to kill yourself.",

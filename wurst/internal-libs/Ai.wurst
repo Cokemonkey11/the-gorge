@@ -1,11 +1,16 @@
 package Ai
 
+import ClosureEvents
+import ClosureTimers
 import ErrorHandling
 import HashMap
-import LinkedListModule
+import WurstLinkedHashMap
+import LinkedList
+import Players
 import Profile
 import Ships
 import TerrainData
+import UnitsApi
 
 bool array ai_controlled
 
@@ -17,6 +22,7 @@ class Vec2
         this.v = which
 
 constant aiMap = new HashMap<string, Vec2>()
+constant propensityMap = new HashMap<unit, Propensity>()
 
 public enum Propensity
     None
@@ -35,6 +41,7 @@ function Propensity.toString() returns string
 
 public enum Status
     None
+    Spawn
     OwnTower
     Obelisk
     EnemyTower
@@ -42,6 +49,8 @@ public enum Status
 
 function Status.next() returns Status
     switch this
+        case Spawn
+            return Status.OwnTower
         case OwnTower
             return Status.Obelisk
         case Obelisk
@@ -56,6 +65,8 @@ function Status.next() returns Status
 
 function Status.toString() returns string
     switch this
+        case Spawn
+            return "Spawn"
         case OwnTower
             return "OwnTower"
         case Obelisk
@@ -78,6 +89,9 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
             switch p
                 case North
                     switch this
+                        case Spawn
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_WEST))
+                            return this.toVec2(p, alliance)
                         case OwnTower
                             aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_NORTH))
                             return this.toVec2(p, alliance)
@@ -94,6 +108,9 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
                             error("Tried to get the target for an improper status.")
                 case South
                     switch this
+                        case Spawn
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_WEST))
+                            return this.toVec2(p, alliance)
                         case OwnTower
                             aiMap.put(key, new Vec2(TerrainData.POS_TOWER_WEST_SOUTH))
                             return this.toVec2(p, alliance)
@@ -114,6 +131,9 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
             switch p
                 case North
                     switch this
+                        case Spawn
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_EAST))
+                            return this.toVec2(p, alliance)
                         case OwnTower
                             aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_NORTH))
                             return this.toVec2(p, alliance)
@@ -130,6 +150,9 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
                             error("Tried to get the target for an improper status.")
                 case South
                     switch this
+                        case Spawn
+                            aiMap.put(key, new Vec2(TerrainData.POS_KEEP_EAST))
+                            return this.toVec2(p, alliance)
                         case OwnTower
                             aiMap.put(key, new Vec2(TerrainData.POS_TOWER_EAST_SOUTH))
                             return this.toVec2(p, alliance)
@@ -150,55 +173,47 @@ function Status.toVec2(Propensity p, player alliance) returns vec2
             error("Tried to get the target for a non-team player.")
     return vec2(0., 0.)
 
-class CreepAi
-    use LinkedListModule
-
-    static timer t = CreateTimer()
-
-    unit u
-    Propensity p
-    Status s
-
-    function tick()
-        let target = this.s.toVec2(
-            this.p,
-            this.u.getOwner()
-        )
-        if this.u.getPos().distanceToSq(target) < 550. * 550.
-            this.s = this.s.next()
-        else
-            this.u.issuePointOrder(
-                "attack",
-                this.u.getPos().moveTowards(target, 550.)
-            )
-
-    static function periodic()
-        let iter = CreepAi.staticItr()
-        while iter.hasNext()
-            let inst = iter.next()
-            profile()
-
-            if inst.u != null and inst.u.isAlive()
-                inst.tick()
-            else
-                destroy inst
-
-        iter.close()
-        if CreepAi.size == 0
-            CreepAi.t.pause()
-
-    construct(unit u, Propensity p)
-        this.u = u
-        this.p = p
-        this.s = Status.OwnTower
-
-        tick()
-
-        if CreepAi.size == 1
-            CreepAi.t.startPeriodic(UPDATE_PERIOD, function CreepAi.periodic)
-
 public function unit.intoCreepAi(Propensity p)
-    new CreepAi(this, p)
+    propensityMap.put(this, p)
+    // new CreepAi(this, p)
+
+function vec2.growToRect(real rad) returns rect
+    return Rect(this.x - rad, this.y - rad, this.x + rad, this.y + rad)
+
+interface EnterListener
+    function do()
+
+function registerRect(EnterListener listener)
+    listener.do()
+
+let listeners = new LinkedHashMap<trigger, EnterListener>()
+init
+    let statuses = asList(Status.Spawn, Status.OwnTower, Status.Obelisk, Status.EnemyTower, Status.EnemyKeep)
+    let propensities = asList(Propensity.North, Propensity.South)
+    let alliances = asList(players[0], players[1])
+
+    for alliance in alliances
+        for propensity in propensities
+            for status in statuses
+                let vec = status.toVec2(propensity, alliance)
+                listeners.put(
+                    CreateTrigger()
+                    ..registerRectEnterEventSource(vec.growToRect(250.))
+                ) ->
+                    let u = GetEnteringUnit()
+                    if u.getOwner() == alliance
+                        doAfter(status == Status.Spawn ? 0.25 : 0.) ->
+                            profile()
+
+                            if propensityMap.has(u) and propensityMap.get(u) == propensity
+                                u.issuePointOrder(
+                                    "attack",
+                                    status.next().toVec2(propensity, alliance)
+                                )
+
+    listeners.forEach() (LHMEntry<trigger, EnterListener> kv) ->
+        kv.key.addAction() ->
+            listeners.get(GetTriggeringTrigger()).do()
 
 function lockShip(unit u)
     u..setPos(u.getOwner().getStartLocation())
@@ -216,3 +231,20 @@ public function player.intoAi()
     let u = Ships.ships[this.getId()]
     if not u == null and u.isAlive()
         lockShip(u)
+
+public function player.intoAiX()
+    ai_controlled[this.getId()] = true
+
+    if Ships.ships[this.getId()] == null
+        Ships.ships[this.getId()] = createUnit(
+            this,
+            ID_HELICOPTER,
+            Players.isWest(this.getId())
+            ? TerrainData.POS_KEEP_WEST
+            : TerrainData.POS_KEEP_EAST,
+            angle(0.)
+        )
+
+    doPeriodically(1.) cb ->
+        if Ships.ships[this.getId()].isAlive()
+            Ships.ships[this.getId()].issuePointOrder("move", vec2(0., 0.))

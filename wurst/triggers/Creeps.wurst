@@ -13,21 +13,19 @@ package Creeps
 	constant  HAWK_PERIOD = 30. * 2.
 	constant  WYRM_PERIOD = 30. * 3.
 
-	function spawnUpper(int faction, int cls, real x, real face, real order_delay) returns unit
+	function spawnUpper(int faction, int cls, real x, real face) returns unit
 		let u = CreateUnit(players[faction], cls, x, 0., face)
-		doAfter(order_delay) ->
-			u.intoCreepAi(Propensity.North)
+			..intoCreepAi(Propensity.North)
 		return u
 
 
-	function spawnLower(int faction, int cls, real x, real face, real order_delay) returns unit
+	function spawnLower(int faction, int cls, real x, real face) returns unit
 		let u = CreateUnit(players[faction], cls, x, 0., face)
-		doAfter(order_delay) ->
-			u.intoCreepAi(Propensity.South)
+			..intoCreepAi(Propensity.South)
 		return u
 
 
-	function spawn(int faction, int cls, real order_delay)
+	function spawn(int faction, int cls)
 		real x
 		real face
 
@@ -39,9 +37,9 @@ package Creeps
 			face = 180.
 
 
-		spawnUpper(faction, cls, x, face, order_delay)
+		spawnUpper(faction, cls, x, face)
 
-		spawnLower(faction, cls, x, face, order_delay)
+		spawnLower(faction, cls, x, face)
 
 
 	function baseSpawn()
@@ -49,58 +47,58 @@ package Creeps
 
 		if not Game.ended
 			// West units
-			spawn(0, ID_GRYPHONRIDER,  .25)
-			spawn(0, ID_GRYPHONRIDER,  .25)
-			doAfter(.5) ->
-				spawn(0, ID_WINDRIDER, .75)
-				spawn(0, ID_WINDRIDER, .75)
+			spawn(0, ID_GRYPHONRIDER)
+			spawn(0, ID_GRYPHONRIDER)
+			doAfter(1.) ->
+				spawn(0, ID_WINDRIDER)
+				spawn(0, ID_WINDRIDER)
 
 			// East units
-			spawn(1, ID_GRYPHONRIDER,  .25)
-			spawn(1, ID_GRYPHONRIDER,  .25)
-			doAfter(.5) ->
-				spawn(1, ID_WINDRIDER, .75)
-				spawn(1, ID_WINDRIDER, .75)
+			spawn(1, ID_GRYPHONRIDER)
+			spawn(1, ID_GRYPHONRIDER)
+			doAfter(1.) ->
+				spawn(1, ID_WINDRIDER)
+				spawn(1, ID_WINDRIDER)
 
 
 	function hawk()
 		profile()
 
-		doAfter(1.) ->
+		doAfter(2.) ->
 			if not Game.ended
-				spawn(0, ID_DRAGONHAWK, 1.25)
-				spawn(1, ID_DRAGONHAWK, 1.25)
+				spawn(0, ID_DRAGONHAWK)
+				spawn(1, ID_DRAGONHAWK)
 
 
 	function wyrm()
 		profile()
 
-		doAfter(2.) ->
+		doAfter(3.5) ->
 			if not Game.ended
 				if EnchantingStone.ownerNorth == players[0]
-					spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
+					spawnUpper(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
 						..setVertexColor(155, 155, 255, 225)
-					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180.)
 				else if EnchantingStone.ownerNorth == players[1]
-					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
-					spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0.)
+					spawnUpper(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
 						..setVertexColor(155, 155, 255, 225)
 				else
-					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
-					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+					spawnUpper(0, ID_FROSTWYRM, TerrainData.WESTX,   0.)
+					spawnUpper(1, ID_FROSTWYRM, TerrainData.EASTX, 180.)
 
 
 				if EnchantingStone.ownerSouth == players[0]
-					spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0., 1.75)
+					spawnLower(0, ENCHANTED_ID, TerrainData.WESTX,   0.)
 						..setVertexColor(155, 155, 255, 225)
-					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180.)
 				else if EnchantingStone.ownerSouth == players[1]
-					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
-					spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180., 1.75)
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0.)
+					spawnLower(1, ENCHANTED_ID, TerrainData.EASTX, 180.)
 						..setVertexColor(155, 155, 255, 225)
 				else
-					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0., 1.75)
-					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180., 1.75)
+					spawnLower(0, ID_FROSTWYRM, TerrainData.WESTX,   0.)
+					spawnLower(1, ID_FROSTWYRM, TerrainData.EASTX, 180.)
 
 	init
 		TimerStart(CreateTimer(), SPAWN_PERIOD, true, function baseSpawn)

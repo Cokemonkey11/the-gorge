@@ -27,7 +27,7 @@ package Game
 		static constant        DUMMY_ID     = 'u000'
 		static constant STONE_SPIDER_ID     = 'n000'
 
-		static constant START_GOLD          =   200
+		static constant START_GOLD          =   150
 		static constant SHIELD_COUNT        =    10
 		static constant    SHIELDOFFS          =   200.
 		static constant    FADEOUT_DURATION    =    10.

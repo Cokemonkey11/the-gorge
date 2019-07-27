@@ -1,4 +1,5 @@
 package SinglePlayer
+    import Ai
     import DamageEvent
     import LinkedList
     import Players
@@ -34,6 +35,10 @@ package SinglePlayer
             let ship = Ships.ships[thePlayer.getId()]
             DamageEvent.setNextDamageFromCode()
             ship.damageTarget(ship, args.getFirst().toReal())
+
+
+        static function ai(LinkedList<string> args)
+            players[args.getFirst().toInt()].intoAiX()
 
 
         static function experience()
