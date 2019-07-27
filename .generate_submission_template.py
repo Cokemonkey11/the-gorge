@@ -61,7 +61,7 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.14.1",
-        "NEXT",
+        "27 Jul 2019",
         (
             "Adjusted Shroud generator effect and appearance to reduce lag.",
             "Adjusted the handling of creeps to reduce lag.",

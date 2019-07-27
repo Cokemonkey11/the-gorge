@@ -51,6 +51,24 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
+[list][*] Adjusted Shroud generator effect and appearance to reduce lag.
+[*] Adjusted the handling of creeps to reduce lag.
+[*] Increased tier-2 ship cost to 400.
+[*] Fixed a bug where the Disruptor Beam was not working at all.
+[*] Reduced starting gold to 150.
+[*] Increased turret hit points from 2000 to 3000.
+[/list]
+
+[color=#ffcc00]0.14.0[/color] [color=#999999]26 Jul 2019[/color]:
+[list][*] New frigate, new battleship, and new interceptor.
+[*] Fixed a bug where shields would cause you to kill yourself.
+[*] Adjusted base layout and increased repair-port repair rate.
+[*] Selected pages in keep/utility ports are now saved/reselected.
+[*] Minor performance improvement and auditing capability.
+[*] [balance] improved the utility of Monsoon Mk. 1.
+[/list]
+
 [color=#ffcc00]0.13.1[/color] [color=#999999]20 Jul 2019[/color]:
 [list][*] Made changes to crewmembers to clarify stats and sell value.
 [*] All long-range crew are now incapable of hitting structures.
@@ -70,7 +88,7 @@ All iterations of this map are maintained in a public git repository at
 [*] fixed a minor cosmetic bug that made creeps appear to be healing.
 [/list]
 
-[color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
 [list][*] regression: scoreboard fixed, when more than 5 players present.
 [*] fixed a minor desync at end-of-game.
 [*] very minor code tidying.
@@ -83,7 +101,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Minor new singleplayer commands added.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.12.1[/color] [color=#999999]9 Jun 2019[/color]:
+[color=#ffcc00]0.12.1[/color] [color=#999999]9 Jun 2019[/color]:
 [list][*] Fixed a fatal problem related to a 1.31 regression (map crash).
 [*] Fixed a bug where a player gets bounty when a team-kill occurs.
 [*] Improved messages for when a team-kill occurs.
