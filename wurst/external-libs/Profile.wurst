@@ -1,5 +1,6 @@
 package Profile
 import ErrorHandling
+// import Reflection
 import StringUtils
 import WurstLinkedHashMap
 import WurstRealHeapGuard
@@ -51,3 +52,31 @@ public function profile()
             getStackTraceString()
         )
         Profile.incr("<profiler>")
+
+
+/** Reflection API */
+
+native maxTypeId() returns int
+native typeIdToTypeName(int _v) returns string
+native instanceCount(int _v) returns int
+native maxInstanceCount(int _v) returns int
+
+public function reflection_summary(player forWhom)
+    new RealHeapGuard<string>() guard ->
+        for type_id_iter = 1 to maxTypeId() - 1
+            guard.push(
+                maxInstanceCount(type_id_iter).toReal(),
+                (
+                    typeIdToTypeName(type_id_iter) +
+                    ": " +
+                    instanceCount(type_id_iter).toString() +
+                    "/" +
+                    maxInstanceCount(type_id_iter).toString()
+                )
+            )
+
+        forWhom.print("|cffffcc00Allocation metrics:|r")
+        for _i = 0 to 9
+            let disp = guard.pop()
+            forWhom.print(disp)
+        destroy guard

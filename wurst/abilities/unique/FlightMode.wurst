@@ -2,7 +2,6 @@ package FlightMode
 
 import AbilitiesApi
 import ClosureEvents
-import ClosureTimers
 import HashMap
 import LinkedListModule
 import Profile
@@ -22,7 +21,7 @@ class Movement
     use LinkedListModule
 
     static constant clock = CreateTimer()
-    static constant retention = .985
+    static constant retention = .99
     static constant minVel = ANIMATION_PERIOD * 20.
 
     vec2 vel
@@ -41,7 +40,6 @@ class Movement
                         inst.vel *= retention
 
                         if inst.which.isAlive() and inst.vel.lengthSq() > (minVel * minVel)
-                            inst.which.setPropWindow(angle(0.))
                             let next = inst.which.getPos() + inst.vel
                             if not next.isTerrainPathable(PATHING_TYPE_WALKABILITY)
                                 inst.which.setXY(next)
@@ -79,9 +77,7 @@ init
                 if order == OrderId("smart") or order == OrderId("move")
                     let target = vec2(GetOrderPointX(), GetOrderPointY())
                     issued.setFacing(issued.getPos().angleTo(target))
-
-                    nullTimer() ->
-                        issued.issueImmediateOrder("stop")
+                    issued.setPropWindow(angle(0.))
 
                     let movement = movements.get(issued)
                     let ms = issued.getMoveSpeed()
@@ -89,7 +85,7 @@ init
                         issued
                             .getPos()
                             .angleTo(target),
-                        ANIMATION_PERIOD * ms / 2.
+                        ANIMATION_PERIOD * 2. * ms / 3.
                     )
 
                     movement.vel += bonus
@@ -106,5 +102,6 @@ init
         if GetSpellAbilityId() == ID_FLIGHT_MODE_OFF
             let tU = GetTriggerUnit()
             tU..removeAbility(ID_FLIGHT_MODE_OFF)..addAbility(ID_FLIGHT_MODE)
+            tU..setPropWindow(tU.getDefaultPropWindow())
 
             listeners.get(tU).destr()

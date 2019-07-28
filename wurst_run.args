@@ -11,7 +11,7 @@ uncheckedDispatch
 
 Optimization arguments (default disabled):
 
-inline
+-inline
 -opt
 -localOptimizations
 

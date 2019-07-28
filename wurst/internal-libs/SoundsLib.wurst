@@ -37,7 +37,7 @@ package SoundsLib
 
 		static function playForPlayer(string str, real pitch, player who)
 			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
-			if GetLocalPlayer()== who
+			if GetLocalPlayer() == who
 				SetSoundVolume(s, 127)
 			else
 				SetSoundVolume(s, 0)

@@ -36,6 +36,8 @@ init
 		)
 	addCommand("stats") (p, _c, _a) ->
 		Stats.display(p)
+	addCommand("reflection") (p, _c, _a) ->
+		reflection_summary(p)
 	if profiling_enabled
 		addCommand("profile") (p, _c, _a) ->
 			Profile.display(p)

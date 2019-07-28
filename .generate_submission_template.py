@@ -3,7 +3,7 @@ import sys
 import textwrap
 
 
-MAP_NAME = "The Gorge"
+MAP_NAME = "Battle Planes"
 AUTHOR   = "Cokemonkey11"
 
 
@@ -11,7 +11,7 @@ INTRODUCTION = (
 
     """
 
-        The Gorge is a battleships-style AoS/MOBA that focuses on simplicity.
+        Battle Planes is a battleships-style AoS/MOBA that focuses on simplicity.
         It uses automatically firing weapons, and some innovative systems, to
         produce a design that's nostalgic, yet fun.
 
@@ -19,9 +19,9 @@ INTRODUCTION = (
 
     """
 
-        What make The Gorge different?  Design principles: (1) Short games aide
-        replayability and reduce burnout (2) Bias for action means big damage
-        and low durability leads to faster-paced gameplay (3) MOBA design
+        What make Battle Planes different?  Design principles: (1) Short games
+        aide replayability and reduce burnout (2) Bias for action means big
+        damage and low durability leads to faster-paced gameplay (3) MOBA design
         principles focus more on action and less on grinding (4) Fresh means not
         being afraid to do things new-and-improved (5) Classic battleships is a
         competitive and brilliant game - when in doubt, remain unbroken.
@@ -59,6 +59,23 @@ ABILITIES = (
 REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
+    (
+        "0.14.3",
+        "NEXT",
+        (
+            "Minor adjustments to improve performance.",
+            "Fixed a Flight Mode bug which occurred when turned off.",
+            "Minor adjustments to Fire ship's Flight Mode responsiveness.",
+        )
+    ),
+    (
+        "0.14.2",
+        "27 Jul 2019",
+        (
+            "We've rebranded! The map is now called Battle Planes.",
+            "Wurst inlining has been re-enabled for performance.",
+        )
+    ),
     (
         "0.14.1",
         "27 Jul 2019",

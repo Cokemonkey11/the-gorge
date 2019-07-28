@@ -64,7 +64,7 @@ package Damage
 				destroy guard
 
 	function h()
-		profile()
+		// profile()
 
 		let targ = DamageEvent.getTarget()
 
@@ -78,7 +78,7 @@ package Damage
 				DamageEvent.getAmount()
 			)
 
-		if Ships.isPlayerShip(targ)
+		if targ.getOwner().getId() > 1 and Ships.isPlayerShip(targ)
 			profile()
 
 			let id = GetPlayerId(GetOwningPlayer(targ))

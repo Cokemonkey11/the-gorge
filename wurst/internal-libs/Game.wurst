@@ -36,7 +36,7 @@ package Game
 		static constant    LATER_OFFSET        =   128.
 		static constant    STONE_SPIDER_FACING =   204.
 
-		static constant MAP_DESCRIP           = "|cffffcc00The Gorge|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
+		static constant MAP_DESCRIP           = "|cffffcc00Battle Planes|r is a MOBA/AoS style game with elements from the classic Sked map " + /*
 			*/ "|cffffcc00Battleships|r. The objective of the game is to use teamwork to push the neutral waves to the opposing base and destroy it."
 		static constant DESCRIPTION_ICON      = "ReplaceableTextures\\CommandButtons\\BTNBansheeAdept.blp"
 		static constant DESCRIPTION_TITLE     = "Description"
@@ -53,7 +53,7 @@ package Game
 		static constant EQUIP_ICON            = "ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp"
 		static constant EQUIP_TITLE           = "Equipment"
 
-		static constant CLASS_DESCRIP         = "During a round of warfare in |cffffcc00The Gorge|r, you will encounter the different classes of " + /*
+		static constant CLASS_DESCRIP         = "During a round of warfare in |cffffcc00Battle Planes|r, you will encounter the different classes of " + /*
 			*/ "Ship: |cffffcc00Frigates|r are well rounded ships designed to do well in most scenarios; |cffffcc00Battleships|r are heavy ships designed " + /*
 			*/ "for warfare with large space for crew and good ability to tank damage; |cffffcc00Interceptors|r are fast moving ships which excel in " + /*
 			*/ "chasing enemies and stopping smugglers; |cffffcc00Smugglers|r are small, light ships with abilities that aid in completing trade routes " + /*
@@ -65,7 +65,7 @@ package Game
 		static constant ICON_COMMANDS        = Icons.bTNGnollCommandAura
 		static constant TITLE_COMMANDS       = "Chat Commands"
 
-		static constant INFO_DESCRIP          = "|cffffcc00The Gorge|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
+		static constant INFO_DESCRIP          = "|cffffcc00Battle Planes|r is an independently developed mini-game by |cffffcc00Cokemonkey11|r. For " + /*
 			*/ "map updates, or to say hello, find me on |cffffcc00hiveworkshop.com|r."
 		static constant INFO_ICON             = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
 		static constant INFO_TITLE            = "Information"
@@ -77,12 +77,12 @@ package Game
 			*/ "new method in 2013 for recognizing spells and physical damage independantly in damage detectors. |cffffcc00kr0mat1k|r for the artwork used " + /*
 			*/ "in the map preview. |cffffcc00Cage the Elephant|r for writing the song played in the background. |cffffcc00Zwiebelchen|r for writing " + /*
 			*/ "TabReader, which inspired me to build Muscii. |cffffcc00bowser499|r for creading myBoard, a multiboard framework. |cffffcc00Kino|r for " + /*
-			*/ "doing extensive Terrain work for The Gorge.  |cffffcc00NatDis|r for the Dwarven Air Force fighter. |cffffcc00MiniMage|r for the " + /*
+			*/ "doing extensive Terrain work for Battle Planes.  |cffffcc00NatDis|r for the Dwarven Air Force fighter. |cffffcc00MiniMage|r for the " + /*
 			*/ "GoblinAirDrone model. |cffffcc00HamHam|r for the Space Undead Fighter model."
 		static constant CREDS_ICON            = "ReplaceableTextures\\CommandButtons\\BTNLesserRejuvScroll.blp"
 		static constant CREDS_TITLE           = "Credits"
 
-		static constant WELCOME_MESSAGE       = "Welcome, Captain, to |cffffcc00The Gorge|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
+		static constant WELCOME_MESSAGE       = "Welcome, Captain, to |cffffcc00Battle Planes|r. If it is your first time playing, please see the |cffffcc00Information|r Menu."
 		static constant START_SOUND           = "Sound\\Interface\\ArrangedTeamInvitation.wav"
 		static constant WIN_SOUND             = "Sound\\Interface\\ClanInvitation.wav"
 		static constant DEF_SOUND             = "Sound\\Interface\\QuestFailed.wav"
