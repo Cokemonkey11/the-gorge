@@ -61,7 +61,7 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.14.3",
-        "NEXT",
+        "30 Jul 2019",
         (
             "Minor adjustments to improve performance.",
             "Fixed a Flight Mode bug which occurred when turned off.",

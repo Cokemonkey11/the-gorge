@@ -1,7 +1,7 @@
 [CENTER]
 [TABLE]
 [CENTER]
-[H3][color=#60A600]The Gorge[/color][/H3]
+[H3][color=#60A600]Battle Planes[/color][/H3]
 [color=#CCAA00][B]A map by Cokemonkey11[/B][/color]
 
 [BOX=Contents]* Introduction
@@ -14,12 +14,12 @@
 [/CENTER]
 
 [R][H3][color=#CCAA00]Introduction[/color][/H3][R]
-The Gorge is a battleships-style AoS/MOBA that focuses on simplicity.         It uses
+Battle Planes is a battleships-style AoS/MOBA that focuses on simplicity.         It uses
 automatically firing weapons, and some innovative systems, to         produce a design
 that's nostalgic, yet fun.
 
-What make The Gorge different?  Design principles: (1) Short games aide
-replayability and reduce burnout (2) Bias for action means big damage         and low
+What make Battle Planes different?  Design principles: (1) Short games         aide
+replayability and reduce burnout (2) Bias for action means big         damage and low
 durability leads to faster-paced gameplay (3) MOBA design         principles focus more on
 action and less on grinding (4) Fresh means not         being afraid to do things new-and-
 improved (5) Classic battleships is a         competitive and brilliant game - when in
@@ -51,6 +51,17 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.14.3[/color] [color=#999999]30 Jul 2019[/color]:
+[list][*] Minor adjustments to improve performance.
+[*] Fixed a Flight Mode bug which occurred when turned off.
+[*] Minor adjustments to Fire ship's Flight Mode responsiveness.
+[/list]
+
+[color=#ffcc00]0.14.2[/color] [color=#999999]27 Jul 2019[/color]:
+[list][*] We've rebranded! The map is now called Battle Planes.
+[*] Wurst inlining has been re-enabled for performance.
+[/list]
+
 [color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
 [list][*] Adjusted Shroud generator effect and appearance to reduce lag.
 [*] Adjusted the handling of creeps to reduce lag.
@@ -75,7 +86,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Significant rework to crewmember balance, improves synergy.
 [/list]
 
-[color=#ffcc00]0.13.0[/color] [color=#999999]16 Jul 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.13.0[/color] [color=#999999]16 Jul 2019[/color]:
 [list][*] Reworked vision/pathing to behave more like classic Battleships.
 [*] Disabled global trading and added a send-gold ability to trader.
 [*] [trading] fixed the broken spider venom job.
@@ -88,7 +99,7 @@ All iterations of this map are maintained in a public git repository at
 [*] fixed a minor cosmetic bug that made creeps appear to be healing.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
+[color=#ffcc00]0.12.3[/color] [color=#999999]19 Jun 2019[/color]:
 [list][*] regression: scoreboard fixed, when more than 5 players present.
 [*] fixed a minor desync at end-of-game.
 [*] very minor code tidying.

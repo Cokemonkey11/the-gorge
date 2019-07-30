@@ -6,6 +6,6 @@ dependencies:
 - https://github.com/Cokemonkey11/WurstLinkedHashMap
 - https://github.com/Cokemonkey11/WurstRealHeapGuard
 buildMapData:
-  name: '|cff999999Battle Planes|r 0.14.2'
-  fileName: (10)BattlePlanes0.14.2
+  name: '|cff999999Battle Planes|r 0.14.3'
+  fileName: (10)BattlePlanes0.14.3
   author: Cokemonkey11
