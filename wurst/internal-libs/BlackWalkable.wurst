@@ -53,23 +53,23 @@ function tile.isWalkable() returns bool
 init
     // print(vec2(-241.5, 2052.0).getTerrainType()) -> 1666147121 Abyss
     // doAfter(0.) ->
-    // forAllTiles() t ->
-    //     if t.getType() == 1666147121 // vec2(-241.5, 2052.0).getTerrainType()
-    //         t.setWalkable()
-    var x = boundMin.x
-    while x <= boundMax.x
+    forAllTiles() t ->
+        if t.getType() == 1666147121 // vec2(-241.5, 2052.0).getTerrainType()
+            t.setWalkable()
+    // var x = boundMin.x
+    // while x <= boundMax.x
         // execute() () ->
-        var y = boundMin.y
-        while y <= boundMax.y
-            y += 128.
+        // var y = boundMin.y
+        // while y <= boundMax.y
+        //     y += 128.
             // let t = tile(x, y)
             // if t.getType() == 1666147121 // vec2(-241.5, 2052.0).getTerrainType()
-            if GetTerrainType(x, y) == 1666147121
-                for i = 0 to 3
-                    for j = 0 to 3
-                        (vec2(x, y) + vec2(-48. + i * 32,-48. + j * 32)).setTerrainPathable(PATHING_TYPE_WALKABILITY, true)
+            // if GetTerrainType(x, y) == 1666147121
+            //     for i = 0 to 3
+            //         for j = 0 to 3
+            //             (vec2(x, y) + vec2(-48. + i * 32,-48. + j * 32)).setTerrainPathable(PATHING_TYPE_WALKABILITY, true)
                 // t.setWalkable()
-        x += 128.
+        // x += 128.
     doAfter(0.) ->
         forDestructablesInRect(bj_mapInitialPlayableArea) (destructable d) ->
             if d.getTypeId() == 'YTlb'
