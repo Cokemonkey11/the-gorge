@@ -38,6 +38,8 @@ INTRODUCTION = (
         explosives, and other armament.
 
     """,
+
+    "This map was previously titled \"The Gorge\"."
 )
 
 
