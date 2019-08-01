@@ -1,7 +1,7 @@
 package Muscii
 	import HashMap
 	import Profile
-	import SoundsLib
+	import SoundUtils
 
 	var wants_mask = [
 		true, true, true, true, true, true, true, true, true, true, true, true,
@@ -14,33 +14,25 @@ package Muscii
 		wants_mask[this.getId()] = flag
 
 	public class Note
-		string path
 		int volume
 		real pitch
 		Note previous
 		Note next
+		SoundDefinition soundDefinition
 
 		function copy() returns Note
-			return Note.create(this.path, this.volume, this.pitch)
+			return new Note(this.soundDefinition.file, this.volume, this.pitch)
 
 
 		function play()
-			SoundsLib.play(
-				this.path,
-				this.pitch,
-				localPlayer.wantsMusic() ? this.volume : 0
-			)
+			this.soundDefinition.play(localPlayer.wantsMusic() ? this.volume : 0)
 
-
-		static function create(string path, int volume, real pitch) returns Note
-			let n = new Note
-			n.path = path
-			n.volume = volume
-			n.pitch = pitch
-			n.previous = null
-			n.next = null
-			return n
-
+		construct(string path, int volume, real pitch)
+			this.volume = volume
+			this.pitch = pitch
+			this.previous = null
+			this.next = null
+			this.soundDefinition = new SoundDefinition(path, false)
 
 
 	public class Chord
@@ -76,7 +68,7 @@ package Muscii
 
 
 		static function create(Note n) returns Chord
-			Note q = Note.create(n.path, n.volume, n.pitch)
+			let q = new Note(n.soundDefinition.file, n.volume, n.pitch)
 			let c = new Chord
 			c.previous = null
 			c.next = null

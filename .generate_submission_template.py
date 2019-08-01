@@ -62,6 +62,13 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.14.4",
+        "NEXT",
+        (
+            "Hopefully fixed a leak that can cause an OOM exception.",
+        )
+    ),
+    (
         "0.14.3",
         "30 Jul 2019",
         (
