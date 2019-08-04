@@ -96,7 +96,7 @@ class Emp
                     var hit = false
                     grp.enumUnitsInRange(emp.owner.getPos(), radius)
                     for u from grp
-                        if u.isType(UNIT_TYPE_HERO) and emp.owner.isEnemyOf(u.getOwner()) and u.isAlive()
+                        if u.isType(UNIT_TYPE_HERO) and emp.owner.isEnemyOf(u.getOwner()) and u.isAlive() and not u.isInvulnerable()
                             hit = true
                             new Hit(emp.owner, u)
                             break
