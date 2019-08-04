@@ -25,7 +25,7 @@ package Muscii
 
 
 		function play()
-			this.soundDefinition.play(localPlayer.wantsMusic() ? this.volume : 0)
+			this.soundDefinition.play(10000, localPlayer.wantsMusic() ? this.volume : 0)
 
 		construct(string path, int volume, real pitch)
 			this.volume = volume

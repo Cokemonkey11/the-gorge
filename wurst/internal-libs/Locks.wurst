@@ -1,8 +1,12 @@
 package Locks
 
+import AbilityObjEditing
+import InstantDummyCaster
 import ErrorHandling
 import HashMap
-import HashSet
+
+constant ID_FIREBOLT = '!stn'
+constant ID_STUNNED  = 'BPSE'
 
 /**
     Implements boolean locks for a resource.
@@ -11,20 +15,20 @@ import HashSet
     (no uids associated).
 */
 public module Lock<T>
-    private static constant locks = new HashMap<T, HashSet<int>>()
+    private static constant locks = new HashMap<T, int>()
 
-    protected static function lock(T resource, int uid)
+    protected static function lock(T resource)
         if not locks.has(resource)
-            locks.put(resource, new HashSet<int>)
-        locks.get(resource).add(uid)
+            locks.put(resource, 0)
+        locks.put(resource, locks.get(resource) + 1)
 
-    protected static function unlock(T resource, int uid) returns bool
+    protected static function unlock(T resource) returns bool
         let them = locks.get(resource)
-        them.remove(uid)
+        locks.put(resource, them - 1)
 
-        if them.isEmpty()
+        if them == 1
             callback(resource)
-        return them.isEmpty()
+        return them == 1
 
     protected static function callback(T _t)
         skip
@@ -57,14 +61,21 @@ public class StunLocks
     use Lock<unit>
 
     override static function callback(unit u)
-        u.unpause()
+        u.removeAbility(ID_STUNNED)
 
     construct()
         error("StunLocks shouldn't be instantiated")
 
-    static function add(unit u, int uid)
-        lock(u, uid)
-        u.pause()
+    static function add(unit u)
+        lock(u)
+        InstantDummyCaster.castTarget(players[PLAYER_NEUTRAL_AGGRESSIVE], ID_FIREBOLT, 1, "firebolt", u, u.getPos())
 
-    static function remove(unit u, int uid) returns bool
-        return unlock(u, uid)
+    static function remove(unit u) returns bool
+        return unlock(u)
+
+@compiletime function gen_firebolt()
+    new AbilityDefinitionFireBolt(ID_FIREBOLT)
+        ..setDamage(1, 0.)
+        ..setDummyAbility()
+        ..setMissileArt("")
+        ..setDurationNormal(1, 999999.)

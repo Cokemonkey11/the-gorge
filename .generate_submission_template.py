@@ -66,6 +66,7 @@ CHANGELOG = (
         "NEXT",
         (
             "Hopefully fixed a leak that can cause an OOM exception.",
+            "Fixed a bug where EMP did a pause instead of a stun.",
         )
     ),
     (

@@ -1383,6 +1383,19 @@ import ObjEditingNatives
 	..setLvlDataString("anam", 0, 0, "Shield (All Levels)")
 
 
+@compiletime function create_w3a_!stn()
+	let def = createObjectDefinition("w3a", '!stn', 'ANfb')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataUnreal("Htb1", 1, 1, 0.0)
+	..setLvlDataInt("aher", 0, 0, 0)
+	..setLvlDataInt("amcs", 1, 0, 0)
+	..setLvlDataUnreal("acdn", 1, 0, 0.0)
+	..setLvlDataUnreal("aran", 1, 0, 99999.0)
+	..setLvlDataInt("achd", 0, 0, 0)
+	..setLvlDataString("amat", 0, 0, "")
+	..setLvlDataUnreal("adur", 1, 0, 999999.0)
+
+
 // Original Table (contains all modified default objects)
 // Wurst does not support modifying default objects
 // but you can copy these functions and replace 'xxxx' with a new, custom id.

@@ -30,7 +30,7 @@ class Hit
         return null
 
     ondestroy
-        StunLocks.remove(this.target, 'emp!')
+        StunLocks.remove(this.target)
 
     construct(unit owner, unit target)
         this.owner = owner
@@ -38,7 +38,7 @@ class Hit
         this.duration = fullDuration
         this.ticks = 0
 
-        StunLocks.add(target, 'emp!')
+        StunLocks.add(target)
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
