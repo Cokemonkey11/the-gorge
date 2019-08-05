@@ -35,6 +35,8 @@ public constant ID_DRAGONHAWK   = 'hc00'
 public constant ID_GRYPHONRIDER = 'hc01'
 public constant ID_WINDRIDER    = 'hc02'
 public constant ID_FROSTWYRM    = 'hc03'
+public constant ID_VOTE_DUMMY   = 'hc04'
+public constant ID_VOTE_ICON    = 'hc05'
 
 public constant ID_CAPTAIN = 'H00C'
 
@@ -158,7 +160,8 @@ class Hangar extends BuildingDefinition
                 ID_PARACOPTER,
                 ID_GUNSHIP,
                 ID_FIRESHIP,
-                ID_FFORTRESS
+                ID_FFORTRESS,
+                ID_VOTE_ICON
             )
         )
         setUnitsTrained("")
@@ -401,11 +404,35 @@ class FrostWyrm extends UnitDefinition
         setSightRadiusDay(900)
         setSightRadiusNight(900)
 
+class VoteDummy extends FrostWyrm
+    construct(int id)
+        super(id)
+        setName("Not implemented")
+
+class VoteIcon extends FrostWyrm
+    construct(int id)
+        super(id)
+        setRequirements(commaList(ID_VOTE_DUMMY))
+        setStockMaximum(1)
+        setGoldCost(0)
+        setLumberCost(0)
+        setFoodCost(0)
+        setStockStartDelay(999999999)
+        setTooltipBasic("The next ship...")
+        setIconGameInterface(Icons.bTNSelectHeroOn)
+        setTooltipExtended("Want to vote on the next ship?|n |n|cffffcc00http://tiny.cc/s02raz|r|n |n- Support Ship|n- Leviathan|n- Armada")
+        setButtonPositionX(3)
+        setButtonPositionY(1)
+
 @compiletime function creeps()
     new DragonhawkRiderCreep(ID_DRAGONHAWK)
     new GryphonRiderCreep(ID_GRYPHONRIDER)
     new WindRiderCreep(ID_WINDRIDER)
     new FrostWyrm(ID_FROSTWYRM)
+
+    // Not really a creep - temporary while we have vote dummy.
+    new VoteDummy(ID_VOTE_DUMMY)
+    new VoteIcon(ID_VOTE_ICON)
 
 class CargoDummy extends UnitDefinition
     construct(int id, string name, string dummyModel, string soundSet, real dummyScale, string icon, int idIcon)

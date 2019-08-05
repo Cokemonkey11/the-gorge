@@ -63,11 +63,12 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.14.4",
-        "NEXT",
+        "5 Aug 2019",
         (
             "Hopefully fixed a leak that can cause an OOM exception.",
             "Fixed a bug where EMP did a pause instead of a stun.",
             "Fixed a bug where EMP could hit invulnerable targets.",
+            "Add vote for next ship.",
         )
     ),
     (
