@@ -3,6 +3,7 @@ package Emp
 import AbilitiesApi
 import ClosureEvents
 import DamageEvent
+import FlightMode
 import LinkedListModule
 import Locks
 import Profile
@@ -39,6 +40,7 @@ class Hit
         this.ticks = 0
 
         StunLocks.add(target)
+        target.disruptFlightMode()
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->

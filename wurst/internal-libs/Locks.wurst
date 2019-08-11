@@ -30,6 +30,9 @@ public module Lock<T>
             callback(resource)
         return them == 1
 
+    static function have(T resource) returns bool
+        return locks.has(resource) and locks.get(resource) > 0
+
     protected static function callback(T _t)
         skip
 

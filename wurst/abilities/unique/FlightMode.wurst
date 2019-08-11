@@ -4,6 +4,7 @@ import AbilitiesApi
 import ClosureEvents
 import HashMap
 import LinkedListModule
+import Locks
 import Profile
 import TerrainUtils
 
@@ -17,6 +18,10 @@ public function unit.getFlightModeSpeed() returns real
         movements.put(this, new Movement(this))
     return movements.get(this).vel.length()
 
+public function unit.disruptFlightMode()
+    if movements.has(this)
+        movements.get(this).vel = ZERO2
+
 class Movement
     use LinkedListModule
 
@@ -29,7 +34,7 @@ class Movement
 
     construct(unit u)
         this.which = u
-        this.vel = vec2(0., 0)
+        this.vel = ZERO2
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
@@ -74,7 +79,7 @@ init
                 let issued = GetOrderedUnit()
                 let order = GetIssuedOrderId()
 
-                if order == OrderId("smart") or order == OrderId("move")
+                if (order == OrderId("smart") or order == OrderId("move")) and not StunLocks.have(issued)
                     let target = vec2(GetOrderPointX(), GetOrderPointY())
                     issued.setFacing(issued.getPos().angleTo(target))
                     issued.setPropWindow(angle(0.))
