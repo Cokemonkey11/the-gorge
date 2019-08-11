@@ -66,7 +66,7 @@ CHANGELOG = (
         "11 Aug 2019",
         (
             "Hopefully fixed a bug where Flight Mode was undisruptible.",
-            
+            "Added more turrets and shields; adjusted base terrain.",
         )
     ),
     (

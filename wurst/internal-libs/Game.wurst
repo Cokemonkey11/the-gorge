@@ -3,6 +3,7 @@ package Game
 	import Assets
 	import ClosureTimers
 	import Damage
+	import HashMap
 	import Ships
 	import MyBoard
 	import RegisterEvents
@@ -12,6 +13,7 @@ package Game
 	import Players
 	import SinglePlayer
 	import SoundsLib
+	import SoundUtils
 	import UnitsApi
 
 	public class Game
@@ -110,8 +112,6 @@ package Game
 
 		static unit array westKeep
 		static unit array eastKeep
-		static int westShieldsLeft = 10
-		static int eastShieldsLeft = 10
 		static group grp = CreateGroup()
 
 		static constant REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
@@ -209,20 +209,6 @@ package Game
 			addQuest( INFO_DESCRIP,  INFO_ICON, false,  INFO_TITLE)
 			// credits.
 			addQuest(CREDS_DESCRIP, CREDS_ICON, false, CREDS_TITLE)
-
-
-		static function c()
-			unit tU = GetTriggerUnit()
-			if GetUnitTypeId(tU) == SHIELD_ID
-				if GetOwningPlayer(tU) == Player(0)
-					westShieldsLeft--
-					if westShieldsLeft < 1
-						SetUnitInvulnerable(westKeep[0], false)
-
-				else
-					eastShieldsLeft--
-					if eastShieldsLeft < 1
-						SetUnitInvulnerable(eastKeep[0], false)
 
 
 		static function fadeOut(real duration)
@@ -348,11 +334,46 @@ package Game
 				SelectUnit(Ships.ships[id], true)
 
 
+	class ShieldData
+		int size
+		unit shielded
+
+		construct(int size, unit shielded)
+			this.size = size
+			this.shielded = shielded
+
+	let unlock_sound = new SoundDefinition(Sounds.lever, false, true)
+
+	let shield_track = new HashMap<unit, ShieldData>()
+	function unit.createShields(int count, real offset)
+		this.setInvulnerable(true)
+
+		let ref = new ShieldData(count, this)
+
+		let trig = CreateTrigger()..addAction() ->
+			let data = shield_track.get(GetTriggerUnit())
+			data.size--
+
+			if data.size == 0
+				data.shielded.setInvulnerable(false)
+				unlock_sound.playOnPoint(data.shielded.getPos3Real())
+
+		for i = 0 to (count - 1)
+			let u = createUnit(
+				this.getOwner(),
+				Game.SHIELD_ID,
+				this.getPos().polarOffset(angle(2. * PI * i / count), offset), angle(3. * PI / 2.)
+			)
+
+			shield_track.put(u, ref)
+
+			trig.registerUnitEvent(u, EVENT_UNIT_DEATH)
+			
+
 	init
 		int index = 0
 
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.c)
 		Game.initializeQuests()
 
 		// Set starting gold and initialize player array.
@@ -412,19 +433,8 @@ package Game
 		Game.eastKeep[1] = CreateUnit(players[1], ID_KEEP_P2, TerrainData.EASTX, 0., 270.)
 
 		// Create shields.
-		index = 0
-		while index < Game.SHIELD_COUNT
-			CreateUnit(players[0], Game.SHIELD_ID, TerrainData.WESTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
-
-			index++
-
-
-		index = 0
-		while index < Game.SHIELD_COUNT
-			CreateUnit(players[1], Game.SHIELD_ID, TerrainData.EASTX+Game.SHIELDOFFS*Cos(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), Game.SHIELDOFFS*Sin(I2R(index)/I2R(Game.SHIELD_COUNT)*bj_PI*2.), 270.)
-
-			index++
-
+		Game.westKeep[0].createShields(Game.SHIELD_COUNT, Game.SHIELDOFFS)
+		Game.eastKeep[0].createShields(Game.SHIELD_COUNT, Game.SHIELDOFFS)
 
 		// Stop Time of Day.
 		SetTimeOfDayScale(0.)
@@ -436,6 +446,17 @@ package Game
 		// Create Hangars.
 		Game.westHangar = CreateUnit(players[0], ID_HANGAR, TerrainData.WESTX - 512., 0., 270.)
 		Game.eastHangar = CreateUnit(players[1], ID_HANGAR, TerrainData.EASTX + 512., 0., 270.)
+
+		// Create Turrets.
+		createUnit(players[0], ID_TURRET, TerrainData.POS_TOWER_WEST_NORTH, angle(3. * PI / 2.))
+		createUnit(players[0], ID_TURRET, TerrainData.POS_TOWER_WEST_SOUTH, angle(3. * PI / 2.))
+		createUnit(players[1], ID_TURRET, TerrainData.POS_TOWER_EAST_NORTH, angle(3. * PI / 2.))
+		createUnit(players[1], ID_TURRET, TerrainData.POS_TOWER_EAST_SOUTH, angle(3. * PI / 2.))
+
+		createUnit(players[0], ID_TURRET, TerrainData.POS_KEEP_WEST + vec2(256. + 128.,  196.), angle(3. * PI / 2.))..createShields(4, 100.)
+		createUnit(players[0], ID_TURRET, TerrainData.POS_KEEP_WEST + vec2(256. + 128., -196.), angle(3. * PI / 2.))..createShields(4, 100.)
+		createUnit(players[1], ID_TURRET, TerrainData.POS_KEEP_EAST - vec2(256. + 128.,  196.), angle(3. * PI / 2.))..createShields(4, 100.)
+		createUnit(players[1], ID_TURRET, TerrainData.POS_KEEP_EAST - vec2(256. + 128., -196.), angle(3. * PI / 2.))..createShields(4, 100.)
 
 		// Create Utility Ports.
 		Game.westUtility[0] = CreateUnit(players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
