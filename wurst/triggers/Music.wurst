@@ -1,6 +1,5 @@
 package Music
 	import Muscii
-	import SoundsLib
 
 	// Back Against the Wall by Cage the Elephant
 	// http://tabs.ultimate-guitar.com/c/cage_the_elephant/back_against_the_wall_ver2_drum_tab.htm
@@ -113,363 +112,131 @@ package Music
 
 
 	init
-		//		song3
-		let hat = new Note(HAT_PATH, 90, 1.)
-		let snr = new Note(SNR_PATH, 110, 1.)
-		let bas = new Note(BAS_PATH, 127, 1.)
-		let hatQuiet = new Note(HAT_PATH, 75, 1.)
-		let snrQuiet = new Note(SNR_PATH, 97, 1.)
-		let basQuiet = new Note(BAS_PATH, 105, 1.)
-		let hatVQuiet = new Note(HAT_PATH, 60, 1.)
-		let snrVQuiet = new Note(SNR_PATH, 83, 1.)
-		let basVQuiet = new Note(BAS_PATH, 89, 1.)
-		let rid = new Note(RID_PATH, 75, 1.)
-		let nul = new Note(HAT_PATH, 0, 1.)
-		let flm = new Note(FLM_PATH, 110, 1.)
-		let rim = new Note(RIM_PATH, 100, 1.)
-		let crs = new Note(CRS_PATH, 55, 1.)
-		let hop = new Note(HATOPEN_PATH, 90, 1.)
-		let tm1 = new Note(TM1_PATH, 110, 1.)
-		let tm1d = new Note(TM1DOUBLE_PATH, 110, 1.)
-		let tm4 = new Note(TM4_PATH, 110, 1.)
-		let tm5 = new Note(TM5_PATH, 110, 1.)
-		//let tm5d = new Note(TM5DOUBLE_PATH, 110, 1.)
-		let hft = new Note(HATPDL_PATH, 75, 1.)
+		let hat       = new Note(HAT_PATH,        90, 1.)
+		let snr       = new Note(SNR_PATH,       110, 1.)
+		let bas       = new Note(BAS_PATH,       127, 1.)
+		let hatQuiet  = new Note(HAT_PATH,        75, 1.)
+		let snrQuiet  = new Note(SNR_PATH,        97, 1.)
+		let basQuiet  = new Note(BAS_PATH,       105, 1.)
+		let hatVQuiet = new Note(HAT_PATH,        60, 1.)
+		let snrVQuiet = new Note(SNR_PATH,        83, 1.)
+		let basVQuiet = new Note(BAS_PATH,        89, 1.)
+		let rid       = new Note(RID_PATH,        75, 1.)
+		let flm       = new Note(FLM_PATH,       110, 1.)
+		let rim       = new Note(RIM_PATH,       100, 1.)
+		let crs       = new Note(CRS_PATH,        55, 1.)
+		let hop       = new Note(HATOPEN_PATH,    90, 1.)
+		let tm1       = new Note(TM1_PATH,       110, 1.)
+		let tm1d      = new Note(TM1DOUBLE_PATH, 110, 1.)
+		let tm4       = new Note(TM4_PATH,       110, 1.)
+		let tm5       = new Note(TM5_PATH,       110, 1.)
+		//let tm5d    = new Note(TM5DOUBLE_PATH, 110, 1.)
+		let hft       = new Note(HATPDL_PATH,     75, 1.)
 
-		Chord rb
-		Chord rs
-		Chord rrim
-		Chord r
-		Chord z
-		Chord b
-		Chord f
-		Chord cb
-		Chord cs
-		Chord hs
-		Chord hb
-		Chord hopen
-		Chord hsb
-		Chord hsbQuiet
-		Chord hsbVQuiet
-		Chord s
-		Chord h
-		Chord t1
-		Chord t1d
-		Chord t4
-		Chord t5
-		Chord hf
+		m = Muscii.fromTracks(
+			new Track(rid, "x-x-x-x-x-x-x-x-"),
+			new Track(bas, "o---------------")
+		)
 
-		hsb = Chord.create(hat)
-		hsb.addNote(snr)
-		hsb.addNote(bas)
+		v1 = Muscii.fromTracks(
+			new Track(rid, "x-x-x-x-x-x-x-x-"),
+			new Track(rim, "--x---x---x---x-"),
+			new Track(bas, "o---------------")
+		)
 
-		hsbQuiet = Chord.create(hatQuiet)
-		hsbQuiet.addNote(snrQuiet)
-		hsbQuiet.addNote(basQuiet)
+		v1p2 = Muscii.fromTracks(
+			new Track(rid, "x-x-x-x-x-x-x-x-"),
+			new Track(rim, "--x---x---x---x-"),
+			new Track(bas, "o--------------o")
+		)
 
-		hsbVQuiet = Chord.create(hatVQuiet)
-		hsbVQuiet.addNote(snrVQuiet)
-		hsbVQuiet.addNote(basVQuiet)
+		v1p3 = Muscii.fromTracks(
+			new Track(rid, "x-x-x-x-x-x-x---"),
+			new Track(rim, "--x---x---x-----"),
+			new Track(flm, "--------------o-"),
+			new Track(bas, "o------------o-o")
+		)
 
-		rb = Chord.create(rid)
-		rb.addNote(bas)
+		chorusP1 = Muscii.fromTracks(
+			new Track(crs, "x---------------"),
+			new Track(hat, "--x-x-x-x-x-x-x-"),
+			new Track(hop, "-------x-------x"),
+			new Track(snr, "--o--o----o--o--"),
+			new Track(bas, "oo-oo----o-oo---")
+		)
 
-		rs = Chord.create(rid)
-		rs.addNote(snr)
+		chorusP2 = Muscii.fromTracks(
+			new Track(hat,  "x-x-x-x-x-x-x---"),
+			new Track(hop,  "-------x--------"),
+			new Track(snr,  "--o--o----o--o--"),
+			new Track(tm1d, "--------------o-"),
+			new Track(tm4,  "---------------o"),
+			new Track(bas,  "oo-oo---oo-oo---")
+		)
 
-		rrim = Chord.create(rid)
-		rrim.addNote(rim)
+		chorusP3 = Muscii.fromTracks(
+			new Track(hat, "x-x-x-x-x-x-x-x-"),
+			new Track(hop, "-------x-------x"),
+			new Track(snr, "--o--o----o--o--"),
+			new Track(bas, "oo-oo---oo-oo---")
+		)
 
-		cb = Chord.create(crs)
-		cb.addNote(bas)
+		chorus2P4 = Muscii.fromTracks(
+			new Track(hatVQuiet, "qqqq------------"),
+			new Track(snrVQuiet, "qqqq------------"),
+			new Track(basVQuiet, "qqqq------------"),
+			new Track(hatQuiet,  "----mmmm--------"),
+			new Track(snrQuiet,  "----mmmm--------"),
+			new Track(basQuiet,  "----mmmm--------"),
+			new Track(crs,       "-------------x-x"),
+			new Track(hat,       "--------xxx-----"),
+			new Track(snr,       "--------ooo--o-o"),
+			new Track(flm,       "-----------xx-x-"),
+			new Track(bas,       "--------ooo-----")
+		)
 
-		cs = Chord.create(crs)
-		cs.addNote(snr)
+		chorus2P5 = Muscii.fromTracks(
+			new Track(crs, "x---------------"),
+			new Track(hat, "--x-x-x-x-x-x-x-"),
+			new Track(snr, "--o---o---o---o-"),
+			new Track(bas, "o--oo--o-o-ooo-o")
+		)
 
-		hs = Chord.create(hat)
-		hs.addNote(snr)
+		chorus2P7 = Muscii.fromTracks(
+			new Track(crs, "x-------------x-"),
+			new Track(hat, "--x-x-x-x-x-x---"),
+			new Track(snr, "--o---o---o---o-"),
+			new Track(bas, "o--oo--o-o-ooo-o")
+		)
 
-		hb = Chord.create(hat)
-		hb.addNote(bas)
+		chorus2P8 = Muscii.fromTracks(
+			new Track(crs, "x---------------"),
+			new Track(hat, "--x-x-x-x-x-x---"),
+			new Track(snr, "--o---o---o--o--"),
+			new Track(tm1, "--------------o-"),
+			new Track(tm5, "---------------o"),
+			new Track(bas, "o--oo--o-o-oo---")
+		)
 
-		hopen = Chord.create(hop)
+		verse3P2 = Muscii.fromTracks(
+			new Track(rid, "x-x-x-x-x-x-x-x-"),
+			new Track(hft, "---------------x"),
+			new Track(rim, "--o---o---o---o-"),
+			new Track(bas, "o---------------")
+		)
 
-		hf = Chord.create(hft)
+		chorus3P7 = Muscii.fromTracks(
+			new Track(crs, "x---------------"),
+			new Track(hat, "--x-x-x-x-x-x-x-"),
+			new Track(snr, "--o---o---o---o-"),
+			new Track(bas, "o--oo--o-o-ooo-o")
+		)
 
-		t1 = Chord.create(tm1)
-
-		t1d = Chord.create(tm1d)
-
-		t4 = Chord.create(tm4)
-
-		t5 = Chord.create(tm5)
-
-		r = Chord.create(rid)
-
-		z = Chord.create(nul)
-
-		b = Chord.create(bas)
-
-		f = Chord.create(flm)
-
-		s = Chord.create(snr)
-
-		h = Chord.create(hat)
-
-		m = Muscii.create(rb, 240.)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-		m.addChord(r)
-		m.addChord(z)
-
-		v1 = Muscii.create(rb, 240.)
-		v1.addChord(z)
-		v1.addChord(rrim)
-		v1.addChord(z)
-		v1.addChord(r)
-		v1.addChord(z)
-		v1.addChord(rrim)
-		v1.addChord(z)
-		v1.addChord(r)
-		v1.addChord(z)
-		v1.addChord(rrim)
-		v1.addChord(z)
-		v1.addChord(r)
-		v1.addChord(z)
-		v1.addChord(rrim)
-		v1.addChord(z)
-
-		v1p2 = Muscii.create(rb, 240.)
-		v1p2.addChord(z)
-		v1p2.addChord(rrim)
-		v1p2.addChord(z)
-		v1p2.addChord(r)
-		v1p2.addChord(z)
-		v1p2.addChord(rrim)
-		v1p2.addChord(z)
-		v1p2.addChord(r)
-		v1p2.addChord(z)
-		v1p2.addChord(rrim)
-		v1p2.addChord(z)
-		v1p2.addChord(r)
-		v1p2.addChord(z)
-		v1p2.addChord(rrim)
-		v1p2.addChord(b)
-
-		v1p3 = Muscii.create(rb, 240.)
-		v1p3.addChord(z)
-		v1p3.addChord(rrim)
-		v1p3.addChord(z)
-		v1p3.addChord(r)
-		v1p3.addChord(z)
-		v1p3.addChord(rrim)
-		v1p3.addChord(z)
-		v1p3.addChord(r)
-		v1p3.addChord(z)
-		v1p3.addChord(rrim)
-		v1p3.addChord(z)
-		v1p3.addChord(r)
-		v1p3.addChord(b)
-		v1p3.addChord(f)
-		v1p3.addChord(b)
-
-		chorusP1 = Muscii.create(cb, 240.)
-		chorusP1.addChord(b)
-		chorusP1.addChord(hs)
-		chorusP1.addChord(b)
-		chorusP1.addChord(hb)
-		chorusP1.addChord(s)
-		chorusP1.addChord(h)
-		chorusP1.addChord(hopen)
-		chorusP1.addChord(hb)
-		chorusP1.addChord(b)
-		chorusP1.addChord(hs)
-		chorusP1.addChord(b)
-		chorusP1.addChord(hb)
-		chorusP1.addChord(s)
-		chorusP1.addChord(h)
-		chorusP1.addChord(hopen)
-
-		chorusP2 = Muscii.create(hb, 240.)
-		chorusP2.addChord(b)
-		chorusP2.addChord(hs)
-		chorusP2.addChord(b)
-		chorusP2.addChord(hb)
-		chorusP2.addChord(s)
-		chorusP2.addChord(h)
-		chorusP2.addChord(hopen)
-		chorusP2.addChord(hb)
-		chorusP2.addChord(b)
-		chorusP2.addChord(hs)
-		chorusP2.addChord(b)
-		chorusP2.addChord(hb)
-		chorusP2.addChord(s)
-		chorusP2.addChord(t1d)
-		chorusP2.addChord(t4)
-
-		chorusP3 = Muscii.create(hb, 240.)
-		chorusP3.addChord(b)
-		chorusP3.addChord(hs)
-		chorusP3.addChord(b)
-		chorusP3.addChord(hb)
-		chorusP3.addChord(s)
-		chorusP3.addChord(h)
-		chorusP3.addChord(hopen)
-		chorusP3.addChord(hb)
-		chorusP3.addChord(b)
-		chorusP3.addChord(hs)
-		chorusP3.addChord(b)
-		chorusP3.addChord(hb)
-		chorusP3.addChord(s)
-		chorusP3.addChord(h)
-		chorusP3.addChord(hopen)
-
-		chorus2P4 = Muscii.create(hsbVQuiet, 240.)
-		chorus2P4.addChord(hsbVQuiet)
-		chorus2P4.addChord(hsbVQuiet)
-		chorus2P4.addChord(hsbVQuiet)
-		chorus2P4.addChord(hsbQuiet)
-		chorus2P4.addChord(hsbQuiet)
-		chorus2P4.addChord(hsbQuiet)
-		chorus2P4.addChord(hsbQuiet)
-		chorus2P4.addChord(hsb)
-		chorus2P4.addChord(hsb)
-		chorus2P4.addChord(hsb)
-		chorus2P4.addChord(f)
-		chorus2P4.addChord(f)
-		chorus2P4.addChord(cs)
-		chorus2P4.addChord(f)
-		chorus2P4.addChord(cs)
-
-		chorus2P5 = Muscii.create(cb, 240.)
-		chorus2P5.addChord(z)
-		chorus2P5.addChord(hs)
-		chorus2P5.addChord(b)
-		chorus2P5.addChord(hb)
-		chorus2P5.addChord(z)
-		chorus2P5.addChord(hs)
-		chorus2P5.addChord(b)
-		chorus2P5.addChord(h)
-		chorus2P5.addChord(b)
-		chorus2P5.addChord(hs)
-		chorus2P5.addChord(b)
-		chorus2P5.addChord(hb)
-		chorus2P5.addChord(b)
-		chorus2P5.addChord(hs)
-		chorus2P5.addChord(b)
-
-		chorus2P7 = Muscii.create(cb, 240.)
-		chorus2P7.addChord(z)
-		chorus2P7.addChord(hs)
-		chorus2P7.addChord(b)
-		chorus2P7.addChord(hb)
-		chorus2P7.addChord(z)
-		chorus2P7.addChord(hs)
-		chorus2P7.addChord(b)
-		chorus2P7.addChord(h)
-		chorus2P7.addChord(b)
-		chorus2P7.addChord(hs)
-		chorus2P7.addChord(b)
-		chorus2P7.addChord(hb)
-		chorus2P7.addChord(b)
-		chorus2P7.addChord(cs)
-		chorus2P7.addChord(b)
-
-		chorus2P8 = Muscii.create(cb, 240.)
-		chorus2P8.addChord(z)
-		chorus2P8.addChord(hs)
-		chorus2P8.addChord(b)
-		chorus2P8.addChord(hb)
-		chorus2P8.addChord(z)
-		chorus2P8.addChord(hs)
-		chorus2P8.addChord(b)
-		chorus2P8.addChord(h)
-		chorus2P8.addChord(b)
-		chorus2P8.addChord(hs)
-		chorus2P8.addChord(b)
-		chorus2P8.addChord(b)
-		chorus2P8.addChord(s)
-		chorus2P8.addChord(t1)
-		chorus2P8.addChord(t5)
-
-		verse3P2 = Muscii.create(rb, 240.)
-		verse3P2.addChord(z)
-		verse3P2.addChord(rrim)
-		verse3P2.addChord(z)
-		verse3P2.addChord(r)
-		verse3P2.addChord(z)
-		verse3P2.addChord(rrim)
-		verse3P2.addChord(z)
-		verse3P2.addChord(r)
-		verse3P2.addChord(z)
-		verse3P2.addChord(rrim)
-		verse3P2.addChord(z)
-		verse3P2.addChord(r)
-		verse3P2.addChord(z)
-		verse3P2.addChord(rrim)
-		verse3P2.addChord(hf)
-
-		chorus3P7 = Muscii.create(cb, 240.)
-		chorus3P7.addChord(z)
-		chorus3P7.addChord(hs)
-		chorus3P7.addChord(b)
-		chorus3P7.addChord(hb)
-		chorus3P7.addChord(z)
-		chorus3P7.addChord(hs)
-		chorus3P7.addChord(b)
-		chorus3P7.addChord(h)
-		chorus3P7.addChord(b)
-		chorus3P7.addChord(hs)
-		chorus3P7.addChord(b)
-		chorus3P7.addChord(hb)
-		chorus3P7.addChord(b)
-		chorus3P7.addChord(hs)
-		chorus3P7.addChord(b)
-
-		chorus3P8 = Muscii.create(cb, 240.)
-		chorus3P8.addChord(z)
-		chorus3P8.addChord(hs)
-		chorus3P8.addChord(b)
-		chorus3P8.addChord(hb)
-		chorus3P8.addChord(z)
-		chorus3P8.addChord(hs)
-		chorus3P8.addChord(b)
-		chorus3P8.addChord(h)
-		chorus3P8.addChord(b)
-		chorus3P8.addChord(hs)
-		chorus3P8.addChord(b)
-		chorus3P8.addChord(hb)
-		chorus3P8.addChord(b)
-		chorus3P8.addChord(hs)
-		chorus3P8.addChord(b)
-
+		chorus3P8 = Muscii.fromTracks(
+			new Track(crs, "x---------------"),
+			new Track(hat, "--x-x-x-x-x-x-x-"),
+			new Track(snr, "--o---o---o---o-"),
+			new Track(bas, "o--oo--o-o-ooo-o")
+		)
 
 		playIntro()
-		//		end song3
-
-
-		SoundsLib.preload(HAT_PATH)
-		SoundsLib.preload(SNR_PATH)
-		SoundsLib.preload(BAS_PATH)
-		SoundsLib.preload(RID_PATH)
-		SoundsLib.preload(FLM_PATH)
-		SoundsLib.preload(RIM_PATH)
-		SoundsLib.preload(CRS_PATH)
-		SoundsLib.preload(HATOPEN_PATH)
-		SoundsLib.preload(TM1_PATH)
-		SoundsLib.preload(TM1DOUBLE_PATH)
-		SoundsLib.preload(TM4_PATH)
-		SoundsLib.preload(TM5_PATH)
-		SoundsLib.preload(TM5DOUBLE_PATH)
-		SoundsLib.preload(HATPDL_PATH)

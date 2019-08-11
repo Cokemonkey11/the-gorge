@@ -306,6 +306,14 @@ import ObjEditingNatives
 	..setLvlDataInt("Ncl5", 1, 5, 0)
 
 
+@compiletime function create_w3a_xdaa()
+	let def = createObjectDefinition("w3a", 'xdaa', 'Apiv')
+	..setLvlDataInt("wurs", 0, 0, 42)
+	..setLvlDataInt("Gho1", 1, 1, 0)
+	..setLvlDataUnreal("adur", 1, 0, -1.0)
+	..setLvlDataUnreal("ahdu", 1, 0, -1.0)
+
+
 @compiletime function create_w3a_AM01()
 	let def = createObjectDefinition("w3a", 'AM01', 'Adef')
 	..setLvlDataInt("wurs", 0, 0, 42)

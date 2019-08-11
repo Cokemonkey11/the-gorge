@@ -1,8 +1,10 @@
 package Muscii
 	import HashMap
+	import LinkedList
+	import Lodash
 	import Profile
 	import SoundUtils
-
+	
 	var wants_mask = [
 		true, true, true, true, true, true, true, true, true, true, true, true,
 		true, true, true, true, true, true, true, true, true, true, true, true
@@ -83,6 +85,29 @@ package Muscii
 
 
 
+	public class Track
+		Note n
+		string seq
+
+		construct(Note n, string seq)
+			this.n = n
+			this.seq = seq
+
+	let chord_registry = new HashMap<string, Chord>()
+		..put("", Chord.create(new Note(Sounds.battleNetTick, 0, 1.)))
+
+	function LinkedList<Track>.toChord() returns Chord
+		let key = this.map(track -> track.n.soundDefinition.file).foldl("", (i, q) -> i + q)
+
+		if not chord_registry.has(key)
+			let chord = this.foldl(0 castTo Chord, (track, chord) -> chord == null ? Chord.create(track.n) : chord..addNote(track.n))
+
+			chord_registry.put(key, chord)
+		
+		return chord_registry.get(key)
+
+		
+
 	public class Muscii
 		static Table fromClock
 		private static Muscii array db
@@ -159,6 +184,9 @@ package Muscii
 			copy.previous = q
 			return this
 
+		function setTempo(real tempo)
+			this.tempo = tempo
+
 
 		static function create(Chord c, real tempo) returns Muscii
 			let m = new Muscii
@@ -175,6 +203,22 @@ package Muscii
 			db[dbIndex] = m
 			return m
 
+		static function fromTracks(vararg Track tracks) returns Muscii
+			let trax = ownList(new LinkedList<Track>())
+
+			for track in tracks
+				trax.push(track)
+
+			let base_chord = trax.filter(track -> track.seq.substring(0, 1) != "-").toChord()
+
+			let m = Muscii.create(base_chord, 240.)
+			
+			for i = 1 to (trax.getFirst().seq.length() - 1)
+				let chord = trax.filter(track -> track.seq.substring(i, i + 1) != "-").toChord()
+
+				m.addChord(chord)
+
+			return m
 
 		private static function p()
 			profile()
