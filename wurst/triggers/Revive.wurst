@@ -10,6 +10,7 @@ package Revive
 	import Ships
 	import Profile
 	import RegisterEvents
+	import SoundUtils
 	import TerrainData
 
 	constant INVULN_FX    = Abilities.divineShieldTarget
@@ -101,6 +102,23 @@ package Revive
 				Game.assists[index]++
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 
+	tuple maybe_killer(bool have, player which)
+
+	function find_assist_killer(int for_whom) returns maybe_killer
+		var best = 0.
+		var best_p = -1
+
+		for index = 2 to 11
+			if Assists.assistTimestamps[for_whom].vals[index] > best
+				best = Assists.assistTimestamps[for_whom].vals[index]
+				best_p = index
+
+		if getElapsedGameTime() - best <= Assists.ASSIST_TIME
+			return maybe_killer(true, players[best_p])
+
+		return maybe_killer(false, players[PLAYER_NEUTRAL_PASSIVE])
+
+	let kill_sound = new SoundDefinition(Sounds.alchemistTransmuteDeath1, false, true)
 
 	function c()
 		let tU = GetTriggerUnit()
@@ -108,7 +126,7 @@ package Revive
 		if Ships.isPlayerShip(tU)
 			let kU = GetKillingUnit()
 			let kO = GetOwningPlayer(kU)
-			let killerId = GetPlayerId(kO)
+			var killerId = GetPlayerId(kO)
 			let tempDat = new DeathDat
 			tempDat.u = tU
 			tempDat.timeL = (REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * getElapsedGameTime() / 60.).toInt()
@@ -117,6 +135,16 @@ package Revive
 			addEffect(Objects.demonLargeDeathExplode, tU.getPos())..destr()
 
 			tU.setPos(TerrainData.SAFE)
+
+			// Overwrite the killer ID if killed by a non-player and there was a recent assist.
+			if (killerId < 2)
+				let maybe_assist = find_assist_killer(tU.getOwner().getId())
+
+				if maybe_assist.have
+					killerId = maybe_assist.which.getId()
+
+			if killerId > 1 and Ships.ships[killerId] != null and Ships.ships[killerId].isAlive()
+				kill_sound.playOnPoint(Ships.ships[killerId].getPos3Real())
 
 			if killerId > 1 and (
 				kU.isEnemyOf(tU.getOwner()) or
