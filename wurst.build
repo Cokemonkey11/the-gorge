@@ -7,6 +7,6 @@ dependencies:
 - https://github.com/Cokemonkey11/WurstRealHeapGuard
 - https://github.com/theQuazz/wurst-lodash
 buildMapData:
-  name: '|cff999999Battle Planes|r 0.14.4'
-  fileName: (10)BattlePlanes0.14.4
+  name: '|cff999999Battle Planes|r 0.14.5'
+  fileName: (10)BattlePlanes0.14.5
   author: Cokemonkey11

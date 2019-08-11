@@ -65,7 +65,7 @@ CHANGELOG = (
         "0.14.5",
         "11 Aug 2019",
         (
-            "Hopefully fixed a bug where Flight Mode was undisruptible.",
+            "Fixed a bug where Flight Mode was not disruptible.",
             "Adjusted how gold is distributed if a player dies to creeps.",
             "Added more turrets and shields; adjusted base terrain.",
         )

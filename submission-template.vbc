@@ -53,6 +53,12 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.14.5[/color] [color=#999999]11 Aug 2019[/color]:
+[list][*] Fixed a bug where Flight Mode was not disruptible.
+[*] Adjusted how gold is distributed if a player dies to creeps.
+[*] Added more turrets and shields; adjusted base terrain.
+[/list]
+
 [color=#ffcc00]0.14.4[/color] [color=#999999]5 Aug 2019[/color]:
 [list][*] Hopefully fixed a leak that can cause an OOM exception.
 [*] Fixed a bug where EMP did a pause instead of a stun.
@@ -80,7 +86,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Increased turret hit points from 2000 to 3000.
 [/list]
 
-[color=#ffcc00]0.14.0[/color] [color=#999999]26 Jul 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.14.0[/color] [color=#999999]26 Jul 2019[/color]:
 [list][*] New frigate, new battleship, and new interceptor.
 [*] Fixed a bug where shields would cause you to kill yourself.
 [*] Adjusted base layout and increased repair-port repair rate.
@@ -89,7 +95,7 @@ All iterations of this map are maintained in a public git repository at
 [*] [balance] improved the utility of Monsoon Mk. 1.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.13.1[/color] [color=#999999]20 Jul 2019[/color]:
+[color=#ffcc00]0.13.1[/color] [color=#999999]20 Jul 2019[/color]:
 [list][*] Made changes to crewmembers to clarify stats and sell value.
 [*] All long-range crew are now incapable of hitting structures.
 [*] Significant rework to crewmember balance, improves synergy.
