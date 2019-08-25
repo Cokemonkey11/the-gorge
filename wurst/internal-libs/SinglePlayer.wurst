@@ -4,18 +4,37 @@ package SinglePlayer
     import LinkedList
     import Players
     import Ships
+    import WurstCommand
+
+    public function add_singleplayer_commands()
+        addCommand("experience") (_p, _c, _a) ->
+            SinglePlayer.experience()
+        addCommand("sphelp") (_p, _c, _a) ->
+            SinglePlayer.help()
+        addCommand("visibility") (_p, _c, _a) ->
+            SinglePlayer.visibility()
+        addCommand("fast") (_p, _c, _a) ->
+            SinglePlayer.fast()
+        addCommand("heal") (_p, _c, _a) ->
+            SinglePlayer.heal()
+        addCommand("hp") (_p, _c, a) ->
+            SinglePlayer.hp(a)
+        addCommand("damage") (_p, _c, a) ->
+            SinglePlayer.damage(a)
+        addCommand("ai") (_p, _c, a) ->
+            SinglePlayer.ai(a)
 
     public class SinglePlayer
         static constant SP_PREFIX = "[|cffffcc00Single Player|r] "
         static constant TAB       = "    "
 
-        static          player thePlayer
-        static          bool   fastEnabled = false
-        static          var    isSinglePlayer = false
+        static player thePlayer
+        static bool   fastEnabled = false
+        static var    isSinglePlayer = false
 
         static function help()
             print(SP_PREFIX + "Available commands:")
-            print(TAB + "-help: Display this help menu.")
+            print(TAB + "-sphelp: Display this help menu.")
             print(TAB + "-experience: Gives 500 trading experience.")
             print(TAB + "-heal: fully heal your helicopter.")
             print(TAB + "-visibility: Disables Fog of War and Black Mask.")
@@ -65,13 +84,11 @@ package SinglePlayer
 
         static function enable()
             isSinglePlayer = true
-            print(SP_PREFIX + "Single player mode enabled.  Enter -help for a list of commands.")
+            print(SP_PREFIX + "Single player mode enabled.  Enter -sphelp for a list of commands.")
 
-            int i = 2
-            while i <= 11
+            add_singleplayer_commands()
 
+            for i = 2 to 11
                 if Players.playing[i]
                     thePlayer = players[i]
                     break
-
-                i++

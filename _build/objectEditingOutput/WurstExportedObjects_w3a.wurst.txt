@@ -306,6 +306,11 @@ import ObjEditingNatives
 	..setLvlDataInt("Ncl5", 1, 5, 0)
 
 
+@compiletime function create_w3a_xrot()
+	let def = createObjectDefinition("w3a", 'xrot', 'Aro1')
+	..setLvlDataInt("wurs", 0, 0, 42)
+
+
 @compiletime function create_w3a_xdaa()
 	let def = createObjectDefinition("w3a", 'xdaa', 'Apiv')
 	..setLvlDataInt("wurs", 0, 0, 42)
@@ -1389,6 +1394,11 @@ import ObjEditingNatives
 	..setLvlDataUnreal("ahdu", 1, 0, 0.01)
 	..setLvlDataUnreal("adur", 1, 0, 0.01)
 	..setLvlDataString("anam", 0, 0, "Shield (All Levels)")
+
+
+@compiletime function create_w3a_AM02()
+	let def = createObjectDefinition("w3a", 'AM02', 'Aro1')
+	..setLvlDataInt("wurs", 0, 0, 42)
 
 
 @compiletime function create_w3a_!stn()

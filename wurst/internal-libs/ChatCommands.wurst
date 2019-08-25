@@ -1,12 +1,11 @@
 package ChatCommands
 import Damage
 import Equipment
-import LinkedList
 import Muscii
 import Profile
 import Ships
-import SinglePlayer
 import WurstCommand
+
 
 init
 	addCommand("music") (p, _cmd, _args) ->
@@ -41,20 +40,3 @@ init
 	if profiling_enabled
 		addCommand("profile") (p, _c, _a) ->
 			Profile.display(p)
-	if SinglePlayer.isSinglePlayer
-		addCommand("experience") (_p, _c, _a) ->
-			SinglePlayer.experience()
-		addCommand("help") (_p, _c, _a) ->
-			SinglePlayer.help()
-		addCommand("visibility") (_p, _c, _a) ->
-			SinglePlayer.visibility()
-		addCommand("fast") (_p, _c, _a) ->
-			SinglePlayer.fast()
-		addCommand("heal") (_p, _c, _a) ->
-			SinglePlayer.heal()
-		addCommand("hp") (_p, _c, a) ->
-			SinglePlayer.hp(a)
-		addCommand("damage") (_p, _c, a) ->
-			SinglePlayer.damage(a)
-		addCommand("ai") (_p, _c, a) ->
-			SinglePlayer.ai(a)

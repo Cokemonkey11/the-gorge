@@ -65,7 +65,8 @@ CHANGELOG = (
         "0.14.6",
         "NEXT",
         (
-            "Fixed an issue where sound handles were not set to kill-on-done.",
+            "Fixed a leak where sound handles were not set to kill-on-done.",
+            "Single-player help text is no longer shown in multiplayer.",
         )
     ),
     (
