@@ -48,13 +48,13 @@ public module Lock<T>
     init
         let u = createUnit(...)
         doPeriodically(3.) ->
-            StunLocks.add(u, 'ev3s')
+            StunLocks.add(u)
             doAfter(1.) ->
-                StunLocks.remove(u, 'ev3s')
+                StunLocks.remove(u)
         doPeriodically(9.) ->
-            StunLocks.add(u, 'ev9s')
+            StunLocks.add(u)
             doAfter(3.) ->
-                StunLocks.remove(u, 'ev9s')
+                StunLocks.remove(u)
     ```
 
     In the above example, the unit is paused/stunned whenever either of the

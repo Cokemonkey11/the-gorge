@@ -62,6 +62,13 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "0.14.6",
+        "NEXT",
+        (
+            "Fixed an issue where sound handles were not set to kill-on-done.",
+        )
+    ),
+    (
         "0.14.5",
         "11 Aug 2019",
         (
