@@ -905,7 +905,7 @@ import ObjEditingNatives
 	..setLvlDataInt("wurs", 0, 0, 42)
 	..setLvlDataString("anam", 0, 0, "Grenadier")
 	..setLvlDataString("ansf", 0, 0, "(Phoenix Fire)")
-	..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\Mortar\\MortarMissile.mdx")
+	..setLvlDataString("amat", 0, 0, "Abilities\\Weapons\\RocketMissile\\RocketMissile.mdx")
 	..setLvlDataInt("amsp", 0, 0, 1200)
 	..setLvlDataUnreal("pxf1", 1, 1, 50.0)
 	..setLvlDataUnreal("aare", 1, 0, 900.0)

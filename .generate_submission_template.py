@@ -77,6 +77,7 @@ CHANGELOG = (
             "Fixed a bug where Flight Mode was not disruptible.",
             "Adjusted how gold is distributed if a player dies to creeps.",
             "Added more turrets and shields; adjusted base terrain.",
+            "Fixed a cosmetic bug related to mortar team missile art.",
         )
     ),
     (
