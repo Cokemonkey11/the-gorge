@@ -65,6 +65,7 @@ CHANGELOG = (
         "0.14.6",
         "NEXT",
         (
+            "Added tier-4 overpriced crewmembers.",
             "Fixed a leak where sound handles were not set to kill-on-done.",
             "Single-player help text is no longer shown in multiplayer.",
             "Reduced the attack speed of some crewmembers to improve perf.",

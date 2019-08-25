@@ -204,7 +204,7 @@ class Keep extends BuildingDefinition
         setUnitsSold(
             page == 1
             ? commaList(CREW_PROPS.get(Crewmember.TuskarrSpearman).id, CREW_PROPS.get(Crewmember.Unbroken).id, CREW_PROPS.get(Crewmember.WitchDoctor).id, CREW_PROPS.get(Crewmember.Headhunter).id, CREW_PROPS.get(Crewmember.Shaman).id, ID_SEAWITCH, CREW_PROPS.get(Crewmember.Grenadier).id, CREW_PROPS.get(Crewmember.LaserRifleman).id)
-            : commaList(CREW_PROPS.get(Crewmember.GryphonRider).id, ID_AMASTER, ID_ODRAKE, CREW_PROPS.get(Crewmember.VileTemptress).id)
+            : commaList(CREW_PROPS.get(Crewmember.GryphonRider).id, ID_AMASTER, ID_ODRAKE, CREW_PROPS.get(Crewmember.VileTemptress).id, CREW_PROPS.get(Crewmember.Warden).id, CREW_PROPS.get(Crewmember.ShadowHunter).id, CREW_PROPS.get(Crewmember.Priestess).id, CREW_PROPS.get(Crewmember.TaurenChieftan).id)
         )
         setUnitsTrained("")
         setUpgradesTo("")
