@@ -830,7 +830,7 @@ import ObjEditingNatives
 	..setString("upro", "Paracopter")
 	..setInt("upru", 1)
 	..setString("utip", "Purchase Paracopter")
-	..setString("utub", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator, Send Gold, Chaff")
+	..setString("utub", "A lightweight, dual-engined |cffffcc00trading|r helicopter - gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r |cffcc3333Smuggler|r|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r |cffcc33332|r|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator, Send Gold, Chaff")
 	..setInt("uhhd", 1)
 
 

@@ -21,7 +21,7 @@ init
 			DTS12MissileArray.disjoint(tU)
 			XtsMissileBarrage.disjoint(tU)
 
-			let fx = addEffect(Abilities.lightningShieldTarget, tU.getPos3Fly() + vec3(0., 0., 500.))
+			let fx = addEffect(Abilities.lightningShieldTarget, tU.getPos3Fly() + vec3(0., 0., 700.))
 				..setOrientation(angle(0.), angle(PI), angle(0.))
 
 			doAfter(.9) ->

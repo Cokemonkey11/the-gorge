@@ -62,6 +62,13 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
+        "NEXT",
+        "NEXT",
+        (
+            "Add a warning on the smuggler ship.",
+        )
+    ),
+    (
         "0.14.6",
         "26 Aug 2019",
         (
