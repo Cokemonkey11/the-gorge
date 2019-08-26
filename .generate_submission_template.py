@@ -63,7 +63,7 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.14.6",
-        "NEXT",
+        "26 Aug 2019",
         (
             "Added tier-4 overpriced crewmembers.",
             "Added another defense ability for the smuggler ship.",

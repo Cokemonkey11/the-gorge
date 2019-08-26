@@ -53,10 +53,19 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.14.6[/color] [color=#999999]26 Aug 2019[/color]:
+[list][*] Added tier-4 overpriced crewmembers.
+[*] Added another defense ability for the smuggler ship.
+[*] Fixed a leak where sound handles were not set to kill-on-done.
+[*] Single-player help text is no longer shown in multiplayer.
+[*] Reduced the attack speed of some crewmembers to improve perf.
+[/list]
+
 [color=#ffcc00]0.14.5[/color] [color=#999999]11 Aug 2019[/color]:
 [list][*] Fixed a bug where Flight Mode was not disruptible.
 [*] Adjusted how gold is distributed if a player dies to creeps.
 [*] Added more turrets and shields; adjusted base terrain.
+[*] Fixed a cosmetic bug related to mortar team missile art.
 [/list]
 
 [color=#ffcc00]0.14.4[/color] [color=#999999]5 Aug 2019[/color]:
@@ -77,7 +86,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Wurst inlining has been re-enabled for performance.
 [/list]
 
-[color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
 [list][*] Adjusted Shroud generator effect and appearance to reduce lag.
 [*] Adjusted the handling of creeps to reduce lag.
 [*] Increased tier-2 ship cost to 400.
@@ -86,7 +95,7 @@ All iterations of this map are maintained in a public git repository at
 [*] Increased turret hit points from 2000 to 3000.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.14.0[/color] [color=#999999]26 Jul 2019[/color]:
+[color=#ffcc00]0.14.0[/color] [color=#999999]26 Jul 2019[/color]:
 [list][*] New frigate, new battleship, and new interceptor.
 [*] Fixed a bug where shields would cause you to kill yourself.
 [*] Adjusted base layout and increased repair-port repair rate.
