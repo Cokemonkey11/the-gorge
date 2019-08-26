@@ -37,8 +37,8 @@ public module Lock<T>
         skip
 
 /**
-    Multi-instanceable stuns for a unit.  The unit is unpaused if all uids are
-    removed.
+    Multi-instanceable stuns for a unit.  The unit is unstunnned if each
+    added stun is removed.
 
     Example usage:
 
@@ -75,6 +75,48 @@ public class StunLocks
 
     static function remove(unit u) returns bool
         return unlock(u)
+
+
+/**
+    Multi-instanceable invulnerability for a unit.  The unit is rendered vulnerable
+    if each added invulnerable lock is removed.
+
+    Example usage:
+
+    ```
+    package Example
+    import ClosureTimers
+    init
+        let u = createUnit(...)
+        doPeriodically(3.) ->
+            let lock = new InvulnerableLocks(u)
+            doAfter(1.) ->
+                destroy lock
+        doPeriodically(9.) ->
+            let lock = new InvulnerableLocks(u)
+            doAfter(3.) ->
+                destroy lock
+    ```
+
+    In the above example, the unit is made invulnerable/vulnerable whenever either of the
+    competing InvulnerableLocks is held.
+*/
+public class InvulnerableLocks
+    use Lock<unit>
+
+    unit which
+
+    override static function callback(unit u)
+        u.setInvulnerable(false)
+
+    construct(unit which)
+        this.which = which
+        which.setInvulnerable(true)
+        lock(which)
+
+    ondestroy
+        unlock(which)
+
 
 @compiletime function gen_firebolt()
     new AbilityDefinitionFireBolt(ID_FIREBOLT)

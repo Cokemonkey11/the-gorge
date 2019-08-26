@@ -6,6 +6,7 @@ package Revive
 	import FloatText
 	import Game
 	import GameTimer
+	import Locks
 	import Players
 	import Ships
 	import Profile
@@ -55,14 +56,14 @@ package Revive
 
 			if tempDat.timeL < 1 and not Game.ended
 				// Revive the ship.
-				Ships.ships[tempDat.ownerID].revive(tempDat.teamPos, true)
-				Ships.ships[tempDat.ownerID]..aiOnRevive()..setInvulnerable(true)
+				Ships.ships[tempDat.ownerID]..revive(tempDat.teamPos, true)..aiOnRevive()
 
 				// Apply and async-clear the invulnerability status.
 				let invuln_u = Ships.ships[tempDat.ownerID]
 				let fx = invuln_u.addEffect(INVULN_FX, "origin")
+				let lock = new InvulnerableLocks(invuln_u)
 				doAfter(INVULN_DURATION) () ->
-					invuln_u.setInvulnerable(false)
+					destroy lock
 					fx.destr()
 
 				AddSpecialEffectTarget(REVIVE_MODEL, Ships.ships[tempDat.ownerID], "origin").destr()

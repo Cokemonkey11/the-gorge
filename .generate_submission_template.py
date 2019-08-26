@@ -66,6 +66,7 @@ CHANGELOG = (
         "NEXT",
         (
             "Added tier-4 overpriced crewmembers.",
+            "Added another defense ability for the smuggler ship.",
             "Fixed a leak where sound handles were not set to kill-on-done.",
             "Single-player help text is no longer shown in multiplayer.",
             "Reduced the attack speed of some crewmembers to improve perf.",

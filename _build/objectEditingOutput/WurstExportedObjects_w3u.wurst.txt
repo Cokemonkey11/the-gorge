@@ -788,7 +788,7 @@ import ObjEditingNatives
 @compiletime function create_w3u_H00B()
 	let def = createObjectDefinition("w3u", 'H00B', 'hgyr')
 	..setInt("wurs", 42)
-	..setString("uabi", "Az03,A00D,A00Y,Af00")
+	..setString("uabi", "Az03,A00D,A00Y,Af00,Az0B")
 	..setString("umdl", "Units\\Human\\Gyrocopter\\Gyrocopter_V1.mdx")
 	..setString("uver", "2")
 	..setString("uico", "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp")
@@ -830,7 +830,7 @@ import ObjEditingNatives
 	..setString("upro", "Paracopter")
 	..setInt("upru", 1)
 	..setString("utip", "Purchase Paracopter")
-	..setString("utub", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator, Send Gold")
+	..setString("utub", "Essentially a lightweight, dual-engined helicopter, the paracopter gives up size in favor of maneuverability.|n |n|cffffcc00Class:|r Smuggler|n|cffffcc00Hit Points:|r 500|n|cffffcc00Inventory Size:|r 4|n|cffffcc00Crew Capacity:|r 2|n|cffffcc00Movement Speed:|r 280|n|cffffcc00Armor:|r 0|n|cffffcc00Abilities:|r SL-15 Shroud Generator, Send Gold, Chaff")
 	..setInt("uhhd", 1)
 
 

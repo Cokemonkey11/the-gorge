@@ -1,0 +1,32 @@
+package Chaff
+import AbilitiesApi
+import Assets
+import ClosureEvents
+import ClosureTimers
+import DTS12MissileArray
+import Locks
+import Profile
+import XtsMissileBarrage
+
+constant INVULN_DURATION = 2.
+
+init
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
+		
+		if EventData.getSpellAbilityId() == ID_CHAFF
+			profile()
+
+			let tU = EventData.getTriggerUnit()
+
+			DTS12MissileArray.disjoint(tU)
+			XtsMissileBarrage.disjoint(tU)
+
+			let fx = addEffect(Abilities.lightningShieldTarget, tU.getPos3Fly() + vec3(0., 0., 500.))
+				..setOrientation(angle(0.), angle(PI), angle(0.))
+
+			doAfter(.9) ->
+				fx..destr()
+
+			let lock = new InvulnerableLocks(tU)
+			doAfter(INVULN_DURATION) ->
+				destroy lock

@@ -42,6 +42,7 @@ public constant ID_DISRUPTOR             = 'Az07'
 public constant ID_FIREBLAST             = 'Az08'
 public constant ID_FLIGHT_MODE           = 'Az09'
 public constant ID_FLIGHT_MODE_OFF       = 'Az0A'
+public constant ID_CHAFF                 = 'Az0B'
 
 public constant ID_SHOW_TRADE_EXP        = 'A00N'
 
@@ -270,6 +271,26 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         "A barrage of 10 missiles is launched in sequence.  Each one seeks out the target enemy unit.|n |n|cffffcc00Damage (Each):|r 55|n|cffffcc00Cooldown:|r 30s|n|cffffcc00Range:|r 1100",
         0.,
         0.
+    )
+
+@compiletime function init_chaff()
+    new ChannelCommon(
+        ID_CHAFF,
+        "spell",
+        2,
+        2,
+        Icons.bTNPurge,
+        15.,
+        "standdown",
+        0.,
+        1,
+        TargetType.Instant,
+        "E",
+        "Chaff",
+        "self",
+        "Charges briefly, rendering the ship invulnerable and emitting a burst of metallic powder that disrupts inbound missiles and abilities.|n |n|cffffcc00Duration:|r 2s|n|cffffcc00Cooldown:|r 15s",
+        0.,
+        0
     )
 
 @compiletime function init_ion_cannons()
