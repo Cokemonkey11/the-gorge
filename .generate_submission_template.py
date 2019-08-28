@@ -65,7 +65,10 @@ CHANGELOG = (
         "NEXT",
         "NEXT",
         (
+            "Reduced enhance stone lock duration from 3 minutes to 2.",
+            "Fixed a bug that granted an assist for each kill.",
             "Add a warning on the smuggler ship.",
+            "Increased the capture/contest radius for enhance stones slightly.",
         )
     ),
     (

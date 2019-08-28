@@ -5,14 +5,15 @@ package EnchantingStone
 	import Players
 	// import Profile
 	import TerrainData
+	import Units
 
 	constant LOCK_HEIGHT          = 560.
 	constant OWNR_HEIGHT          = 160.
 	constant INDICATOR_SCALE      =    .5
 	constant INDICATOR_TIME_SCALE =    .1
 	constant CAPTURE_TIME         =  10.
-	constant LOCK_TIME            =  60. * 3.
-	constant CAPTURE_RADIUS       = 150. + 16.
+	constant LOCK_TIME            =  60. * 2.
+	constant CAPTURE_RADIUS       = 150. + 16. + 16.
 	constant PROGRESS_OFFSET      = vec2(75., 0.)
 
 	constant PERIOD = 1. / 10.
@@ -20,7 +21,7 @@ package EnchantingStone
 	constant CAPTURE_STATUS_CEIL = R2I(CAPTURE_TIME / PERIOD)
 	constant LOCK_STEPS          = R2I(   LOCK_TIME / PERIOD)
 
-	constant INDICATOR_MODEL = "units\\nightelf\\Wisp\\Wisp.mdl"
+	constant INDICATOR_MODEL = Units.wisp1
 
 	var lockStepsNorth     = LOCK_STEPS
 	var lockStepsSouth     = LOCK_STEPS

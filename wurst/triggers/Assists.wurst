@@ -6,6 +6,7 @@ class AssistTimestamps
 public class Assists
     static constant ASSIST_TIME = 15.
 
+    // assistsTimestamps[i].vals[j] := "When did j last hit i"
     static AssistTimestamps array assistTimestamps
 
 init

@@ -97,9 +97,13 @@ package Revive
 		return (FLAT_BOUNTY + BOUNTY_PER_MINUTE * getElapsedGameTime() / 60.).toInt()
 
 
-	function parseAssists(int pID)
+	/**
+		Grant an assist to all players that recently damaged pid, apart from
+		not_pid (the killer).
+	*/
+	function parseAssists(int pid, int not_pid)
 		for index = 2 to 11
-			if (getElapsedGameTime() - Assists.assistTimestamps[pID].vals[index]) <= Assists.ASSIST_TIME
+			if not_pid != index and (getElapsedGameTime() - Assists.assistTimestamps[pid].vals[index]) <= Assists.ASSIST_TIME
 				Game.assists[index]++
 				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
 
@@ -121,48 +125,176 @@ package Revive
 
 	let kill_sound = new SoundDefinition(Sounds.alchemistTransmuteDeath1, false, true)
 
-	function c()
-		let tU = GetTriggerUnit()
 
-		if Ships.isPlayerShip(tU)
-			let kU = GetKillingUnit()
-			let kO = GetOwningPlayer(kU)
-			var killerId = GetPlayerId(kO)
-			let tempDat = new DeathDat
-			tempDat.u = tU
-			tempDat.timeL = (REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * getElapsedGameTime() / 60.).toInt()
-			tempDat.ownerID = GetPlayerId(GetOwningPlayer(tU))
+	init
+		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH) ->
+			let tU = GetTriggerUnit()
 
-			addEffect(Objects.demonLargeDeathExplode, tU.getPos())..destr()
+			if Ships.isPlayerShip(tU)
+				let kU = GetKillingUnit()
+				let kO = GetOwningPlayer(kU)
+				var killerId = GetPlayerId(kO)
+				let tempDat = new DeathDat
+				tempDat.u = tU
+				tempDat.timeL = (REVIVE_DELAY_FLAT + REVIVE_DELAY_PERMINUTE * getElapsedGameTime() / 60.).toInt()
+				tempDat.ownerID = GetPlayerId(GetOwningPlayer(tU))
 
-			tU.setPos(TerrainData.SAFE)
+				addEffect(Objects.demonLargeDeathExplode, tU.getPos())..destr()
 
-			// Overwrite the killer ID if killed by a non-player and there was a recent assist.
-			if (killerId < 2)
-				let maybe_assist = find_assist_killer(tU.getOwner().getId())
+				tU.setPos(TerrainData.SAFE)
 
-				if maybe_assist.have
-					killerId = maybe_assist.which.getId()
+				// Overwrite the killer ID if killed by a non-player and there was a recent assist.
+				if (killerId < 2)
+					let maybe_assist = find_assist_killer(tU.getOwner().getId())
 
-			if killerId > 1 and Ships.ships[killerId] != null and Ships.ships[killerId].isAlive()
-				kill_sound.playOnPoint(Ships.ships[killerId].getPos3Real())
+					if maybe_assist.have
+						killerId = maybe_assist.which.getId()
 
-			if killerId > 1 and (
-				kU.isEnemyOf(tU.getOwner()) or
-				killerId == tempDat.ownerID
-			)
-				parseAssists(tempDat.ownerID)
+				if killerId > 1 and Ships.ships[killerId] != null and Ships.ships[killerId].isAlive()
+					kill_sound.playOnPoint(Ships.ships[killerId].getPos3Real())
 
-				if killerId == tempDat.ownerID
-					// Player suicide occurred.
-					if localPlayer == players[killerId]
-						// Message for suicide player.
+				if killerId > 1 and (
+					kU.isEnemyOf(tU.getOwner()) or
+					killerId == tempDat.ownerID
+				)
+					parseAssists(tempDat.ownerID, killerId)
+
+					if killerId == tempDat.ownerID
+						// Player suicide occurred.
+						if localPlayer == players[killerId]
+							// Message for suicide player.
+							DisplayTimedTextToPlayer(
+								localPlayer,
+								0.,
+								0.,
+								10.,
+								"You destroyed yourself!"
+							)
+
+						else
+							// Message for other players.
+							DisplayTimedTextToPlayer(
+								localPlayer,
+								0.,
+								0.,
+								10.,
+								Game.colors[tempDat.ownerID] +
+									Game.names[tempDat.ownerID] +
+									"|r destroyed themself!"
+							)
+
+					else
+						// PVP kill occurred.
+						Game.parseKill(killerId)
+						let bounty = getBounty()
+						kO.addGold(bounty)
+
+						// Message for killed player.
+						DisplayTimedTextToPlayer(
+							players[tempDat.ownerID],
+							0.,
+							0.,
+							10.,
+							"Your ship was destroyed by " +
+								Game.colors[killerId] +
+								Game.names[killerId] +
+								"|r; you will be rebuilt in " +
+								I2S(tempDat.timeL) +
+								"|r seconds."
+						)
+
+						// Message for killing player.
+						DisplayTimedTextToPlayer(
+							players[killerId],
+							0.,
+							0.,
+							10.,
+							"You destroyed " +
+								Game.colors[tempDat.ownerID] +
+								Game.names[tempDat.ownerID] +
+								"|r for |cffffcc00" +
+								I2S(bounty) +
+								" gold."
+						)
+
+						if not (
+							localPlayer == players[tempDat.ownerID] or
+							localPlayer == players[killerId
+						])
+							// Message for other players.
+							DisplayTimedTextToPlayer(
+								localPlayer,
+								0.,
+								0.,
+								10.,
+								Game.colors[tempDat.ownerID] +
+									Game.names[tempDat.ownerID] +
+									"|r was destroyed by " +
+									Game.colors[killerId] +
+									Game.names[killerId] +
+									"|r for |cffffcc00" +
+									I2S(bounty) +
+									"|r gold."
+							)
+
+				else if not kU.isEnemyOf(tU.getOwner())
+					// Something weird occurred - let's display what we know, for
+					// posterity.
+
+					// Message for killed player.
+					DisplayTimedTextToPlayer(
+						players[tempDat.ownerID],
+						0.,
+						0.,
+						10.,
+						"Your ship was destroyed by an ALLY " +
+							Game.colors[killerId] +
+							Game.names[killerId] +
+							"|r; you will be rebuilt in " +
+							I2S(tempDat.timeL) +
+							"|r seconds.  How did this happen?"
+					)
+
+					// Message for killing player.
+					DisplayTimedTextToPlayer(
+						players[killerId],
+						0.,
+						0.,
+						10.,
+						"You destroyed an ALLY " +
+							Game.colors[tempDat.ownerID] +
+							Game.names[tempDat.ownerID] +
+							"|r.  How did this happen?"
+					)
+
+					if not (
+						localPlayer == players[tempDat.ownerID] or
+						localPlayer == players[killerId]
+					)
+						// Message for other players.
 						DisplayTimedTextToPlayer(
 							localPlayer,
 							0.,
 							0.,
 							10.,
-							"You destroyed yourself!"
+							Game.colors[tempDat.ownerID] +
+								Game.names[tempDat.ownerID] +
+								"|r was destroyed by an ALLY " +
+								Game.colors[killerId] +
+								Game.names[killerId] +
+								"|r.  How did this happen?"
+						)
+				else
+					if localPlayer == players[tempDat.ownerID]
+						// Message for killed player.
+						DisplayTimedTextToPlayer(
+							localPlayer,
+							0.,
+							0.,
+							10.,
+							"Your ship was destroyed. It will be rebuilt in |cffffcc00" +
+								I2S(tempDat.timeL) +
+								"|r seconds."
 						)
 
 					else
@@ -174,158 +306,29 @@ package Revive
 							10.,
 							Game.colors[tempDat.ownerID] +
 								Game.names[tempDat.ownerID] +
-								"|r destroyed themself!"
+								"|r was destroyed."
 						)
 
-				else
-					// PVP kill occurred.
-					Game.parseKill(killerId)
-					let bounty = getBounty()
-					kO.addGold(bounty)
 
-					// Message for killed player.
-					DisplayTimedTextToPlayer(
-						players[tempDat.ownerID],
-						0.,
-						0.,
-						10.,
-						"Your ship was destroyed by " +
-							Game.colors[killerId] +
-							Game.names[killerId] +
-							"|r; you will be rebuilt in " +
-							I2S(tempDat.timeL) +
-							"|r seconds."
-					)
+				Game.addDeath(tU)
 
-					// Message for killing player.
-					DisplayTimedTextToPlayer(
-						players[killerId],
-						0.,
-						0.,
-						10.,
-						"You destroyed " +
-							Game.colors[tempDat.ownerID] +
-							Game.names[tempDat.ownerID] +
-							"|r for |cffffcc00" +
-							I2S(bounty) +
-							" gold."
-					)
+				if tempDat.ownerID < 7
+					tempDat.teamPos = vec2(TerrainData.WESTX + REVIVE_OFFSET, 0.)
+					westDeadCount++
 
-					if not (
-						localPlayer == players[tempDat.ownerID] or
-						localPlayer == players[killerId
-					])
-						// Message for other players.
-						DisplayTimedTextToPlayer(
-							localPlayer,
-							0.,
-							0.,
-							10.,
-							Game.colors[tempDat.ownerID] +
-								Game.names[tempDat.ownerID] +
-								"|r was destroyed by " +
-								Game.colors[killerId] +
-								Game.names[killerId] +
-								"|r for |cffffcc00" +
-								I2S(bounty) +
-								"|r gold."
-						)
-
-			else if not kU.isEnemyOf(tU.getOwner())
-				// Something weird occurred - let's display what we know, for
-				// posterity.
-
-				// Message for killed player.
-				DisplayTimedTextToPlayer(
-					players[tempDat.ownerID],
-					0.,
-					0.,
-					10.,
-					"Your ship was destroyed by an ALLY " +
-						Game.colors[killerId] +
-						Game.names[killerId] +
-						"|r; you will be rebuilt in " +
-						I2S(tempDat.timeL) +
-						"|r seconds.  How did this happen?"
-				)
-
-				// Message for killing player.
-				DisplayTimedTextToPlayer(
-					players[killerId],
-					0.,
-					0.,
-					10.,
-					"You destroyed an ALLY " +
-						Game.colors[tempDat.ownerID] +
-						Game.names[tempDat.ownerID] +
-						"|r.  How did this happen?"
-				)
-
-				if not (
-					localPlayer == players[tempDat.ownerID] or
-					localPlayer == players[killerId]
-				)
-					// Message for other players.
-					DisplayTimedTextToPlayer(
-						localPlayer,
-						0.,
-						0.,
-						10.,
-						Game.colors[tempDat.ownerID] +
-							Game.names[tempDat.ownerID] +
-							"|r was destroyed by an ALLY " +
-							Game.colors[killerId] +
-							Game.names[killerId] +
-							"|r.  How did this happen?"
-					)
-			else
-				if localPlayer == players[tempDat.ownerID]
-					// Message for killed player.
-					DisplayTimedTextToPlayer(
-						localPlayer,
-						0.,
-						0.,
-						10.,
-						"Your ship was destroyed. It will be rebuilt in |cffffcc00" +
-							I2S(tempDat.timeL) +
-							"|r seconds."
-					)
+					if westDeadCount == 1
+						SetUnitX(westDummy, TerrainData.WESTX + REVIVE_OFFSET)
+						SetUnitY(westDummy, 0.)
 
 				else
-					// Message for other players.
-					DisplayTimedTextToPlayer(
-						localPlayer,
-						0.,
-						0.,
-						10.,
-						Game.colors[tempDat.ownerID] +
-							Game.names[tempDat.ownerID] +
-							"|r was destroyed."
-					)
+					tempDat.teamPos = vec2(TerrainData.EASTX - REVIVE_OFFSET, 0.)
+					eastDeadCount++
 
+					if eastDeadCount == 1
+						SetUnitX(eastDummy, TerrainData.EASTX - REVIVE_OFFSET)
+						SetUnitY(eastDummy, 0.)
 
-			Game.addDeath(tU)
-
-			if tempDat.ownerID < 7
-				tempDat.teamPos = vec2(TerrainData.WESTX + REVIVE_OFFSET, 0.)
-				westDeadCount++
-
-				if westDeadCount == 1
-					SetUnitX(westDummy, TerrainData.WESTX + REVIVE_OFFSET)
-					SetUnitY(westDummy, 0.)
-
-			else
-				tempDat.teamPos = vec2(TerrainData.EASTX - REVIVE_OFFSET, 0.)
-				eastDeadCount++
-
-				if eastDeadCount == 1
-					SetUnitX(eastDummy, TerrainData.EASTX - REVIVE_OFFSET)
-					SetUnitY(eastDummy, 0.)
-
-			dbIndex++
-			deathDB[dbIndex] = tempDat
-			if dbIndex == 0
-				TimerStart(time, CLOCK_PERIOD, true, function p)
-
-	init
-		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function c)
+				dbIndex++
+				deathDB[dbIndex] = tempDat
+				if dbIndex == 0
+					TimerStart(time, CLOCK_PERIOD, true, function p)

@@ -38,8 +38,10 @@ class Movement
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile()
+
                 for inst from staticItr()
-                    profile()
+                    // profile()
 
                     if inst.which != null and inst.which.getTypeId() > 0
                         inst.vel *= retention
