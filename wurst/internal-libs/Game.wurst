@@ -458,6 +458,14 @@ package Game
 		createUnit(players[1], ID_TURRET, TerrainData.POS_KEEP_EAST - vec2(256. + 128.,  196.), angle(3. * PI / 2.))..createShields(4, 100.)
 		createUnit(players[1], ID_TURRET, TerrainData.POS_KEEP_EAST - vec2(256. + 128., -196.), angle(3. * PI / 2.))..createShields(4, 100.)
 
+		// Create trade-related artefacts.
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u001', vec2( -80.,  -240.), angle(3. * PI / 2.))
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u002', vec2( -80.,  -240.), angle(3. * PI / 2.))
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u004', vec2( 860.,  3000.), angle(3. * PI / 2.))
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u002', vec2( 860.,  3000.), angle(3. * PI / 2.))
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u005', vec2(-110., -4510.), angle(3. * PI / 2.))
+		createUnit(players[PLAYER_NEUTRAL_PASSIVE], 'u002', vec2(-110., -4510.), angle(3. * PI / 2.))
+
 		// Create Utility Ports.
 		Game.westUtility[0] = CreateUnit(players[0], ID_PORT_P1, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)
 		Game.westUtility[1] = CreateUnit(players[0], ID_PORT_P2, TerrainData.WESTX, TerrainData.UTILITY_Y, 270.)

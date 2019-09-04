@@ -1,4 +1,5 @@
 package Music
+	import ClosureTimers
 	import Muscii
 
 	// Back Against the Wall by Cage the Elephant
@@ -239,4 +240,5 @@ package Music
 			new Track(bas, "o--oo--o-o-ooo-o")
 		)
 
-		playIntro()
+		doAfter(5.) ->
+			playIntro()

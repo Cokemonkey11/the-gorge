@@ -62,9 +62,18 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 
 CHANGELOG = (
     (
-        "NEXT",
+        "0.15.0",
         "NEXT",
         (
+            "Re-enabled the in-game music after verifying it does not leak.",
+            "Fully extracted object data into wurst.",
+        )
+    ),
+    (
+        "0.14.7",
+        "NEXT",
+        (
+            "Temporarily disabled in-game music while investigating a crash.",
             "Reduced enhance stone lock duration from 3 minutes to 2.",
             "Fixed a bug that granted an assist for each kill.",
             "Add a warning on the smuggler ship.",
