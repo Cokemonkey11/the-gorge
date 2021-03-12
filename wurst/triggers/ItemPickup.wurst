@@ -1,11 +1,11 @@
 package ItemPickup
 	import Equipment
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	function c()
-		int id = GetPlayerId(GetTriggerPlayer())
-		item itm = GetManipulatedItem()
+		let id = GetPlayerId(GetTriggerPlayer())
+		let itm = GetManipulatedItem()
 
 		profile()
 

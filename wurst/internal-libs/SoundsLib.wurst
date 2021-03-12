@@ -4,13 +4,14 @@ package SoundsLib
 	class Slop
 		string snd
 
+	// TODO potential leak
 	public class SoundsLib
 		static Table preloadDB
 
 		private static function preloadAfter()
-			timer time = GetExpiredTimer()
-			Slop s = preloadDB.loadInt(time.getHandleId()) castTo Slop
-			sound sd = CreateSound(s.snd, false, false, false, 12700, 12700, "")
+			let time = GetExpiredTimer()
+			let s = preloadDB.loadInt(time.getHandleId()) castTo Slop
+			let sd = CreateSound(s.snd, false, false, false, 12700, 12700, "")
 			SetSoundVolume(sd, 1)
 			StartSound(sd)
 			KillSoundWhenDone(sd)
@@ -19,7 +20,7 @@ package SoundsLib
 
 
 		static function preload(string str)
-			timer time= CreateTimer()
+			let time= CreateTimer()
 			let s = new Slop
 			s.snd = str
 			preloadDB.saveInt(time.getHandleId(), s castTo int)
@@ -27,7 +28,7 @@ package SoundsLib
 
 
 		static function play3D(string str, real pitch, real x, real y, real z)
-			sound s = CreateSound(str, false, true, true, 12700, 12700, "")
+			let s = CreateSound(str, false, true, true, 12700, 12700, "")
 			SetSoundPosition(s, x, y, z)
 			SetSoundVolume(s, 127)
 			SetSoundPitch(s, pitch)
@@ -36,7 +37,7 @@ package SoundsLib
 
 
 		static function playForPlayer(string str, real pitch, player who)
-			sound s = CreateSound(str, false, false, false, 12700, 12700, "")
+			let s = CreateSound(str, false, false, false, 12700, 12700, "")
 			if GetLocalPlayer() == who
 				SetSoundVolume(s, 127)
 			else

@@ -57,7 +57,7 @@ package MyBoard
 
 		// Local parameter changes.
 		function displayLocalIcon(player whichPlayer, int col, int row, bool doDisplay)
-			int arrIndex = MAX_COLUMN_COUNT*col + row
+			let arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer
 				this.showIcon[arrIndex] = doDisplay
@@ -67,7 +67,7 @@ package MyBoard
 
 
 		function displayLocalValue(player whichPlayer, int col, int row, bool doDisplay)
-			int arrIndex = MAX_COLUMN_COUNT*col + row
+			let arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer
 				this.showVal[arrIndex] = doDisplay
@@ -77,7 +77,7 @@ package MyBoard
 
 
 		function setLocalIcon(player whichPlayer, int col, int row, string newIcon)
-			int arrIndex = MAX_COLUMN_COUNT*col + row
+			let arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer
 				this.curIcon[arrIndex] = newIcon
@@ -87,7 +87,7 @@ package MyBoard
 
 
 		function setLocalValue(player whichPlayer, int col, int row, string newValue)
-			int arrIndex = MAX_COLUMN_COUNT*col + row
+			let arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer
 				this.curValue[arrIndex] = newValue
@@ -97,7 +97,7 @@ package MyBoard
 
 
 		function setLocalWidth(player whichPlayer, int col, int row, real width)
-			int arrIndex = MAX_COLUMN_COUNT*col + row
+			let arrIndex = MAX_COLUMN_COUNT*col + row
 
 			if GetLocalPlayer() == whichPlayer
 				this.width[arrIndex] = width

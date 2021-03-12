@@ -5,7 +5,7 @@ package Crewmembers
 	import AbilitiesApi
 	import ClosureTimers
 	import ErrorHandling
-	import Profile
+	import WurstProfile
 	import WurstLinkedHashMap
 	import Ships
 	import HashMap
@@ -89,14 +89,13 @@ package Crewmembers
 
 		static function p()
 			var index = 0
-			// profile()
+			profile(dbIndex)
 
 			for i = 2 to 11
 				shipLocs[i] = Ships.ships[i].getPos()
 
 			while index <= dbIndex
 				let temp = db[index]
-				// profile()
 
 				temp.phoenix.setPos(shipLocs[temp.ownerID])
 

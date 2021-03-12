@@ -5,7 +5,7 @@ import AbilitiesApi
 import ClosureEvents
 import DamageEvent
 import LinkedListModule
-import Profile
+import WurstProfile
 
 constant ORDER = "acidbomb"
 
@@ -25,8 +25,8 @@ class Knockback
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for inst from staticItr()
-                    profile()
                     inst.vel *= retention
 
                     inst.which.setXY(inst.which.getPos() + inst.vel)
@@ -89,8 +89,8 @@ class Missile
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for inst from staticItr()
-                    profile()
                     inst.rangeLeft -= inst.speedRef
 
                     inst.head += inst.vel
@@ -146,9 +146,8 @@ class IonCannons
 
         if size == 1
             clock.startPeriodic(period) ->
+                profile(size)
                 for ion from staticItr()
-                    profile()
-
                     ion.seed++
                     if ion.owner.getCurrentOrder() == OrderId(ORDER)
                         new Missile(ion.owner, ion.seed)

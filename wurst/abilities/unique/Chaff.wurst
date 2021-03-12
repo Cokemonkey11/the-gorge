@@ -5,14 +5,14 @@ import ClosureEvents
 import ClosureTimers
 import DTS12MissileArray
 import Locks
-import Profile
+import WurstProfile
 import XtsMissileBarrage
 
 constant INVULN_DURATION = 2.
 
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->
-		
+
 		if EventData.getSpellAbilityId() == ID_CHAFF
 			profile()
 

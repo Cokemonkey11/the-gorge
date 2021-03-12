@@ -1,7 +1,7 @@
 package HeliumOverdrive
     import HashMap
     import Assets
-    import Profile
+    import WurstProfile
     import RegisterEvents
     import DummyUnitStack
 
@@ -80,9 +80,9 @@ package HeliumOverdrive
             real tx
             real ty
             real dist
+            profile(dbIndex)
             while index <= dbIndex
                 fx = fxDB[index]
-                profile()
 
                 // state 0: the flash of light flies up
                 if fx.state == 0
@@ -195,10 +195,10 @@ package HeliumOverdrive
 
     // periodic function for handling the dash
     function p()
-        timer tim = GetExpiredTimer()
+        let tim = GetExpiredTimer()
         OverdriveDat d = tab2.get(tim)
-        real nX = GetUnitX(d.caster) + d.delX
-        real nY = GetUnitY(d.caster) + d.delY
+        let nX = GetUnitX(d.caster) + d.delX
+        let nY = GetUnitY(d.caster) + d.delY
         if isTerrainFlyable(nX,nY)
             SetUnitX(d.caster,nX)
             SetUnitY(d.caster,nY)
@@ -216,7 +216,7 @@ package HeliumOverdrive
 
     // magic, aka dynamic triggering; listener for right clicks
     function c() returns bool
-        unit tU = GetTriggerUnit()
+        let tU = GetTriggerUnit()
         OverdriveDat d = casterData.get(tU)
         real ang
 
@@ -236,8 +236,8 @@ package HeliumOverdrive
 
     // after the static timer finishes, end the "avatar" effects
     function after()
-        timer tim = GetExpiredTimer()
-        OverdriveDat d = tab.get(tim)
+        let tim = GetExpiredTimer()
+        let d = tab.get(tim)
 
         // destroy the listener
         d.clickListener.destr()

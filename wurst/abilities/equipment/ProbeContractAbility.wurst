@@ -4,7 +4,7 @@ package ProbeContractAbility
 	import Ships
 	import Equipment
 	import Game
-	import Profile
+	import WurstProfile
 	import SoundsLib
 
 	constant ERROR_MESSAGE     = "This probe can only be used on unusual rock formations."

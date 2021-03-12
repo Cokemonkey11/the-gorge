@@ -1,7 +1,7 @@
 package TempLightning
 
 import LinkedListModule
-import Profile
+import WurstProfile
 
 public class TempLightning
     use LinkedListModule
@@ -39,9 +39,8 @@ public class TempLightning
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for templ from staticItr()
-                    profile()
-
                     let a = (
                         templ.duration_left / templ.initial_duration * 255
                     ).toInt()

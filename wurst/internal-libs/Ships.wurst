@@ -17,7 +17,7 @@ package Ships
 		static constant sellVals = new Table
 
 		static function getClass(unit u) returns int
-			int id = GetUnitTypeId(u)
+			let id = GetUnitTypeId(u)
 			if tab.hasInt(id)
 				return tab.loadInt(id)
 
@@ -25,7 +25,7 @@ package Ships
 
 
 		static function getSellValue(unit u) returns int
-			int id = GetUnitTypeId(u)
+			let id = GetUnitTypeId(u)
 			if sellVals.hasInt(id)
 				return sellVals.loadInt(id)
 

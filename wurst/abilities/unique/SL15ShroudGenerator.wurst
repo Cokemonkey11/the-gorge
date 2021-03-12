@@ -3,7 +3,7 @@ package SL15ShroudGenerator
 	import AbilitiesApi
 	import DummyUnitStack
 	import InstantDummyCaster
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	constant GEN_VELOCITY  = 500.
@@ -59,9 +59,9 @@ package SL15ShroudGenerator
 	function p2()
 		int index = 0
 		ShroudEffect g
+		profile(gensIndex)
 		while index <= gensIndex
 			g = gens[index]
-			profile()
 
 			g.duration -= ANIMATION_PERIOD
 			g.dummy.setXY(g.dummy.getPos() + g.vel)

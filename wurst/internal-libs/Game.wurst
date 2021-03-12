@@ -117,10 +117,10 @@ package Game
 		static constant REWARD_MODEL = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
 
 		static function reward(unit u, int gold, int bonusExperience)
-			player  owner = GetOwningPlayer(u)
-			int id    = GetPlayerId(owner)
-			let     uX    = GetUnitX(u)
-			let     uY    = GetUnitY(u)
+			let owner = GetOwningPlayer(u)
+			let id    = GetPlayerId(owner)
+			let uX    = GetUnitX(u)
+			let uY    = GetUnitY(u)
 
 			if gold > 0
 				FloatText.goldBounty(uX, uY + FloatText.VERTICAL_KERNING/2., gold, id)
@@ -158,7 +158,7 @@ package Game
 
 
 		static function addDeath(unit u)
-			int id = GetPlayerId(GetOwningPlayer(u))
+			let id = GetPlayerId(GetOwningPlayer(u))
 			deaths[id] = deaths[id] + 1
 			if id < 7
 				deaths[0]++
@@ -169,12 +169,12 @@ package Game
 
 
 		static function updateIcon(int pID)
-			int unitType = shipClass[pID]
+			let unitType = shipClass[pID]
 			scoreboard.setIcon(0, scoreboardRows[pID], ship_get_icon(unitType))
 
 
 		static function addQuest(string desc, string iconPath, bool required, string title) returns quest
-			quest q = CreateQuest()
+			let q = CreateQuest()
 			QuestSetCompleted(  q, false)
 			QuestSetDescription(q, desc)
 			QuestSetDiscovered( q, true)
@@ -298,7 +298,7 @@ package Game
 
 
 		static function defeatC()
-			unit tU = GetTriggerUnit()
+			let tU = GetTriggerUnit()
 			if tU == westKeep[0]
 				DisplayTextToPlayer(localPlayer, 0., 0., "The |cffffcc00Eastern Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
@@ -324,7 +324,7 @@ package Game
 
 
 		static function after()
-			int id = GetPlayerId(localPlayer)
+			let id = GetPlayerId(localPlayer)
 			DestroyTimer(GetExpiredTimer())
 			SoundsLib.play(START_SOUND, .75, 127)
 			fadeIn(1.)
@@ -368,7 +368,7 @@ package Game
 			shield_track.put(u, ref)
 
 			trig.registerUnitEvent(u, EVENT_UNIT_DEATH)
-			
+
 
 	init
 		int index = 0

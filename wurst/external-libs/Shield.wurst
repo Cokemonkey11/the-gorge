@@ -15,7 +15,7 @@
 package Shield
 	import DamageEvent
 	import HashMap
-	import Profile
+	import WurstProfile
 
 	//* This class is just a shim for a pretty API. (You don't instanciate
 	//* Shield objects yourself)
@@ -96,9 +96,9 @@ package Shield
 			int index = 0
 			Shield tempDat
 			Shield otherDat
+			profile(Shield.shieldIndex)
 			while index <= Shield.shieldIndex
 				tempDat = Shield.allShields[index]
-				profile()
 
 				tempDat.timeLeft -= TIMER_PERIOD
 				if (tempDat.timeLeft <= 0. and tempDat.useDuration) or (tempDat.shieldLeft+tempDat.falseHP) <= 0. or tempDat.u.isAlive() == false
@@ -146,9 +146,9 @@ package Shield
 		static function add(unit u, real _amount, real time, string fx, string fxpoint)
 			let tempDat = new Shield
 			Shield linkedDat
-			real initialLife = u.getHP()
-			real maxLife = GetUnitState(u, UNIT_STATE_MAX_LIFE)
-			real diff = maxLife - initialLife
+			let initialLife = u.getHP()
+			let maxLife = GetUnitState(u, UNIT_STATE_MAX_LIFE)
+			let diff = maxLife - initialLife
 			tempDat.u = u
 			tempDat.timeLeft = time
 			tempDat.fx = AddSpecialEffectTarget(fx, u, fxpoint)

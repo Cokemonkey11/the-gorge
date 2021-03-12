@@ -7,7 +7,7 @@ import HashMap
 import WurstLinkedHashMap
 import LinkedList
 import Players
-import Profile
+import WurstProfile
 import Ships
 import TerrainData
 import UnitsApi

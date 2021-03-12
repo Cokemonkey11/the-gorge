@@ -20,7 +20,7 @@
 //*
 package DummyUnitStack
 import ClosureTimers
-import Profile
+import WurstProfile
 
 // Just a shim for the API, the class is not actually instanciated.
 public class DummyUnitStack

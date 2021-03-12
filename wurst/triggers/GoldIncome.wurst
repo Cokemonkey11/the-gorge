@@ -1,6 +1,6 @@
 package GoldIncome
 	import Game
-	import Profile
+	import WurstProfile
 
 	constant CLOCK_PERIOD = 1.
 	constant GOLD_PER_SECOND = 1

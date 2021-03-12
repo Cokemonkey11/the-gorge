@@ -1,13 +1,13 @@
 package Farm
 	import Game
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	function c()
 		profile()
 
-		player p = GetOwningPlayer(GetKillingUnit())
-		int id = GetPlayerId(p)
+		let p = GetOwningPlayer(GetKillingUnit())
+		let id = GetPlayerId(p)
 		if id > 1
 			Game.farmIncrement(id)
 

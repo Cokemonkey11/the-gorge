@@ -2,9 +2,9 @@ package Muscii
 	import HashMap
 	import LinkedList
 	import Lodash
-	import Profile
+	import WurstProfile
 	import SoundUtils
-	
+
 	var wants_mask = [
 		true, true, true, true, true, true, true, true, true, true, true, true,
 		true, true, true, true, true, true, true, true, true, true, true, true
@@ -45,7 +45,7 @@ package Muscii
 
 		function copy() returns Chord
 			Note iterator = this.first
-			Chord nw = Chord.create(iterator)
+			let nw = Chord.create(iterator)
 			while iterator.next != null
 				iterator = iterator.next
 				nw.addNote(iterator)
@@ -103,10 +103,10 @@ package Muscii
 			let chord = this.foldl(0 castTo Chord, (track, chord) -> chord == null ? Chord.create(track.n) : chord..addNote(track.n))
 
 			chord_registry.put(key, chord)
-		
+
 		return chord_registry.get(key)
 
-		
+
 
 	public class Muscii
 		static Table fromClock
@@ -139,7 +139,7 @@ package Muscii
 
 		function copy() returns Muscii
 			Chord iterator = this.first
-			Muscii nw = Muscii.create(iterator, this.tempo)
+			let nw = Muscii.create(iterator, this.tempo)
 			while iterator.next != null
 				iterator = iterator.next
 				nw.addChord(iterator.copy())
@@ -190,7 +190,7 @@ package Muscii
 
 		static function create(Chord c, real tempo) returns Muscii
 			let m = new Muscii
-			Chord cop = c.copy()
+			let cop = c.copy()
 			m.first = cop
 			m.last = cop
 			m.iterator = cop
@@ -212,7 +212,7 @@ package Muscii
 			let base_chord = trax.filter(track -> track.seq.substring(0, 1) != "-").toChord()
 
 			let m = Muscii.create(base_chord, 240.)
-			
+
 			for i = 1 to (trax.getFirst().seq.length() - 1)
 				let chord = trax.filter(track -> track.seq.substring(i, i + 1) != "-").toChord()
 
@@ -225,7 +225,7 @@ package Muscii
 
 			Muscii m = fromClock.loadInt(GetExpiredTimer().getHandleId()) castTo Muscii
 			Muscii next
-			Chord now = m.iterator
+			let now = m.iterator
 			Section cbf
 			now.play()
 			if now.next != null

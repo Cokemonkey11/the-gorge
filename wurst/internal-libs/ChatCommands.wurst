@@ -2,9 +2,11 @@ package ChatCommands
 import Damage
 import Equipment
 import Muscii
-import Profile
 import Ships
+
 import WurstCommand
+import WurstProfile
+import WurstAllocationHistogram
 
 
 init

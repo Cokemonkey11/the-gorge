@@ -5,6 +5,7 @@ dependencies:
 - https://github.com/Cokemonkey11/WurstCommand
 - https://github.com/Cokemonkey11/WurstLinkedHashMap
 - https://github.com/Cokemonkey11/WurstRealHeapGuard
+- https://github.com/Cokemonkey11/wurst-debugging-tools
 - https://github.com/theQuazz/wurst-lodash
 buildMapData:
   name: '|cff999999Battle Planes|r 0.14.7'

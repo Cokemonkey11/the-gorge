@@ -1,6 +1,6 @@
 package TradeRewardsPawn
     import Game
-    import Profile
+    import WurstProfile
     import RegisterEvents
     import Equipment
 

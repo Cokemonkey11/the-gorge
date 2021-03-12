@@ -75,7 +75,7 @@ package SinglePlayer
             print(SP_PREFIX + "Fast movement enabled.")
 
             // Fast movement trigger.
-            trigger f = CreateTrigger()
+            let f = CreateTrigger()
             TriggerRegisterUnitEvent(f, Ships.ships[SinglePlayer.thePlayer.getId()], EVENT_UNIT_ISSUED_POINT_ORDER)
             TriggerAddCondition(f, Condition(() -> begin
                 GetTriggerUnit()..setX(GetOrderPointX())..setY(GetOrderPointY())

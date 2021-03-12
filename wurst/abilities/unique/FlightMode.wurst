@@ -5,7 +5,7 @@ import ClosureEvents
 import HashMap
 import LinkedListModule
 import Locks
-import Profile
+import WurstProfile
 import TerrainUtils
 
 constant listeners = new HashMap<unit, trigger>()
@@ -38,11 +38,8 @@ class Movement
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
-                profile()
-
+                profile(size)
                 for inst from staticItr()
-                    // profile()
-
                     if inst.which != null and inst.which.getTypeId() > 0
                         inst.vel *= retention
 
@@ -64,8 +61,6 @@ class Movement
 init
     EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
         if GetSpellAbilityId() == ID_FLIGHT_MODE
-            profile()
-
             let tU = GetTriggerUnit()
 
             tU..removeAbility(ID_FLIGHT_MODE)..addAbility(ID_FLIGHT_MODE_OFF)
@@ -76,7 +71,7 @@ init
             let listener = CreateTrigger()
             listener..registerUnitEvent(tU, EVENT_UNIT_ISSUED_POINT_ORDER)
                 ..addAction() ->
-                profile()
+                profile(3)
 
                 let issued = GetOrderedUnit()
                 let order = GetIssuedOrderId()

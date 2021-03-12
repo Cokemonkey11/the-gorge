@@ -9,7 +9,7 @@ package Revive
 	import Locks
 	import Players
 	import Ships
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 	import SoundUtils
 	import TerrainData

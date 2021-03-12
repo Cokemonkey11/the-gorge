@@ -2,7 +2,7 @@ package SeaWitchColdArrows
 	import DamageEvent
 	import Game
 	import Players
-	import Profile
+	import WurstProfile
 
 	constant SEAWITCH_ID = 'o005'
 	constant SLOW_ID     = 'A009'

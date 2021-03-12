@@ -7,7 +7,7 @@ import ClosureTimers
 import DamageEvent
 import Fx
 import LinkedListModule
-import Profile
+import WurstProfile
 import SoundUtils
 
 constant HALF_COUNT = 10 div 2
@@ -57,9 +57,8 @@ class XtsMissileBarrage
 
         if size == 1
             doPeriodically(ANIMATION_PERIOD) (CallbackPeriodic cb) ->
+                profile(size)
                 for msl from staticItr()
-                    profile()
-
                     let curr = msl.dummy.getPos3() + msl.vel
                     msl.dummy.setXYZ(curr, true)
                     msl.dummy.setXYAngle(ZERO3.angleTo2d(msl.vel))

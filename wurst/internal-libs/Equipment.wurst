@@ -14,7 +14,7 @@ package Equipment
 	import Ships
 	import Game
 	import HashMap
-	import Profile
+	import WurstProfile
 	import Players
 
 	unit array utilities
@@ -58,7 +58,7 @@ package Equipment
 		static constant reduction = new HashMap<unit, int>()
 
 		static function autoPawnItemForPlayer(int pID, item itm)
-			int val = R2I(GetWidgetLife(itm))
+			let val = R2I(GetWidgetLife(itm))
 			if val > 1
 				DisplayTextToPlayer(players[pID], 0., 0., "Your |cffffcc00" + GetUnitName(Ships.ships[pID]) + "|r cannot acquire a |cffffcc00" + GetItemName(itm) + "|r; it was automatically pawned for |cffffcc00" + I2S(val) + "|r gold.")
 				SetPlayerState(players[pID], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[pID], PLAYER_STATE_RESOURCE_GOLD) + val)
@@ -157,8 +157,8 @@ package Equipment
 
 
 		static function unitCanAcquireItemIdPost(unit u, int id) returns bool
-			int shipClass = Ships.getClass(u)
-			int itemClass = getItemClassId(id)
+			let shipClass = Ships.getClass(u)
+			let itemClass = getItemClassId(id)
 
 			if unitHasClassPair(u, itemClass) and itemClass!= CLASS_UNKNOWN and itemClass != CLASS_CONTRACT and itemClass != CLASS_SPECIAL
 				return false
@@ -177,8 +177,8 @@ package Equipment
 
 
 		static function unitCanAcquireItemId(unit u, int id) returns bool
-			int shipClass = Ships.getClass(u)
-			int itemClass = getItemClassId(id)
+			let shipClass = Ships.getClass(u)
+			let itemClass = getItemClassId(id)
 			if unitHasItemOfType(u, id)
 				return false
 			else if shipClass == Ships.CLASS_FRIGATE and itemClass == CLASS_CONTRACT
@@ -194,8 +194,8 @@ package Equipment
 
 
 		static function playerAddItemFromIdConditional(int pID, int id) returns bool
-			real x = GetUnitX(Ships.ships[pID])
-			real y = GetUnitY(Ships.ships[pID])
+			let x = GetUnitX(Ships.ships[pID])
+			let y = GetUnitY(Ships.ships[pID])
 			item temp
 			if unitCanAcquireItemId(Ships.ships[pID], id)
 				UnitAddItem(Ships.ships[pID], CreateItem(id, x, y))
@@ -227,8 +227,8 @@ package Equipment
 				playerAddItemFromIdConditional(pID, i5)
 
 		static function playerAddItemsFromId(int pID, int i0, int i1, int i2, int i3, int i4, int i5)
-			real x = GetUnitX(Ships.ships[pID])
-			real y = GetUnitY(Ships.ships[pID])
+			let x = GetUnitX(Ships.ships[pID])
+			let y = GetUnitY(Ships.ships[pID])
 			if i0 > 0
 				UnitAddItem(Ships.ships[pID], CreateItem(i0, x, y))
 
@@ -255,7 +255,7 @@ package Equipment
 
 		// Get the cost of a trade contract, in trade experience.
 		static function getContractCost(item itm) returns int
-			int typ = GetItemTypeId(itm)
+			let typ = GetItemTypeId(itm)
 			if     typ == DATA_ACQUISIT
 				return 0
 			else if typ == TOXIC_SUBST
@@ -267,14 +267,14 @@ package Equipment
 
 
 		static function pageC() returns bool
-			profile()
+			profile(6)
 
-			item sI = GetSoldItem()
-			unit seller = GetSellingUnit()
-			unit buyer = GetBuyingUnit()
+			let sI = GetSoldItem()
+			let seller = GetSellingUnit()
+			let buyer = GetBuyingUnit()
 			unit toSelect = null
-			int id = GetItemTypeId(sI)
-			player owner = GetOwningPlayer(buyer)
+			let id = GetItemTypeId(sI)
+			let owner = GetOwningPlayer(buyer)
 			bool was = false
 
 			if id == ID_NEXT_PAGE_HULLS_AND_SHIELDS
@@ -380,20 +380,20 @@ package Equipment
 			else if (selected == Game.westKeep[0] or selected == Game.westKeep[1] or selected == Game.eastKeep[0] or selected == Game.eastKeep[1]) and not selected == keeps[p.getId()]
 				p.selectSingle(keeps[p.getId()])
 
-			profile()
+			profile(5)
 
 			return false
 
 
 		static function c() returns bool
-			profile()
+			profile(2)
 
-			unit buyer = GetBuyingUnit()
-			item sI = GetSoldItem()
-			player buyerP = GetOwningPlayer(buyer)
-			int cls = getItemClass(sI)
-			bool has = unitHasItemOfType(buyer, GetItemTypeId(sI))
-			item itm = unitHasItemOfClass(buyer, cls)
+			let buyer = GetBuyingUnit()
+			let sI = GetSoldItem()
+			let buyerP = GetOwningPlayer(buyer)
+			let cls = getItemClass(sI)
+			let has = unitHasItemOfType(buyer, GetItemTypeId(sI))
+			let itm = unitHasItemOfClass(buyer, cls)
 
 			if has or GetItemTypeId(sI) == GetItemTypeId(itm)
 				simError(buyerP, "You can't carry two of the same equipment.")

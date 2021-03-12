@@ -1,5 +1,5 @@
 package SelectShip
-	import Profile
+	import WurstProfile
 	import SimError
 	import Ships
 	import RegisterEvents
@@ -12,8 +12,8 @@ package SelectShip
 	function c()
 		if GetSpellAbilityId() == SELECT_SHIP_ID
 			profile()
-			player owner = GetOwningPlayer(GetTriggerUnit())
-			int id = GetPlayerId(owner)
+			let owner = GetOwningPlayer(GetTriggerUnit())
+			let id = GetPlayerId(owner)
 
 			if UnitAlive(Ships.ships[id]) and GetUnitTypeId(Ships.ships[id]) != 0
 				if localPlayer == owner

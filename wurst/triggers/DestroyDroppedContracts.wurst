@@ -1,7 +1,7 @@
 package DestroyDroppedContracts
 	import Equipment
 	import HashMap
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	let tradeItems = new HashMap<int, int>()
@@ -13,7 +13,7 @@ package DestroyDroppedContracts
 		return false
 
 	function c()
-		item ite = GetManipulatedItem()
+		let ite = GetManipulatedItem()
 		profile()
 
 		if Equipment.getItemClass(ite) == Equipment.CLASS_CONTRACT

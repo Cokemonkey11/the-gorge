@@ -2,7 +2,7 @@ package Creeps
 	import Ai
 	import ClosureTimers
 	import Game
-	import Profile
+	import WurstProfile
 	import TerrainData
 	import EnchantingStone
 	import UnitsApi
@@ -26,6 +26,7 @@ package Creeps
 
 
 	function spawn(int faction, int cls)
+		profile()
 		real x
 		real face
 
@@ -43,8 +44,6 @@ package Creeps
 
 
 	function baseSpawn()
-		profile()
-
 		if not Game.ended
 			// West units
 			spawn(0, ID_GRYPHONRIDER)
@@ -62,8 +61,6 @@ package Creeps
 
 
 	function hawk()
-		profile()
-
 		doAfter(2.) ->
 			if not Game.ended
 				spawn(0, ID_DRAGONHAWK)
@@ -71,8 +68,6 @@ package Creeps
 
 
 	function wyrm()
-		profile()
-
 		doAfter(3.5) ->
 			if not Game.ended
 				if EnchantingStone.ownerNorth == players[0]

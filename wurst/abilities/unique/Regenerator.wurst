@@ -4,7 +4,7 @@ import AbilitiesApi
 import Assets
 import GameTimer
 import LinkedListModule
-import Profile
+import WurstProfile
 import RegisterEvents
 import TempLightning
 
@@ -31,8 +31,8 @@ class Regenerator
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for reactor from staticItr()
-                    profile()
                     reactor.owner.addHP(reactor.hitpoints_per_tick)
 
                     if occasionally(reactor.ticks, bj_PI / 4., ANIMATION_PERIOD)

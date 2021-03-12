@@ -4,7 +4,7 @@ package Damage
 	import Ships
 	import Assists
 	import DamageEvent
-	import Profile
+	import WurstProfile
 	import WurstLinkedHashMap
 	import WurstRealHeapGuard
 
@@ -64,8 +64,6 @@ package Damage
 				destroy guard
 
 	function h()
-		// profile()
-
 		let targ = DamageEvent.getTarget()
 
 		let source = DamageEvent.getSource()

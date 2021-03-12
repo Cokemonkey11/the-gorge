@@ -36,47 +36,37 @@ package Music
 
 
 	function playIntro()
-		Section verse1 = () -> playVerse1()
-
 		m
 			..playCounted(3)
-			..callback(verse1)
+			..callback(() -> playVerse1())
 
 
 	function playVerse1()
-		Section chorus = () -> playChorus()
-
 		v1
 			..playCounted(0)
 			..enqueue(v1p2, 1)
 			..enqueue(v1p3, 0)
-			..callback(chorus)
+			..callback(() -> playChorus())
 
 
 	function playChorus()
-		Section verse2 = () -> playVerse2()
-
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP2, 0)
 			..enqueue(chorusP3, 0)
 			..enqueue(chorusP2, 0)
-			..callback(verse2)
+			..callback(() -> playVerse2())
 
 
 	function playVerse2()
-		Section chorus2 = () -> playChorus2()
-
 		v1
 			..playCounted(0)
 			..enqueue(v1p2, 1)
 			..enqueue(v1p3, 0)
-			..callback(chorus2)
+			..callback(() -> playChorus2())
 
 
 	function playChorus2()
-		Section verse3 = () -> playVerse3()
-
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP3, 1)
@@ -84,23 +74,19 @@ package Music
 			..enqueue(chorus2P5, 1)
 			..enqueue(chorus2P7, 0)
 			..enqueue(chorus2P8, 0)
-			..callback(verse3)
+			..callback(() -> playVerse3())
 
 
 	function playVerse3()
-		Section chorus3 = () -> playChorus3()
-
 		v1
 			..playCounted(0)
 			..enqueue(verse3P2, 0)
 			..enqueue(v1p2, 2)
 			..enqueue(v1p3, 0)
-			..callback(chorus3)
+			..callback(() -> playChorus3())
 
 
 	function playChorus3()
-		Section verse1 = () -> playVerse1()
-
 		chorusP1
 			..playCounted(0)
 			..enqueue(chorusP3, 0)
@@ -109,7 +95,7 @@ package Music
 			..enqueue(chorus2P5, 1)
 			..enqueue(chorus3P7, 0)
 			..enqueue(chorus3P8, 0)
-			..callback(verse1)
+			..callback(() -> playVerse1())
 
 
 	init

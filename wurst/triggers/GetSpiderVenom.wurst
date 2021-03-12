@@ -1,7 +1,7 @@
 package GetSpiderVenom
 	import Equipment
 	import Game
-	import Profile
+	import WurstProfile
 	import TerrainData
 	import SoundsLib
 	import Ships
@@ -13,9 +13,9 @@ package GetSpiderVenom
 	function spiderAction() returns bool
 		profile()
 
-		unit fU = GetFilterUnit()
-		int slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
-		player owner = GetOwningPlayer(fU)
+		let fU = GetFilterUnit()
+		let slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.SPIDER_VENOM_CONTRACT)
+		let owner = GetOwningPlayer(fU)
 
 		if slt > -1 and (not Ships.hasItemOfType(fU, Equipment.VENOM_VIAL))
 			if Equipment.noItemSlot(fU)
@@ -28,8 +28,8 @@ package GetSpiderVenom
 		return false
 
 	init
-		trigger spiderTrigger = CreateTrigger()
-		region  reg           = CreateRegion()
+		let spiderTrigger = CreateTrigger()
+		let reg           = CreateRegion()
 
 		RegionAddRect(reg, TerrainData.spider)
 

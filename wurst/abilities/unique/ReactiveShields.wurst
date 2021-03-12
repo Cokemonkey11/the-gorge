@@ -1,6 +1,6 @@
 package ReactiveShields
 	import Assets
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	import Shield

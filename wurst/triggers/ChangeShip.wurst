@@ -2,7 +2,7 @@ package ChangeShip
 	import Ships
 	import Game
 	import Equipment
-	import Profile
+	import WurstProfile
 	import SimError
 	import RegisterEvents
 
@@ -14,11 +14,11 @@ package ChangeShip
 
 
 	function c()
-		unit selU = GetSellingUnit()
-		unit bU = GetBuyingUnit()
-		unit sU = GetSoldUnit()
-		player buyer = GetOwningPlayer(sU)
-		int cls = Ships.getClass(sU)
+		let selU = GetSellingUnit()
+		let bU = GetBuyingUnit()
+		let sU = GetSoldUnit()
+		let buyer = GetOwningPlayer(sU)
+		let cls = Ships.getClass(sU)
 		int id
 		int val
 		int index = 0

@@ -1,6 +1,6 @@
 package SelectCaptain
 	import Game
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 
 	constant SELECT_CAPT_ID = 'A00Z'

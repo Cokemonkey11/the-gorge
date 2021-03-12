@@ -1,7 +1,7 @@
 package Release
 	import Abilities
 	import AbilitiesApi
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 	import Crewmembers
 

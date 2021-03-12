@@ -3,7 +3,7 @@ package MonsoonMk1
 import AbilitiesApi
 import DamageEvent
 import LinkedListModule
-import Profile
+import WurstProfile
 import RegisterEvents
 import TempLightning
 
@@ -34,8 +34,8 @@ class Monsoon
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for reactor from staticItr()
-                    profile()
                     reactor.lght.move(true, reactor.owner.getPos3Real(), reactor.target.getPos3Real())
 
                     reactor.durationLeft -= ANIMATION_PERIOD

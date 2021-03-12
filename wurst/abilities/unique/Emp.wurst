@@ -6,7 +6,7 @@ import DamageEvent
 import FlightMode
 import LinkedListModule
 import Locks
-import Profile
+import WurstProfile
 import TempLightning
 import UnitsApi
 
@@ -44,8 +44,8 @@ class Hit
 
         if size == 1
             clock.startPeriodic(ANIMATION_PERIOD) ->
+                profile(size)
                 for inst from staticItr()
-                    profile()
                     inst.duration -= ANIMATION_PERIOD
                     inst.ticks++
 
@@ -82,8 +82,8 @@ class Emp
 
         if size == 1
             clock.startPeriodic(period) ->
+                profile(size)
                 for emp from staticItr()
-                    profile()
                     emp.ticks++
 
                     let radius = 50. + emp.ticks * 40.

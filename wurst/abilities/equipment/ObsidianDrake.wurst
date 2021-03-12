@@ -2,7 +2,7 @@ package ObsidianDrake
 	// Deals precisely 400 damage to targets below 400 hp.
 
 	import DamageEvent
-	import Profile
+	import WurstProfile
 
 	constant DRAKE_ID = 'o00K'
 	constant HEALTH_PROC = 400

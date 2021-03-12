@@ -10,7 +10,7 @@ package FloatText
 		static constant TEXT_SIZE        = .024 / .0023
 
 		static function themedTag(real x, real y, string s) returns texttag
-			texttag t = CreateTextTag()
+			let t = CreateTextTag()
 
 			t..setPos(x, y, 0.)
 			 ..setText(s, TEXT_SIZE)
@@ -19,7 +19,7 @@ package FloatText
 
 
 		static function themedTemporaryTag(real x, real y, string s) returns texttag
-			texttag t = themedTag(x, y, s)
+			let t = themedTag(x, y, s)
 
 			t..setFadepoint(2.)
 			 ..setLifespan(3.)
@@ -30,7 +30,7 @@ package FloatText
 
 
 		static function themedTemporaryTagPlayer(real x, real y, string s, int pId) returns texttag
-			texttag t = themedTemporaryTag(x, y, s)
+			let t = themedTemporaryTag(x, y, s)
 
 			t.setVisibility(localPlayer == players[pId])
 
@@ -43,7 +43,7 @@ package FloatText
 
 
 		static function goldBounty(real x, real y, int bounty, int pId) returns texttag
-			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
+			let t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
 
 			t..setColor(255, 220, 0, 255)
 
@@ -51,7 +51,7 @@ package FloatText
 
 
 		static function tradeExperienceBounty(real x, real y, int bounty, int pId) returns texttag
-			texttag t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
+			let t = themedTemporaryTagPlayer(x - DEFAULT_SHIFT, y, "+" + I2S(bounty), pId)
 
 			t.setColor(220, 0, 255, 255)
 

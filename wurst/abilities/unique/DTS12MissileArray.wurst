@@ -13,7 +13,7 @@ package DTS12MissileArray
 
 	import RegisterEvents
 	import DamageEvent
-	import Profile
+	import WurstProfile
 	import Ships
 	import SoundsLib
 	import HashMap
@@ -79,8 +79,8 @@ package DTS12MissileArray
 			real newY
 			real oldX
 			real oldY
+			profile(dbIndex)
 			while index <= dbIndex
-				profile()
 				temp = db[index]
 				if temp.target == null
 					temp.dX += temp.ddX

@@ -15,9 +15,9 @@ package FillToxicSack
 
 
 	function f() returns bool
-		unit fU = GetFilterUnit()
-		int slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
-		player owner = GetOwningPlayer(fU)
+		let fU = GetFilterUnit()
+		let slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST)
+		let owner = GetOwningPlayer(fU)
 
 		if slt > -1
 			RemoveItem(UnitItemInSlot(fU, slt))
@@ -29,9 +29,9 @@ package FillToxicSack
 
 
 	function f2() returns bool
-		unit fU = GetFilterUnit()
-		int id = GetPlayerId(GetOwningPlayer(fU))
-		int slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST_FULL)
+		let fU = GetFilterUnit()
+		let id = GetPlayerId(GetOwningPlayer(fU))
+		let slt = Equipment.unitHasItemOfTypeSlot(fU, Equipment.TOXIC_SUBST_FULL)
 
 		if slt > -1
 			if id < 7
@@ -51,15 +51,15 @@ package FillToxicSack
 
 	init
 		// Initialize triggers for shop and utility ports
-		trigger shopTrigger = CreateTrigger()
-		trigger utilityTrigger = CreateTrigger()
+		let shopTrigger = CreateTrigger()
+		let utilityTrigger = CreateTrigger()
 
 		// Initialize rect near shop
-		rect shopRect = Rect(MIN_X, MIN_Y, MAX_X, MAX_Y)
+		let shopRect = Rect(MIN_X, MIN_Y, MAX_X, MAX_Y)
 
 		// Create regions which spasely define the trigger spots (near shop, near utilities)
-		region reg = CreateRegion()
-		region reg2 = CreateRegion()
+		let reg = CreateRegion()
+		let reg2 = CreateRegion()
 		RegionAddRect(reg, shopRect)
 		RegionAddRect(reg2, TerrainData.utilityWest)
 		RegionAddRect(reg2, TerrainData.utilityEast)

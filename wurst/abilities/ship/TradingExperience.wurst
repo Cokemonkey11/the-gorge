@@ -1,6 +1,6 @@
 package TradingExperience
 	import AbilitiesApi
-	import Profile
+	import WurstProfile
 	import RegisterEvents
 	import Players
 

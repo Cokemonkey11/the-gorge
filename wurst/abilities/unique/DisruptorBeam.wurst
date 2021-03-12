@@ -5,7 +5,7 @@ import ClosureEvents
 import ClosureTimers
 import HashSet
 import InstantDummyCaster
-import Profile
+import WurstProfile
 import SoundUtils
 import TempLightning
 
