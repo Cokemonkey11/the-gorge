@@ -11,13 +11,13 @@ package Repair
 
 
 	function doHeal(unit u, bool do_text)
-		real fracMissing = 1. - (u.getHP() / u.getMaxHP())
-		real exponent    = (fracMissing - .5) * 2.
+		let fracMissing = 1. - (u.getHP() / u.getMaxHP())
+		let exponent    = (fracMissing - .5) * 2.
 
 		// Get a rate between 0. and 1.
-		real healRate    = 10..pow(exponent) * 2. / 100.
+		let healRate    = 10..pow(exponent) * 2. / 100.
 
-		real delHp       = (10. + u.getMaxHP() * healRate) * PERIOD
+		let delHp       = (10. + u.getMaxHP() * healRate) * PERIOD
 
 		if do_text and fracMissing > 0.01
 			u.addEffect(Objects.impaleTargetDust, "origin").destr()

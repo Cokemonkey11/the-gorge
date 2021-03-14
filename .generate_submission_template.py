@@ -63,21 +63,22 @@ REPOSITORY_URI = "https://bitbucket.org/Cokemonkey11/the-gorge/"
 CHANGELOG = (
     (
         "0.15.0",
-        "NEXT",
+        "13 Mar 2021",
         (
-            "Re-enabled the in-game music after verifying it does not leak.",
             "Fully extracted object data into wurst.",
-        )
-    ),
-    (
-        "0.14.7",
-        "NEXT",
-        (
-            "Temporarily disabled in-game music while investigating a crash.",
             "Reduced enhance stone lock duration from 3 minutes to 2.",
             "Fixed a bug that granted an assist for each kill.",
             "Add a warning on the smuggler ship.",
             "Increased the capture/contest radius for enhance stones slightly.",
+            "Fixed a bug where Gunship's rockets would behave oddly on death.",
+            "Gently increased the DPS of all weapons.",
+            "Increased the cost and DPS of tier 1 weapons by 50%.",
+            "Gently increased the effectiveness of all repair crews.",
+            "Frigate's healing ability no longer interrupts orders on cast.",
+            "Added hints to direct attention to equipment sell value (100%).",
+            "Increased Smuggler's invuln duration from 2 to 2.5s.",
+            "Player ship kills now indicates who received assist gold.",
+            "Minor bug fixed wherein end-game sound plays just as game ends."
         )
     ),
     (

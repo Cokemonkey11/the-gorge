@@ -6,6 +6,7 @@ package Revive
 	import FloatText
 	import Game
 	import GameTimer
+	import LinkedList
 	import Locks
 	import Players
 	import Ships
@@ -97,15 +98,26 @@ package Revive
 		return (FLAT_BOUNTY + BOUNTY_PER_MINUTE * getElapsedGameTime() / 60.).toInt()
 
 
-	/**
-		Grant an assist to all players that recently damaged pid, apart from
-		not_pid (the killer).
-	*/
-	function parseAssists(int pid, int not_pid)
-		for index = 2 to 11
-			if not_pid != index and (getElapsedGameTime() - Assists.assistTimestamps[pid].vals[index]) <= Assists.ASSIST_TIME
-				Game.assists[index]++
-				Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
+	class AssistHelper
+		static constant lastAssists = new LinkedList<player>()
+
+		/**
+			Grant an assist to all players that recently damaged pid, apart from
+			not_pid (the killer).
+		*/
+		function parseAssists(int pid, int not_pid)
+			lastAssists.clear()
+			for index = 2 to 11
+				if not_pid != index and (getElapsedGameTime() - Assists.assistTimestamps[pid].vals[index]) <= Assists.ASSIST_TIME
+					lastAssists.add(players[index])
+					Game.assists[index]++
+					Game.scoreboard.setValue(3, Game.scoreboardRows[index], I2S(Game.assists[index]))
+
+		function renderAssistsMessage() returns string
+			if lastAssists.size() == 0
+				return ""
+
+			return "Assists: " + lastAssists.joinBy(pl -> pl.getNameColored(), ", ")
 
 	tuple maybe_killer(bool have, player which)
 
@@ -125,6 +137,8 @@ package Revive
 
 	let kill_sound = new SoundDefinition(Sounds.alchemistTransmuteDeath1, false, true)
 
+
+	constant assistHelper = new AssistHelper()
 
 	init
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH) ->
@@ -157,7 +171,8 @@ package Revive
 					kU.isEnemyOf(tU.getOwner()) or
 					killerId == tempDat.ownerID
 				)
-					parseAssists(tempDat.ownerID, killerId)
+					assistHelper.parseAssists(tempDat.ownerID, killerId)
+					let assistMessage = assistHelper.renderAssistsMessage()
 
 					if killerId == tempDat.ownerID
 						// Player suicide occurred.
@@ -168,7 +183,8 @@ package Revive
 								0.,
 								0.,
 								10.,
-								"You destroyed yourself!"
+								"You destroyed yourself! " +
+								assistMessage
 							)
 
 						else
@@ -180,7 +196,8 @@ package Revive
 								10.,
 								Game.colors[tempDat.ownerID] +
 									Game.names[tempDat.ownerID] +
-									"|r destroyed themself!"
+									"|r destroyed themself! " +
+									assistMessage
 							)
 
 					else
@@ -200,7 +217,8 @@ package Revive
 								Game.names[killerId] +
 								"|r; you will be rebuilt in " +
 								I2S(tempDat.timeL) +
-								"|r seconds."
+								"|r seconds. " +
+								assistMessage
 						)
 
 						// Message for killing player.
@@ -214,7 +232,8 @@ package Revive
 								Game.names[tempDat.ownerID] +
 								"|r for |cffffcc00" +
 								I2S(bounty) +
-								" gold."
+								"|r gold. " +
+								assistMessage
 						)
 
 						if not (
@@ -234,7 +253,8 @@ package Revive
 									Game.names[killerId] +
 									"|r for |cffffcc00" +
 									I2S(bounty) +
-									"|r gold."
+									"|r gold. " +
+									assistMessage
 							)
 
 				else if not kU.isEnemyOf(tU.getOwner())
@@ -252,7 +272,7 @@ package Revive
 							Game.names[killerId] +
 							"|r; you will be rebuilt in " +
 							I2S(tempDat.timeL) +
-							"|r seconds.  How did this happen?"
+							"|r seconds.  How did this happen? "
 					)
 
 					// Message for killing player.
@@ -306,7 +326,7 @@ package Revive
 							10.,
 							Game.colors[tempDat.ownerID] +
 								Game.names[tempDat.ownerID] +
-								"|r was destroyed."
+								"|r was destroyed. "
 						)
 
 

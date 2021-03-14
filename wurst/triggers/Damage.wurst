@@ -59,7 +59,7 @@ package Damage
 				forWhom.print("|cffffcc00Top weapons:|r")
 				for _i = 0 to 9
 					let disp = guard.pop()
-					if disp != null
+					if disp != null and disp != ""
 						forWhom.print(disp)
 				destroy guard
 

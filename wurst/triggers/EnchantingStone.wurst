@@ -3,7 +3,6 @@ package EnchantingStone
 	import DummyUnitStack
 	import Game
 	import Players
-	// import Profile
 	import TerrainData
 	import Units
 
@@ -89,7 +88,7 @@ package EnchantingStone
 		int capPower = 0
 
 		grp.enumUnitsInRange(TerrainData.POS_STONE1, CAPTURE_RADIUS, Condition(() -> begin
-			int id = GetFilterUnit().getOwner().getId()
+			let id = GetFilterUnit().getOwner().getId()
 
 			if Players.isWest(id)
 				capPowerWest++
@@ -142,7 +141,7 @@ package EnchantingStone
 		int capPower = 0
 
 		grp.enumUnitsInRange(TerrainData.POS_STONE2, CAPTURE_RADIUS, Condition(() -> begin
-			int id = GetFilterUnit().getOwner().getId()
+			let id = GetFilterUnit().getOwner().getId()
 
 			if Players.isWest(id)
 				capPowerWest++

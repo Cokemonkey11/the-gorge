@@ -83,7 +83,21 @@ package Muscii
 	public interface Section
 		function do()
 
+	public function LinkedList<string>.accumulate<Q>(Q startValue, FoldClosure<string, Q> predicate) returns Q
+		var result = startValue
+		for i from this.iterator()
+			result = predicate.run(i, result)
 
+		destroy predicate
+		return result
+
+	public function LinkedList<Track>.accumulate<Q>(Q startValue, FoldClosure<Track, Q> predicate) returns Q
+		var result = startValue
+		for i from this.iterator()
+			result = predicate.run(i, result)
+
+		destroy predicate
+		return result
 
 	public class Track
 		Note n
@@ -97,10 +111,10 @@ package Muscii
 		..put("", Chord.create(new Note(Sounds.battleNetTick, 0, 1.)))
 
 	function LinkedList<Track>.toChord() returns Chord
-		let key = this.map(track -> track.n.soundDefinition.file).foldl("", (i, q) -> i + q)
+		let key = this.map(track -> track.n.soundDefinition.file).accumulate("", (i, q) -> i + q)
 
 		if not chord_registry.has(key)
-			let chord = this.foldl(0 castTo Chord, (track, chord) -> chord == null ? Chord.create(track.n) : chord..addNote(track.n))
+			let chord = this.accumulate(0 castTo Chord, (track, chord) -> chord == null ? Chord.create(track.n) : chord..addNote(track.n))
 
 			chord_registry.put(key, chord)
 

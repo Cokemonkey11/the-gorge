@@ -62,7 +62,6 @@ class XtsMissileBarrage
                     let curr = msl.dummy.getPos3() + msl.vel
                     msl.dummy.setXYZ(curr, true)
                     msl.dummy.setXYAngle(ZERO3.angleTo2d(msl.vel))
-                    // msl.dummy.setZAngle(ORIGIN.) TODO
 
                     var hit = false
 
@@ -93,10 +92,11 @@ init
             let tU = GetTriggerUnit()
 
             doPeriodicallyCounted(PERIOD, HALF_COUNT) (CallbackCounted cb) ->
-                let offset = angle(
-                    (PI / 100.)
-                    + cb.getCount() * (PI / 2.) / (HALF_COUNT + 1)
-                )
+                if tU.isAlive()
+                    let offset = angle(
+                        (PI / 100.)
+                        + cb.getCount() * (PI / 2.) / (HALF_COUNT + 1)
+                    )
 
-                new XtsMissileBarrage(tU, target, angle( PI / 2.), offset)
-                new XtsMissileBarrage(tU, target, angle(-PI / 2.), offset)
+                    new XtsMissileBarrage(tU, target, angle( PI / 2.), offset)
+                    new XtsMissileBarrage(tU, target, angle(-PI / 2.), offset)

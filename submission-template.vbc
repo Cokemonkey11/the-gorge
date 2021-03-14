@@ -53,6 +53,23 @@ All iterations of this map are maintained in a public git repository at
 [R][H3][color=#CCAA00]Changelog[/color][/H3][R]
 
 
+[color=#ffcc00]0.15.0[/color] [color=#999999]13 Mar 2021[/color]:
+[list][*] Fully extracted object data into wurst.
+[*] Reduced enhance stone lock duration from 3 minutes to 2.
+[*] Fixed a bug that granted an assist for each kill.
+[*] Add a warning on the smuggler ship.
+[*] Increased the capture/contest radius for enhance stones slightly.
+[*] Fixed a bug where Gunship's rockets would behave oddly on death.
+[*] Gently increased the DPS of all weapons.
+[*] Increased the cost and DPS of tier 1 weapons by 50%.
+[*] Gently increased the effectiveness of all repair crews.
+[*] Frigate's healing ability no longer interrupts orders on cast.
+[*] Added hints to direct attention to equipment sell value (100%).
+[*] Increased Smuggler's invuln duration from 2 to 2.5s.
+[*] Player ship kills now indicates who received assist gold.
+[*] Minor bug fixed wherein end-game sound plays just as game ends.
+[/list]
+
 [color=#ffcc00]0.14.6[/color] [color=#999999]26 Aug 2019[/color]:
 [list][*] Added tier-4 overpriced crewmembers.
 [*] Added another defense ability for the smuggler ship.
@@ -81,12 +98,12 @@ All iterations of this map are maintained in a public git repository at
 [*] Minor adjustments to Fire ship's Flight Mode responsiveness.
 [/list]
 
-[color=#ffcc00]0.14.2[/color] [color=#999999]27 Jul 2019[/color]:
+[hidden=Older Changes][color=#ffcc00]0.14.2[/color] [color=#999999]27 Jul 2019[/color]:
 [list][*] We've rebranded! The map is now called Battle Planes.
 [*] Wurst inlining has been re-enabled for performance.
 [/list]
 
-[hidden=Older Changes][color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
+[color=#ffcc00]0.14.1[/color] [color=#999999]27 Jul 2019[/color]:
 [list][*] Adjusted Shroud generator effect and appearance to reduce lag.
 [*] Adjusted the handling of creeps to reduce lag.
 [*] Increased tier-2 ship cost to 400.

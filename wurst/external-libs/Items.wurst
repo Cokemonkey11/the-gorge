@@ -46,7 +46,7 @@ class MovespeedItems extends ItemDefinition
         setDescription("Boosts movement speed by |cffffcc00" + bonus.toString() + "|r units per second.")
         setName(name)
         setTooltipBasic("Purchase " + name)
-        setTooltipExtended("Boosts movement speed of your ship.|n |n|cffffcc00Speed Bonus:|r " + bonus.toString() + " units per second|n|cffffcc00Class:|r Engine|n|cffffcc00Applicable Ship Classes:|r All")
+        setTooltipExtended("Boosts movement speed of your ship.|n |n|cffffcc00Speed Bonus:|r " + bonus.toString() + " units per second|n|cffffcc00Class:|r Engine|n|cffffcc00Applicable Ship Classes:|r All|n|cffffcc00Sell value:|r " + cost.toString() + " (100%)")
         setButtonPositionX(xPos)
 
 @compiletime function initMovespeedItems()
@@ -67,7 +67,7 @@ class HealthregenItems extends ItemDefinition
         setDescription("Boosts health regeneration by |cffffcc00" + bonus.toString() + "|r hit points per second.")
         setName(name)
         setTooltipBasic("Purchase " + name)
-        setTooltipExtended("Boosts health regeneration of your ship.|n |n|cffffcc00Regeneration Bonus:|r " + bonus.toString() + " per second|n|cffffcc00Class:|r Mechanic|n|cffffcc00Applicable Ship Classes:|r All")
+        setTooltipExtended("Boosts health regeneration of your ship.|n |n|cffffcc00Regeneration Bonus:|r " + bonus.toString() + " per second|n|cffffcc00Class:|r Mechanic|n|cffffcc00Applicable Ship Classes:|r All|n|cffffcc00Sell value:|r " + cost.toString() + " (100%)")
         setButtonPositionX(xPos)
         setButtonPositionY(1)
 
@@ -130,6 +130,7 @@ class HullDefinition extends ItemDefinition
             + "|n|cffffcc00Damage Reduction:|r "
             + damageReduction.toString()
             + "%|n|cffffcc00Class:|r Hull|n|cffffcc00Applicable Ship Classes:|r Frigate, Battleship, Interceptor"
+            + "|n|cffffcc00Sell value:|r " + cost.toString() + " (100%)"
         )
 
         setLevelUnclassified(1)
@@ -188,6 +189,7 @@ class ShieldDefinition extends ItemDefinition
             + "|n|cffffcc00Duration: |r"
             + duration.toString()
             + "|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Shield Generator|n|cffffcc00Applicable Ship Classes:|r Frigate, Battleship, Interceptor"
+            + "|n|cffffcc00Sell value:|r " + cost.toString() + " (100%)"
         )
 
         setLevelUnclassified(1)
@@ -233,7 +235,7 @@ class ShieldDefinition extends ItemDefinition
         ..setString("ides", "Instantly teleports a short distance.")
         ..setString("unam", "Ionic Teleporter")
         ..setString("utip", "Purchase Ionic Teleporter")
-        ..setString("utub", "Teleports the user towards the target location, disjointing many negative effects.|n |n|cffffcc00Range:|r 800|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Teleporter|n|cffffcc00Applicable Ship Classes:|r Frigate, Interceptor, Smuggler")
+        ..setString("utub", "Teleports the user towards the target location, disjointing many negative effects.|n |n|cffffcc00Range:|r 800|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Teleporter|n|cffffcc00Applicable Ship Classes:|r Frigate, Interceptor, Smuggler|n|cffffcc00Sell value:|r 200 (100%)")
         ..setInt("ihtp", 200)
         ..setString("icid", "A00H")
         ..setInt("iusa", 1)
@@ -251,7 +253,7 @@ class ShieldDefinition extends ItemDefinition
         ..setString("ides", "Pings nearby player ships on the minimap.")
         ..setString("unam", "Ship Locator")
         ..setString("utip", "Purchase Ship Locator")
-        ..setString("utub", "Can be activated to ping nearby enemy player ships.|n |n|cffffcc00Range:|r 4000|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Special|n|cffffcc00Applicable Ship Classes:|r Frigate, Interceptor")
+        ..setString("utub", "Can be activated to ping nearby enemy player ships.|n |n|cffffcc00Range:|r 4000|n|cffffcc00Cooldown:|r 30 seconds|n|cffffcc00Class:|r Special|n|cffffcc00Applicable Ship Classes:|r Frigate, Interceptor|n|cffffcc00Sell value:|r 100 (100%)")
         ..setInt("ihtp", 100)
         ..setInt("ubpy", 1)
         ..setString("icid", "A00I")

@@ -309,7 +309,8 @@ package Game
 					Stats.display(localPlayer)
 				doAfter(30.) ->
 					defeatTeam(0)
-					EndGame(true)
+					doAfter(1.5) ->
+						EndGame(true)
 			else if tU == eastKeep[0]
 				DisplayTextToPlayer(localPlayer, 0., 0., "The |cffffcc00Western Kingdom|r has won! This game will end automatically in 30 seconds.")
 				pauseUnits()
@@ -320,7 +321,8 @@ package Game
 					Stats.display(localPlayer)
 				doAfter(30.) ->
 					defeatTeam(1)
-					EndGame(true)
+					doAfter(1.5) ->
+						EndGame(true)
 
 
 		static function after()
@@ -372,6 +374,14 @@ package Game
 
 	init
 		int index = 0
+
+		doAfter(45.) ->
+			print(
+				"Hint:".color(COLOR_GOLD)
+				+ " unlike Crewmembers, "
+				+ "Equipment".color(COLOR_GOLD)
+				+ " items can be sold for 100% price."
+			)
 
 		registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function Game.defeatC)
 		Game.initializeQuests()

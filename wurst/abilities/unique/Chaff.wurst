@@ -8,7 +8,7 @@ import Locks
 import WurstProfile
 import XtsMissileBarrage
 
-constant INVULN_DURATION = 2.
+constant INVULN_DURATION = 2.5
 
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) () ->

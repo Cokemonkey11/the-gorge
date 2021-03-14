@@ -21,10 +21,10 @@ public constant ID_HEALTH_REGEN_BONUS_2     = 'A!03'
 public constant ID_HEALTH_REGEN_BONUS_3     = 'A!04'
 public constant ID_HEALTH_REGEN_BONUS_4     = 'A!05'
 
-public constant HEALTH_REGEN_BONUS_1 =  8
-public constant HEALTH_REGEN_BONUS_2 = 12
-public constant HEALTH_REGEN_BONUS_3 = 16
-public constant HEALTH_REGEN_BONUS_4 = 20
+public constant HEALTH_REGEN_BONUS_1 = 10
+public constant HEALTH_REGEN_BONUS_2 = 14
+public constant HEALTH_REGEN_BONUS_3 = 18
+public constant HEALTH_REGEN_BONUS_4 = 22
 
 public constant ID_HERO_GLOW           = 'Af00'
 public constant ID_SELECT_UNIT         = 'AE01'
@@ -69,7 +69,7 @@ public class CrewmemberProps
     int idIcon
 
     static function regressDamage(real aps, int range, int cost) returns real
-        return (-0.10868*range + 0.26748*cost + 98.35081) / aps
+        return (-0.10868*range + 0.26748*cost + 100.) / aps
 
         // Old damage values:
         //  25
@@ -83,6 +83,7 @@ public class CrewmemberProps
         //  50
 
         // Regression data:
+        // range cost dps
         // 450   20   25     hh huge buff
         // 500   20   26     dok huge buff
         // 900   20   22     tusk huge nerf
@@ -149,10 +150,10 @@ public constant ID_ODRAKE_PP      = 'A00V'
 public constant ID_ODRAKE_ICON    = '![0B'
 
 public constant CREW_PROPS = new LinkedHashMap<Crewmember, CrewmemberProps>()
-    ..put(Crewmember.Headhunter,      new CrewmemberProps('o000', 'A000', 'o009', "Headhunter",            0, 0,   20, Abilities.huntermissile,       /* Attackspeed */ 1.,    400, Icons.bTNHeadhunter,          /* Projectile Scale */ 1.,  "HeadHunter",         Units.headhunter_V1,        /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,   .1,  '![00'))
-    ..put(Crewmember.WitchDoctor,     new CrewmemberProps('o001', 'A003', 'o00F', "Witch Doctor",          1, 0,   20, Abilities.witchDoctorMissile,  /* Attackspeed */  .9,   650, Icons.bTNWitchDoctor,         /* Projectile Scale */  .5, "WitchDoctor",        Units.witchDoctor1,         /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,  0.,   '![01'))
-    ..put(Crewmember.TuskarrSpearman, new CrewmemberProps('o002', 'A001', 'o00D', "Tuskarr Spearman",      2, 0,   20, Abilities.tuskarSpear,         /* Attackspeed */  .5,   900, Icons.bTNTuskaarBrown,        /* Projectile Scale */ 1.,  "Tuskarr",            Units.tuskarRanged,         /* Cargodummy Scale */ .5, /* Projectile Speed */ 1700, false,  .1,  '![02'))
-    ..put(Crewmember.Unbroken,        new CrewmemberProps('o003', 'A002', 'o00E', "Unbroken",              3, 0,   20, Abilities.wardenMissile,       /* Attackspeed */  .5,   200, Icons.bTNUnbroken,            /* Projectile Scale */ 1.,  "Unbroken",           Units.unbroken,             /* Cargodummy Scale */ .4, /* Projectile Speed */ 1000, true,  0.,   '![03'))
+    ..put(Crewmember.Headhunter,      new CrewmemberProps('o000', 'A000', 'o009', "Headhunter",            0, 0,   30, Abilities.huntermissile,       /* Attackspeed */ 1.,    400, Icons.bTNHeadhunter,          /* Projectile Scale */ 1.,  "HeadHunter",         Units.headhunter_V1,        /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,   .1,  '![00'))
+    ..put(Crewmember.WitchDoctor,     new CrewmemberProps('o001', 'A003', 'o00F', "Witch Doctor",          1, 0,   30, Abilities.witchDoctorMissile,  /* Attackspeed */  .9,   650, Icons.bTNWitchDoctor,         /* Projectile Scale */  .5, "WitchDoctor",        Units.witchDoctor1,         /* Cargodummy Scale */ .6, /* Projectile Speed */ 1000, true,  0.,   '![01'))
+    ..put(Crewmember.TuskarrSpearman, new CrewmemberProps('o002', 'A001', 'o00D', "Tuskarr Spearman",      2, 0,   30, Abilities.tuskarSpear,         /* Attackspeed */  .5,   900, Icons.bTNTuskaarBrown,        /* Projectile Scale */ 1.,  "Tuskarr",            Units.tuskarRanged,         /* Cargodummy Scale */ .5, /* Projectile Speed */ 1700, false,  .1,  '![02'))
+    ..put(Crewmember.Unbroken,        new CrewmemberProps('o003', 'A002', 'o00E', "Unbroken",              3, 0,   30, Abilities.wardenMissile,       /* Attackspeed */  .5,   200, Icons.bTNUnbroken,            /* Projectile Scale */ 1.,  "Unbroken",           Units.unbroken,             /* Cargodummy Scale */ .4, /* Projectile Speed */ 1000, true,  0.,   '![03'))
     ..put(Crewmember.LaserRifleman,   new CrewmemberProps('o007', 'A007', 'o00A', "Laser Rifleman",        0, 1,  150, Abilities.phoenix_Missile,     /* Attackspeed */ 5.,    400, Icons.bTNSkink,               /* Projectile Scale */  .3, "Skink",              Units.skink1,               /* Cargodummy Scale */ .9, /* Projectile Speed */ 1500, true,  0.,   '![06'))
     ..put(Crewmember.Shaman,          new CrewmemberProps('o004', 'A004', 'o00C', "Shaman",                1, 1,  150, Abilities.farseerMissile,      /* Attackspeed */ 1.1,   650, Icons.bTNShaman,              /* Projectile Scale */  .8, "Shaman",             Units.shaman1,              /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, true,   .15, '![04'))
     ..put(Crewmember.Grenadier,       new CrewmemberProps('o006', 'A006', 'o008', "Grenadier",             2, 1,  150, Abilities.rocketMissile,       /* Attackspeed */  .8,   900, Icons.bTNMortarTeam,          /* Projectile Scale */  .6, "Grenadier",          Units.mortarTeam1,          /* Cargodummy Scale */ .6, /* Projectile Speed */ 1200, false,  .15, '![05'))
@@ -253,6 +254,37 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         setTooltipNormalExtended(1, tooltipExtended)
         setAreaofEffect(1, aoe)  // Used for targeting image.
 
+class BerserkCommon extends AbilityDefinitionBeserk
+    construct(int id, string animationName, int x, int y, string icon, real cooldown, string orderid, real castRange, string hotkey, string name, string targetsAllowed, string tooltipExtended, real aoe)
+        super(id)
+        presetDurationNormal(_ -> 0.01)
+        presetDurationHero(_ -> 0.01)
+        presetBuffs(_ -> "")
+        presetDamageTakenIncrease(_ -> 0.)
+        presetMovementSpeedIncrease(_ -> 0.)
+        presetAttackSpeedIncrease(_ -> 0.)
+        setAnimationNames(animationName)
+        setButtonPositionNormalX(x)
+        setButtonPositionNormalY(y)
+        setArtCaster("")
+        setCasterAttachmentPoint("")
+        setArtEffect("")
+        setIconNormal(icon)
+        setArtTarget("")
+        setCooldown(1, cooldown)
+        setTargetAttachmentPoint("")
+        setCastRange(1, castRange)
+        setHeroAbility(false)
+        setLevels(1)
+        setCheckDependencies(false)
+        setHotkeyNormal(hotkey)
+        setName(name)
+        setTargetsAllowed(1, targetsAllowed)
+        setOrderStringUseTurnOn(orderid)
+        setTooltipNormal(1, name + " [|cffffcc00" + hotkey + "|r]")
+        setTooltipNormalExtended(1, tooltipExtended)
+        setAreaofEffect(1, aoe)  // Used for targeting image.
+
 @compiletime function init_xts()
     new ChannelCommon(
         ID_XTS_MISSILE_ARRAY,
@@ -288,7 +320,7 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         "E",
         "Chaff",
         "self",
-        "Charges briefly, rendering the ship invulnerable and emitting a burst of metallic powder that disrupts inbound missiles and abilities.|n |n|cffffcc00Duration:|r 2s|n|cffffcc00Cooldown:|r 15s",
+        "Charges briefly, rendering the ship invulnerable and emitting a burst of metallic powder that disrupts inbound missiles and abilities.|n |n|cffffcc00Duration:|r 2.5s|n|cffffcc00Cooldown:|r 15s",
         0.,
         0
     )
@@ -373,7 +405,7 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
     )
 
 @compiletime function initMagneticReactors()
-    new ChannelCommon(
+    new BerserkCommon(
         ID_MAGNETIC_REACTORS,
         "spell",
         1,
@@ -382,13 +414,10 @@ class ChannelCommon extends AbilityDefinitionIllidanChannel
         30.,
         "ancestralspirit",
         384.,
-        1,
-        TargetType.Instant,
         "W",
         "Magnetic Reactors",
         "ground,invulnerable,neutral",
         "Restores a fraction of your missing health over time.|n |n|cffffcc00Missing Health Restored:|r 15%|n|cffffcc00Heal Duration:|r 5s|n|cffffcc00Cooldown:|r 30s",
-        0.,
         0.
     )
 

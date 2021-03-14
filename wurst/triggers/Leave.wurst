@@ -23,7 +23,7 @@ package Leave
 		return false
 
 	init
-		trigger t = CreateTrigger()
+		let t = CreateTrigger()
 		int index = 2
 		while index <= 11
 			TriggerRegisterPlayerEvent(t, Player(index), EVENT_PLAYER_LEAVE)
